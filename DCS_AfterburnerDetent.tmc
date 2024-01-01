@@ -1,0 +1,96 @@
+
+include "target.tmh"
+
+// -------------------- INITIALISE --------------------
+
+char afterburnerdetent_present = 0;						// 0 - no detent present, 
+														// 1 - detent present, at mil power
+char afterburnerdetent_lifted = 0;						// 0 - detent prevents throttle from going into afterburner, 
+														// 1 - detent is lifted and throttle moves into afterburner
+
+define AB 77											// detent position at AB% of full throttle reach
+
+// -------------------- MAIN --------------------
+
+int main()
+{
+	Configure(&HCougar, MODE_EXCLUDED);
+	Configure(&JoystickF18, MODE_EXCLUDED);
+	Configure(&A320Pilot, MODE_EXCLUDED);
+	Configure(&A320Copilot, MODE_EXCLUDED);
+	Configure(&TCAQuadrant12, MODE_EXCLUDED);
+	Configure(&TCAQuadrant34, MODE_EXCLUDED);
+	Configure(&T16000, MODE_EXCLUDED);
+	Configure(&T16000L, MODE_EXCLUDED);
+	Configure(&LMFD, MODE_EXCLUDED);
+	Configure(&RMFD, MODE_EXCLUDED);
+	Configure(&TFRPRudder, MODE_EXCLUDED);
+	Configure(&TWCSThrottle, MODE_EXCLUDED);
+	Configure(&TFRPHARudder, MODE_EXCLUDED);
+	
+	if(Init(&EventHandle)) return 1;
+	
+	SetKBRate(40, 50);									// (a,b) a = pulse duration, b = delay duration
+	SetKBLayout(KB_ENG);
+	
+	// -------------------- IOUMD Buttons --------------------
+	
+	SetShiftButton(&Joystick, S4, &Throttle, BSF, BSB, 0);
+	
+ 
+	// -------------------- THROTTLE --------------------
+
+	// Left Throttle Button
+	MapKey(&Throttle, LTB, 		EXEC( "if (afterburnerdetent_present) {"		// If detent present
+										   "afterburnerdetent(0);"				//   Engage afterburner
+										   "afterburnerdetent_lifted = 1;"		//   Lift detent
+										   "DXAxis( DX_ZROT_AXIS, -AMAX );"		//	 Left throttle to full afterburner
+										   "DXAxis( DX_Z_AXIS, -AMAX );"		//	 Right throttle to full afterburner
+									  "}" ));								
+
+	// EORMOTOR
+	MapKey(&Throttle, EORMOTOR, EXEC( "afterburnerdetent_present = 1;" 			// Engage afterburner detent
+									  "afterburnerdetent(1);" ));
+	MapKeyR(&Throttle, EORMOTOR, EXEC( "afterburnerdetent_present = 0;" 		// Disengage afterburner detent
+									   "afterburnerdetent(0);" ));
+
+	// THR_LEFT
+	MapAxis(&Throttle, THR_LEFT, DX_ZROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
+	SetSCurve(&Throttle, THR_LEFT, 0, 0, 0, 0, 0);
+	// THR_RIGHT
+	MapAxis(&Throttle, THR_RIGHT, DX_Z_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
+	SetSCurve(&Throttle, THR_RIGHT, 0, 0, 0, 0, 0);
+
+
+} // ------- end main -------
+
+
+// -------------------- AFTERBURNER DETENT --------------------
+
+int afterburnerdetent(int x)
+{
+	if (x == 1) {		// Activate detent
+		SetCustomCurve(&Throttle, THR_LEFT, LIST(0,0, 25,25, 50,50, AB,AB, 100,AB));
+		SetCustomCurve(&Throttle, THR_RIGHT, LIST(0,0, 25,25, 50,50, AB,AB, 100,AB));			
+	}
+	else {				// Throttle back to full reach
+		SetSCurve(&Throttle, THR_LEFT, 0, 0, 0, 0, 0);
+		SetSCurve(&Throttle, THR_RIGHT, 0, 0, 0, 0, 0);
+	}
+}
+
+
+// -------------------- EVENTHANDLE --------------------
+
+int EventHandle(int type, alias o, int x)
+{
+	if ((&o == &Throttle) & (x == THR_LEFT)) {									// Detect left throttle position for afterburner detent
+		if (afterburnerdetent_present & afterburnerdetent_lifted) {				// If afterburnerdetent present and detent is lifted
+			if (Throttle[THR_LEFT] < (100-AB)*(2*AMAX)/100) {					//   If left throttle below afterburner detent value of AB%
+				afterburnerdetent(1);											//     Re-engage detent
+				afterburnerdetent_lifted = 0;									//     Detent is no longer lifted
+			}
+		} 
+	}
+	DefaultMapping(&o, x);
+}

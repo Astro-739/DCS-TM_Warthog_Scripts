@@ -1,0 +1,502 @@
+// DCS F-14B Tomcat Thrustmaster Warthog Script by Astro
+// version 3, Oct 2023
+
+
+// -------------------- INCLUDE -----------------------------------------------
+
+include "target.tmh"
+include "DCS_F-14B_Tomcat_PILOT.tmc"						// all PILOT controls
+include "DCS_F-14B_Tomcat_RIO.tmc"							// all RIO controls
+include "DCS_F-14B_Tomcat_JESTER.tmc"						// all JESTER controls
+include "DCS_F-14B_Tomcat_macros.ttm"						// definitions
+include "DCS_Fighter_Common.tmc"							// all dcs fighter COMMON controls
+
+
+
+
+// -------------------- INITIALISE ---------------------------------------------
+
+int autopilot;
+int extlight_full;			
+int extlight_posdim;	
+int extlight_formation;		
+int extlight_covert;		
+int speedbrakes_open;
+int speedbrakes_close;
+int groundcrewstartup;
+
+int steercmdlist, index_stcmd = 0;							// (start with second element after increment, element 0 is first element in list)
+int radarrangelist, index_range = 2;						// (current is middle of five (assumption 100 nm), element 2, element 0 is first element in list)
+int radarelevlist, index_elev = 2;							// (current is middle of five, element 2, element 0 is first element in list)
+int radarazlist, index_az = 2;								// (current is middle of five, element 2, element 0 is first element in list)
+int steerpointlist_aa, index_stpt_aa = -1;					// (start with first element after increment, wp1, element 0 is first element in list)
+int steerpointlist_ag, index_stpt_ag = -1;					// (start with first element after increment, wp1, element 0 is first element in list)
+int lantirn_q_stptlist;
+
+int	JSTR_rdr_mode_auto;
+int	JSTR_rdr_mode_TWS;
+int	JSTR_rdr_mode_RWS;
+int	JSTR_toggle_PD_P_STT;
+int	JSTR_rdr_off;
+int	JSTR_rdr_on;
+int	JSTR_rdr_range_auto;
+int	JSTR_rdr_range_25;
+int	JSTR_rdr_range_50;
+int	JSTR_rdr_ac_stab;
+int	JSTR_rdr_ground_stab;
+int	JSTR_rdr_az_elev_auto;
+int	JSTR_lock_enemy_ahead;
+int	JSTR_lock_friend_ahead;
+int	JSTR_lock_ahead;
+int	JSTR_break_lock;
+int	JSTR_lock_TWS_tgt_1;
+int	JSTR_lock_TWS_tgt_2;
+int	JSTR_lock_TWS_tgt_3;
+int	JSTR_lock_TWS_tgt_4;
+int	JSTR_rwr_norm;
+int	JSTR_rwr_ai;
+int	JSTR_nav_wp1;
+int	JSTR_nav_wp2;
+int	JSTR_nav_wp3;
+int	JSTR_nav_ip;
+int	JSTR_nav_surftgt;
+int	JSTR_nav_homebase;
+int	JSTR_nav_fixpt;
+int JSTR_lntrn_q_des;
+int JSTR_lntrn_q_eyeballs;
+int JSTR_lntrn_q_headctrl;
+int JSTR_lntrn_q_hud;
+int JSTR_lntrn_designate;
+int JSTR_lntrn_undesignate;
+int JSTR_lntrn_stblarea;
+int JSTR_lntrn_srch_anyactive;
+int JSTR_lntrn_srch_aircraftall;
+int JSTR_lntrn_srch_samactive;
+int JSTR_lntrn_srch_armoractive;
+int JSTR_lntrn_nexttgt;
+int JSTR_lntrn_prevtgt;
+int JSTR_agwpn_comptgt;
+int JSTR_agwpn_comppilot;
+int	JSTR_startup;
+int	JSTR_loudclear;
+int	JSTR_ins_fine;
+int	JSTR_ins_wpn;
+int	JSTR_jett_droptanks;
+int	JSTR_jammer_onoff;
+int	JSTR_spot;
+int	JSTR_check;
+int JSTR_menu;
+
+//int JSTR_tcs_menu;
+char LTRN_mode = 0;
+
+int JSTR_toggle_RWS_TWS;
+int JSTR_ground_ac_stbl;
+int JSTR_rdr_range_50_25;
+int	JSTR_rdr_range_50_25_auto;
+int JSTR_rdr_offon;
+int JSTR_rwr_ai_norm;
+int JSTR_WHDN_startup;
+int	JSTR_nav_wp123;
+
+
+define AB 75											// detent position at AB% of full throttle reach (80% for F-14B, 75% for F-14A)
+
+
+
+
+// -------------------- MAIN ---------------------------------------------
+
+int main()
+{
+	Configure(&HCougar, MODE_EXCLUDED);
+	Configure(&JoystickF18, MODE_EXCLUDED);
+	Configure(&A320Pilot, MODE_EXCLUDED);
+	Configure(&A320Copilot, MODE_EXCLUDED);
+	Configure(&TCAQuadrant12, MODE_EXCLUDED);
+	Configure(&TCAQuadrant34, MODE_EXCLUDED);
+	Configure(&T16000, MODE_EXCLUDED);
+	Configure(&T16000L, MODE_EXCLUDED);
+	Configure(&LMFD, MODE_EXCLUDED);
+	Configure(&RMFD, MODE_EXCLUDED);
+	Configure(&TFRPRudder, MODE_EXCLUDED);
+	Configure(&TWCSThrottle, MODE_EXCLUDED);
+	Configure(&TFRPHARudder, MODE_EXCLUDED);
+	
+	if(Init(&EventHandle)) return 1;
+	
+	SetKBRate(40, 50);									// (a < b) a = pulse duration, b = delay duration
+	SetKBLayout(KB_ENG);
+	
+	// -------------------- IOUMD Buttons -------------------------------------
+	
+	SetShiftButton(&Joystick, S4, &Throttle, BSF, BSB, 0);
+	
+	// -------------------- COMMON --------------------------------------------
+					
+	dcs_fighter_common();								// load dcs COMMON controls
+
+	// -------------------- LISTS ---------------------------------------------
+	// List items are defined in DCS_F-14B_Tomcat_macros.ttm
+	
+	
+	// Steer CMD select
+	steercmdlist 	= SEQ( Steer_CMD_TACAN,
+						   Steer_CMD_Destination,
+						   Steer_CMD_AWLPCD,
+						   Steer_CMD_VEC,
+						   Steer_CMD_MAN );
+
+	// Radar range select
+	radarrangelist 	= SEQ( JSTR_rdr_range_25_list,
+						   JSTR_rdr_range_50_list,
+						   JSTR_rdr_range_100_list,
+						   JSTR_rdr_range_200_list,
+						   JSTR_rdr_range_400_list );
+
+	// Radar elevation select
+	radarelevlist 	= SEQ( JSTR_rdr_elev_low,
+						   JSTR_rdr_elev_lowmid,
+						   JSTR_rdr_elev_middle,
+						   JSTR_rdr_elev_highmid,
+						   JSTR_rdr_elev_high );
+
+	// Radar azimuth select						 
+	radarazlist 	= SEQ( JSTR_rdr_az_left,
+						   JSTR_rdr_az_leftcntr,
+						   JSTR_rdr_az_center,
+						   JSTR_rdr_az_rightcntr,
+						   JSTR_rdr_az_right );
+
+	// Navigation Steerpoint select
+	steerpointlist_aa	= SEQ( JSTR_nav_wp1_list,
+							   JSTR_nav_wp2_list,
+							   JSTR_nav_wp3_list );
+
+	steerpointlist_ag	= SEQ( JSTR_nav_wp1_list,
+							   JSTR_nav_wp2_list,
+							   JSTR_nav_ip_list,
+							   JSTR_nav_surftgt_list,
+							   JSTR_nav_wp3_list );
+							   
+	// LANTIRN Cue Steerpoint select
+	lantirn_q_stptlist	= SEQ( JSTR_lntrn_q_wp1_list,
+							   JSTR_lntrn_q_wp2_list,
+							   JSTR_lntrn_q_ip_list,
+							   JSTR_lntrn_q_surftgt_list,
+							   JSTR_lntrn_q_wp3_list );
+	
+	
+	
+	
+	
+
+
+	// -------------------- FUNCTIONS ---------------------------------------------
+					
+	// Autopilot function
+	autopilot = SEQ( CHAIN( EXEC( "autopilot_mode();" ), D(200),														// Set autopilot mode
+							DOWN+L_ALT+L_SHIFT, D(10), PULSE+'p', D(), UP+L_ALT+L_SHIFT ),								// Autopilot on
+					 CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'p', D(), UP+L_ALT+L_CTL ));									// Autopilot off
+	
+	// Exterior Lighting - Full
+	extlight_full = CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'l', D(), UP+L_SHIFT+R_SHIFT, D(100),						// Lights Anti Collision ON
+						   DOWN+L_CTL+R_SHIFT, D(10), PULSE+'l', D(), UP+L_CTL+R_SHIFT, D(100),							// Lights Position Wing BRT
+						   DOWN+L_ALT+R_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+R_SHIFT,	D(100),							// Lights Position Tail BRT
+						   PULSE+'l', D(100),																			// Exterior Lights Master Switch ON
+						   REXEC( 0, 100, "ActKey( PULSE+KEYON+R_CTL+'l' );", RNOSTOP ), 								// Lights Formation Brightnes Down
+						   D(800),																						// loop 8x
+						   EXEC( "StopAutoRepeat(0);" ));																// stop loop
+						   
+	// Exterior Lighting - Position Dim
+	extlight_posdim = CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'l', D(), UP+L_SHIFT+R_CTL, D(100),						// Lights Anti Collision OFF
+							 DOWN+L_CTL+L_ALT, D(10), PULSE+'l', D(), UP+L_CTL+L_ALT, D(100),							// Lights Position Wing DIM
+							 DOWN+L_ALT+L_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+L_SHIFT, D(100),						// Lights Position Tail DIM
+							 PULSE+'l', D(100),																			// Exterior Lights Master Switch ON
+							 REXEC( 1, 100, "ActKey( PULSE+KEYON+R_CTL+'l' );", RNOSTOP ), 								// Lights Formation Brightnes Down
+							 D(800),																					//   loop 8x
+							 EXEC( "StopAutoRepeat(1);" ));																//   stop loop
+						   
+	// Exterior Lighting - Formation
+	extlight_formation = CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'l', D(), UP+L_SHIFT+R_CTL, D(100),					// Lights Anti Collision OFF
+								DOWN+L_CTL+R_CTL, D(10), PULSE+'l', D(), UP+L_CTL+R_CTL, D(100),						// Lights Position Wing OFF
+								DOWN+L_ALT+R_CTL, D(10), PULSE+'l', D(), UP+L_ALT+R_CTL, D(100),						// Lights Position Tail OFF
+								PULSE+'l', D(100),																		// Exterior Lights Master Switch ON
+								REXEC( 2, 100, "ActKey( PULSE+KEYON+R_SHIFT+'l' );", RNOSTOP ), 						// Lights Formation Brightnes Up
+								D(800),																					//   loop 8x
+								EXEC( "StopAutoRepeat(2);" ));															//   stop loop
+						
+	// Exterior Lighting - Covert
+	extlight_covert = CHAIN( DOWN+L_CTL, D(10), PULSE+'l', D(), UP+L_CTL );												// Exterior Lights Master Switch OFF
+
+
+	// Ground Crew Start-up
+	groundcrewstartup = SEQ( CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F1, D(10000), 	// Radio menu (\), Ground crew, Wheel Chocks, Place 
+									PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F2, D(100), PULSE+F1, D(13000), 	// Radio menu (\), Ground crew, Ground Electric Power, On
+									PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F1, D(13000) ),	// Radio menu (\), Ground crew, Ground Air Supply, Connect
+							 CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F2, D(13000),	// Radio menu (\), Ground crew, Ground Air Supply, Disconnect
+									PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F2, D(100), PULSE+F2, D(13000), 	// Radio menu (\), Ground crew, Ground Electric Power, Off
+									PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F2 ));			// Radio menu (\), Ground crew, Wheel Chocks, Remove
+
+
+	// Air-to-Air Refuelling
+																														// Master Arm Off
+																														// RIO set WCS Switch - STBY
+																														// Refuel Probe to ALL EXTD or FUS EXTD
+																														// Fuel Dump Switch Off
+																														// Air Source to L ENG
+																														// Wing Sweep to Bomb (?)
+
+	// Speedbrake functions
+	speedbrakes_open  = PULSE+'b'; 																						// speedbrake extend
+
+	speedbrakes_close = CHAIN( D(100), DOWN+L_CTL, D(10), PULSE+'b', D(), UP+L_CTL );									// speedbrake fully retract
+
+	
+
+	// JESTER calls
+
+	// Radar - Radar Mode
+	JSTR_rdr_mode_auto		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
+	JSTR_rdr_mode_TWS		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'6', D(), UP+L_CTL+R_SHIFT );
+	JSTR_rdr_mode_RWS		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'7', D(), UP+L_CTL+R_SHIFT );
+	JSTR_toggle_PD_P_STT	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'4', D(), UP+L_CTL+R_SHIFT );
+	// Radar - Silent/Active
+	JSTR_rdr_off			= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'7', D(), UP+L_CTL );
+	JSTR_rdr_on				= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL );
+	// Radar - Range
+	JSTR_rdr_range_auto		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'0', D(), UP+L_CTL+L_ALT );
+	JSTR_rdr_range_25		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'1', D(), UP+L_CTL+L_ALT );
+	JSTR_rdr_range_50		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'2', D(), UP+L_CTL+L_ALT );
+	// Radar - Stabilise
+	JSTR_rdr_ac_stab		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'8', D(), UP+L_CTL+R_SHIFT );
+	JSTR_rdr_ground_stab	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'9', D(), UP+L_CTL+R_SHIFT );
+	// Radar – Auto Azimuth and Elevation Radar
+	JSTR_rdr_az_elev_auto	= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
+	// Radar – STT Lock
+	JSTR_lock_enemy_ahead 	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'1', D(), UP+L_CTL+R_SHIFT );
+	JSTR_lock_friend_ahead 	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'2', D(), UP+L_CTL+R_SHIFT );
+	JSTR_lock_ahead 		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'3', D(), UP+L_CTL+R_SHIFT );
+	JSTR_break_lock			= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'5', D(), UP+L_CTL+R_SHIFT );
+	JSTR_lock_TWS_tgt_1		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
+	JSTR_lock_TWS_tgt_2		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL );
+	JSTR_lock_TWS_tgt_3		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );
+	JSTR_lock_TWS_tgt_4		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
+	// RWR
+	JSTR_rwr_norm			= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
+	JSTR_rwr_ai				= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL );
+	// Navigation
+	JSTR_nav_wp1			= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'1', D(), UP+L_CTL+L_SHIFT );
+	JSTR_nav_wp2			= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'2', D(), UP+L_CTL+L_SHIFT );
+	JSTR_nav_wp3			= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'3', D(), UP+L_CTL+L_SHIFT );
+	JSTR_nav_ip				= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'4', D(), UP+L_CTL+L_SHIFT );
+	JSTR_nav_surftgt		= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'5', D(), UP+L_CTL+L_SHIFT );
+	JSTR_nav_homebase		= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'6', D(), UP+L_CTL+L_SHIFT );
+	JSTR_nav_fixpt			= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'7', D(), UP+L_CTL+L_SHIFT );
+	// LANTIRN
+//	JSTR_tcs_menu			= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
+//									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
+//									 DOWN+L_CTL, D(10), PULSE+'8', D(), UP+L_CTL, D(200) );
+	JSTR_lntrn_q_des		= CHAIN( PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
+	JSTR_lntrn_q_eyeballs	= CHAIN( PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
+	JSTR_lntrn_q_headctrl	= CHAIN( PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL );
+	JSTR_lntrn_q_hud		= CHAIN( PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
+	JSTR_lntrn_designate	= CHAIN( PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'7', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );
+	JSTR_lntrn_undesignate	= CHAIN( PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'7', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
+	JSTR_lntrn_stblarea		= CHAIN( PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );
+	JSTR_lntrn_srch_anyactive	= CHAIN( PULSE+'a', D(200), 
+										 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
+										 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL );
+	JSTR_lntrn_srch_aircraftall	= CHAIN( PULSE+'a', D(200), 
+										 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
+										 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );
+	JSTR_lntrn_srch_samactive	= CHAIN( PULSE+'a', D(200), 
+										 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
+										 DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL );
+	JSTR_lntrn_srch_armoractive	= CHAIN( PULSE+'a', D(200), 
+										 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
+										 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL );
+	JSTR_lntrn_nexttgt		= CHAIN( PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL );
+	JSTR_lntrn_prevtgt		= CHAIN( PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL );
+	// A-G Weapons
+	JSTR_agwpn_comptgt		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200) );
+	JSTR_agwpn_comppilot	= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200) );							//   also 2????????????????????????
+	// Start-up
+	JSTR_startup			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );
+	JSTR_loudclear			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
+	JSTR_ins_fine			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
+	JSTR_ins_wpn			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL );
+	// General
+	JSTR_jett_droptanks		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
+	JSTR_jammer_onoff		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'7', D(), UP+L_CTL );
+	JSTR_spot				= CHAIN( PULSE+'a', D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
+	JSTR_check				= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'7', D(), UP+L_CTL+L_ALT );
+	JSTR_menu				= PULSE+'a';
+
+
+
+	// JSTR functions
+	JSTR_rdr_offon			= SEQ( JSTR_rdr_off,										// Radar - Silent/Active
+								   JSTR_rdr_on );
+	JSTR_rdr_range_50_25	= SEQ( JSTR_rdr_range_50,									// Radar - Range 50/25
+								   JSTR_rdr_range_25 );
+	JSTR_rdr_range_50_25_auto	= SEQ( JSTR_rdr_range_50,								// Radar - Range 50/25/auto
+									   JSTR_rdr_range_25,
+									   JSTR_rdr_range_auto );
+	JSTR_ground_ac_stbl		= SEQ( JSTR_rdr_ground_stab,								// Radar - Ground/Aircraft Stabilize
+								   JSTR_rdr_ac_stab );
+	JSTR_toggle_RWS_TWS		= SEQ( JSTR_rdr_mode_RWS,									// Radar - RWS/TWS Mode
+								   JSTR_rdr_mode_TWS );
+	JSTR_rwr_ai_norm		= SEQ( JSTR_rwr_ai,											// RWR - Airborne Interceptor / Normal
+								   JSTR_rwr_norm );
+	JSTR_WHDN_startup		= SEQ( JSTR_startup,										// Start-up/Loud&Clear/INS Fine
+								   JSTR_loudclear,
+								   JSTR_ins_fine );
+	JSTR_nav_wp123			= SEQ( JSTR_nav_wp1,										// Nav - Set Steerpoint WP 1/2/3
+								   JSTR_nav_wp2,
+								   JSTR_nav_wp3 );
+
+	
+	// -------------------- INITIAL MODE VALUES ---------------------------------
+
+	printf("LTRN_mode = %i\xa", LTRN_mode);												// write to output window
+
+
+
+	// -------------------- CONTROLS ---------------------------------------------
+	
+	dcs_f14_pilot_controls();							// PILOT controls (loaded first, assumimg player starts as pilot)
+
+
+
+	// Engine Override
+	// EFLNORM	
+	MapKeyIO(&Throttle, EFLNORM, 	0,													// I - 
+									CHAIN( PULSE+'1', D(100),							// O - Switch to PILOT cockpit
+										   EXEC( "dcs_f14_pilot_controls();" )));		//     load PILOT controls
+	// EFLOVER
+	MapKeyIO(&Throttle, EFLOVER, 	0,													// I - 
+									CHAIN( PULSE+'2', D(100),							// O - Switch to RIO cockpit
+										   EXEC( "dcs_f14_rio_controls();" )));			//     load RIO controls
+	MapKeyRIO(&Throttle, EFLOVER, 	0,													// I - 
+									0 );												// O - 
+								
+
+
+}	// end main()	================================================================
+
+
+
+
+
+
+// -------------------- AUTOPILOT MODE ---------------------------------------------
+
+int autopilot_mode()
+{
+	if (Throttle[APPAT]) ActKey(KEYON+PULSE+L_ALT+R_SHIFT+'a');							// Autopilot - Heading Hold
+	else if (Throttle[APALT]) ActKey(KEYON+PULSE+L_ALT+R_CTL+'p');						// Autopilot - Vector ACL
+	else ActKey(KEYON+PULSE+L_ALT+L_SHIFT+'a');											// Autopilot - Altitude Hold
+}
+
+
+
+// -------------------- TCS MENU ---------------------------------------------
+
+//int checktcsmenu()
+//{
+//	if (!tcs_menu_on) {
+//		ActKey(KEYON+PULSE+JSTR_TCS_menu);												// Turn on TCS menu (when not already on)
+//		tcs_menu_on = 1;
+//		LTRN_mode = 1;																	// LTRN_mode ON
+//		dcs_f14_jester_lantirn_controls();												// Load JESTER LANTIRN controls
+//	}
+//}
+
+
+
+// -------------------- AFTERBURNER DETENT ------------------------------------------
+
+int afterburnerdetent(int x)
+{
+	if (x == 1) {		// Activate detent
+		SetCustomCurve(&Throttle, THR_LEFT, LIST(0,0, 25,25, 50,50, AB,AB, 100,AB));
+		SetCustomCurve(&Throttle, THR_RIGHT, LIST(0,0, 25,25, 50,50, AB,AB, 100,AB));			
+	}
+	else {				// Throttle back to full reach
+		SetSCurve(&Throttle, THR_LEFT, 0, 0, 0, 0, 0);
+		SetSCurve(&Throttle, THR_RIGHT, 0, 0, 0, 0, 0);
+	}
+}
+
+
+// -------------------- EVENTHANDLE -------------------------------------------------
+
+int EventHandle(int type, alias o, int x)
+{
+	if ((&o == &Throttle) & (x == THR_LEFT)) {											// Detect left throttle position for afterburner detent
+		if (afterburnerdetent_present & afterburnerdetent_lifted) {						// If afterburnerdetent present and detent is lifted
+			if (Throttle[THR_LEFT] < (100-AB)*(2*AMAX)/100) {							//   If left throttle below afterburner detent value of AB%
+				afterburnerdetent(1);													//     Re-engage detent
+				afterburnerdetent_lifted = 0;											//     Detent is no longer lifted
+			}
+		} 
+	}
+	DefaultMapping(&o, x);
+}

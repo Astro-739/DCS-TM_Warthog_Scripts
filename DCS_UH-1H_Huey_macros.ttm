@@ -1,0 +1,11 @@
+// Macro file for DCS_UH-1H_Huey.tmc  by Astro
+
+
+// intercom mode select
+define	Intercom_Mode_INT	R_CTL+R_SHIFT+'e'
+define	Intercom_Mode_PVT	R_CTL+R_SHIFT+'w'
+define	Intercom_Mode_1		R_CTL+R_SHIFT+'r'
+define	Intercom_Mode_2		R_CTL+R_SHIFT+'t'
+define	Intercom_Mode_3		R_CTL+R_SHIFT+'y'
+define	Intercom_Mode_4		R_CTL+R_SHIFT+'u'
+
