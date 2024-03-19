@@ -229,7 +229,7 @@ int main()
 									   500 ),																	// 
 								DX3,																			// OU - ENABLE Switch - Depress
 								CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x57], D(), UP+L_CTL ),						// IM - ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
-								0, 																				// OM - 
+								DX3, 																			// OM - ENABLE Switch - Depress
 								CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x57], D(), UP+L_CTL ),						// ID - ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
 								DX3);																			// OD - ENABLE Switch - Depress
 	// CSR
