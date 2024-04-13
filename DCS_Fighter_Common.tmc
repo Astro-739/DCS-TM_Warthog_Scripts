@@ -25,8 +25,12 @@ int flight_echelonright;
 int flight_echelonleft;
 int flight_opencloseformation;
 
-int awacs_requestbogeydope;
-int awacs_requesthomeairbase;
+int awacs_bogeydope;
+int awacs_vectorhomeairbase;
+int awacs_vectorbullseye;
+int awacs_vectortanker;
+int awacs_requestpicture;
+int awacs_declare;
 
 int uhf_callradiomenu;
 int vhf_callradiomenu;
@@ -101,9 +105,13 @@ int dcs_fighter_common()
 	flight_opencloseformation	= SEQ( CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F5, D(200), PULSE+F8 ), 	// Radio menu (\), Flight, Formation, Open Formation
 									   CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F5, D(200), PULSE+F9 ));	// Radio menu (\), Flight, Formation, Close Formation
 									   
-	awacs_requestbogeydope		= CHAIN( DOWN+L_WIN, D(10), PULSE+'o', D(), UP+L_WIN ); 								// Request AWACS Bogey Dope
-	awacs_requesthomeairbase	= CHAIN( DOWN+L_WIN, D(10), PULSE+'u', D(), UP+L_WIN ); 								// Request AWACS Home Airbase
-	
+	awacs_bogeydope				= CHAIN( DOWN+L_WIN, D(10), PULSE+'o', D(), UP+L_WIN ); 								// Request AWACS Bogey Dope
+	awacs_vectorhomeairbase		= CHAIN( DOWN+L_WIN, D(10), PULSE+'u', D(), UP+L_WIN ); 								// Request AWACS Vector to Home Airbase
+	awacs_vectorbullseye		= CHAIN( PULSE+USB[0x31], D(200), PULSE+F7, D(200), PULSE+F1 ); 						// Radio menu (\), AWACS, Vector to Bullseye
+	awacs_vectortanker			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F7, D(200), PULSE+F3 ); 						// Radio menu (\), AWACS, Vector to Tanker
+	awacs_requestpicture		= CHAIN( PULSE+USB[0x31], D(200), PULSE+F7, D(200), PULSE+F5 ); 						// Radio menu (\), AWACS, Request Picture
+	awacs_declare				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F7, D(200), PULSE+F6 ); 						// Radio menu (\), AWACS, Declare
+
 	atc_inbound					= CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ); 		// Radio menu (\), ATC, Airfield, Inbound
 	atc_requestlanding			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 );				 							// Request landing short menu
 
@@ -111,7 +119,7 @@ int dcs_fighter_common()
 	ground_requesttaxitakeoff	= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 );				 							// Request taxi, take-off short menu
 	ground_rearmrefuel			= CHAIN( DOWN+L_ALT, D(10), PULSE+USB[0x34], D(), UP+L_ALT );        			  		// Rearming and Refueling Window   (L_ALT+')
 	
-	cv_requestlaunch			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F3, D(200), PULSE+F2 ); 		// Radio menu (\), xxxxxxxxxxxxxxx todo
+	cv_requestlaunch			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F3, D(200), PULSE+F2 ); 		// Radio menu (\), xxxxxxxxxxxxxxx  todo
 	cv_inbound					= SEQ( CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ), 	// Radio menu (\), ATC, CV, Inbound
 									   CHAIN( PULSE+USB[0x31], D(200), PULSE+F2 )); 									// Radio menu (\), See you at 10 (menu shortcut)
 	cv_salute					= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'u', D(), UP+L_SHIFT ); 							// Salute
@@ -341,11 +349,11 @@ int dcs_fighter_common_jstr()
 								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_inbound );" 					// IM - [CAR]  Inbound / See you at 10
 											 "else if(WHDN_mode) ActKey( PULSE+KEYON+atc_requestlanding );" 	//		[WHDN] Request Landing
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+refuel_inbound );"			//		[AAR]  Inbound
-											 "else ActKey( PULSE+KEYON+flight_rtb );" ),						//		Flight - RTB
+											 "else ActKey( PULSE+KEYON+atc_inbound );" ),						//		ATC - Inbound
 									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 							// 		[long] [CAR]  -
 											 "else if(WHDN_mode) ActKey( PULSE+KEYON+0 );" 						//		[long] [WHDN] -
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"						//		[long] [AAR]  -
-											 "else ActKey( PULSE+KEYON+atc_inbound );" ),	500 ),				//		[long] ATC - Inbound
+											 "else ActKey( PULSE+KEYON+flight_rtb);" ),	500 ),					//		[long] Flight - RTB
 								DX29,																			// OM - Transmit Switch - Radio 2 (VOIP)
 								TEMPO( flight_completemissionrejoin,											// ID - Flight - Complete mission and rejoin
 									   0, 500 ),																//		[long] Flight - 
@@ -367,20 +375,20 @@ int dcs_fighter_common_jstr()
 									   flight_lineabreast, 500 ),												// 		[long] Flight - Formation Line Abreast
 								DX28 );																			// OD - D_MSR
 	// MSL
-	MapKeyIOUMD(&Throttle, MSL, TEMPO( awacs_requestbogeydope,						 							// IU - Request AWACS Bogey Dope
-									   flight_radaroffon, 500 ),												// 		[long] Flight - Radar Off/On
+	MapKeyIOUMD(&Throttle, MSL, TEMPO( awacs_declare,								 							// IU - AWACS Declare
+									   awacs_bogeydope, 500 ),													// 		[long] Flight - Request AWACS Bogey Dope
 								DX30,																			// OU - U_MSL
 								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_calltheball );" 				// IM - [CAR]  Call the Ball
 											 "else if(WHDN_mode) ActKey( PULSE+KEYON+ground_rearmrefuel );" 	//		[WHDN] Rearming and Refueling Window   (L_ALT+')
-											 "else if(AAR_mode) ActKey( PULSE+KEYON+awacs_requestbogeydope );"	//		[AAR]  Request AWACS Bogey Dope
-											 "else ActKey( PULSE+KEYON+awacs_requestbogeydope );" ),			//		Request AWACS Bogey Dope
+											 "else if(AAR_mode) ActKey( PULSE+KEYON+awacs_bogeydope );"			//		[AAR]  Request AWACS Bogey Dope
+											 "else ActKey( PULSE+KEYON+awacs_declare );" ),						//		AWACS Declare
 									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 							// 		[long] [CAR]  -
 											 "else if(WHDN_mode) ActKey( PULSE+KEYON+0 );" 						//		[long] [WHDN] -
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"						//		[long] [AAR]  -
-											 "else ActKey( PULSE+KEYON+flight_radaroffon );" ),	500 ),			//		[long] Flight - Radar Off/On
+											 "else ActKey( PULSE+KEYON+awacs_bogeydope );" ),	500 ),			//		[long] Request AWACS Bogey Dope
 								DX30,																			// OM - M_MSL
-								TEMPO( awacs_requestbogeydope,													// ID - Request AWACS Bogey Dope
-									   flight_radaroffon, 500 ),												// 		[long] Flight - Radar Off/On
+								TEMPO( flight_radaroffon,														// ID - Flight - Radar Off/On
+									   awacs_bogeydope, 500 ),													// 		[long] Request AWACS Bogey Dope
 								DX30 );																			// OD - D_MSL
 	// MSP 
 	MapKeyIO(&Throttle, MSP, 	TEMPO( EXEC( "if(WHDN_mode | CAR_mode | AAR_mode) ActKey( PULSE+KEYON+F12 );"	// I - [WHDN] or [CAR] or [AAR] F12 exit menu
