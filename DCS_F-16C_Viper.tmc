@@ -144,10 +144,10 @@ int main()
 
  	// Countermeasure Management Switch
 	// H4U
-	MapKeyIO(&Joystick, H4U, 	CHAIN( DOWN+L_SHIFT+L_CTL, D(10), PULSE+'d', D(), UP+L_SHIFT+L_CTL ),			// I - ECM XMIT Switch - Up
+	MapKeyIO(&Joystick, H4U, 	CHAIN( DOWN+L_SHIFT+L_CTL, D(10), PULSE+'f', D(), UP+L_SHIFT+L_CTL ),			// I - ECM XMIT Switch - Up
 							 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+';', D(), UP+R_SHIFT ));						// O - Countermeasures Management Switch - Fwd
 	// H4D
-	MapKeyIO(&Joystick, H4D, 	CHAIN( DOWN+L_SHIFT+L_CTL, D(10), PULSE+'c', D(), UP+L_SHIFT+L_CTL ),			// I - ECM XMIT Switch - Down
+	MapKeyIO(&Joystick, H4D, 	CHAIN( DOWN+L_SHIFT+L_CTL, D(10), PULSE+'v', D(), UP+L_SHIFT+L_CTL ),			// I - ECM XMIT Switch - Down
 							 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'.', D(), UP+R_SHIFT )); 						// O - Countermeasures Management Switch - Aft
 	// H4R
 	MapKeyIO(&Joystick, H4R, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ), 							// I - PROGRAM Knob - CW
