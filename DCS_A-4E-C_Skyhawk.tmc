@@ -10,6 +10,9 @@ include "DCS_Fighter_Common.tmc"
 // -------------------- INITIALISE --------------------
 
 int autopilot;
+int ap_path;
+int ap_althdg;
+int ap_alt;
 
 int extlight_full;			
 int extlight_posdim;	
@@ -64,10 +67,17 @@ int main()
 					
 	// Autopilot function
 	autopilot = SEQ( CHAIN( EXEC( "autopilot_mode();" ), D(200),														// Set autopilot mode
-							DOWN+L_ALT+L_SHIFT, D(10), PULSE+'p', D(), UP+L_ALT+L_SHIFT ),								// Autopilot on
-					 CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'p', D(), UP+L_ALT+L_CTL ));									// Autopilot off
+							PULSE+'a' ),																				// Autopilot on - AFCS Engage Switch - ENGAGE/OFF
+					 PULSE+'a' );																						// Autopilot off - AFCS Engage Switch - ENGAGE/OFF
 	
-	
+	ap_alt = 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT, D(200),												// AFCS Altitude Switch - ALT
+					   DOWN+R_SHIFT+L_CTRL, D(10), PULSE+'z', D(), UP+R_SHIFT+L_CTRL );										// AFCS Heading Select Switch - OFF
+	ap_althdg = CHAIN( DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT, D(200),												// AFCS Altitude Switch - ALT
+					   DOWN+R_SHIFT+L_CTRL, D(10), PULSE+'a', D(), UP+R_SHIFT+L_CTRL );										// AFCS Heading Select Switch - HDG SEL
+	ap_path = 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'z', D(), UP+R_SHIFT, D(200),												// AFCS Altitude Switch - OFF
+					   DOWN+R_SHIFT+L_CTRL, D(10), PULSE+'z', D(), UP+R_SHIFT+L_CTRL );										// AFCS Heading Select Switch - OFF
+
+
 	// Exterior Lighting - Full
 	extlight_full = CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+R_SHIFT,	D(100),							// Anti-Collision Light Switch - ON
 						   DOWN+R_CTL+L_SHIFT, D(10), PULSE+'l', D(), UP+R_CTL+L_SHIFT, D(100),							// Fuselage Light Switch - BRIGHT
@@ -220,15 +230,15 @@ int main()
 
 	// Autopilot
 	// APENG	
-	MapKey(&Throttle, APENG, 	autopilot );																		// Autopilot on/off
+	MapKey(&Throttle, APENG, 	autopilot );																	// Autopilot on/off
 	// APDIS
-	MapKey(&Throttle, APDIS, 	0 ); 																				// see autopilot_mode()
+	MapKey(&Throttle, APDIS, 	0 ); 																			// see autopilot_mode()
 	// APPAT
-	MapKey(&Throttle, APPAT, 	0 );																				// see autopilot_mode()
+	MapKey(&Throttle, APPAT, 	ap_path );																		// see autopilot_mode()
 	// APAH
-	MapKey(&Throttle, APAH, 	0 );																				// see autopilot_mode()
+	MapKey(&Throttle, APAH, 	ap_althdg );																	// see autopilot_mode()
 	// APALT
-	MapKey(&Throttle, APALT, 	0 );																				// see autopilot_mode()
+	MapKey(&Throttle, APALT, 	ap_alt );																		// see autopilot_mode()
 
 
 	// Coolie Switch
@@ -413,24 +423,9 @@ int main()
 
 int autopilot_mode()
 {
-	if (Throttle[APPAT]) ActKey(KEYON+PULSE+L_ALT+R_SHIFT+'a');							// Autopilot - Heading Hold
-	else if (Throttle[APALT]) ActKey(KEYON+PULSE+L_ALT+R_CTL+'p');						// Autopilot - Vector ACL
-	else ActKey(KEYON+PULSE+L_ALT+L_SHIFT+'a');											// Autopilot - Altitude Hold
-}
-
-
-// -------------------- AFTERBURNER DETENT --------------------
-
-int afterburnerdetent(int x)
-{
-	if (x == 1) {		// Activate detent
-		SetCustomCurve(&Throttle, THR_LEFT, LIST(0,0, 25,25, 50,50, AB,AB, 100,AB));
-		SetCustomCurve(&Throttle, THR_RIGHT, LIST(0,0, 25,25, 50,50, AB,AB, 100,AB));			
-	}
-	else {				// Throttle back to full reach
-		SetSCurve(&Throttle, THR_LEFT, 0, 0, 0, 0, 0);
-		SetSCurve(&Throttle, THR_RIGHT, 0, 0, 0, 0, 0);
-	}
+	if (Throttle[APPAT]) ActKey(KEYON+PULSE+ap_path);									// Autopilot - Path
+	else if (Throttle[APALT]) ActKey(KEYON+PULSE+ap_alt);								// Autopilot - Alt
+	else ActKey(KEYON+PULSE+ap_althdg);													// Autopilot - Alt/Hdg
 }
 
 
@@ -438,13 +433,5 @@ int afterburnerdetent(int x)
 
 int EventHandle(int type, alias o, int x)
 {
-	if ((&o == &Throttle) & (x == THR_LEFT)) {									// Detect left throttle position for afterburner detent
-		if (afterburnerdetent_present & afterburnerdetent_lifted) {				// If afterburnerdetent present and detent is lifted
-			if (Throttle[THR_LEFT] < (100-AB)*(2*AMAX)/100) {					//   If left throttle below afterburner detent value of AB%
-				afterburnerdetent(1);											//     Re-engage detent
-				afterburnerdetent_lifted = 0;									//     Detent is no longer lifted
-			}
-		} 
-	}
 	DefaultMapping(&o, x);
 }
