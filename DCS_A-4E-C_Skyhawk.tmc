@@ -261,14 +261,14 @@ int main()
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, 0,																				// IU - 
 								0,																				// OU - 
-								0,																				// IM - 
+								CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'a', D(), UP+R_SHIFT+L_ALT ),			// IM - AFCS Heading Select Pull-to-Set Knob - Continuous Increase
 								TEMPO( 0, PULSE+'m', 500 ),														// OM - [long] Toggle Mirrors
 								0,																				// ID - 
 								0);																				// OD - 
 	// CSL
 	MapKeyIOUMD(&Throttle, CSL, 0,																				// IU - 
 								0,																				// OU - 
-								0,																				// IM - 
+								CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'z', D(), UP+R_SHIFT+L_ALT ),			// IM - AFCS Heading Select Pull-to-Set Knob - Continuous Decrease
 								0,																				// OM - 
 								0,																				// ID - 
 								0);																				// OD - 
