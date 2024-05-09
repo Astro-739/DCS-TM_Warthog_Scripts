@@ -152,17 +152,17 @@ int main()
 							    CHAIN( L_ALT, D(10), SPC ));													// OD - weapon release
 
 	// Expand FOV Button - S3
-	MapKey(&Joystick, S3,  		0);																// 
-	MapKeyR(&Joystick, S3,  	0);																// 
+	MapKey(&Joystick, S3,  		0 );																			// 
+	MapKeyR(&Joystick, S3,  	0 );																			// 
 
 
 	// Target Management Switch
 	// H2U
 	MapKeyIO(&Joystick, H2U, 	PULSE+'8',																		// I - Weapon Function Selector Switch - CW
-							 	USB[0x55]);		 																// O - zoom in 
+							 	USB[0x55] );	 																// O - zoom in 
 	// H2D
 	MapKeyIO(&Joystick, H2D, 	PULSE+'7',																		// I - Weapon Function Selector Switch - CCW
-							 	USB[0x54]);																		// O - zoom out
+							 	USB[0x54] );																	// O - zoom out
 	// H2R							
 	MapKeyIO(&Joystick, H2R, 	0,																				// I - 
 							 	CHAIN( L_WIN, D(10), KP6 )); 													// O - snap view right MFD
@@ -261,17 +261,17 @@ int main()
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, 0,																				// IU - 
 								0,																				// OU - 
-								CHAIN( R_SHIFT+L_WIN, D(10), 'a' ),					// IM - AFCS Heading Select Pull-to-Set Knob - Continuous Increase
+								CHAIN( R_SHIFT+L_WIN, D(10), 'a' ),												// IM - AFCS Heading Select Pull-to-Set Knob - Continuous Increase
 								TEMPO( 0, PULSE+'m', 500 ),														// OM - [long] Toggle Mirrors
 								0,																				// ID - 
-								0);																				// OD - 
+								0 );																			// OD - 
 	// CSL
 	MapKeyIOUMD(&Throttle, CSL, 0,																				// IU - 
 								0,																				// OU - 
-								CHAIN( R_SHIFT+L_WIN, D(10), 'z' ),					// IM - AFCS Heading Select Pull-to-Set Knob - Continuous Decrease
+								CHAIN( R_SHIFT+L_WIN, D(10), 'z' ),												// IM - AFCS Heading Select Pull-to-Set Knob - Continuous Decrease
 								0,																				// OM - 
 								0,																				// ID - 
-								0);																				// OD - 
+								0 );																			// OD - 
 
 	// Speedbrake Switch
 	// SPDF
@@ -347,17 +347,17 @@ int main()
 								CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));						// O - Throttle Position Lock - Step Up (OFF/IGN/IDLE)
 	// EOLMOTOR
 	MapKeyIO(&Throttle, EOLMOTOR, 0,																			// I - 
-								groundcrewstartup); 															// O - Ground Crew Start-up
+								groundcrewstartup ); 															// O - Ground Crew Start-up
 	// EORIGN
-	MapKey(&Throttle, EORIGN, 		0); 																			// 
+	MapKey(&Throttle, EORIGN, 	0 ); 																			// 
 
 
 	// Engine Override
 	// EFLNORM	
-	MapKey(&Throttle, EFLNORM, 	0);																				// 
+	MapKey(&Throttle, EFLNORM, 	0 );																			// 
 	// EFLOVER
 	MapKeyIO(&Throttle, EFLOVER, 0,																				// 
-								0);																				// 
+								0 );																			// 
 								
 	// EFRNORM
 	MapKeyIOUMD(&Throttle, EFRNORM, 0,																			// IU - 
@@ -366,7 +366,7 @@ int main()
 								CHAIN( 0,																		// OM - ******** TODO ********
 									   EXEC( "AAR_mode = 0;" )),												//		AAR_mode off
 								0,																				// ID - 
-								0);																				// OD - 
+								0 );																			// OD - 
 	// EFROVER
 	MapKeyIOUMD(&Throttle, EFROVER, 0,																			// IU - 
 								0,																				// OU - 
@@ -374,7 +374,7 @@ int main()
 								CHAIN( 0,																		// OM - ******** TODO ********
 									   EXEC( "AAR_mode = 1;" )),												//		AAR_mode on
 								0,																				// ID - 
-								0);																				// OD - 
+								0 );																			// OD - 
 
 	// SC
 	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+HOME, D(), UP+R_CTL ),					// I - [short] re-centre IR tracker
@@ -397,8 +397,8 @@ int main()
 
 	// M LAYER - Navigation Mode
 	// BSM - LED2 ON/OFF
-	MapKey(&Throttle, BSM, 		LED(&Throttle, LED_ONOFF, LED_CURRENT+LED2)); 									// LED2 ON for M layer
-	MapKeyR(&Throttle, BSM, 	LED(&Throttle, LED_ONOFF, LED_CURRENT-LED2)); 									// LED2 OFF for M layer
+	MapKey(&Throttle, BSM, 		LED(&Throttle, LED_ONOFF, LED_CURRENT+LED2) ); 									// LED2 ON for M layer
+	MapKeyR(&Throttle, BSM, 	LED(&Throttle, LED_ONOFF, LED_CURRENT-LED2) ); 									// LED2 OFF for M layer
 
 	// D LAYER - Air-to-Ground Mode
 	// BSB - LED3 ON/OFF
