@@ -70,12 +70,12 @@ int main()
 							PULSE+'a' ),																				// Autopilot on - AFCS Engage Switch - ENGAGE/OFF
 					 PULSE+'a' );																						// Autopilot off - AFCS Engage Switch - ENGAGE/OFF
 	
-	ap_alt = 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT, D(200),												// AFCS Altitude Switch - ALT
-					   DOWN+R_SHIFT+L_CTRL, D(10), PULSE+'z', D(), UP+R_SHIFT+L_CTRL );										// AFCS Heading Select Switch - OFF
-	ap_althdg = CHAIN( DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT, D(200),												// AFCS Altitude Switch - ALT
-					   DOWN+R_SHIFT+L_CTRL, D(10), PULSE+'a', D(), UP+R_SHIFT+L_CTRL );										// AFCS Heading Select Switch - HDG SEL
-	ap_path = 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'z', D(), UP+R_SHIFT, D(200),												// AFCS Altitude Switch - OFF
-					   DOWN+R_SHIFT+L_CTRL, D(10), PULSE+'z', D(), UP+R_SHIFT+L_CTRL );										// AFCS Heading Select Switch - OFF
+	ap_alt = 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT, D(200),											// AFCS Altitude Switch - ALT
+					   DOWN+R_SHIFT+L_CTL, D(10), PULSE+'z', D(), UP+R_SHIFT+L_CTL );									// AFCS Heading Select Switch - OFF
+	ap_althdg = CHAIN( DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT, D(200),											// AFCS Altitude Switch - ALT
+					   DOWN+R_SHIFT+L_CTL, D(10), PULSE+'a', D(), UP+R_SHIFT+L_CTL );									// AFCS Heading Select Switch - HDG SEL
+	ap_path = 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'z', D(), UP+R_SHIFT, D(200),											// AFCS Altitude Switch - OFF
+					   DOWN+R_SHIFT+L_CTL, D(10), PULSE+'z', D(), UP+R_SHIFT+L_CTL );									// AFCS Heading Select Switch - OFF
 
 
 	// Exterior Lighting - Full
