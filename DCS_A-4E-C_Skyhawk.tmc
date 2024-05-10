@@ -169,7 +169,10 @@ int main()
 							 	CHAIN( L_WIN, D(10), KP6 )); 													// O - snap view right MFD
 	// H2L
 	MapKeyIO(&Joystick, H2L, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'9', D(), UP+L_SHIFT ),						// I - Guns Charging Switch - READY
-							 	CHAIN( L_WIN, D(10), KP4 )); 													// O - snap view left MFD
+								CHAIN( PULSE+BSP, D(), L_WIN, D(10), KP4 ));									// O - remove stick, snap view instruments
+	MapKeyRIO(&Joystick, H2L, 	0,																				// I - 
+								CHAIN( D(200), PULSE+BSP ));													// O - place stick
+
 
 
 	// Display Management Switch
