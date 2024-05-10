@@ -79,14 +79,14 @@ int main()
 					   DOWN+R_SHIFT+L_CTL, D(10), PULSE+'z', D(), UP+R_SHIFT+L_CTL );									// AFCS Heading Select Switch - OFF
 
 
-	// Exterior Lighting - Full
+	// Exterior Lighting
 	extlight_full = CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+R_SHIFT,	D(100),							// Anti-Collision Light Switch - ON
 						   DOWN+R_CTL+L_SHIFT, D(10), PULSE+'l', D(), UP+R_CTL+L_SHIFT, D(100),							// Fuselage Light Switch - BRIGHT
 						   DOWN+L_ALT+L_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+L_SHIFT, D(100),							// Navigation Lights Switch - BRIGHT
 						   DOWN+R_ALT+R_SHIFT, D(10), PULSE+'l', D(), UP+R_ALT+R_SHIFT,	D(100),							// Tail Light Switch - BRIGHT
 						   DOWN+L_SHIFT, D(10), PULSE+'l', D(), UP+L_SHIFT );											// Master Exterior Lights Switch - ON
 						   
-	// Exterior Lighting - Position Dim - // TODO *********
+	// TODO *********
 	extlight_posdim = CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'l', D(), UP+L_SHIFT+R_CTL, D(100),						// Lights Anti Collision OFF
 							 DOWN+L_CTL+L_ALT, D(10), PULSE+'l', D(), UP+L_CTL+L_ALT, D(100),							// Lights Position Wing DIM
 							 DOWN+L_ALT+L_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+L_SHIFT, D(100),						// Lights Position Tail DIM
@@ -95,17 +95,14 @@ int main()
 							 D(800),																					//   loop 8x
 							 EXEC( "StopAutoRepeat(1);" ));																//   stop loop
 						   
-	// Exterior Lighting - Formation
 	extlight_formation = CHAIN( DOWN+L_ALT+R_CTL, D(10), PULSE+'l', D(), UP+L_ALT+R_CTL, D(100),						// Anti-Collision Light Switch - OFF
 								DOWN+R_CTL+L_CTL, D(10), PULSE+'l', D(), UP+R_CTL+L_CTL, D(100),						// Fuselage Light Switch - OFF
 								DOWN+L_ALT+L_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+L_SHIFT, D(100),					// Navigation Lights Switch - BRIGHT
 								DOWN+R_ALT+R_SHIFT, D(10), PULSE+'l', D(), UP+R_ALT+R_SHIFT, D(100),					// Tail Light Switch - BRIGHT
 								DOWN+L_SHIFT, D(10), PULSE+'l', D(), UP+L_SHIFT );										// Master Exterior Lights Switch - ON
 
-	// Exterior Lighting - Flash/Steady toggle
 	extlight_flash_steady = CHAIN( DOWN+L_SHIFT+L_WIN, D(10), PULSE+'l', D(), UP+L_SHIFT+L_WIN );						// Lighting Flash/Steady Switch - FLSH/STDY
 
-	// Exterior Lighting - Covert
 	extlight_covert = CHAIN( DOWN+L_CTL, D(10), PULSE+'l', D(), UP+L_CTL );												// Master Exterior Lights Switch - OFF
 
 
@@ -247,21 +244,21 @@ int main()
 
 	// Coolie Switch
 	// CSU
-	MapKeyIOUMD(&Throttle, CSU, 0, 																				// IU - 
-								CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'w', D(), UP+L_CTL+R_SHIFT ), 			// OU - Wing Sweep Auto Mode
+	MapKeyIOUMD(&Throttle, CSU, CHAIN( L_SHIFT+L_CTL, D(10), 'v' ), 											// IU - Missile Volume Knob - CCW/Decrease
+								0, 																				// OU - 
 								EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+L_CTL+'q' );"							// IM - [CAR] Nose strut extend
 									  "else ActKey( PULSE+KEYON+L_SHIFT+'`' );" ),								//      Previous Waypoint
-								CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'w', D(), UP+L_CTL+R_SHIFT ), 			// OM - Wing Sweep Auto Mode
-								0,																				// ID - 
-								CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'w', D(), UP+L_CTL+R_SHIFT )); 			// OD - Wing Sweep Auto Mode
+								0, 																				// OM - 
+								CHAIN( L_SHIFT+L_CTL, D(10), 'v' ), 											// IU - Missile Volume Knob - CCW/Decrease
+								0 ); 																			// OD - 
 	// CSD
-	MapKeyIOUMD(&Throttle, CSD, CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'w', D(), UP+L_CTL+R_CTL ),	 			// IU - 
-								CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'w', D(), UP+L_CTL+R_CTL ),	 			// OU - 
+	MapKeyIOUMD(&Throttle, CSD, CHAIN( L_SHIFT+L_CTL, D(10), 'f' ), 											// IU - Missile Volume Knob - CW/Increase
+								0,	 																			// OU - 
 								EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+L_CTL+'a' );"							// IM - [CAR] Nose strut kneel
 									  "else ActKey( PULSE+KEYON+L_CTL+'`' );" ),								//      Next Waypoint
-								CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'w', D(), UP+L_CTL+R_CTL ),	 			// OM - Wing Sweep Bomb Mode
-								0,																				// ID - 
-								CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'w', D(), UP+L_CTL+R_CTL ));	 			// OD - Wing Sweep Bomb Mode
+								0,	 																			// OM - 
+								CHAIN( L_SHIFT+L_CTL, D(10), 'f' ), 											// IU - Missile Volume Knob - CW/Increase
+								0 );	 																		// OD - 
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, 0,																				// IU - 
 								0,																				// OU - 
