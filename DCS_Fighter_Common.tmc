@@ -1,5 +1,27 @@
 // DCS Fighter Common Thrustmaster Warthog Script by Astro
 // version 3, Oct 2023
+//
+// All common functions across DCS modules:
+// - Gun Trigger first/second detent
+// - F10 map
+// - Aircraft trim
+// - Aircraft roll/pitch axes
+// - Eject
+// - Afterburner detent
+// - Canopy
+// - Landing gear
+// - Re-centre IR tracker
+// - Discord game overlay
+// - Carrier Mode
+// - Afterburner detent
+// - Left/Right throttles (incl off/idle)
+// - Radar cursor axes
+// - Throttle FC axis
+// - Radio commands
+// - Night Vision Goggles function
+// - Flashlight function
+// - Brightness function (NVG, flashlight, other)
+
 
 
 
@@ -119,7 +141,7 @@ int dcs_fighter_common()
 	ground_requesttaxitakeoff	= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 );				 							// Request taxi, take-off short menu
 	ground_rearmrefuel			= CHAIN( DOWN+L_ALT, D(10), PULSE+USB[0x34], D(), UP+L_ALT );        			  		// Rearming and Refueling Window   (L_ALT+')
 	
-	cv_requestlaunch			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F3, D(200), PULSE+F2 ); 		// Radio menu (\), xxxxxxxxxxxxxxx  todo
+	cv_requestlaunch			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F3, D(200), PULSE+F2 ); 		// TODO Radio menu (\), xxxxxxx
 	cv_inbound					= SEQ( CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ), 	// Radio menu (\), ATC, CV, Inbound
 									   CHAIN( PULSE+USB[0x31], D(200), PULSE+F2 )); 									// Radio menu (\), See you at 10 (menu shortcut)
 	cv_salute					= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'u', D(), UP+L_SHIFT ); 							// Salute
