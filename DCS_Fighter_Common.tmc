@@ -18,6 +18,7 @@
 // - Radar cursor axes
 // - Throttle FC axis
 // - Radio commands
+// - External views
 // - Night Vision Goggles function
 // - Flashlight function
 // - Brightness function (NVG, flashlight, other)

@@ -339,27 +339,27 @@ int main()
 
 	// Engine Override
 	// EFLNORM
-	MapKeyIO(&Throttle, EFLNORM, 	0,																				// I - 
-									CHAIN( 0, D(), 																	// O - MANUAL PITCH Override Switch - NORM
-										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ));							// 	   LED5 OFF for MANUAL PITCH Override
+	MapKeyIO(&Throttle, EFLNORM, 	CHAIN( 0, D(), 																	// I - MANUAL PITCH Override Switch - NORM
+										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),							// 	   LED5 OFF for MANUAL PITCH Override
+									0 );																			// O - 
 	// EFLOVER
-	MapKeyIO(&Throttle, EFLOVER, 	0,																				// I - 
-									CHAIN( DX26, D(),																// O - MANUAL PITCH Override Switch - OVRD   ********* FIX DX in DCS
-										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ));							// 	   LED5 ON for MANUAL PITCH Override
+	MapKeyIO(&Throttle, EFLOVER, 	CHAIN( DX26, D(),																// I - MANUAL PITCH Override Switch - OVRD   // TODO ********* FIX DX in DCS
+										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),							// 	   LED5 ON for MANUAL PITCH Override
+										   0 );																		// O - 
 	// EFRNORM
-	MapKeyIO(&Throttle, EFRNORM, 	CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'h', D(), UP+L_CTL+L_ALT ),				// I - HOOK Switch - UP
-									0);																				// O - 
+	MapKeyIO(&Throttle, EFRNORM, 	0, 																				// I - 
+									CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'h', D(), UP+L_CTL+L_ALT ));				// O - HOOK Switch - UP
 	// EFROVER
-	MapKeyIO(&Throttle, EFROVER, 	CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'h', D(), UP+L_CTL+L_SHIFT ),			// I - HOOK Switch - DOWN
-									CHAIN( DOWN+R_SHIFT, D(10), PULSE+'f', D(), UP+R_SHIFT,	D(), 					// O - AIR REFUEL Switch - OPEN
-										   //EXEC( "SetSCurve(&Joystick, JOYX, 0, 0, 0, 0, -1);"						//	    set joyX curves for aerial refuelling
+	MapKeyIO(&Throttle, EFROVER, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'f', D(), UP+R_SHIFT,	D(), 					// I - AIR REFUEL Switch - OPEN
+										   //EXEC( "SetSCurve(&Joystick, JOYX, 0, 0, 0, 0, -1);"					//	    set joyX curves for aerial refuelling
 										   // 	 "SetSCurve(&Joystick, JOYY, 0, 0, 0, 0, -1);" ), D(), 				// 	  	set joyY curves for aerial refuelling
-										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ));							// 		LED5 ON for Aerial Refuelling
-	MapKeyRIO(&Throttle, EFROVER, 	0,																				// I - 
-									CHAIN( DOWN+R_CTL, D(10), PULSE+'f', D(), UP+R_CTL, D(),						// O - AIR REFUEL Switch - CLOSE
+										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),							// 		LED5 ON for Aerial Refuelling
+									CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'h', D(), UP+L_CTL+L_SHIFT ));			// O - HOOK Switch - DOWN
+	MapKeyRIO(&Throttle, EFROVER, 	CHAIN( DOWN+R_CTL, D(10), PULSE+'f', D(), UP+R_CTL, D(),						// I - AIR REFUEL Switch - CLOSE
 										   //EXEC( "SetSCurve(&Joystick, JOYX, 0, 0, 0, 0, 0);"						//		set joyX curves back to normal
 										   //	 "SetSCurve(&Joystick, JOYY, 0, 0, 0, 0, 0);" ), D(), 				//		set joyY curves back to normal
-										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ));							// 		LED5 OFF for Aerial Refuelling
+										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),							// 		LED5 OFF for Aerial Refuelling
+									0 );																			// O - 
 
 	// Engine idle/off
 	// IDLELON

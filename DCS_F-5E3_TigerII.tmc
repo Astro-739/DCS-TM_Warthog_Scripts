@@ -324,23 +324,25 @@ int main()
 
 	// Engine Override
 	// EFLNORM	
-	MapKey(&Throttle, EFLNORM, 	0);																				// 
+	MapKeyIO(&Throttle, EFLNORM, 	0,																			// I - 
+									0 );																		// O - (Front seat)
 	// EFLOVER
-	MapKey(&Throttle, EFLOVER, 	DX32);																			// Aileron Limiter (Hold to turn off)
+	MapKeyIO(&Throttle, EFLOVER, 	DX32,																		// I - Aileron Limiter (Hold to turn off)
+									0 );																		// O - (Back seat)
 	// EFRNORM
 	MapKeyIOUMD(&Throttle, EFRNORM, 0,																			// IU - 
 								0,																				// OU - 
-								0,																				// IM - 
-								CHAIN( PULSE+'p', D(100), DOWN+'p', D(500), UP+'p', PULSE+'p' ),				// OM - Cut Drag Chute
+								CHAIN( PULSE+'p', D(100), DOWN+'p', D(500), UP+'p', PULSE+'p' ),				// IM - Cut Drag Chute
+								0,																				// OM - (Raise tail hook)
 								0,																				// ID - 
-								0);																				// OD - 
+								0 );																			// OD - 
 	// EFROVER
 	MapKeyIOUMD(&Throttle, EFROVER, 0,																			// IU - 
 								0,																				// OU - 
-								CHAIN( DOWN+'h', D(100), UP+'h' ),												// IM - Deploy Tail Hook
-								PULSE+'p',																		// OM - Deploy Drag Chute
+								PULSE+'p',																		// IM - Deploy Drag Chute
+								CHAIN( DOWN+'h', D(100), UP+'h' ),												// OM - Deploy Tail Hook
 								0,																				// ID - 
-								0);																				// OD - 
+								0 );																			// OD - 
 
 
 	// U LAYER - Air-to-Air Mode

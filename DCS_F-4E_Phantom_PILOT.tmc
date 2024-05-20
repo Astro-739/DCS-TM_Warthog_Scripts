@@ -179,20 +179,20 @@ int dcs_f4e_pilot_controls()
 	// Engine Override
 	// EFRNORM
 	MapKeyIOUMD(&Throttle, EFRNORM, 0,																			// IU - 
-								0,																				// OU - 1F
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ),						// IM - Hook Retract
-								CHAIN( 0,																		// OM - ******** TODO AAR stuff ********
+								0,																				// OU - 
+								CHAIN( 0,																		// IM - // TODO AAR stuff ********
 									   EXEC( "AAR_mode = 0;" 													//		AAR_mode off
 											 "printf(\"AAR_mode = 0\\xa\");" )),								// 
+								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ),						// OM - Hook Retract
 								0,																				// ID - 
 								0);																				// OD - 
 	// EFROVER
 	MapKeyIOUMD(&Throttle, EFROVER, 0,																			// IU - 
 								0,																				// OU - 
-								CHAIN( DOWN+L_CTL, D(10), PULSE+'h', D(), UP+L_CTL ),							// IM - Hook Extend
-								CHAIN( 0,																		// OM - ******** TODO AAR stuff ********
+								CHAIN( 0,																		// IM - // TODO AAR stuff ********
 									   EXEC( "AAR_mode = 1;"													//		AAR_mode on
 											 "printf(\"AAR_mode = 1\\xa\");" )),								// 
+								CHAIN( DOWN+L_CTL, D(10), PULSE+'h', D(), UP+L_CTL ),							// OM - Hook Extend
 								0,																				// ID - 
 								0);																				// OD - 
 
