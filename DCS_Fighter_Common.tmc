@@ -308,8 +308,8 @@ int dcs_fighter_common()
 
 	// Engine idle/off
 	// IDLELON
-	MapKey(&Throttle, IDLELON, 	CHAIN( DOWN+R_ALT, D(10), PULSE+END, D(), UP+R_ALT ));							// Throttle Left - OFF
-	MapKeyR(&Throttle, IDLELON, CHAIN( DOWN+R_ALT, D(10), PULSE+HOME, D(), UP+R_ALT ));							// Throttle Left - IDLE
+	MapKey(&Throttle, IDLELON, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+END, D(), UP+L_SHIFT ));						// Throttle Left - OFF
+	MapKeyR(&Throttle, IDLELON, CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));						// Throttle Left - IDLE
 	// IDLERON
 	MapKey(&Throttle, IDLERON, 	CHAIN( D(100), DOWN+R_SHIFT, D(10), PULSE+END, D(), UP+R_SHIFT ));				// Throttle Right - OFF
 	MapKeyR(&Throttle, IDLERON, CHAIN( D(100), DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));				// Throttle Right - IDLE
