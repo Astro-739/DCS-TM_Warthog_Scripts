@@ -165,16 +165,16 @@ int dcs_f4e_pilot_controls()
 
 	// Engine Operation
 	// EOLIGN
-	MapKeyIO(&Throttle, EOLIGN,	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'c', D(), UP+R_SHIFT ),						// I - Crank Left Engine
-								CHAIN( DOWN+R_ALT, D(10), PULSE+HOME, D(), UP+R_ALT ));							// O - Throttle Left - IDLE
+	MapKeyIO(&Throttle, EOLIGN,	0,																				// I - 
+								CHAIN( DOWN+R_ALT, D(10), PULSE+HOME, D(), UP+R_ALT ));							// O - Left Engine Ignition
 
 	// EOLMOTOR
 	MapKeyIO(&Throttle, EOLMOTOR, 0,																			// I - 
 								groundcrewstartup); 															// O - Ground Crew Start-up
 
 	// EORIGN
-	MapKeyIO(&Throttle, EORIGN, CHAIN( DOWN+R_CTL, D(10), PULSE+'c', D(), UP+R_CTL ),							// I - Crank Right Engine
-								CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));						// O - Throttle Right - IDLE
+	MapKeyIO(&Throttle, EORIGN, 0,																				// I - 
+								CHAIN( DOWN+R_CTL, D(10), PULSE+HOME, D(), UP+R_CTL ));							// O - Right Engine Ignition
 
 	// Engine Override
 	// EFRNORM
