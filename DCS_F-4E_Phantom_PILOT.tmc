@@ -157,11 +157,11 @@ int dcs_f4e_pilot_controls()
 
 	// Flaps Switch
 	// FLAPU
-	MapKey(&Throttle, FLAPU,  	CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'f', D(), UP+L_CTL+L_SHIFT ));			// Flaps/Slats Switch - Norm/Out (3-way down)
+	MapKey(&Throttle, FLAPU,  	CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'f', D(), UP+L_CTL+L_SHIFT ));			// Flaps/Slats Switch - Norm
 	// FLAPM
-	MapKey(&Throttle, FLAPM, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));							// Flaps/Slats Switch - Norm
+	MapKey(&Throttle, FLAPM, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));							// Flaps/Slats Switch - Out
 	// FLAPD	
-	MapKey(&Throttle, FLAPD,  	CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'f', D(), UP+L_CTL+L_ALT ));				// Flaps/Slats Switch - Out&Down/Out (3-way up)
+	MapKey(&Throttle, FLAPD,  	CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'f', D(), UP+L_CTL+L_ALT ));				// Flaps/Slats Switch - Out&Down
 
 	// Engine Operation
 	// EOLIGN
