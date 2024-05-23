@@ -369,7 +369,7 @@ int main()
 	MapKey(&Throttle, IDLERON, 		0);																				//
 
 	// SC
-	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+HOME, D(), UP+R_CTL ),					// I - [short] re-centre IR tracker
+	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - [short] re-centre IR tracker
 									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'`', D(), UP+L_SHIFT),					//     [long] discord game overlay
 									   500),
 								PULSE+'d');																		// O - Expand/FOV Button
