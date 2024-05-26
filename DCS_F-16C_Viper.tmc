@@ -127,9 +127,10 @@ int main()
 
 	// Display Management Switch
 	// H3U
-	MapKeyIO(&Joystick, H3U, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
+	MapKeyIO(&Joystick, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),				// I - kneeboard on/off
+									   nightvision, 500 ),														// 	   [long] Night Vision Goggles toggle
 								TEMPO( CHAIN( DOWN+R_ALT, D(10), PULSE+';', D(), UP+R_ALT ),					// O - DMS up
-									   nightvision,	500 ));														// 	   [long] Night Vision Goggles
+									   CHAIN( DOWN+L_CTL, D(10), PULSE+'v', D(), UP+L_CTL ), 500 ));			// 	   [long] Helmet Visor toggle
 	// H3D
 	MapKeyIO(&Joystick, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),					// I - kneeboard current position mark point
 									   flashlight, 500 ),														//	   [long] Flashlight on/off

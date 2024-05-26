@@ -420,7 +420,7 @@ int main()
 
 	// -------------------- CONTROLS ---------------------------------------------
 	
-	dcs_f4e_pilot_controls();							// PILOT controls (loaded first, assumimg player starts as pilot)
+	dcs_f4e_pilot_controls();							// PILOT controls (loaded first, for WSO switch after scripted loaded)
 
 
 

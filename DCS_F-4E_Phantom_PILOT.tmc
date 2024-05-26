@@ -105,14 +105,14 @@ int dcs_f4e_pilot_controls()
 	// SPDB
 	MapKeyIOUMD(&Throttle, SPDB, CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),				// IU - snap zoom min    (R_SHIFT+KP/)
 								speedbrakes_open,																// OU - Open Speed Brakes Momentary
-								EXEC( "if(WHDN_mode) ActKey( KEYON+'w' );" 										// IM - [WHDN] wheel brake
+								EXEC( "if(WHDN_mode) ActKey( KEYON+'d' );" 										// IM - [WHDN] wheel brake
 									  "else ActKey( PULSE+KEYON+USB[0x54] );" ),								//		snap zoom min
 								speedbrakes_open,																// OM - Open Speed Brakes Momentary
 								CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),					// ID - snap zoom min    (R_SHIFT+KP/)
 								speedbrakes_open );																// OD - Open Speed Brakes Momentary
 	MapKeyRIOUMD(&Throttle, SPDB, PULSE+KPENT,																	// IU - snap zoom normal
 								speedbrakes_close,																// OU - Close Speed Brakes
-								EXEC( "if(WHDN_mode) ActKey( 'w' );"											// IM - [WHDN] release 'w'
+								EXEC( "if(WHDN_mode) ActKey( 'd' );"											// IM - [WHDN] release 'w'
 									  "else ActKey( PULSE+KEYON+KPENT );" ),									//		snap zoom normal
 								speedbrakes_close,																// OM - Close Speed Brakes
 								PULSE+KPENT,																	// ID - snap zoom normal
@@ -177,21 +177,22 @@ int dcs_f4e_pilot_controls()
 								CHAIN( R_CTL, D(10), HOME ));													// O - Right Engine Ignition
 
 	// Engine Override
+	// EFL in Phantom main script
 	// EFRNORM
 	MapKeyIOUMD(&Throttle, EFRNORM, 0,																			// IU - 
-								0,																				// OU - 
-								CHAIN( 0,																		// IM - // TODO AAR stuff ********
+								CHAIN( 0,																		// OU - // TODO AAR stuff ********
 									   EXEC( "AAR_mode = 0;" 													//		AAR_mode off
 											 "printf(\"AAR_mode = 0\\xa\");" )),								// 
+								CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT ),						// IM - Release Drag-Parachute
 								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ),						// OM - Hook Retract
 								0,																				// ID - 
 								0);																				// OD - 
 	// EFROVER
 	MapKeyIOUMD(&Throttle, EFROVER, 0,																			// IU - 
-								0,																				// OU - 
-								CHAIN( 0,																		// IM - // TODO AAR stuff ********
+								CHAIN( 0,																		// OU - // TODO AAR stuff ********
 									   EXEC( "AAR_mode = 1;"													//		AAR_mode on
 											 "printf(\"AAR_mode = 1\\xa\");" )),								// 
+								PULSE+'p',																		// IM - Drag-Parachute - Deploy
 								CHAIN( DOWN+L_CTL, D(10), PULSE+'h', D(), UP+L_CTL ),							// OM - Hook Extend
 								0,																				// ID - 
 								0);																				// OD - 
@@ -340,19 +341,19 @@ int dcs_f4e_pilot_controls_jstr()
 								CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'w', D(), UP+L_CTL+R_CTL ),	 					// ID - Wing Sweep Bomb Mode
 								JSTR_agwpn_comppilot );												 					// OD - Set Computer Pilot Weapons (CCIP)
 	// CSR
-	MapKeyIOUMD(&Throttle, CSR, CHAIN( L_ALT, D(10), 'w' ),																// IU - Wing Sweep Forward
+	MapKeyIOUMD(&Throttle, CSR, CHAIN( 0 ),																				// IU - Wing Sweep Forward
 								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'c', D(), UP+L_SHIFT ),								// OU - CAGE-SEAM button
-								CHAIN( L_ALT, D(10), 'w' ),																// IM - Wing Sweep Forward
-								TEMPO( 0, PULSE+'m', 500 ),																// OM - [long] Toggle Mirrors
-								CHAIN( L_ALT, D(10), 'w' ),																// ID - Wing Sweep Forward
-								0);																						// OD - 
+								CHAIN( 0 ),																				// IM - Wing Sweep Forward
+								TEMPO( 0, CHAIN( DOWN+L_SHIFT, D(10), PULSE+'m', D(), UP+L_SHIFT ), 500 ),				// OM - [long] Toggle Mirrors
+								CHAIN( 0 ),																				// ID - Wing Sweep Forward
+								0 );																					// OD - 
 	// CSL
 	MapKeyIOUMD(&Throttle, CSL, CHAIN( L_SHIFT+R_CTL, D(10), 'w' ),														// IU - Wing Sweep Aft
 								0,																						// OU - 
 								CHAIN( L_SHIFT+R_CTL, D(10), 'w' ),														// IM - Wing Sweep Aft
 								0,																						// OM - 
 								CHAIN( L_SHIFT+R_CTL, D(10), 'w' ),														// ID - Wing Sweep Aft
-								0);																						// OD - 
+								0 );																					// OD - 
 
 
 
