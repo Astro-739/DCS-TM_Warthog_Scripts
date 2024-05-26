@@ -135,7 +135,7 @@ int dcs_f4e_pilot_controls()
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED4) )); 							//     LED4 ON
 	MapKeyRIO(&Throttle, PSF, 	CHAIN( 0, D(), 																	// I - 
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED4) ),							//     LED4 OFF
-							  	CHAIN( extlight_formation, D(), 												// O - extlight_formation
+							  	CHAIN( extlight_position, D(), 													// O - extlight_position
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED4) )); 							//     LED4 OFF
 	// PSB		
 	MapKeyIO(&Throttle, PSB, 	CHAIN( 0, D(), 																	// I - 
@@ -144,7 +144,7 @@ int dcs_f4e_pilot_controls()
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED4) )); 							//     LED4 ON
 	MapKeyRIO(&Throttle, PSB, 	CHAIN( 0, D(), 																	// I - 
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED4) ),							//     LED4 OFF
-							  	CHAIN( extlight_formation, D(), 												// O - extlight_formation
+							  	CHAIN( extlight_position, D(), 													// O - extlight_position
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED4) )); 							//     LED4 OFF
 
 	// LDGH
