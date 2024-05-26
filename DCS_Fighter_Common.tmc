@@ -284,14 +284,14 @@ int dcs_fighter_common()
 	// SPDB
 	MapKeyIOUMD(&Throttle, SPDB, CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),				// IU - snap zoom min    (R_SHIFT+KP/)
 								DX32,																			// OU - Open Speed Brakes Momentary
-								EXEC( "if(WHDN_mode) ActKey( KEYON+'d' );" 										// IM - [WHDN] wheel brake
+								EXEC( "if(WHDN_mode) ActKey( KEYON+DX13 );" 										// IM - [WHDN] wheel brake  // TODO DX
 									  "else ActKey( PULSE+KEYON+USB[0x54] );" ),								//		snap zoom min
 								DX32,																			// OM - Open Speed Brakes Momentary
 								CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),					// ID - snap zoom min    (R_SHIFT+KP/)
 								DX32 );																			// OD - Open Speed Brakes Momentary
 	MapKeyRIOUMD(&Throttle, SPDB, PULSE+KPENT,																	// IU - snap zoom normal
 								CHAIN( D(100), DX31 ),															// OU - Close Speed Brakes
-								EXEC( "if(WHDN_mode) ActKey( 'd' );"											// IM - [WHDN] release 'w'
+								EXEC( "if(WHDN_mode) ActKey( DX13 );"											// IM - [WHDN] release 'w'
 									  "else ActKey( PULSE+KEYON+KPENT );" ),									//		snap zoom normal
 								CHAIN( D(100), DX31 ),															// OM - Close Speed Brakes
 								PULSE+KPENT,																	// ID - snap zoom normal
