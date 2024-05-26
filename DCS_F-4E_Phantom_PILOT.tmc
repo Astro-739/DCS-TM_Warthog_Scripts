@@ -166,7 +166,8 @@ int dcs_f4e_pilot_controls()
 	// Engine Operation
 	// EOLIGN
 	MapKeyIO(&Throttle, EOLIGN,	0,																				// I - 
-								DX11 );																			// O - Left Engine Ignition
+								CHAIN( DX11, D(300),															// O - Left Engine Ignition
+									   DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));						// 	   Throttle Left - IDLE
 
 	// EOLMOTOR
 	MapKeyIO(&Throttle, EOLMOTOR, 0,																			// I - 
@@ -174,7 +175,8 @@ int dcs_f4e_pilot_controls()
 
 	// EORIGN
 	MapKeyIO(&Throttle, EORIGN, 0,																				// I - 
-								DX12 );																			// O - Right Engine Ignition
+								CHAIN( DX12, D(300), 															// O - Right Engine Ignition
+									   DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));						// 	   Throttle Right - IDLE
 
 	// Engine Override
 	// EFL in Phantom main script

@@ -230,12 +230,15 @@ int main()
 
 
 	// Ground Crew Start-up
-	groundcrewstartup = SEQ( CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F1, D(10000), 	// Radio menu (\), Ground crew, Wheel Chocks, Place 
-									PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F2, D(100), PULSE+F1, D(13000), 	// Radio menu (\), Ground crew, Ground Electric Power, On
-									PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F1, D(13000) ),	// Radio menu (\), Ground crew, Ground Air Supply, Connect
-							 CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F2, D(13000),	// Radio menu (\), Ground crew, Ground Air Supply, Disconnect
-									PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F2, D(100), PULSE+F2, D(13000), 	// Radio menu (\), Ground crew, Ground Electric Power, Off
-									PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F2 ));			// Radio menu (\), Ground crew, Wheel Chocks, Remove
+	groundcrewstartup = SEQ( CHAIN( DOWN+R_CTL, D(10), PULSE+'0', D(), UP+R_CTL, D(10000), 								// Crew Chief Command: Comms Check
+									DOWN+R_CTL, D(10), PULSE+'1', D(), UP+R_CTL, D(15000), 							 	// Crew Chief Command: Wheel Chocks > Place
+									DOWN+R_CTL, D(10), PULSE+'3', D(), UP+R_CTL, D(20000), 								// Crew Chief Command: External Power > Connect
+									DOWN+R_CTL, D(10), PULSE+'6', D(), UP+R_CTL, D(7000), 								// Crew Chief Command: Air Source > Connect Right Engine
+									DOWN+R_CTL, D(10), PULSE+'7', D(), UP+R_CTL, D(25000), 								// Crew Chief Command: Air Source > Start Flow
+									DOWN+R_CTL, D(10), PULSE+'5', D(), UP+R_CTL, D(25000), 								// Crew Chief Command: Air Source > Connect Left Engine
+									DOWN+R_CTL, D(10), PULSE+'8', D(), UP+R_CTL, D(5000), 								// Crew Chief Command: Air Source > Stop Flow
+									DOWN+R_CTL, D(10), PULSE+'9', D(), UP+R_CTL ), 		 								// Crew Chief Command: Air Source > Disconnect
+							 CHAIN( DOWN+R_CTL, D(10), PULSE+'8', D(), UP+R_CTL ));										// Crew Chief Command: Wheel Chocks > Remove
 
 
 	// Air-to-Air Refuelling
