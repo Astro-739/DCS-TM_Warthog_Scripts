@@ -215,23 +215,14 @@ int dcs_f4e_pilot_controls()
 	// U LAYER - [O] Air-to-Air Mode
 	//			 [I] ACM Mode
 	// BSF - LED1 ON/OFF
-	MapKeyIO(&Throttle, BSF, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'3', D(), UP+L_SHIFT, D(200),							// I - Display mode air to air
-									   DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'a', D(), UP+L_SHIFT+R_SHIFT, D(200),			// 	   Master arm cover open
-									   DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT,	D(200),							// 	   Master arm on
-									   DOWN+R_CTL+L_CTL, D(10), PULSE+'r', D(), UP+R_CTL+L_CTL, D(200),					//     AFCS Roll Stabilisation Off
-									   DOWN+L_CTL+R_SHIFT, D(10), PULSE+'w', D(), UP+L_CTL+R_SHIFT, D(100),				//	   Wing Sweep Auto Mode
-									   DOWN+R_SHIFT+L_ALT, D(10), PULSE+'c', D(), UP+R_SHIFT+L_ALT, D(),				//	   ACM cover open
+	MapKeyIO(&Throttle, BSF, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT, D(200),							// I - HUD Mode - A/A
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED1) ), 									// 	   LED1 ON for U layer
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'3', D(), UP+L_SHIFT, D(200),							// O - Display mode air to air
-									   DOWN+R_CTL+L_CTL, D(10), PULSE+'r', D(), UP+R_CTL+L_CTL, D(200),					//     AFCS Roll Stabilisation Off
-									   DOWN+L_CTL+R_SHIFT, D(10), PULSE+'w', D(), UP+L_CTL+R_SHIFT, D(),				//	   Wing Sweep Auto Mode
+								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT, D(200),							// O - HUD Mode - A/A
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED1) )); 									// 	   LED1 ON for U layer
-	MapKeyRIO(&Throttle, BSF, 	CHAIN( DOWN+R_SHIFT+L_CTL, D(10), PULSE+'c', D(), UP+R_SHIFT+L_CTL, D(200),				// I - ACM cover close
-									   DOWN+L_SHIFT, D(10), PULSE+'2', D(), UP+L_SHIFT, D(200),							// 	   Display mode cruise
-									   DOWN+R_CTL+L_SHIFT, D(10), PULSE+'r', D(), UP+R_CTL+L_SHIFT, D(),				//	   AFCS Roll Stabilisation On
+	MapKeyRIO(&Throttle, BSF, 	CHAIN( 0,																				// I - 
+									   DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT, D(200),								// 	   HUD Mode - Cage
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED1) ), 									// 	   LED1 OFF for U layer 
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'2', D(), UP+L_SHIFT, D(200),							// O - Display mode cruise
-									   DOWN+R_CTL+L_SHIFT, D(10), PULSE+'r', D(), UP+R_CTL+L_SHIFT, D(),				//	   AFCS Roll Stabilisation On
+								CHAIN( DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT, D(200),								// O - HUD Mode - Cage
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED1) )); 									// 	   LED1 OFF for U layer
 
 	// M LAYER - Navigation Mode
@@ -245,7 +236,7 @@ int dcs_f4e_pilot_controls()
 									   EXEC( "CAR_mode = 1;"															// 	   Set CAR_mode ON
 											 "printf(\"CAR_mode = 1\\xa\");" ),											// 
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),									//     LED5 ON
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'4', D(), UP+L_SHIFT, D(100),							// O - Display mode air to ground
+								CHAIN( DOWN+L_CTL, D(10), PULSE+'h', D(), UP+L_CTL, D(100),								// O - HUD Mode - A/G
 									   EXEC( "if((index_stpt_aa)%3 == 2) index_stpt_ag = 4;"							// 	   Set correct steerpoint in A-G mode (element 0 is first element in list)
 											 "else index_stpt_ag = (index_stpt_aa)%3;" ),								// 
 									   EXEC( "if(Joystick[S3]) {"														// 	   If JSTR shift is pressed
@@ -257,7 +248,7 @@ int dcs_f4e_pilot_controls()
 	MapKeyRIO(&Throttle, BSB, 	CHAIN( EXEC( "CAR_mode = 0;"															// I - Set CAR_mode OFF
 											 "printf(\"CAR_mode = 0\\xa\");" ),											// 
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),									//     LED5 OFF
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'2', D(), UP+L_SHIFT, D(),							// O - Display mode cruise
+								CHAIN( DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT, D(),								// O - HUD Mode - Cage
 									   EXEC( "if((index_stpt_ag)%5 > 1) index_stpt_aa = 2;"								// 	   Set correct steerpoint in A-A mode (IP and ST default to WP3, element 0 is first element in list)
 											 "else index_stpt_aa = (index_stpt_ag)%5;" ),								//
 									   EXEC( "LTRN_mode = 0;"															//     LTRN_mode OFF
