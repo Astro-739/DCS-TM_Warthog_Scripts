@@ -275,6 +275,28 @@ int dcs_fighter_common()
 											 "printf(\"WHDN_mode = 1\\xa\");" )),								//
 								0 );																			// D -
 
+	// Speedbrake Switch
+	// SPDF
+	MapKeyIO(&Throttle, SPDF, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x55], D(), UP+R_SHIFT ),					// I - snap zoom max   (R_SHIFT+KP*)
+								DX32 );																			// O - Open Speed Brakes
+	MapKeyRIO(&Throttle, SPDF, 	PULSE+KPENT,																	// I - snap zoom normal
+								CHAIN( D(100), DX31 ));															// O - Close Speed Brakes
+	// SPDB
+	MapKeyIOUMD(&Throttle, SPDB, CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),				// IU - snap zoom min    (R_SHIFT+KP/)
+								DX32,																			// OU - Open Speed Brakes Momentary
+								EXEC( "if(WHDN_mode) ActKey( KEYON+'d' );" 										// IM - [WHDN] wheel brake
+									  "else ActKey( PULSE+KEYON+USB[0x54] );" ),								//		snap zoom min
+								DX32,																			// OM - Open Speed Brakes Momentary
+								CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),					// ID - snap zoom min    (R_SHIFT+KP/)
+								DX32 );																			// OD - Open Speed Brakes Momentary
+	MapKeyRIOUMD(&Throttle, SPDB, PULSE+KPENT,																	// IU - snap zoom normal
+								CHAIN( D(100), DX31 ),															// OU - Close Speed Brakes
+								EXEC( "if(WHDN_mode) ActKey( 'd' );"											// IM - [WHDN] release 'w'
+									  "else ActKey( PULSE+KEYON+KPENT );" ),									//		snap zoom normal
+								CHAIN( D(100), DX31 ),															// OM - Close Speed Brakes
+								PULSE+KPENT,																	// ID - snap zoom normal
+								CHAIN( D(100), DX31 ));															// OU - Close Speed Brakes
+
 
 	// SC
 	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - re-centre IR tracker
