@@ -139,7 +139,8 @@ int main()
 	MapKeyIO(&Joystick, H3R, 	PULSE+']', 																		// I - kneeboard next page
 								CHAIN( R_ALT, D(10), '/' ));													// O - DMS right
 	// H3L
-	MapKeyIO(&Joystick, H3L, 	PULSE+'[', 																		// I - kneeboard previous page
+	MapKeyIO(&Joystick, H3L, 	TEMPO( PULSE+'[', 																// I - kneeboard previous page
+									   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT ), 500 ),			//	   [long] Pilot Body toggle
 								CHAIN( R_ALT, D(10), ',' ));													// O - DMS left
 
 

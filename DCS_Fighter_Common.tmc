@@ -219,7 +219,8 @@ int dcs_fighter_common()
 	MapKeyIO(&Joystick, H1R, 	PULSE+F2, 																		// I - F2 outside view
 							 	CHAIN( R_CTL, D(10), '/' )); 													// O - trim right wing down
 	// H1D
-	MapKeyIO(&Joystick, H1D, 	PULSE+F1, 																		// I - F1 cockpit view
+	MapKeyIO(&Joystick, H1D, 	TEMPO( PULSE+F1, 																// I - F1 cockpit view
+									   CHAIN( DOWN+R_CTL, D(10), PULSE+'F1', D(), UP+R_CTL ), 500 ),			//     [long] Selfie Mode toggle
 							 	CHAIN( R_CTL, D(10), '.' )); 													// O - trim nose up
 	// H1L	
 	MapKeyIO(&Joystick, H1L, 	PULSE+F6, 																		// I - F6 weapon view

@@ -144,7 +144,8 @@ int main()
 	MapKeyIO(&Joystick, H3D, 	CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
 								CHAIN( R_ALT, D(10), '6' ));													// O - RWR Indicator Control MODE Button
 	// H3L
-	MapKeyIO(&Joystick, H3L, 	PULSE+'[', 																		// I - kneeboard previous page
+	MapKeyIO(&Joystick, H3L, 	TEMPO( PULSE+'[', 																// I - kneeboard previous page
+									   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT ), 500 ),			//	   [long] Pilot Body toggle								
 								CHAIN( R_ALT, D(10), 'i' ));													// O - RWR Indicator Control UNKNOWN SHIP Button
 
  	// Countermeasure Management Switch
