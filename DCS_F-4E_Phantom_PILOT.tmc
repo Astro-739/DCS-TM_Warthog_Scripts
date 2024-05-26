@@ -295,15 +295,17 @@ int dcs_f4e_pilot_controls_jstr()
 
 	// Display Management Switch
 	// H3U
-	MapKeyIO(&Joystick, H3U, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),								// IM - kneeboard on/off
+	MapKeyIO(&Joystick, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// IM - kneeboard on/off
+									   nightvision, 500 ),																// 		[long] Night Vision Goggles toggle
 								TEMPO( CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'v', D(), UP+L_ALT+R_SHIFT ),			// OM - VDI Mode Toggle
-									   nightvision, 500 ));																// 		[long] Night Vision Goggles
+									   CHAIN( DOWN+L_CTL, D(10), PULSE+'v', D(), UP+L_CTL ), 500 ));					// 		[long] Helmet Visor toggle
 	// H3D
 	MapKeyIO(&Joystick, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// IM - kneeboard current position mark point
-									   flashlight, 500 ),																//	   [long] Flashlight on/off	
+									   flashlight, 500 ),																//	    [long] Flashlight on/off	
 								CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'h', D(), UP+L_ALT+R_SHIFT ));					// OM - HSD Mode Toggle
 	// H3R
-	MapKeyIO(&Joystick, H3R, 	PULSE+']', 																				// IM - kneeboard next page
+	MapKeyIO(&Joystick, H3R, 	TEMPO( PULSE+']', 																		// IM - kneeboard next page
+									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'v', D(), UP+L_SHIFT ), 500 ),   				// 		[long] Sunglasses toggle
 								TEMPO( EXEC( "index_stcmd = (index_stcmd+1)%5;"											// OM - Steer CMD next
 											 "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ),					// 		
 									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'7', D(), UP+L_SHIFT ),						// 		Display mode next

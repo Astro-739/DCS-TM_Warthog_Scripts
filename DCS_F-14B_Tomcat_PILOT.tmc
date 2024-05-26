@@ -300,7 +300,7 @@ int dcs_f14_pilot_controls_jstr()
 									   0, 500 ));																		// 		[long] (placeholder for visor)
 	// H3D
 	MapKeyIO(&Joystick, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// IM - kneeboard current position mark point
-									   flashlight, 500 ),																//	   [long] Flashlight on/off	
+									   flashlight, 500 ),																//	    [long] Flashlight on/off	
 								CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'h', D(), UP+L_ALT+R_SHIFT ));					// OM - HSD Mode Toggle
 	// H3R
 	MapKeyIO(&Joystick, H3R, 	PULSE+']', 																				// IM - kneeboard next page
