@@ -183,8 +183,8 @@ int dcs_f4e_pilot_controls()
 								CHAIN( 0,																		// OU - // TODO AAR stuff ********
 									   EXEC( "AAR_mode = 0;" 													//		AAR_mode off
 											 "printf(\"AAR_mode = 0\\xa\");" )),								// 
-								CHAIN( DOWN+R_CTL, D(10), PULSE+'p', D(), UP+R_CTL ),							// IM - Release Drag-Parachute
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ),						// OM - Hook Retract
+								0,																				// IM - 
+								0,																				// OM - 
 								0,																				// ID - 
 								0);																				// OD - 
 	// EFROVER
@@ -194,6 +194,12 @@ int dcs_f4e_pilot_controls()
 											 "printf(\"AAR_mode = 1\\xa\");" )),								// 
 								PULSE+'p',																		// IM - Drag-Parachute - Deploy
 								CHAIN( DOWN+L_CTL, D(10), PULSE+'h', D(), UP+L_CTL ),							// OM - Hook Extend
+								0,																				// ID - 
+								0);																				// OD - 
+	MapKeyRIOUMD(&Throttle, EFROVER, 0,																			// IU - 
+								0,																				// OU -
+								CHAIN( DOWN+R_CTL, D(10), PULSE+'p', D(), UP+R_CTL ),							// IM - Release Drag-Parachute
+								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ),						// OM - Hook Retract
 								0,																				// ID - 
 								0);																				// OD - 
 
@@ -311,7 +317,8 @@ int dcs_f4e_pilot_controls_jstr()
 									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'7', D(), UP+L_SHIFT ),						// 		Display mode next
 									   500 ));																			//
 	// H3L
-	MapKeyIO(&Joystick, H3L, 	PULSE+'[', 																				// IM - kneeboard previous page
+	MapKeyIO(&Joystick, H3L, 	TEMPO( PULSE+'[', 																				// IM - kneeboard previous page
+									   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT ), 500 ),					//	   [long] Pilot Body toggle								
 								TEMPO( EXEC( "index_stcmd = (index_stcmd+4)%5;"											// OM - Steer CMD previous
 											 "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ),					// 		
 									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'6', D(), UP+L_SHIFT ),						// 		Display mode previous
