@@ -21,10 +21,10 @@ int dcs_f4e_pilot_controls()
 
 	// JSTR layer
 	// Expand FOV Button - S3
-	MapKey(&Joystick, S3,  		EXEC( "if(LTRN_mode) dcs_f14_jester_lantirn_controls();"	// Switch to JESTER LANTIRN controls (LTRN_mode ON)
-									  "else dcs_f14_jester_controls();" ));					// Switch to JESTER controls (LTRN_mode OFF)
+	MapKey(&Joystick, S3,  		EXEC( "if(LTRN_mode) dcs_f4e_jester_lantirn_controls();"	// Switch to JESTER LANTIRN controls (LTRN_mode ON)
+									  "else dcs_f4e_jester_controls();" ));					// Switch to JESTER controls (LTRN_mode OFF)
 	MapKeyR(&Joystick, S3,  	EXEC( "dcs_fighter_common_jstr();" 							// Switch back to COMMON,
-									  "dcs_f14_pilot_controls_jstr();" ));					//   and PILOT controls
+									  "dcs_f4e_pilot_controls_jstr();" ));					//   and PILOT controls
 
 
 	// Weapon Release Button
@@ -242,7 +242,7 @@ int dcs_f4e_pilot_controls()
 									   EXEC( "if(Joystick[S3]) {"														// 	   If JSTR shift is pressed
 											   "LTRN_mode = 1;"															// 	   LTRN_mode ON
 											   "printf(\"LTRN_mode = 1\\xa\");"											// 
-											   "dcs_f14_jester_lantirn_controls();"										//	   Load JESTER LANTIRN controls
+											   "dcs_f4e_jester_lantirn_controls();"										//	   Load JESTER LANTIRN controls
 											   "}" ),																	//
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED3) )); 									//     A-G mode on, LED3 ON for D layer
 	MapKeyRIO(&Throttle, BSB, 	CHAIN( EXEC( "CAR_mode = 0;"															// I - Set CAR_mode OFF
