@@ -195,13 +195,13 @@ int dcs_f4e_pilot_controls()
 									   EXEC( "AAR_mode = 1;"													//		AAR_mode on
 											 "printf(\"AAR_mode = 1\\xa\");" )),								// 
 								PULSE+'p',																		// IM - Drag-Parachute - Deploy
-								CHAIN( DOWN+L_CTL, D(10), PULSE+'h', D(), UP+L_CTL ),							// OM - Hook Extend
+								CHAIN( DOWN+L_CTL+L_WIN, D(10), PULSE+'h', D(), UP+L_CTL+L_WIN ),				// OM - Arresting Hook Control Handle - Out
 								0,																				// ID - 
 								0);																				// OD - 
 	MapKeyRIOUMD(&Throttle, EFROVER, 0,																			// IU - 
 								0,																				// OU -
 								CHAIN( DOWN+R_CTL, D(10), PULSE+'p', D(), UP+R_CTL ),							// IM - Release Drag-Parachute
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ),						// OM - Hook Retract
+								CHAIN( DOWN+L_SHIFT+L_WIN, D(10), PULSE+'h', D(), UP+L_SHIFT+L_WIN ),			// OM - Arresting Hook Control Handle - In
 								0,																				// ID - 
 								0);																				// OD - 
 
@@ -344,9 +344,10 @@ int dcs_f4e_pilot_controls_jstr()
 								JSTR_agwpn_comppilot );												 					// OD - Set Computer Pilot Weapons (CCIP)
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, CHAIN( 0 ),																				// IU - Wing Sweep Forward
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'c', D(), UP+L_SHIFT ),								// OU - CAGE-SEAM button
+								'n',																					// OU - Air Refuel (AAR) Release Button (ARR) - missile uncage
 								CHAIN( 0 ),																				// IM - Wing Sweep Forward
-								TEMPO( 0, CHAIN( DOWN+L_SHIFT, D(10), PULSE+'m', D(), UP+L_SHIFT ), 500 ),				// OM - [long] Toggle Mirrors
+								TEMPO( 'n', 																			// OM - Air Refuel (AAR) Release Button (ARR)
+									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'m', D(), UP+L_SHIFT ), 500 ),					// 		[long] Toggle Mirrors
 								CHAIN( 0 ),																				// ID - Wing Sweep Forward
 								0 );																					// OD - 
 	// CSL
