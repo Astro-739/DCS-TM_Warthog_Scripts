@@ -423,15 +423,17 @@ int main()
 
 	// Engine Override
 	// EFLNORM	
-	MapKeyIO(&Throttle, EFLNORM, 	0,													// I - 
-									CHAIN( PULSE+'1', D(100),							// O - Switch to PILOT cockpit
-										   EXEC( "dcs_f4e_pilot_controls();" )));		//     load PILOT controls
+	MapKeyIO(&Throttle, EFLNORM, 	CHAIN( 0, D(), 													// I - Emergency Quick Release Lever - Release
+										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),			// 	   LED5 OFF for MANUAL Override
+									CHAIN( PULSE+'1', D(100),										// O - Switch to PILOT cockpit
+										   EXEC( "dcs_f4e_pilot_controls();" )));					//     load PILOT controls
 	// EFLOVER
-	MapKeyIO(&Throttle, EFLOVER, 	0,													// I - 
-									CHAIN( PULSE+'2', D(100),							// O - Switch to WSO cockpit
-										   EXEC( "dcs_f4e_wso_controls();" )));			//     load WSO controls
-	MapKeyRIO(&Throttle, EFLOVER, 	0,													// I - 
-									0 );												// O - 
+	MapKeyIO(&Throttle, EFLOVER, 	CHAIN( DX22, D(),												// I - Emergency Quick Release Lever - Press
+										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),			// 	   LED5 ON for MANUAL Override
+									CHAIN( PULSE+'2', D(100),										// O - Switch to WSO cockpit
+										   EXEC( "dcs_f4e_wso_controls();" )));						//     load WSO controls
+	MapKeyRIO(&Throttle, EFLOVER, 	0,																// I - 
+									0 );															// O - 
 								
 
 
