@@ -327,36 +327,36 @@ int dcs_f4e_pilot_controls_jstr()
 
 	// Coolie Switch
 	// CSU
-	MapKeyIOUMD(&Throttle, CSU, CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'w', D(), UP+L_CTL+R_SHIFT ), 					// IU - Wing Sweep Auto Mode
-								CHAIN( DOWN+L_CTL, D(10), PULSE+'p', D(), UP+L_CTL ), 									// OU - Missile Mode Toggle (boresight/slave)
-								CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'w', D(), UP+L_CTL+R_SHIFT ), 					// IM - Wing Sweep Auto Mode
-								CHAIN( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+L_CTL+'q' );" )),						// OM - [CAR] Nose strut extend
-								CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'w', D(), UP+L_CTL+R_SHIFT ),					// ID - Wing Sweep Auto Mode
+	MapKeyIOUMD(&Throttle, CSU, 0,																	 					// IU - 
+								0,																	 					// OU - 
+								0,																	  					// IM - 
+								0,																	 					// OM - 
+								0,																	 					// ID -
 								JSTR_agwpn_comptgt ); 																	// OD - Set Computer Target Weapons (CCRP)
 	// CSD
-	MapKeyIOUMD(&Throttle, CSD, CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'w', D(), UP+L_CTL+R_CTL ),	 					// IU - Wing Sweep Bomb Mode
+	MapKeyIOUMD(&Throttle, CSD, 0,																	  					// IU - 
 								CHAIN( DOWN+L_ALT, D(10), PULSE+'p', D(), UP+L_ALT, D(200),			 					// OU - Toggle Missile Prep
 									   DOWN+L_SHIFT, D(10), PULSE+'p', D(), UP+L_SHIFT, D(200),							//      Toggle SW Cooling
 									   DOWN+L_WIN, D(10), PULSE+'p', D(), UP+L_WIN ),									//      Toggle Gun Rate
-								CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'w', D(), UP+L_CTL+R_CTL ),	 					// IM - Wing Sweep Bomb Mode
-								CHAIN( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+L_CTL+'a' );" )),						// OM - [CAR] Nose strut kneel
-								CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'w', D(), UP+L_CTL+R_CTL ),	 					// ID - Wing Sweep Bomb Mode
+								0,																	  					// IM - 
+								0,																	 					// OM - 
+								0,																	  					// ID - 
 								JSTR_agwpn_comppilot );												 					// OD - Set Computer Pilot Weapons (CCIP)
 	// CSR
-	MapKeyIOUMD(&Throttle, CSR, CHAIN( 0 ),																				// IU - Wing Sweep Forward
-								'n',																					// OU - Air Refuel (AAR) Release Button (ARR) - missile uncage
-								CHAIN( 0 ),																				// IM - Wing Sweep Forward
-								TEMPO( 'n', 																			// OM - Air Refuel (AAR) Release Button (ARR)
+	MapKeyIOUMD(&Throttle, CSR, CHAIN( 0 ),																				// IU - 
+								'n',																					// OU - Air Refuel Release Button (ARR) - missile uncage
+								CHAIN( 0 ),																				// IM - 
+								TEMPO( PULSE+'n', 																		// OM - Air Refuel Release Button (ARR)
 									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'m', D(), UP+L_SHIFT ), 500 ),					// 		[long] Toggle Mirrors
-								CHAIN( 0 ),																				// ID - Wing Sweep Forward
+								CHAIN( 0 ),																				// ID - 
 								0 );																					// OD - 
 	// CSL
-	MapKeyIOUMD(&Throttle, CSL, CHAIN( L_SHIFT+R_CTL, D(10), 'w' ),														// IU - Wing Sweep Aft
-								0,																						// OU - 
-								CHAIN( L_SHIFT+R_CTL, D(10), 'w' ),														// IM - Wing Sweep Aft
+	MapKeyIOUMD(&Throttle, CSL, 0,																						// IU - Wing Sweep Aft
+								PULSE+'c',																				// OU - Cage Button
+								0,																						// IM - Wing Sweep Aft
 								0,																						// OM - 
-								CHAIN( L_SHIFT+R_CTL, D(10), 'w' ),														// ID - Wing Sweep Aft
-								0 );																					// OD - 
+								0,																						// ID - Wing Sweep Aft
+								PULSE+'c' );																			// OD - Cage Button
 
 
 

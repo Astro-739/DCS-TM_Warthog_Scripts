@@ -213,7 +213,7 @@ int dcs_fighter_common()
 
 	// Trim Switch
 	// H1U
-	MapKeyIO(&Joystick, H1U, 	PULSE+F4, 																		// I - F4 outside view
+	MapKeyIO(&Joystick, H1U, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'m', D(), UP+L_SHIFT ), 						// I - Toggle Mirrors
 						 	 	CHAIN( R_CTL, D(10), ';' )); 													// O - trim nose down
 	// H1R
 	MapKeyIO(&Joystick, H1R, 	PULSE+F2, 																		// I - F2 outside view
