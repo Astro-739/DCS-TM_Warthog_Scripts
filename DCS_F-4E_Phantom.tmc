@@ -148,11 +148,10 @@ int main()
 						   Steer_CMD_MAN );
 
 	// Radar range select
-	radarrangelist 	= SEQ( JSTR_rdr_range_25_list,
-						   JSTR_rdr_range_50_list,
-						   JSTR_rdr_range_100_list,
-						   JSTR_rdr_range_200_list,
-						   JSTR_rdr_range_400_list );
+	radarrangelist 	= SEQ( JSTR_rdr_range_25n_list
+						   JSTR_rdr_range_25w_list
+						   JSTR_rdr_range_50n_list
+						   JSTR_rdr_range_50w_list );
 
 	// Radar elevation select
 	radarelevlist 	= SEQ( JSTR_rdr_elev_low,
@@ -261,12 +260,8 @@ int main()
 	JSTR_rdr_mode_RWS		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'7', D(), UP+L_CTL+R_SHIFT );
 	JSTR_toggle_PD_P_STT	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'4', D(), UP+L_CTL+R_SHIFT );
 	// Radar - Silent/Active
-	JSTR_rdr_off			= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'7', D(), UP+L_CTL );
-	JSTR_rdr_on				= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL );
+	JSTR_rdr_off			= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'0', D(), UP+L_CTL+R_CTL );
+	JSTR_rdr_on				= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'1', D(), UP+L_CTL+R_CTL );
 	// Radar - Range
 	JSTR_rdr_range_auto		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'0', D(), UP+L_CTL+L_ALT );
 	JSTR_rdr_range_25		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'1', D(), UP+L_CTL+L_ALT );
