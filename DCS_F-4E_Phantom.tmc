@@ -231,7 +231,7 @@ int main()
 									DOWN+R_CTL, D(10), PULSE+'8', D(), UP+R_CTL, D(10000), 								// Crew Chief Command: Air Source > Stop Flow
 									DOWN+R_CTL, D(10), PULSE+'9', D(), UP+R_CTL, D(20000), 								// Crew Chief Command: Air Source > Disconnect
 									DOWN+R_CTL, D(10), PULSE+'4', D(), UP+R_CTL ), 		 								// Crew Chief Command: External Power > Disconnect
-							 CHAIN( DOWN+R_CTL, D(10), PULSE+'8', D(), UP+R_CTL ));										// Crew Chief Command: Wheel Chocks > Remove
+							 CHAIN( DOWN+R_CTL, D(10), PULSE+'2', D(), UP+R_CTL ));										// Crew Chief Command: Wheel Chocks > Remove
 
 
 	// Air-to-Air Refuelling
