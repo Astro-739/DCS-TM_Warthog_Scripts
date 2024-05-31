@@ -148,9 +148,9 @@ int main()
 						   Steer_CMD_MAN );
 
 	// Radar range select
-	radarrangelist 	= SEQ( JSTR_rdr_range_25n_list
-						   JSTR_rdr_range_25w_list
-						   JSTR_rdr_range_50n_list
+	radarrangelist 	= SEQ( JSTR_rdr_range_25n_list,
+						   JSTR_rdr_range_25w_list,
+						   JSTR_rdr_range_50n_list,
 						   JSTR_rdr_range_50w_list );
 
 	// Radar elevation select
