@@ -12,11 +12,10 @@ define	Steer_CMD_VEC			L_ALT+'4'
 define	Steer_CMD_MAN			L_ALT+'5'
 
 // JESTER Radar Range select
-define JSTR_rdr_range_25n_list	CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'1', D(), UP+L_CTL+L_ALT )
-define JSTR_rdr_range_25w_list	CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'2', D(), UP+L_CTL+L_ALT )
-define JSTR_rdr_range_50n_list	CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'3', D(), UP+L_CTL+L_ALT )
-define JSTR_rdr_range_50w_list	CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'4', D(), UP+L_CTL+L_ALT )
-
+define  JSTR_rdr_range_25n_list     CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'1', D(), UP+L_CTL+L_ALT )
+define  JSTR_rdr_range_25w_list     CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'2', D(), UP+L_CTL+L_ALT )
+define  JSTR_rdr_range_50n_list     CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'3', D(), UP+L_CTL+L_ALT )
+define  JSTR_rdr_range_50w_list     CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'4', D(), UP+L_CTL+L_ALT )
 
 // JESTER Radar Azimuth select
 define	JSTR_rdr_az_left		CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL )
