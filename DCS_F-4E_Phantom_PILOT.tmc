@@ -360,10 +360,4 @@ int dcs_f4e_pilot_controls_jstr()
 								CHAIN( DOWN+'c', D(200), UP+'c' ));														// OD - Cage Button
 
 
-
-EXEC( "index_stcmd = (index_stcmd+4)%5;"
-     	 "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ),
-
-
-
 } 	// end of dcs_f4e_pilot_controls_jstr()	======================================================================
