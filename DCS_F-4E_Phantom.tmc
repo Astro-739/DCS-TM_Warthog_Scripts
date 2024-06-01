@@ -40,11 +40,12 @@ int	JSTR_rdr_mode_RWS;
 int	JSTR_toggle_PD_P_STT;
 int	JSTR_rdr_off;
 int	JSTR_rdr_on;
-int	JSTR_rdr_range_auto;
-int	JSTR_rdr_range_25;
-int	JSTR_rdr_range_50;
-int	JSTR_rdr_ac_stab;
-int	JSTR_rdr_ground_stab;
+
+int	JSTR_rdr_range_25n;
+int	JSTR_rdr_range_25w;
+int	JSTR_rdr_range_50n;
+int	JSTR_rdr_range_50w;
+
 int	JSTR_rdr_az_elev_auto;
 int	JSTR_lock_enemy_ahead;
 int	JSTR_lock_friend_ahead;
@@ -92,15 +93,13 @@ char LTRN_mode = 0;
 
 int JSTR_toggle_RWS_TWS;
 int JSTR_ground_ac_stbl;
-int JSTR_rdr_range_50_25;
-int	JSTR_rdr_range_50_25_auto;
 int JSTR_rdr_offon;
 int JSTR_rwr_ai_norm;
 int JSTR_WHDN_startup;
 int	JSTR_nav_wp123;
 
 
-define AB 80											// detent position at AB% of full throttle reach
+define AB 75											// detent position at AB% of full throttle reach
 
 
 
@@ -195,8 +194,8 @@ int main()
 					
 	// Autopilot function
 	autopilot = SEQ( CHAIN( EXEC( "autopilot_mode();" ), D(200),														// Set autopilot mode
-							DOWN+L_ALT+L_SHIFT, D(10), PULSE+'p', D(), UP+L_ALT+L_SHIFT ),								// Autopilot on
-					 CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'p', D(), UP+L_ALT+L_CTL ));									// Autopilot off
+							DOWN+L_ALT+L_SHIFT, D(10), PULSE+'a', D(), UP+L_ALT+L_SHIFT ),								// Autopilot on
+					 CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'a', D(), UP+L_ALT+L_CTL ));									// Autopilot off
 	
 	// Exterior Lighting - Full
 	extlight_full = CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'l', D(), UP+L_SHIFT+R_SHIFT, D(100),						// Fus & Anti-Col Lights - Bright
@@ -263,12 +262,10 @@ int main()
 	JSTR_rdr_off			= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'0', D(), UP+L_CTL+R_CTL );
 	JSTR_rdr_on				= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'1', D(), UP+L_CTL+R_CTL );
 	// Radar - Range
-	JSTR_rdr_range_auto		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'0', D(), UP+L_CTL+L_ALT );
-	JSTR_rdr_range_25		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'1', D(), UP+L_CTL+L_ALT );
-	JSTR_rdr_range_50		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'2', D(), UP+L_CTL+L_ALT );
-	// Radar - Stabilise
-	JSTR_rdr_ac_stab		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'8', D(), UP+L_CTL+R_SHIFT );
-	JSTR_rdr_ground_stab	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'9', D(), UP+L_CTL+R_SHIFT );
+	JSTR_rdr_range_25n		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'1', D(), UP+L_CTL+L_ALT );
+	JSTR_rdr_range_25w		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'2', D(), UP+L_CTL+L_ALT );
+	JSTR_rdr_range_50n		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'3', D(), UP+L_CTL+L_ALT );
+	JSTR_rdr_range_50w		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'4', D(), UP+L_CTL+L_ALT );
 	// Radar – Auto Azimuth and Elevation Radar
 	JSTR_rdr_az_elev_auto	= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
@@ -385,13 +382,6 @@ int main()
 	// JSTR functions
 	JSTR_rdr_offon			= SEQ( JSTR_rdr_off,										// Radar - Silent/Active
 								   JSTR_rdr_on );
-	JSTR_rdr_range_50_25	= SEQ( JSTR_rdr_range_50,									// Radar - Range 50/25
-								   JSTR_rdr_range_25 );
-	JSTR_rdr_range_50_25_auto	= SEQ( JSTR_rdr_range_50,								// Radar - Range 50/25/auto
-									   JSTR_rdr_range_25,
-									   JSTR_rdr_range_auto );
-	JSTR_ground_ac_stbl		= SEQ( JSTR_rdr_ground_stab,								// Radar - Ground/Aircraft Stabilize
-								   JSTR_rdr_ac_stab );
 	JSTR_toggle_RWS_TWS		= SEQ( JSTR_rdr_mode_RWS,									// Radar - RWS/TWS Mode
 								   JSTR_rdr_mode_TWS );
 	JSTR_rwr_ai_norm		= SEQ( JSTR_rwr_ai,											// RWR - Airborne Interceptor / Normal
@@ -443,9 +433,9 @@ int main()
 
 int autopilot_mode()
 {
-	if (Throttle[APPAT]) ActKey(KEYON+PULSE+L_ALT+R_SHIFT+'a');							// Autopilot - Heading Hold
-	else if (Throttle[APALT]) ActKey(KEYON+PULSE+L_ALT+R_CTL+'p');						// Autopilot - Vector ACL
-	else ActKey(KEYON+PULSE+L_ALT+L_SHIFT+'a');											// Autopilot - Altitude Hold
+	if (Throttle[APPAT]) ActKey(KEYON+PULSE+L_ALT+L_CTL+'h');							// ALT Hold - Disengage
+	else if (Throttle[APALT]) ActKey(KEYON+PULSE+L_ALT+L_CTL+'h');						// ALT Hold - Disengage
+	else ActKey(KEYON+PULSE+L_ALT+L_SHIFT+'h');											// ALT Hold - Engage
 }
 
 

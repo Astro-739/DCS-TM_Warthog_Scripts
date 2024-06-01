@@ -83,16 +83,16 @@ int dcs_f4e_pilot_controls()
 
 	// Autopilot
 	// APENG	
-	MapKeyIO(&Throttle, APENG, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'t', D(), UP+L_CTL ),								// Toggle Auto Throttle
-								autopilot );																		// Autopilot on/off
+	MapKeyIO(&Throttle, APENG, 	0,																					// I - 
+								autopilot );																		// O - Autopilot on/off
 	// APDIS
 	MapKey(&Throttle, APDIS, 	0 ); 																				// see autopilot_mode()
 	// APPAT
-	MapKey(&Throttle, APPAT, 	0 );																				// see autopilot_mode()
+	MapKey(&Throttle, APPAT, 	CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'h', D(), UP+L_ALT+L_CTL ));					// ALT Hold - Disengage
 	// APAH
-	MapKey(&Throttle, APAH, 	0 );																				// see autopilot_mode()
+	MapKey(&Throttle, APAH, 	CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'h', D(), UP+L_ALT+L_SHIFT ));				// ALT Hold - Engage
 	// APALT
-	MapKey(&Throttle, APALT, 	0 );																				// see autopilot_mode()
+	MapKey(&Throttle, APALT, 	CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'h', D(), UP+L_ALT+L_CTL ));					// ALT Hold - Disengage
 
 
 
@@ -327,36 +327,33 @@ int dcs_f4e_pilot_controls_jstr()
 
 	// Coolie Switch
 	// CSU
-	MapKeyIOUMD(&Throttle, CSU, 0,																	 					// IU - 
-								0,																	 					// OU - 
+	MapKeyIOUMD(&Throttle, CSU, CHAIN( L_SHIFT, D(10), '-'),										 					// IU - Aural Tone Volume - [Dec]
+								CHAIN( DOWN+L_WIN+L_CTL, D(10), PULSE+'m', D(), UP+L_WIN+L_CTL ),						// OU - Radar-Missile CW - [Down]
 								0,																	  					// IM - 
 								0,																	 					// OM - 
 								0,																	 					// ID -
 								JSTR_agwpn_comptgt ); 																	// OD - Set Computer Target Weapons (CCRP)
 	// CSD
-	MapKeyIOUMD(&Throttle, CSD, 0,																	  					// IU - 
-								CHAIN( DOWN+L_ALT, D(10), PULSE+'p', D(), UP+L_ALT, D(200),			 					// OU - Toggle Missile Prep
-									   DOWN+L_SHIFT, D(10), PULSE+'p', D(), UP+L_SHIFT, D(200),							//      Toggle SW Cooling
-									   DOWN+L_WIN, D(10), PULSE+'p', D(), UP+L_WIN ),									//      Toggle Gun Rate
+	MapKeyIOUMD(&Throttle, CSD, CHAIN( L_SHIFT, D(10), '='),										 					// IU - Aural Tone Volume - [Inc]
+								CHAIN( DOWN+L_WIN+L_SHIFT, D(10), PULSE+'m', D(), UP+L_WIN+L_SHIFT ),					// OU - Radar-Missile CW - [Up]
 								0,																	  					// IM - 
 								0,																	 					// OM - 
 								0,																	  					// ID - 
 								JSTR_agwpn_comppilot );												 					// OD - Set Computer Pilot Weapons (CCIP)
 	// CSR
-	MapKeyIOUMD(&Throttle, CSR, CHAIN( 0 ),																				// IU - 
+	MapKeyIOUMD(&Throttle, CSR, 0,																						// IU - 
 								'n',																					// OU - Air Refuel Release Button (ARR) - missile uncage
-								CHAIN( 0 ),																				// IM - 
-								TEMPO( PULSE+'n', 																		// OM - Air Refuel Release Button (ARR)
-									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'m', D(), UP+L_SHIFT ), 500 ),					// 		[long] Toggle Mirrors
-								CHAIN( 0 ),																				// ID - 
+								0,																						// IM - 
+								PULSE+'n', 																				// OM - Air Refuel Release Button (ARR)
+								0,																						// ID - 
 								0 );																					// OD - 
 	// CSL
 	MapKeyIOUMD(&Throttle, CSL, 0,																						// IU - Wing Sweep Aft
-								PULSE+'c',																				// OU - Cage Button
+								CHAIN( DOWN+'c', D(200), UP+'c' ),														// OU - Cage Button
 								0,																						// IM - Wing Sweep Aft
 								0,																						// OM - 
 								0,																						// ID - Wing Sweep Aft
-								PULSE+'c' );																			// OD - Cage Button
+								CHAIN( DOWN+'c', D(200), UP+'c' ));														// OD - Cage Button
 
 
 

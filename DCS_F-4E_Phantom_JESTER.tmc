@@ -35,19 +35,17 @@ int dcs_f4e_jester_controls()
 	// Display Management Switch
 	// H3U
 	MapKeyIO(&Joystick, H3U, 	0,																						// I - 
-								TEMPO( EXEC( "index_range = (index_range+1)%5;"											// O -     
-											 "ActKey( KEYON+PULSE+X(radarrangelist, index_range) );" ),					//     Radar range step up
+								TEMPO( SEQ( JSTR_rdr_range_50n, JSTR_rdr_range_50w ),									// O - Radar range 50 narrow/wide
 									   EXEC( "index_elev = (index_elev+1)%5;"											//     
 											 "ActKey( KEYON+PULSE+X(radarelevlist, index_elev) );" ), 500 ));			//     [long] Radar elevation step up
 	// H3D
 	MapKeyIO(&Joystick, H3D, 	0,																						// I - 
-								TEMPO( EXEC( "index_range = (index_range+4)%5;"											// O -     
-											 "ActKey( KEYON+PULSE+X(radarrangelist, index_range) );" ),					//     Radar range step down
+								TEMPO( SEQ( JSTR_rdr_range_25n, JSTR_rdr_range_25w ),									// O - Radar range 25 narrow/wide
 									   EXEC( "index_elev = (index_elev+4)%5;"											//     
 											 "ActKey( KEYON+PULSE+X(radarelevlist, index_elev) );" ), 500 ));			// 	   [long] Radar elevation step down
 	// H3R
 	MapKeyIO(&Joystick, H3R, 	0, 																						// I - 
-								TEMPO( CHAIN( JSTR_rdr_range_auto, D(),													// O - Radar - Range Auto
+								TEMPO( CHAIN( 0, D(),																	// O - Radar - Range Auto
 											  EXEC( "index_range = 2;" )),												//	   Reset range index to 2 (100 nm) (element 0 is first element in list)
 									   EXEC( "index_az = (index_az+1)%5;"												//     
 											 "ActKey( KEYON+PULSE+X(radarazlist, index_az) );" ), 500 ));				// 	   [long] Radar azimuth step right
