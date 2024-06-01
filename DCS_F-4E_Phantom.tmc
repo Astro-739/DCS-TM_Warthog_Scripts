@@ -27,6 +27,7 @@ int speedbrakes_close;
 int groundcrewstartup;
 
 int steercmdlist, index_stcmd = 0;							// (start with second element after increment, element 0 is first element in list)
+int missilecwlist, index_mslcw = 0;							// (start in off position, element 0 is first element in list)
 int radarrangelist, index_range = 2;						// (current is middle of five (assumption 100 nm), element 2, element 0 is first element in list)
 int radarelevlist, index_elev = 2;							// (current is middle of five, element 2, element 0 is first element in list)
 int radarazlist, index_az = 2;								// (current is middle of five, element 2, element 0 is first element in list)
@@ -145,6 +146,11 @@ int main()
 						   Steer_CMD_AWLPCD,
 						   Steer_CMD_VEC,
 						   Steer_CMD_MAN );
+
+	// Radar Missile CW select
+	missilecwlist 	= SEQ( Missile_CW_Off,
+						   Missile_CW_Stby,
+						   Missile_CW_On );
 
 	// Radar range select
 	radarrangelist 	= SEQ( JSTR_rdr_range_25n_list,
