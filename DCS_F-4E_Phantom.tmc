@@ -90,6 +90,10 @@ int	JSTR_spot;
 int	JSTR_check;
 int JSTR_menu;
 
+int JSTR_context_short;
+int JSTR_context_long;
+int JSTR_context_double;
+
 char LTRN_mode = 0;
 
 int JSTR_toggle_RWS_TWS;
@@ -100,7 +104,7 @@ int JSTR_WHDN_startup;
 int	JSTR_nav_wp123;
 
 
-define AB 75											// detent position at AB% of full throttle reach
+define AB 70											// detent position at AB% of full throttle reach
 
 
 
@@ -199,8 +203,8 @@ int main()
 	// -------------------- FUNCTIONS ---------------------------------------------
 					
 	// Autopilot function
-	autopilot = SEQ( CHAIN( EXEC( "autopilot_mode();" ), D(200),														// Set autopilot mode
-							DOWN+L_ALT+L_SHIFT, D(10), PULSE+'a', D(), UP+L_ALT+L_SHIFT ),								// Autopilot on
+	autopilot = SEQ( CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'a', D(), UP+L_ALT+L_SHIFT, D(200),						// Autopilot on
+							EXEC( "autopilot_mode();" )),																// Set autopilot mode
 					 CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'a', D(), UP+L_ALT+L_CTL ));									// Autopilot off
 	
 	// Exterior Lighting - Full
@@ -381,7 +385,10 @@ int main()
 	JSTR_spot				= CHAIN( PULSE+'a', D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
 	JSTR_check				= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'7', D(), UP+L_CTL+L_ALT );
-	JSTR_menu				= PULSE+'a';
+	JSTR_menu				= 'a';
+	JSTR_context_short		= PULSE+'v';
+	JSTR_context_long		= CHAIN( DOWN+'v', D(500), UP+'v');
+	JSTR_context_double		= CHAIN( PULSE+'v', D(200), PULSE+'v');
 
 
 

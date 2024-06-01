@@ -15,20 +15,20 @@ int dcs_f4e_jester_controls()
 	// Target Management Switch
 	// H2U
 	MapKeyIO(&Joystick, H2U, 	0,																						// I - 
-							 	TEMPO( JSTR_lock_enemy_ahead,							 								// O - Radar – STT Lock Enemy Ahead
-									   JSTR_lock_TWS_tgt_1, 500 ));														//     [long] Radar – STT Lock TWS Target #1
+							 	JSTR_context_long );										 							// O - Scan - Lock selected contact
+																														//	   Lock - Drop lock, keep contact focus
+																														//	   Cage - Lock/Unlock contact ahead
 	// H2D
 	MapKeyIO(&Joystick, H2D, 	0, 																						// I - 
-							 	TEMPO( JSTR_break_lock,																	// O - Radar – Break Lock
-									   JSTR_lock_TWS_tgt_3, 500 ));														//     [long] Radar – STT Lock TWS Target #3
+							 	JSTR_context_double );																	// O - Scan - Reset target selection
+																														//	   Lock - Drop lock and focus
+																														//	   Cage - Exit Cage mode
 	// H2R							
 	MapKeyIO(&Joystick, H2R, 	0, 																						// I - 
-							 	TEMPO( JSTR_toggle_RWS_TWS, 															// O - Radar – Toggle RWS/TWS Mode
-									   JSTR_lock_TWS_tgt_2, 500 ));														//     [long] Radar – STT Lock TWS Target #2
+							 	JSTR_context_short );		 															// O - Scan - Select next contact
 	// H2L
 	MapKeyIO(&Joystick, H2L, 	0,																						// I -
-							 	TEMPO( JSTR_rdr_mode_auto, 																// O - Radar - Mode Auto
-									   JSTR_toggle_PD_P_STT, 500 ));													//     [long] Radar – Toggle PD-STT or P-STT
+							 	0 ); 																					// O - 
 	MapKeyRIO(&Joystick, H2L, 	0,																						// I -
 								0 );																					// O -
 								

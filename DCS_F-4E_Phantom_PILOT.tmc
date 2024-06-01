@@ -42,20 +42,20 @@ int dcs_f4e_pilot_controls()
 
  	// Countermeasure Management Switch
 	// H4U	
-	MapKeyIO(&Joystick, H4U, 	CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'t', D(), UP+R_SHIFT+L_SHIFT ),				// I - Target designate up / VSL HI
-							 	CHAIN( L_SHIFT, D(10), 'd' ));															// O - DLC Thumbwheel Forward
+	MapKeyIO(&Joystick, H4U, 	0,																						// I - 
+							 	CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'q', D(), UP+L_ALT+L_SHIFT ));					// O - Dispense Program - Flares
 	// H4D
-	MapKeyIO(&Joystick, H4D, 	CHAIN( DOWN+R_SHIFT+L_CTL, D(10), PULSE+'t', D(), UP+R_SHIFT+L_CTL ), 					// I - Target designate down / VSL LO
-							 	CHAIN( L_CTL, D(10), 'd' ));															// O - DLC Thumbwheel Aft
+	MapKeyIO(&Joystick, H4D, 	0,																						// I - 
+							 	CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'q', D(), UP+L_ALT+L_CTL ));						// O - Dispense Program - Normal
 	// H4R
-	MapKeyIO(&Joystick, H4R, 	CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'t', D(), UP+R_SHIFT+L_ALT ), 					// I - Target designate fwd / PAL
-			  				 	0);																						// O - 
+	MapKeyIO(&Joystick, H4R, 	0,																						// I - 
+			  				 	0 );																					// O - 
 	// H4L
-	MapKeyIO(&Joystick, H4L, 	CHAIN( L_SHIFT+L_CTL, D(10), 't' ), 													// I - PLM button
-							 	0); 																					// O - 
+	MapKeyIO(&Joystick, H4L, 	0,									 													// I - 
+							 	0 ); 																					// O - 
 	// H4P
 	MapKeyIO(&Joystick, H4P, 	0, 																						// I - 
-							 	CHAIN( DOWN+L_ALT, D(10), PULSE+'d', D(), UP+L_ALT )); 									// O - DLC Toggle / Countermeasure Dispense
+							 	CHAIN( DOWN+L_ALT, D(10), PULSE+'q', D(), UP+L_ALT )); 									// O - Countermeasure Dispense
 
 	
 	
@@ -287,7 +287,7 @@ int dcs_f4e_pilot_controls_jstr()
 	// H2L
 	MapKeyIO(&Joystick, H2L, 	0,																						// I -
 								CHAIN( DOWN+R_SHIFT, D(10), PULSE+BSP, D(), UP+R_SHIFT, D(),							// O - remove stick
-								L_WIN, D(10), KP4 ));																	//     snap view instruments
+								L_WIN, D(10), KP2 ));																	//     snap view instruments
 	MapKeyRIO(&Joystick, H2L, 	0,																						// I - 
 								CHAIN( D(200), DOWN+R_CTL, D(10), PULSE+BSP, D(), UP+R_CTL ));							// O - place stick
 
@@ -328,23 +328,23 @@ int dcs_f4e_pilot_controls_jstr()
 	// Coolie Switch
 	// CSU
 	MapKeyIOUMD(&Throttle, CSU, CHAIN( L_SHIFT, D(10), '-'),										 					// IU - Aural Tone Volume - [Dec]
-								EXEC( "if (index_mslcw > 0) {"														// OU - Radar-Missile CW - [Down]
+								EXEC( "if (index_mslcw > 0) {"															// OU - Radar-Missile CW - [Down]
 									  	"index_mslcw = (index_mslcw-1)%3;"												// 
      	 							  	"ActKey( KEYON+PULSE+X(missilecwlist, index_mslcw) );"							//
 										"}" ),																			//
 								0,																	  					// IM - 
 								0,																	 					// OM - 
-								0,																	 					// ID -
+								CHAIN( L_SHIFT, D(10), '-'),										 					// ID - Aural Tone Volume - [Dec]
 								JSTR_agwpn_comptgt ); 																	// OD - Set Computer Target Weapons (CCRP)
 	// CSD
 	MapKeyIOUMD(&Throttle, CSD, CHAIN( L_SHIFT, D(10), '='),										 					// IU - Aural Tone Volume - [Inc]
-								EXEC( "if (index_mslcw < 2) {"														// OU - Radar-Missile CW - [Up]
+								EXEC( "if (index_mslcw < 2) {"															// OU - Radar-Missile CW - [Up]
 									  	"index_mslcw = (index_mslcw+1)%3;"												// 
      	 							  	"ActKey( KEYON+PULSE+X(missilecwlist, index_mslcw) );"							//
 										"}" ),																			//
 								0,																	  					// IM - 
 								0,																	 					// OM - 
-								0,																	  					// ID - 
+								CHAIN( L_SHIFT, D(10), '='),										 					// ID - Aural Tone Volume - [Inc]
 								JSTR_agwpn_comppilot );												 					// OD - Set Computer Pilot Weapons (CCIP)
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, 0,																						// IU - 
