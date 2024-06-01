@@ -328,18 +328,20 @@ int dcs_f4e_pilot_controls_jstr()
 	// Coolie Switch
 	// CSU
 	MapKeyIOUMD(&Throttle, CSU, CHAIN( L_SHIFT, D(10), '-'),										 					// IU - Aural Tone Volume - [Dec]
-								EXEC( "if index_mslcw%3 > 0 {"														// OU - Radar-Missile CW - [Down]
+								EXEC( "if (index_mslcw)%3 > 0 {"														// OU - Radar-Missile CW - [Down]
 									  	"index_mslcw = (index_mslcw-1)%3;"												// 
-     	 							  	"ActKey( KEYON+PULSE+X(missilecwlist, index_mslcw) )};" ),						//
+     	 							  	"ActKey( KEYON+PULSE+X(missilecwlist, index_mslcw) );"							//
+										"}" ),																			//
 								0,																	  					// IM - 
 								0,																	 					// OM - 
 								0,																	 					// ID -
 								JSTR_agwpn_comptgt ); 																	// OD - Set Computer Target Weapons (CCRP)
 	// CSD
 	MapKeyIOUMD(&Throttle, CSD, CHAIN( L_SHIFT, D(10), '='),										 					// IU - Aural Tone Volume - [Inc]
-								EXEC( "if index_mslcw%3 < 2 {"														// OU - Radar-Missile CW - [Up]
+								EXEC( "if (index_mslcw)%3 < 2 {"														// OU - Radar-Missile CW - [Up]
 									  	"index_mslcw = (index_mslcw+1)%3;"												// 
-     	 							  	"ActKey( KEYON+PULSE+X(missilecwlist, index_mslcw) )};" ),						//
+     	 							  	"ActKey( KEYON+PULSE+X(missilecwlist, index_mslcw) );"							//
+										"}" ),																			//
 								0,																	  					// IM - 
 								0,																	 					// OM - 
 								0,																	  					// ID - 
