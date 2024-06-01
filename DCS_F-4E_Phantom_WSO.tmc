@@ -28,72 +28,62 @@ int dcs_f4e_wso_controls()
 
 	// Weapon Release Button
 	// S2
-	MapKeyIOUMD(&Joystick, S2,  0,																						// IU - 
-							    CHAIN( R_ALT, D(10), SPC ),																// OU - weapon release
-								0,																						// IM - Emergency All Jettison Button Cover - OPEN
-							    0,																					 	// OM - 
-							    SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),												// ID - Emergency All Jettison Button Cover - OPEN
-									 CHAIN( L_SHIFT+L_CTL, D(10), '0' )),												//		Emergency All Jettison Button
-							    CHAIN( R_ALT, D(10), SPC ));															// OD - weapon release
-
+	// Same as PILOT
 
 	// Target Management Switch
 	// H2U
-	MapKeyIO(&Joystick, H2U, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'w', D(), UP+R_SHIFT ),								// I - Weapon Selector up
+	MapKeyIO(&Joystick, H2U, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT ),								// I - Gun/Missile Pinky Switch - Radar
 								USB[0x55] );																			// O - zoom in  (KP*)
 	// H2D
-	MapKeyIO(&Joystick, H2D, 	CHAIN( DOWN+R_CTL, D(10), PULSE+'w', D(), UP+R_CTL ), 									// I - Weapon Selector down
+	MapKeyIO(&Joystick, H2D, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'w', D(), UP+L_SHIFT ), 								// I - Gun/Missile Pinky Switch - Gun
 								USB[0x54] );																			// O - zoom out  (KP\)
 	// H2R							
-	MapKeyIO(&Joystick, H2R, 	CHAIN( DOWN+R_ALT, D(10), PULSE+'w', D(), UP+R_ALT ), 									// I - Weapon Selector press
-								CHAIN( L_WIN, D(10), KP6 ));															// O - snap view right
+	MapKeyIO(&Joystick, H2R, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT ), 								// I - Gun/Missile Pinky Switch - Heat
+								CHAIN( L_WIN, D(10), KP6 ));															// O - snap view radar
 	// H2L
 	MapKeyIO(&Joystick, H2L, 	0,																						// I -
 								CHAIN( DOWN+R_SHIFT, D(10), PULSE+BSP, D(), UP+R_SHIFT, D(),							// O - remove stick
-								L_WIN, D(10), KP4 ));																	//     snap view instruments
+								L_WIN, D(10), KP2 ));																	//     snap view instruments
 	MapKeyRIO(&Joystick, H2L, 	0,																						// I - 
-								CHAIN( D(), DOWN+R_CTL, D(10), PULSE+BSP, D(), UP+R_CTL ));								// O - place stick
+								CHAIN( D(200), DOWN+R_CTL, D(10), PULSE+BSP, D(), UP+R_CTL ));							// O - place stick
 
 
 	// Display Management Switch
 	// H3U
-	MapKeyIO(&Joystick, H3U, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),								// IM - kneeboard on/off
-								TEMPO( CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'v', D(), UP+L_ALT+R_SHIFT ),			// OM - VDI Mode Toggle
-									   nightvision, 500 ));																// 		[long] Night Vision Goggles
+	MapKeyIO(&Joystick, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
+									   nightvision, 500 ),																// 	   [long] Night Vision Goggles toggle
+								TEMPO( 0,																				// O - 
+									   CHAIN( DOWN+L_CTL, D(10), PULSE+'v', D(), UP+L_CTL ), 500 ));					// 	   [long] Helmet Visor toggle
 	// H3D
-	MapKeyIO(&Joystick, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// IM - kneeboard current position mark point
+	MapKeyIO(&Joystick, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
 									   flashlight, 500 ),																//	   [long] Flashlight on/off	
-								CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'h', D(), UP+L_ALT+R_SHIFT ));					// OM - HSD Mode Toggle
+								CHAIN( 0 ));																			// O - 
 	// H3R
-	MapKeyIO(&Joystick, H3R, 	PULSE+']', 																				// IM - kneeboard next page
-								TEMPO( EXEC( "index = (index+1)%5;"														// OM - Steer CMD next
-											 "ActKey( KEYON+PULSE+X(steercmdlist, index) );" ),							// 		
-									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'7', D(), UP+L_SHIFT ),						// 		Display mode next
-									   500 ));																			//
+	MapKeyIO(&Joystick, H3R, 	TEMPO( PULSE+']', 																		// I - kneeboard next page
+									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'v', D(), UP+L_SHIFT ), 500 ),   				// 	   [long] Sunglasses toggle
+								0 );																					// O - 
 	// H3L
-	MapKeyIO(&Joystick, H3L, 	PULSE+'[', 																				// IM - kneeboard previous page
-								TEMPO( EXEC( "index = (index+4)%5;"														// OM - Steer CMD previous
-											 "ActKey( KEYON+PULSE+X(steercmdlist, index) );" ),							// 		
-									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'6', D(), UP+L_SHIFT ),						// 		Display mode previous
-									   500 ));																			//
+	MapKeyIO(&Joystick, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
+									   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT ), 500 ),					//	   [long] Pilot Body toggle								
+								0 );																					// O - 
 
 
  	// Countermeasure Management Switch
 	// H4U	
-	MapKeyIO(&Joystick, H4U, 	CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'t', D(), UP+R_SHIFT+L_SHIFT ),				// I - Target designate up / VSL HI
-							 	CHAIN( L_SHIFT, D(10), 'd' ));															// O - DLC Thumbwheel Forward
+	MapKeyIO(&Joystick, H4U, 	0,																						// I - 
+			  				 	0 );																					// O - 
 	// H4D
-	MapKeyIO(&Joystick, H4D, 	CHAIN( DOWN+R_SHIFT+L_CTL, D(10), PULSE+'t', D(), UP+R_SHIFT+L_CTL ), 					// I - Target designate down / VSL LO
-							 	CHAIN( L_CTL, D(10), 'd' ));															// O - DLC Thumbwheel Aft
+	MapKeyIO(&Joystick, H4D, 	0,																						// I - 
+			  				 	0 );																					// O - 
 	// H4R
-	MapKeyIO(&Joystick, H4R, 	CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'t', D(), UP+R_SHIFT+L_ALT ), 					// I - Target designate fwd / PAL
-			  				 	0);																						// O - 
+	MapKeyIO(&Joystick, H4R, 	0,																						// I - 
+			  				 	0 );																					// O - 
 	// H4L
-	MapKeyIO(&Joystick, H4L, 	CHAIN( L_SHIFT+L_CTL, D(10), 't' ), 													// I - PLM button
-							 	0); 																					// O - 
+	MapKeyIO(&Joystick, H4L, 	0,									 													// I - 
+							 	0 ); 																					// O - 
 	// H4P
 	MapKeyIO(&Joystick, H4P, 	0, 																						// I - 
-							 	CHAIN( DOWN+L_ALT, D(10), PULSE+'d', D(), UP+L_ALT )); 									// O - DLC Toggle / Countermeasure Dispense
+							 	CHAIN( DOWN+L_ALT, D(10), PULSE+'q', D(), UP+L_ALT )); 									// O - Countermeasure Dispense
 
 	
 	
@@ -118,42 +108,6 @@ int dcs_f4e_wso_controls()
 	// -----------------------------
 
 
-
-	// Autopilot
-	// APENG	
-	MapKey(&Throttle, APENG, 	autopilot );																		// Autopilot on/off
-	// APDIS
-	MapKey(&Throttle, APDIS, 	0 ); 																				// see autopilot_mode()
-	// APPAT
-	MapKey(&Throttle, APPAT, 	0 );																				// see autopilot_mode()
-	// APAH
-	MapKey(&Throttle, APAH, 	0 );																				// see autopilot_mode()
-	// APALT
-	MapKey(&Throttle, APALT, 	0 );																				// see autopilot_mode()
-
-
-
-	// Speedbrake Switch
-	// SPDF
-	MapKeyIO(&Throttle, SPDF, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x55], D(), UP+R_SHIFT ),					// I - snap zoom max   (R_SHIFT+KP*)
-								speedbrakes_open );																// O - Open Speed Brakes
-	MapKeyRIO(&Throttle, SPDF, 	PULSE+KPENT,																	// I - snap zoom normal
-								speedbrakes_close );															// O - Close Speed Brakes
-	// SPDB
-	MapKeyIOUMD(&Throttle, SPDB, CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),				// IU - snap zoom min    (R_SHIFT+KP/)
-								speedbrakes_open,																// OU - Open Speed Brakes Momentary
-								EXEC( "if(WHDN_mode) ActKey( KEYON+'w' );" 										// IM - [WHDN] wheel brake
-									  "else ActKey( PULSE+KEYON+USB[0x54] );" ),								//		snap zoom min
-								speedbrakes_open,																// OM - Open Speed Brakes Momentary
-								CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),					// ID - snap zoom min    (R_SHIFT+KP/)
-								speedbrakes_open );																// OD - Open Speed Brakes Momentary
-	MapKeyRIOUMD(&Throttle, SPDB, PULSE+KPENT,																	// IU - snap zoom normal
-								speedbrakes_close,																// OU - Close Speed Brakes
-								EXEC( "if(WHDN_mode) ActKey( 'w' );"											// IM - [WHDN] release 'w'
-									  "else ActKey( PULSE+KEYON+KPENT );" ),									//		snap zoom normal
-								speedbrakes_close,																// OM - Close Speed Brakes
-								PULSE+KPENT,																	// ID - snap zoom normal
-								speedbrakes_close );															// OU - Close Speed Brakes
 
 								
 	// China Hat
@@ -229,11 +183,11 @@ int dcs_f4e_wso_controls()
 
 	// Flaps Switch
 	// FLAPU
-	MapKey(&Throttle, FLAPU,  	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ));						// Flap Switch - UP
+	MapKey(&Throttle, FLAPU,  	0 );																			// 
 	// FLAPM
-	MapKey(&Throttle, FLAPM, 	0);																				// 
+	MapKey(&Throttle, FLAPM, 	0 );																			// 
 	// FLAPD	
-	MapKey(&Throttle, FLAPD,  	PULSE+'f');																		// Flap Switch - DOWN
+	MapKey(&Throttle, FLAPD,  	0 );																			// 
 
 	// Engine Operation
 	// EOLIGN
@@ -249,60 +203,25 @@ int dcs_f4e_wso_controls()
 								CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));						// O - Throttle Right - IDLE
 
 	// Engine Override
+	// EFL in Phantom main script
 	// EFRNORM
-	MapKeyIOUMD(&Throttle, EFRNORM, 0,																			// IU - 
-								0,																				// OU - 
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ),						// IM - Hook Retract
-								CHAIN( 0,																		// OM - ******** TODO ********
-									   EXEC( "AAR_mode = 0;" )),												//		AAR_mode off
-								0,																				// ID - 
-								0);																				// OD - 
+	MapKey(&Throttle, EFRNORM, 0 );																				// 
 	// EFROVER
-	MapKeyIOUMD(&Throttle, EFROVER, 0,																			// IU - 
-								0,																				// OU - 
-								CHAIN( DOWN+L_CTL, D(10), PULSE+'h', D(), UP+L_CTL ),							// IM - Hook Extend
-								CHAIN( 0,																		// OM - ******** TODO ********
-									   EXEC( "AAR_mode = 1;" )),												//		AAR_mode on
-								0,																				// ID - 
-								0);																				// OD - 
+	MapKey(&Throttle, EFROVER, 0 );																				// air refuelling maybe here
 
-	// SC
-	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+HOME, D(), UP+R_CTL ),					// I - [short] re-centre IR tracker
-									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'`', D(), UP+L_SHIFT ),				//     [long] discord game overlay
-									   500),
-								CHAIN( L_SHIFT+L_CTL, D(10), 't' ));											// O - PLM button
 
 
 	// U LAYER - [O] Air-to-Air Mode
 	//			 [I] ACM Mode
 	// BSF - LED1 ON/OFF
-	MapKeyIO(&Throttle, BSF, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'3', D(), UP+L_SHIFT, D(200),							// I - Display mode air to air
-									   //DOWN+R_SHIFT, D(10), PULSE+'2', D(), UP+R_SHIFT, D(200),						// 	   HSD Mode TID
-									   DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'a', D(), UP+L_SHIFT+R_SHIFT, D(200),			// 	   Master arm cover open
-									   DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT,	D(200),							// 	   Master arm on
-									   DOWN+R_CTL+L_CTL, D(10), PULSE+'r', D(), UP+R_CTL+L_CTL, D(200),					//     AFCS Roll Stabilisation Off
-									   DOWN+L_CTL+R_SHIFT, D(10), PULSE+'w', D(), UP+L_CTL+R_SHIFT, D(100),				//	   Wing Sweep Auto Mode
-									   DOWN+R_SHIFT+L_ALT, D(10), PULSE+'c', D(), UP+R_SHIFT+L_ALT, D(),				//	   ACM cover open
+	MapKeyIO(&Throttle, BSF, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT, D(200),							// I - HUD Mode - A/A
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED1) ), 									// 	   LED1 ON for U layer
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'3', D(), UP+L_SHIFT, D(200),							// O - Display mode air to air
-									   //DOWN+R_SHIFT, D(10), PULSE+'2', D(), UP+R_SHIFT, D(200),						// 	   HSD Mode TID
-									   //DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'a', D(), UP+L_SHIFT+R_SHIFT, D(200),		// 	   Master arm cover open
-									   //DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT, D(200),						// 	   Master arm on
-									   DOWN+R_CTL+L_CTL, D(10), PULSE+'r', D(), UP+R_CTL+L_CTL, D(200),					//     AFCS Roll Stabilisation Off
-									   DOWN+L_CTL+R_SHIFT, D(10), PULSE+'w', D(), UP+L_CTL+R_SHIFT, D(),				//	   Wing Sweep Auto Mode
+								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT, D(200),							// O - HUD Mode - A/A
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED1) )); 									// 	   LED1 ON for U layer
-	MapKeyRIO(&Throttle, BSF, 	CHAIN( DOWN+R_SHIFT+L_CTL, D(10), PULSE+'c', D(), UP+R_SHIFT+L_CTL, D(200),				// I - ACM cover close
-									   //DOWN+R_CTL, D(10), PULSE+'a', D(), UP+R_CTL, D(200),							//	   Master arm off
-									   //DOWN+L_SHIFT+R_CTL, D(10), PULSE+'a', D(), UP+L_SHIFT+R_CTL, D(200),			// 	   Master arm cover close
-									   DOWN+L_SHIFT, D(10), PULSE+'2', D(), UP+L_SHIFT, D(200),							// 	   Display mode cruise
-									   //DOWN+R_SHIFT, D(10), PULSE+'1', D(), UP+R_SHIFT, D(200),						// 	   HSD Mode NAV
-									   DOWN+R_CTL+L_SHIFT, D(10), PULSE+'r', D(), UP+R_CTL+L_SHIFT, D(),				//	   AFCS Roll Stabilisation On
+	MapKeyRIO(&Throttle, BSF, 	CHAIN( 0,																				// I - 
+									   DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT, D(200),								// 	   HUD Mode - Cage
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED1) ), 									// 	   LED1 OFF for U layer 
-								CHAIN( //DOWN+R_CTL, D(10), PULSE+'a', D(), UP+R_CTL, D(200),							// O - Master arm off
-									   //DOWN+L_SHIFT+R_CTL, D(10), PULSE+'a', D(), UP+L_SHIFT+R_CTL, D(200),			// 	   Master arm cover close
-									   DOWN+L_SHIFT, D(10), PULSE+'2', D(), UP+L_SHIFT, D(200),							// 	   Display mode cruise
-									   //DOWN+R_SHIFT, D(10), PULSE+'1', D(), UP+R_SHIFT, D(200),						// 	   HSD Mode NAV
-									   DOWN+R_CTL+L_SHIFT, D(10), PULSE+'r', D(), UP+R_CTL+L_SHIFT, D(),				//	   AFCS Roll Stabilisation On
+								CHAIN( DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT, D(200),								// O - HUD Mode - Cage
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED1) )); 									// 	   LED1 OFF for U layer
 
 	// M LAYER - Navigation Mode
@@ -312,28 +231,28 @@ int dcs_f4e_wso_controls()
 
 	// D LAYER - Air-to-Ground Mode
 	// BSB - LED3 ON/OFF
-	MapKeyIO(&Throttle, BSB, 	CHAIN( EXEC( "CAR_mode = 1;" ),															// I - Set CAR_mode ON
+	MapKeyIO(&Throttle, BSB, 	CHAIN( EXEC( "Throttle[BSB] = 0; DefEventHandler(EV_HID_INPUT_DATA, &Throttle, BSB);"),	// I - Temporary virtual M layer (reset D layer)
+									   EXEC( "CAR_mode = 1;"															// 	   Set CAR_mode ON
+											 "printf(\"CAR_mode = 1\\xa\");" ),											// 
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),									//     LED5 ON
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'4', D(), UP+L_SHIFT, D(200),							// O - Display mode air to ground
-									   DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'a', D(), UP+L_SHIFT+R_SHIFT, D(200),			// 	     Master arm cover open
-									   DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT,	D(),							// 	     Master arm on
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED3) )); 									//       A-G mode on, LED3 ON for D layer
-	MapKeyRIO(&Throttle, BSB, 	CHAIN( EXEC( "CAR_mode = 0;" ),															// I - Set CAR_mode OFF
+								CHAIN( DOWN+L_CTL, D(10), PULSE+'h', D(), UP+L_CTL, D(100),								// O - HUD Mode - A/G
+									   EXEC( "if((index_stpt_aa)%3 == 2) index_stpt_ag = 4;"							// 	   Set correct steerpoint in A-G mode (element 0 is first element in list)
+											 "else index_stpt_ag = (index_stpt_aa)%3;" ),								// 
+									   EXEC( "if(Joystick[S3]) {"														// 	   If JSTR shift is pressed
+											   "LTRN_mode = 1;"															// 	   LTRN_mode ON
+											   "printf(\"LTRN_mode = 1\\xa\");"											// 
+											   "dcs_f4e_jester_lantirn_controls();"										//	   Load JESTER LANTIRN controls
+											   "}" ),																	//
+									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED3) )); 									//     A-G mode on, LED3 ON for D layer
+	MapKeyRIO(&Throttle, BSB, 	CHAIN( EXEC( "CAR_mode = 0;"															// I - Set CAR_mode OFF
+											 "printf(\"CAR_mode = 0\\xa\");" ),											// 
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),									//     LED5 OFF
-								CHAIN( DOWN+R_CTL, D(10), PULSE+'a', D(), UP+R_CTL,	D(200),								// O - Master arm off
-									   DOWN+L_SHIFT+R_CTL, D(10), PULSE+'a', D(), UP+L_SHIFT+R_CTL, D(200),				// 	     Master arm cover close
-									   DOWN+L_SHIFT, D(10), PULSE+'2', D(), UP+L_SHIFT, D(),							// 	     Display mode cruise
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED3) )); 									// 	     A-G mode off, LED3 OFF for D layer
-
-	
-
-
-//								SEQ( CHAIN( DOWN+L_SHIFT, D(10), PULSE+'m', D(), UP+L_SHIFT ),							// IU - Walkman Start
-//									 CHAIN( DOWN+L_SHIFT, D(10), PULSE+'n', D(), UP+L_SHIFT )),							//	    Walkman Stop
-//								CHAIN( DOWN+L_ALT, D(10), PULSE+'n', D(), UP+L_ALT ),									// IU - Walkman Switch Side
-//								CHAIN( DOWN+L_CTL, D(10), PULSE+'m', D(), UP+L_CTL ),									// IU - Walkman Fast Forward
-//								CHAIN( DOWN+L_CTL, D(10), PULSE+'n', D(), UP+L_CTL ),									// IU - Walkman Fast Backward
-
+								CHAIN( DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT, D(),								// O - HUD Mode - Cage
+									   EXEC( "if((index_stpt_ag)%5 > 1) index_stpt_aa = 2;"								// 	   Set correct steerpoint in A-A mode (IP and ST default to WP3, element 0 is first element in list)
+											 "else index_stpt_aa = (index_stpt_ag)%5;" ),								//
+									   EXEC( "LTRN_mode = 0;"															//     LTRN_mode OFF
+											 "printf(\"LTRN_mode = 0\\xa\");" ),										// 
+									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED3) ));									// 	   A-G mode off, LED3 OFF for D layer
 
 
 
