@@ -200,10 +200,10 @@ int main()
 	MapKeyIO(&Joystick, H4D, 	0, 																						// I - 
 							 	CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'q', D(), UP+L_ALT+L_CTL ));						// O - Chaff Dispenser Select - 2
 	// H4R
-	MapKeyIO(&Joystick, H4R, 	0, 																						// I - 
+	MapKeyIO(&Joystick, H4R, 	CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'j', D(), UP+L_ALT+L_SHIFT ),					// I - AN/APR-25 Function Selector Switch - CW
 			  				 	CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'q', D(), UP+L_ALT+R_SHIFT ));					// O - Chaff Dispenser Select - Both
 	// H4L
-	MapKeyIO(&Joystick, H4L, 	0, 																						// I - 
+	MapKeyIO(&Joystick, H4L, 	CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'j', D(), UP+L_ALT+L_CTL ),						// I - AN/APR-25 Function Selector Switch - CCW
 							 	CHAIN( DOWN+L_ALT+R_CTL, D(10), PULSE+'q', D(), UP+L_ALT+R_CTL )); 						// O - Chaff Power Switch - PWR
 	// H4P
 	MapKeyIO(&Joystick, H4P, 	0, 																						// I - 
