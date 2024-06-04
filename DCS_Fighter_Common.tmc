@@ -308,21 +308,23 @@ int dcs_fighter_common()
 
 	// APUON
 	MapKey(&Throttle, APUON, 	CHAIN( EXEC( "CAR_mode = 1;" ),													// Set CAR_mode ON
-									   //DOWN+R_CTL, D(10), PULSE+'b', D(), UP+R_CTL, D(),						//   Antiskid & Spoiler BK - Off
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ));							//   LED5 ON
 	// APUOFF
 	MapKey(&Throttle, APUOFF, 	CHAIN( EXEC( "CAR_mode = 0;" ),													// Set CAR_mode OFF
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ));							//   LED5 OFF
 									   
+	// LDGH
+	MapKeyIO(&Throttle, LDGH,   0, 																				// I - 
+								CHAIN( DOWN+L_ALT, D(10), PULSE+'m', D(), UP+L_ALT ));							// O - Master Caution Button
 
 	// EOLNORM
-	MapKey(&Throttle, EOLNORM, 	0);																				//
+	MapKey(&Throttle, EOLNORM, 	0 );																			//
 	// EOLMOTOR
 	MapKeyIO(&Throttle, EOLMOTOR, 0,																			// I - 
-								0); 																			// O - 
+								0 ); 																			// O - 
 
 	// EORNORM
-	MapKey(&Throttle, EORNORM, 	0);
+	MapKey(&Throttle, EORNORM, 	0 );																			// 
 	// EORMOTOR
 	MapKeyIO(&Throttle, EORMOTOR, 0,																			// I - 
 								EXEC( "afterburnerdetent_present = 1;" 											// O - Engage afterburner detent

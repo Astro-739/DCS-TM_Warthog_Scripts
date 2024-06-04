@@ -70,6 +70,7 @@ int dcs_f14_pilot_controls()
 	// EORNORM/MOTOR
 	// SC
 	// APUON/OFF
+	// LDGH
 	// RDRNRM/DIS Canopy
 	// IDLELON/IDLERON
 	// THR_LEFT
@@ -147,13 +148,6 @@ int dcs_f14_pilot_controls()
 							  	CHAIN( extlight_formation, D(), 												// O - extlight_formation
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED4) )); 							//     LED4 OFF
 
-	// LDGH
-	MapKeyIOUMD(&Throttle, LDGH, 0, 																			// IU - 
-								CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x38], D(), UP+R_ALT ),						// OU - Master Caution Button
-								0, 																				// IM - 
-								CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x38], D(), UP+R_ALT ),						// OM - Master Caution Button
-								0, 																				// ID - 
-								CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x38], D(), UP+R_ALT ));					// OD - Master Caution Button
 
 	// Flaps Switch
 	// FLAPU

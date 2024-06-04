@@ -29,14 +29,11 @@ int dcs_f4e_pilot_controls()
 
 	// Weapon Release Button
 	// S2
-	MapKeyIOUMD(&Joystick, S2,  SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),												// IU - Emergency All Jettison Button Cover - OPEN
-									 CHAIN( L_SHIFT+L_CTL, D(10), '0' )),												//		Emergency All Jettison Button
+	MapKeyIOUMD(&Joystick, S2,  CHAIN( L_CTL, D(10), 'j' ),																// IU - Jettison Button
 							    CHAIN( R_ALT, D(10), SPC ),																// OU - weapon release
-								SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),												// IM - Emergency All Jettison Button Cover - OPEN
-									 CHAIN( L_SHIFT+L_CTL, D(10), '0' )),												//		Emergency All Jettison Button
+								CHAIN( L_CTL, D(10), 'j' ),																// IM - Jettison Button
 							    0,																					 	// OM - 
-							    SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),												// ID - Emergency All Jettison Button Cover - OPEN
-									 CHAIN( L_SHIFT+L_CTL, D(10), '0' )),												//		Emergency All Jettison Button
+							    CHAIN( L_CTL, D(10), 'j' ),																// ID - Jettison Button
 							    CHAIN( R_ALT, D(10), SPC ));															// OD - weapon release
 
 
@@ -70,6 +67,7 @@ int dcs_f4e_pilot_controls()
 	// EORNORM/MOTOR
 	// SC
 	// APUON/OFF
+	// LDGH
 	// RDRNRM/DIS Canopy
 	// IDLELON/IDLERON
 	// THR_LEFT
@@ -124,13 +122,6 @@ int dcs_f4e_pilot_controls()
 							  	CHAIN( extlight_position, D(), 													// O - extlight_position
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED4) )); 							//     LED4 OFF
 
-	// LDGH
-	MapKeyIOUMD(&Throttle, LDGH, 0, 																			// IU - 
-								CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x38], D(), UP+R_ALT ),						// OU - Master Caution Button
-								0, 																				// IM - 
-								CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x38], D(), UP+R_ALT ),						// OM - Master Caution Button
-								0, 																				// ID - 
-								CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x38], D(), UP+R_ALT ));					// OD - Master Caution Button
 
 	// Flaps Switch
 	// FLAPU
@@ -314,9 +305,9 @@ int dcs_f4e_pilot_controls_jstr()
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, 0,																						// IU - 
 								'n',																					// OU - Air Refuel Release Button (ARR) - missile uncage
-								0,																						// IM - 
+								CHAIN( DOWN+R_CTL, D(10), PULSE+'b', D(), UP+R_CTL ),									// IM - Bombing Table - [Toggle]
 								PULSE+'n', 																				// OM - Air Refuel Release Button (ARR)
-								0,																						// ID - 
+								CHAIN( DOWN+R_CTL, D(10), PULSE+'b', D(), UP+R_CTL ),									// ID - Bombing Table - [Toggle]
 								0 );																					// OD - 
 	// CSL
 	MapKeyIOUMD(&Throttle, CSL, 0,																						// IU - Wing Sweep Aft

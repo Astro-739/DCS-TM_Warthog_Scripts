@@ -104,7 +104,7 @@ int JSTR_WHDN_startup;
 int	JSTR_nav_wp123;
 
 
-define AB 70											// detent position at AB% of full throttle reach
+define AB 69											// detent position at AB% of full throttle reach
 
 
 
