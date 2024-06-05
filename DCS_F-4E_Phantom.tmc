@@ -35,12 +35,14 @@ int steerpointlist_aa, index_stpt_aa = -1;					// (start with first element afte
 int steerpointlist_ag, index_stpt_ag = -1;					// (start with first element after increment, wp1, element 0 is first element in list)
 int lantirn_q_stptlist;
 
-int	JSTR_rdr_mode_auto;
-int	JSTR_rdr_mode_TWS;
-int	JSTR_rdr_mode_RWS;
-int	JSTR_toggle_PD_P_STT;
-int	JSTR_rdr_off;
-int	JSTR_rdr_on;
+int	JSTR_rdr_off;		// a long, 2, 1, w
+int	JSTR_rdr_on;		// a long, 2, 1, e, w
+
+int	JSTR_rdr_stby;			// a long, 2, 1, e, w
+int	JSTR_rdr_active;		// a long, 2, 1, w
+int	JSTR_rdr_autofocus_on;		// a long, 2, 1, 2x e, w
+int	JSTR_rdr_autofocus_off;		// a long, 2, 1, 3x e, w
+int	JSTR_rdr_iff;			// a long, 2, 2
 
 int	JSTR_rdr_range_25n;
 int	JSTR_rdr_range_25w;
@@ -48,47 +50,40 @@ int	JSTR_rdr_range_50n;
 int	JSTR_rdr_range_50w;
 
 int	JSTR_rdr_az_elev_auto;
-int	JSTR_lock_enemy_ahead;
-int	JSTR_lock_friend_ahead;
-int	JSTR_lock_ahead;
-int	JSTR_break_lock;
-int	JSTR_lock_TWS_tgt_1;
-int	JSTR_lock_TWS_tgt_2;
-int	JSTR_lock_TWS_tgt_3;
-int	JSTR_lock_TWS_tgt_4;
 int	JSTR_rwr_norm;
 int	JSTR_rwr_ai;
-int	JSTR_nav_wp1;
-int	JSTR_nav_wp2;
-int	JSTR_nav_wp3;
+
+int JSTR_nav_wp_next;		// a, 4, 1, w
+int	JSTR_nav_wp1;			// a, 4, 1, e, w
+int	JSTR_nav_wp2;			// a, 4, 1, 2x e, w
+int	JSTR_nav_wp3;			// a, 4, 1, 3x e, w
+
 int	JSTR_nav_ip;
 int	JSTR_nav_surftgt;
 int	JSTR_nav_homebase;
 int	JSTR_nav_fixpt;
-int JSTR_lntrn_q_des;
-int JSTR_lntrn_q_eyeballs;
-int JSTR_lntrn_q_headctrl;
-int JSTR_lntrn_q_hud;
-int JSTR_lntrn_designate;
-int JSTR_lntrn_undesignate;
-int JSTR_lntrn_stblarea;
-int JSTR_lntrn_srch_anyactive;
-int JSTR_lntrn_srch_aircraftall;
-int JSTR_lntrn_srch_samactive;
-int JSTR_lntrn_srch_armoractive;
-int JSTR_lntrn_nexttgt;
-int JSTR_lntrn_prevtgt;
+
 int JSTR_agwpn_comptgt;
 int JSTR_agwpn_comppilot;
+
 int	JSTR_startup;
 int	JSTR_loudclear;
+
 int	JSTR_ins_fine;
 int	JSTR_ins_wpn;
-int	JSTR_jett_droptanks;
+
+int	JSTR_ins_align;				//	a, 6, 5   start alignment
+int	JSTR_jammer_active;			// a, 5, 5, e, w
+int	JSTR_jammer_stby;			// a, 5, 5, w
 int	JSTR_jammer_onoff;
 int	JSTR_spot;
 int	JSTR_check;
-int JSTR_menu;
+
+int JSTR_menu;					// a 
+int JSTR_menu_right;			// e
+int JSTR_menu_left;				// q 
+int JSTR_menu_select;			// w
+int JSTR_menu_main;				// RCtrl-w
 
 int JSTR_context_short;
 int JSTR_context_long;
@@ -96,8 +91,6 @@ int JSTR_context_double;
 
 char LTRN_mode = 0;
 
-int JSTR_toggle_RWS_TWS;
-int JSTR_ground_ac_stbl;
 int JSTR_rdr_offon;
 int JSTR_rwr_ai_norm;
 int JSTR_WHDN_startup;
@@ -187,15 +180,6 @@ int main()
 							   JSTR_nav_surftgt_list,
 							   JSTR_nav_wp3_list );
 							   
-	// LANTIRN Cue Steerpoint select
-	lantirn_q_stptlist	= SEQ( JSTR_lntrn_q_wp1_list,
-							   JSTR_lntrn_q_wp2_list,
-							   JSTR_lntrn_q_ip_list,
-							   JSTR_lntrn_q_surftgt_list,
-							   JSTR_lntrn_q_wp3_list );
-	
-	
-	
 	
 	
 
@@ -260,14 +244,6 @@ int main()
 
 	// JESTER calls
 
-	// Radar - Radar Mode
-	JSTR_rdr_mode_auto		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
-	JSTR_rdr_mode_TWS		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'6', D(), UP+L_CTL+R_SHIFT );
-	JSTR_rdr_mode_RWS		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'7', D(), UP+L_CTL+R_SHIFT );
-	JSTR_toggle_PD_P_STT	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'4', D(), UP+L_CTL+R_SHIFT );
 	// Radar - Silent/Active
 	JSTR_rdr_off			= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'0', D(), UP+L_CTL+R_CTL );
 	JSTR_rdr_on				= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'1', D(), UP+L_CTL+R_CTL );
@@ -281,31 +257,6 @@ int main()
 									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
-	// Radar – STT Lock
-	JSTR_lock_enemy_ahead 	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'1', D(), UP+L_CTL+R_SHIFT );
-	JSTR_lock_friend_ahead 	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'2', D(), UP+L_CTL+R_SHIFT );
-	JSTR_lock_ahead 		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'3', D(), UP+L_CTL+R_SHIFT );
-	JSTR_break_lock			= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'5', D(), UP+L_CTL+R_SHIFT );
-	JSTR_lock_TWS_tgt_1		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
-	JSTR_lock_TWS_tgt_2		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL );
-	JSTR_lock_TWS_tgt_3		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );
-	JSTR_lock_TWS_tgt_4		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
 	// RWR
 	JSTR_rwr_norm			= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
@@ -316,6 +267,12 @@ int main()
 									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL );
 	// Navigation
+	JSTR_nav_wp_next		= CHAIN( PULSE+'a', D(200),
+									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
+									 PULSE+'w' );
+
+
 	JSTR_nav_wp1			= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'1', D(), UP+L_CTL+L_SHIFT );
 	JSTR_nav_wp2			= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'2', D(), UP+L_CTL+L_SHIFT );
 	JSTR_nav_wp3			= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'3', D(), UP+L_CTL+L_SHIFT );
@@ -323,46 +280,6 @@ int main()
 	JSTR_nav_surftgt		= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'5', D(), UP+L_CTL+L_SHIFT );
 	JSTR_nav_homebase		= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'6', D(), UP+L_CTL+L_SHIFT );
 	JSTR_nav_fixpt			= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'7', D(), UP+L_CTL+L_SHIFT );
-	// LANTIRN
-//	JSTR_tcs_menu			= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-//									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
-//									 DOWN+L_CTL, D(10), PULSE+'8', D(), UP+L_CTL, D(200) );
-	JSTR_lntrn_q_des		= CHAIN( PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
-	JSTR_lntrn_q_eyeballs	= CHAIN( PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
-	JSTR_lntrn_q_headctrl	= CHAIN( PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL );
-	JSTR_lntrn_q_hud		= CHAIN( PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
-	JSTR_lntrn_designate	= CHAIN( PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'7', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );
-	JSTR_lntrn_undesignate	= CHAIN( PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'7', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
-	JSTR_lntrn_stblarea		= CHAIN( PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );
-	JSTR_lntrn_srch_anyactive	= CHAIN( PULSE+'a', D(200), 
-										 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
-										 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL );
-	JSTR_lntrn_srch_aircraftall	= CHAIN( PULSE+'a', D(200), 
-										 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
-										 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );
-	JSTR_lntrn_srch_samactive	= CHAIN( PULSE+'a', D(200), 
-										 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
-										 DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL );
-	JSTR_lntrn_srch_armoractive	= CHAIN( PULSE+'a', D(200), 
-										 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
-										 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL );
-	JSTR_lntrn_nexttgt		= CHAIN( PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL );
-	JSTR_lntrn_prevtgt		= CHAIN( PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL );
 	// A-G Weapons
 	JSTR_agwpn_comptgt		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
@@ -376,16 +293,19 @@ int main()
 	JSTR_ins_fine			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
 	JSTR_ins_wpn			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL );
 	// General
-	JSTR_jett_droptanks		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
 	JSTR_jammer_onoff		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'7', D(), UP+L_CTL );
 	JSTR_spot				= CHAIN( PULSE+'a', D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
 	JSTR_check				= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'7', D(), UP+L_CTL+L_ALT );
+
 	JSTR_menu				= 'a';
+	JSTR_menu_right			= PULSE+'e';
+	JSTR_menu_left			= PULSE+'q';
+	JSTR_menu_select		= PULSE+'w';
+	JSTR_menu_main			= CHAIN( DOWN+R_CTL, D(10), PULSE+'w', D(), UP+R_CTL );
+
 	JSTR_context_short		= PULSE+'v';
 	JSTR_context_long		= CHAIN( DOWN+'v', D(500), UP+'v');
 	JSTR_context_double		= CHAIN( PULSE+'v', D(200), PULSE+'v');
@@ -395,8 +315,6 @@ int main()
 	// JSTR functions
 	JSTR_rdr_offon			= SEQ( JSTR_rdr_off,										// Radar - Silent/Active
 								   JSTR_rdr_on );
-	JSTR_toggle_RWS_TWS		= SEQ( JSTR_rdr_mode_RWS,									// Radar - RWS/TWS Mode
-								   JSTR_rdr_mode_TWS );
 	JSTR_rwr_ai_norm		= SEQ( JSTR_rwr_ai,											// RWR - Airborne Interceptor / Normal
 								   JSTR_rwr_norm );
 	JSTR_WHDN_startup		= SEQ( JSTR_startup,										// Start-up/Loud&Clear/INS Fine
@@ -409,7 +327,6 @@ int main()
 	
 	// -------------------- INITIAL MODE VALUES ---------------------------------
 
-	printf("LTRN_mode = %i\xa", LTRN_mode);												// write to output window
 
 
 

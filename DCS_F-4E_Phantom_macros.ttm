@@ -45,10 +45,4 @@ define	JSTR_nav_surftgt_list	CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'5', D(), U
 define	JSTR_nav_homebase_list	CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'6', D(), UP+L_CTL+L_SHIFT )
 define	JSTR_nav_fixpt_list		CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'7', D(), UP+L_CTL+L_SHIFT )
 
-// JESTER Cue LANTIRN select
-define	JSTR_lntrn_q_wp1_list		CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL ) 
-define	JSTR_lntrn_q_wp2_list		CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL ) 
-define	JSTR_lntrn_q_wp3_list		CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL ) 
-define	JSTR_lntrn_q_ip_list		CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL ) 
-define	JSTR_lntrn_q_surftgt_list	CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL ) 
 

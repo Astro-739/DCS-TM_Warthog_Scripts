@@ -84,7 +84,7 @@ int dcs_f4e_pilot_controls()
 	MapKeyIO(&Throttle, APENG, 	0,																					// I - 
 								autopilot );																		// O - Autopilot on/off
 	// APDIS
-	MapKey(&Throttle, APDIS, 	0 ); 																				// see autopilot_mode()
+	MapKey(&Throttle, APDIS, 	0 ); 																				// 
 	// APPAT
 	MapKey(&Throttle, APPAT, 	CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'h', D(), UP+L_ALT+L_CTL ));					// ALT Hold - Disengage
 	// APAH
@@ -207,11 +207,6 @@ int dcs_f4e_pilot_controls()
 								CHAIN( DOWN+L_CTL, D(10), PULSE+'h', D(), UP+L_CTL, D(100),								// O - HUD Mode - A/G
 									   EXEC( "if((index_stpt_aa)%3 == 2) index_stpt_ag = 4;"							// 	   Set correct steerpoint in A-G mode (element 0 is first element in list)
 											 "else index_stpt_ag = (index_stpt_aa)%3;" ),								// 
-									   EXEC( "if(Joystick[S3]) {"														// 	   If JSTR shift is pressed
-											   "LTRN_mode = 1;"															// 	   LTRN_mode ON
-											   "printf(\"LTRN_mode = 1\\xa\");"											// 
-											   "dcs_f4e_jester_lantirn_controls();"										//	   Load JESTER LANTIRN controls
-											   "}" ),																	//
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED3) )); 									//     A-G mode on, LED3 ON for D layer
 	MapKeyRIO(&Throttle, BSB, 	CHAIN( EXEC( "CAR_mode = 0;"															// I - Set CAR_mode OFF
 											 "printf(\"CAR_mode = 0\\xa\");" ),											// 
@@ -219,8 +214,6 @@ int dcs_f4e_pilot_controls()
 								CHAIN( DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT, D(),								// O - HUD Mode - Cage
 									   EXEC( "if((index_stpt_ag)%5 > 1) index_stpt_aa = 2;"								// 	   Set correct steerpoint in A-A mode (IP and ST default to WP3, element 0 is first element in list)
 											 "else index_stpt_aa = (index_stpt_ag)%5;" ),								//
-									   EXEC( "LTRN_mode = 0;"															//     LTRN_mode OFF
-											 "printf(\"LTRN_mode = 0\\xa\");" ),										// 
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED3) ));									// 	   A-G mode off, LED3 OFF for D layer
 
 	
