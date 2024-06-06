@@ -45,17 +45,10 @@ int dcs_f4e_jester_controls()
 											 "ActKey( KEYON+PULSE+X(radarelevlist, index_elev) );" ), 500 ));			// 	   [long] Radar elevation step down
 	// H3R
 	MapKeyIO(&Joystick, H3R, 	0, 																						// I - 
-								TEMPO( CHAIN( 0, D(),																	// O - Radar - Range Auto
-											  EXEC( "index_range = 2;" )),												//	   Reset range index to 2 (100 nm) (element 0 is first element in list)
-									   EXEC( "index_az = (index_az+1)%5;"												//     
-											 "ActKey( KEYON+PULSE+X(radarazlist, index_az) );" ), 500 ));				// 	   [long] Radar azimuth step right
+								0 );																					// O - 
 	// H3L
 	MapKeyIO(&Joystick, H3L, 	0, 																						// I - 
-								TEMPO( CHAIN( JSTR_rdr_az_elev_auto, D(),												// O - Radar - Az/El Auto
-											  EXEC( "index_az = 2;"														//	   Reset azimuth index to Center (element 0 is first element in list)
-													"index_elev = 2;" )),												//	   Reset elevation index to Middle (element 0 is first element in list)
-									   EXEC( "index_az = (index_az+4)%5;"												//     
-											 "ActKey( KEYON+PULSE+X(radarazlist, index_az) );" ), 500 ));				// 	   [long] Radar azimuth step left
+								0 );																					// O - 
 
 
 
@@ -75,27 +68,28 @@ int dcs_f4e_jester_controls()
 	MapKeyIOUMD(&Throttle, MSD, 0, 																				// IU - 
 								0, 																				// OU - 
 								0,																				// IM - 
-								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+JSTR_check );" 						// OM - [WHDN] JSTR_check
-									  "else ActKey( PULSE+KEYON+JSTR_nav_homebase );" ),						//		JSTR_nav_homebase
+								0, 																				// OM - 
 								0,																				// ID - 
 								0 );																			// OD - 
 	// MSR
 	MapKeyIOUMD(&Throttle, MSR, 0, 																				// IU - 
-								JSTR_jammer_onoff,																// OU - JSTR_jammer_onoff
+								TEMPO( 0,																		// OU - JSTR_jammer_active
+									   SEQ( JSTR_jammer_active,	JSTR_jammer_stby ),	500 ),						//      [long] JSTR_jammer_active / JSTR_jammer_stby
 								0,																				// IM - 
-								CHAIN( JSTR_nav_wp1,															// OM - JSTR_nav_wp1
-									   EXEC( "index_stpt_aa = 0;" )),											//		Set steerpoint index to match wp1 (first element is 0)
+								JSTR_nav_wp1,																	// OM - JSTR_nav_wp1
 								0,																				// ID - 
-								0 );																			// OD - 
+								TEMPO( 0,																		// OD - JSTR_jammer_active
+									   SEQ( JSTR_jammer_active,	JSTR_jammer_stby ),	500 ));						//      [long] JSTR_jammer_active / JSTR_jammer_stby
+
 	// MSL
 	MapKeyIOUMD(&Throttle, MSL, 0, 																				// IU - 
-								TEMPO( 0,																		// OU - Radar - Ground/Aircraft Stabilize
+								TEMPO( 0,																		// OU - 
 									   JSTR_rdr_offon, 500 ),													//		[long] JSTR_rdr_offon
 								0,																				// IM - 
-								TEMPO( 0,																		// OM - Radar - Ground/Aircraft Stabilize
+								TEMPO( 0,																		// OM - 
 									   JSTR_rdr_offon, 500 ),													//		[long] JSTR_rdr_offon
 								0,																				// ID - 
-								TEMPO( 0,																		// OD - Radar - Ground/Aircraft Stabilize
+								TEMPO( 0,																		// OD - 
 									   JSTR_rdr_offon, 500 ));													//		[long] JSTR_rdr_offon
 
 	// MSP 

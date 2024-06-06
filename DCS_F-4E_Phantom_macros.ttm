@@ -22,13 +22,6 @@ define  JSTR_rdr_range_25w_list     CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'2', D
 define  JSTR_rdr_range_50n_list     CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'3', D(), UP+L_CTL+L_ALT )
 define  JSTR_rdr_range_50w_list     CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'4', D(), UP+L_CTL+L_ALT )
 
-// JESTER Radar Azimuth select
-define	JSTR_rdr_az_left		CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL )
-define	JSTR_rdr_az_leftcntr	CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL )
-define	JSTR_rdr_az_center		CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL )
-define	JSTR_rdr_az_rightcntr	CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL )
-define	JSTR_rdr_az_right		CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL )
-
 // JESTER Radar Elevation select
 define	JSTR_rdr_elev_low		CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL )
 define	JSTR_rdr_elev_lowmid	CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL )
@@ -36,13 +29,5 @@ define	JSTR_rdr_elev_middle	CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), DOWN+L_
 define	JSTR_rdr_elev_highmid	CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL )
 define	JSTR_rdr_elev_high		CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL )
 
-// JESTER Steerpoint select
-define	JSTR_nav_wp1_list		CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'1', D(), UP+L_CTL+L_SHIFT )
-define	JSTR_nav_wp2_list		CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'2', D(), UP+L_CTL+L_SHIFT )
-define	JSTR_nav_wp3_list		CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'3', D(), UP+L_CTL+L_SHIFT )
-define	JSTR_nav_ip_list		CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'4', D(), UP+L_CTL+L_SHIFT )
-define	JSTR_nav_surftgt_list	CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'5', D(), UP+L_CTL+L_SHIFT )
-define	JSTR_nav_homebase_list	CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'6', D(), UP+L_CTL+L_SHIFT )
-define	JSTR_nav_fixpt_list		CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'7', D(), UP+L_CTL+L_SHIFT )
 
 

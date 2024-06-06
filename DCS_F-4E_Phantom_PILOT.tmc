@@ -284,7 +284,7 @@ int dcs_f4e_pilot_controls_jstr()
 								0,																	  					// IM - 
 								0,																	 					// OM - 
 								CHAIN( L_SHIFT, D(10), '-'),										 					// ID - Aural Tone Volume - [Dec]
-								JSTR_agwpn_comptgt ); 																	// OD - Set Computer Target Weapons (CCRP)
+								0 ); 																					// OD - 
 	// CSD
 	MapKeyIOUMD(&Throttle, CSD, CHAIN( L_SHIFT, D(10), '='),										 					// IU - Aural Tone Volume - [Inc]
 								EXEC( "if (index_mslcw < 2) {"															// OU - Radar-Missile CW - [Up]
@@ -294,7 +294,7 @@ int dcs_f4e_pilot_controls_jstr()
 								0,																	  					// IM - 
 								0,																	 					// OM - 
 								CHAIN( L_SHIFT, D(10), '='),										 					// ID - Aural Tone Volume - [Inc]
-								JSTR_agwpn_comppilot );												 					// OD - Set Computer Pilot Weapons (CCIP)
+								0 );																 					// OD - 
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, 0,																						// IU - 
 								'n',																					// OU - Air Refuel Release Button (ARR) - missile uncage

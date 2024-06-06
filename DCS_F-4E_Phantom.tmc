@@ -30,9 +30,6 @@ int steercmdlist, index_stcmd = 0;							// (start with second element after inc
 int missilecwlist, index_mslcw = 0;							// (start in off position, element 0 is first element in list)
 int radarrangelist, index_range = 2;						// (current is middle of five (assumption 100 nm), element 2, element 0 is first element in list)
 int radarelevlist, index_elev = 2;							// (current is middle of five, element 2, element 0 is first element in list)
-int radarazlist, index_az = 2;								// (current is middle of five, element 2, element 0 is first element in list)
-int steerpointlist_aa, index_stpt_aa = -1;					// (start with first element after increment, wp1, element 0 is first element in list)
-int steerpointlist_ag, index_stpt_ag = -1;					// (start with first element after increment, wp1, element 0 is first element in list)
 int lantirn_q_stptlist;
 
 int	JSTR_rdr_off;		// a long, 2, 1, w
@@ -49,22 +46,11 @@ int	JSTR_rdr_range_25w;
 int	JSTR_rdr_range_50n;
 int	JSTR_rdr_range_50w;
 
-int	JSTR_rdr_az_elev_auto;
 int	JSTR_rwr_norm;
 int	JSTR_rwr_ai;
 
 int JSTR_nav_wp_next;		// a, 4, 1, w
 int	JSTR_nav_wp1;			// a, 4, 1, e, w
-int	JSTR_nav_wp2;			// a, 4, 1, 2x e, w
-int	JSTR_nav_wp3;			// a, 4, 1, 3x e, w
-
-int	JSTR_nav_ip;
-int	JSTR_nav_surftgt;
-int	JSTR_nav_homebase;
-int	JSTR_nav_fixpt;
-
-int JSTR_agwpn_comptgt;
-int JSTR_agwpn_comppilot;
 
 int	JSTR_startup;
 int	JSTR_loudclear;
@@ -75,9 +61,6 @@ int	JSTR_ins_wpn;
 int	JSTR_ins_align;				//	a, 6, 5   start alignment
 int	JSTR_jammer_active;			// a, 5, 5, e, w
 int	JSTR_jammer_stby;			// a, 5, 5, w
-int	JSTR_jammer_onoff;
-int	JSTR_spot;
-int	JSTR_check;
 
 int JSTR_menu;					// a 
 int JSTR_menu_right;			// e
@@ -94,7 +77,6 @@ char LTRN_mode = 0;
 int JSTR_rdr_offon;
 int JSTR_rwr_ai_norm;
 int JSTR_WHDN_startup;
-int	JSTR_nav_wp123;
 
 
 define AB 69											// detent position at AB% of full throttle reach
@@ -162,25 +144,6 @@ int main()
 						   JSTR_rdr_elev_highmid,
 						   JSTR_rdr_elev_high );
 
-	// Radar azimuth select						 
-	radarazlist 	= SEQ( JSTR_rdr_az_left,
-						   JSTR_rdr_az_leftcntr,
-						   JSTR_rdr_az_center,
-						   JSTR_rdr_az_rightcntr,
-						   JSTR_rdr_az_right );
-
-	// Navigation Steerpoint select
-	steerpointlist_aa	= SEQ( JSTR_nav_wp1_list,
-							   JSTR_nav_wp2_list,
-							   JSTR_nav_wp3_list );
-
-	steerpointlist_ag	= SEQ( JSTR_nav_wp1_list,
-							   JSTR_nav_wp2_list,
-							   JSTR_nav_ip_list,
-							   JSTR_nav_surftgt_list,
-							   JSTR_nav_wp3_list );
-							   
-	
 	
 
 
@@ -252,11 +215,6 @@ int main()
 	JSTR_rdr_range_25w		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'2', D(), UP+L_CTL+L_ALT );
 	JSTR_rdr_range_50n		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'3', D(), UP+L_CTL+L_ALT );
 	JSTR_rdr_range_50w		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'4', D(), UP+L_CTL+L_ALT );
-	// Radar – Auto Azimuth and Elevation Radar
-	JSTR_rdr_az_elev_auto	= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
 	// RWR
 	JSTR_rwr_norm			= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
@@ -271,34 +229,26 @@ int main()
 									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
 									 PULSE+'w' );
-
-
-	JSTR_nav_wp1			= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'1', D(), UP+L_CTL+L_SHIFT );
-	JSTR_nav_wp2			= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'2', D(), UP+L_CTL+L_SHIFT );
-	JSTR_nav_wp3			= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'3', D(), UP+L_CTL+L_SHIFT );
-	JSTR_nav_ip				= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'4', D(), UP+L_CTL+L_SHIFT );
-	JSTR_nav_surftgt		= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'5', D(), UP+L_CTL+L_SHIFT );
-	JSTR_nav_homebase		= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'6', D(), UP+L_CTL+L_SHIFT );
-	JSTR_nav_fixpt			= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'7', D(), UP+L_CTL+L_SHIFT );
-	// A-G Weapons
-	JSTR_agwpn_comptgt		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
+	JSTR_nav_wp1			= CHAIN( PULSE+'a', D(200),
 									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200) );
-	JSTR_agwpn_comppilot	= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200) );							//   also 2????????????????????????
+									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
+									 PULSE+'e', D(200), 
+									 PULSE+'w' );
 	// Start-up
 	JSTR_startup			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );
 	JSTR_loudclear			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
 	JSTR_ins_fine			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
 	JSTR_ins_wpn			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL );
 	// General
-	JSTR_jammer_onoff		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'7', D(), UP+L_CTL );
-	JSTR_spot				= CHAIN( PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
-	JSTR_check				= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'7', D(), UP+L_CTL+L_ALT );
+	JSTR_jammer_active		= CHAIN( PULSE+'a', D(200),
+									 DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL, D(200), 
+									 PULSE+'e', D(200), 
+									 PULSE+'w' );
+	JSTR_jammer_stby		= CHAIN( PULSE+'a', D(200),
+									 DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL, D(200), 
+									 PULSE+'w' );
 
 	JSTR_menu				= 'a';
 	JSTR_menu_right			= PULSE+'e';
@@ -320,9 +270,6 @@ int main()
 	JSTR_WHDN_startup		= SEQ( JSTR_startup,										// Start-up/Loud&Clear/INS Fine
 								   JSTR_loudclear,
 								   JSTR_ins_fine );
-	JSTR_nav_wp123			= SEQ( JSTR_nav_wp1,										// Nav - Set Steerpoint WP 1/2/3
-								   JSTR_nav_wp2,
-								   JSTR_nav_wp3 );
 
 	
 	// -------------------- INITIAL MODE VALUES ---------------------------------
