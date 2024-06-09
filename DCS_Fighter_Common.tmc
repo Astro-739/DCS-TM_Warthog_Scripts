@@ -209,7 +209,7 @@ int dcs_fighter_common()
 	// Nosewheel Steering Button
 	// S1
 	MapKeyIO(&Joystick, S1,  	SEQ( PULSE+F10, PULSE+F1 ),														// I - map
-							 	's'); 																			// O - Nosewheel Steering Button
+							 	DX3 ); 																			// O - Nosewheel Steering Button
 
 	// Trim Switch
 	// H1U

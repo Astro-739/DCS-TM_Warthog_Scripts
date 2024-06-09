@@ -125,14 +125,14 @@ int main()
 
 	// Nosewheel Steering Button
 	// S1
-	MapKeyIOUMD(&Joystick, S1, 	SEQ( PULSE+F10, PULSE+F1 ),														// IU - F10 map
-							 	PULSE+INS, 																		// OU - Nosewheel Steering Button
-							    SEQ( PULSE+F10, PULSE+F1 ), 													// IM - F10 map
-							    PULSE+INS,															 			// OM - Nosewheel Steering Button
-							    SEQ( PULSE+F10, PULSE+F1 ),								 						// ID - F10 map
-							    TEMPO( PULSE+INS,																// OD - [short] Nosewheel Steering Button
-									   CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'6', D(), UP+L_ALT+R_SHIFT ),	//		[long]  Switch AG weapon type (SMS page Right MFD OSB 6)
-									   500 ));
+//	MapKeyIOUMD(&Joystick, S1, 	SEQ( PULSE+F10, PULSE+F1 ),														// IU - F10 map
+//							 	PULSE+INS, 																		// OU - Nosewheel Steering Button
+//							    SEQ( PULSE+F10, PULSE+F1 ), 													// IM - F10 map
+//							    PULSE+INS,															 			// OM - Nosewheel Steering Button
+//							    SEQ( PULSE+F10, PULSE+F1 ),								 						// ID - F10 map
+//							    TEMPO( PULSE+INS,																// OD - [short] Nosewheel Steering Button
+//									   CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'6', D(), UP+L_ALT+R_SHIFT ),	//		[long]  Switch AG weapon type (SMS page Right MFD OSB 6)
+//									   500 ));
 
 	// Weapon Release Button
 	// S2

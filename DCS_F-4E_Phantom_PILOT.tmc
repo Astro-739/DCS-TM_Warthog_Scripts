@@ -97,10 +97,10 @@ int dcs_f4e_pilot_controls()
 	// China Hat
 	// CHF
 	MapKeyIO(&Throttle, CHF, 	brightness_up, 																	// I - brightness up for reticle/NVG
-							 	CHAIN( L_ALT+R_SHIFT, D(10), '-' )); 											// O - HUD Trim Dec
+							 	CHAIN( L_ALT+R_SHIFT, D(10), '-' )); 											// O - Reticle Depression - [Inc]
 	// CHB
 	MapKeyIO(&Throttle, CHB, 	brightness_down,																// I - brightness down for reticle/NVG
-							 	CHAIN( L_ALT+R_SHIFT, D(10), '=' )); 											// O - HUD Trim Inc
+							 	CHAIN( L_ALT+R_SHIFT, D(10), '=' )); 											// O - Reticle Depression - [Dec]
 
 	// Pinky Switch (exterior lighting)
 	// PSF
@@ -257,7 +257,8 @@ int dcs_f4e_pilot_controls_jstr()
 	// H3U
 	MapKeyIO(&Joystick, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
 									   nightvision, 500 ),																// 	   [long] Night Vision Goggles toggle
-								TEMPO( 0,																				// O - 
+								TEMPO( SEQ( CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_SHIFT ),	// O - DSCG Screen Mode - Radar/TV
+											CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_ALT )),
 									   CHAIN( DOWN+L_CTL, D(10), PULSE+'v', D(), UP+L_CTL ), 500 ));					// 	   [long] Helmet Visor toggle
 	// H3D
 	MapKeyIO(&Joystick, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
@@ -266,11 +267,11 @@ int dcs_f4e_pilot_controls_jstr()
 	// H3R
 	MapKeyIO(&Joystick, H3R, 	TEMPO( PULSE+']', 																		// I - kneeboard next page
 									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'v', D(), UP+L_SHIFT ), 500 ),   				// 	   [long] Sunglasses toggle
-								0 );																					// O - 
+								CHAIN( DOWN+R_SHIFT, D(10), PULSE+'n', D(), UP+R_SHIFT ));								// O - Navigation Mode - [Next]
 	// H3L
 	MapKeyIO(&Joystick, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
 									   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT ), 500 ),					//	   [long] Pilot Body toggle								
-								0 );																					// O - 
+								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'n', D(), UP+L_SHIFT ));								// O - Navigation Input - [Next]
 
 
 

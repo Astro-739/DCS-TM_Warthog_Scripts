@@ -229,11 +229,11 @@ int main()
 	MapKeyIOUMD(&Throttle, CSD, TEMPO( CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x57], D(), UP+L_CTL ),				// IU - ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
 									   CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'0', D(), UP+L_ALT+R_SHIFT ),	// 		[long] HSD zoom in (Right MFD OSB 20 on HSD page)
 									   500 ),																	// 
-								DX3,																			// OU - ENABLE Switch - Depress
+								DX14,																			// OU - ENABLE Switch - Depress
 								CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x57], D(), UP+L_CTL ),						// IM - ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
-								DX3, 																			// OM - ENABLE Switch - Depress
+								DX14, 																			// OM - ENABLE Switch - Depress
 								CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x57], D(), UP+L_CTL ),						// ID - ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
-								DX3);																			// OD - ENABLE Switch - Depress
+								DX14);																			// OD - ENABLE Switch - Depress
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, 0, 																				// IU - 
 							 	PULSE+'c',																		// OU - UNCAGE Switch
