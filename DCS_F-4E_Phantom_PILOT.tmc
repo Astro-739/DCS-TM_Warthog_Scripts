@@ -29,12 +29,12 @@ int dcs_f4e_pilot_controls()
 
 	// Weapon Release Button
 	// S2
-	MapKeyIOUMD(&Joystick, S2,  CHAIN( L_CTL, D(10), 'j' ),																// IU - Jettison Button
-							    CHAIN( R_ALT, D(10), SPC ),																// OU - weapon release
-								CHAIN( L_CTL, D(10), 'j' ),																// IM - Jettison Button
+	MapKeyIOUMD(&Joystick, S2,  jettison_stores,																		// IU - Jettison Stores
+							    DX2,																					// OU - weapon release
+								jettison_stores,																		// IM - Jettison Stores
 							    0,																					 	// OM - 
-							    CHAIN( L_CTL, D(10), 'j' ),																// ID - Jettison Button
-							    CHAIN( R_ALT, D(10), SPC ));															// OD - weapon release
+							    jettison_stores,																		// ID - Jettison Stores
+							    DX2 );																					// OD - weapon release
 
 
  	// Countermeasure Management Switch
@@ -97,10 +97,10 @@ int dcs_f4e_pilot_controls()
 	// China Hat
 	// CHF
 	MapKeyIO(&Throttle, CHF, 	brightness_up, 																	// I - brightness up for reticle/NVG
-							 	CHAIN( L_ALT+R_SHIFT, D(10), '-' )); 											// O - Reticle Depression - [Inc]
+							 	CHAIN( L_ALT+R_SHIFT, D(10), '=' )); 											// O - Reticle Depression - [Dec]
 	// CHB
 	MapKeyIO(&Throttle, CHB, 	brightness_down,																// I - brightness down for reticle/NVG
-							 	CHAIN( L_ALT+R_SHIFT, D(10), '=' )); 											// O - Reticle Depression - [Dec]
+							 	CHAIN( L_ALT+R_SHIFT, D(10), '-' )); 											// O - Reticle Depression - [Inc]
 
 	// Pinky Switch (exterior lighting)
 	// PSF
@@ -184,13 +184,13 @@ int dcs_f4e_pilot_controls()
 	//			 [I] ACM Mode
 	// BSF - LED1 ON/OFF
 	MapKeyIO(&Throttle, BSF, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT, D(200),							// I - HUD Mode - A/A
+									   DOWN+'c', D(200), UP+'c', D(),													// 	   Cage Button
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED1) ), 									// 	   LED1 ON for U layer
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT, D(200),							// O - HUD Mode - A/A
+								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT, D(),							// O - HUD Mode - A/A
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED1) )); 									// 	   LED1 ON for U layer
-	MapKeyRIO(&Throttle, BSF, 	CHAIN( 0,																				// I - 
-									   DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT, D(200),								// 	   HUD Mode - Cage
+	MapKeyRIO(&Throttle, BSF, 	CHAIN( DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT, D(),								// I - HUD Mode - Cage
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED1) ), 									// 	   LED1 OFF for U layer 
-								CHAIN( DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT, D(200),								// O - HUD Mode - Cage
+								CHAIN( DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT, D(),								// O - HUD Mode - Cage
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED1) )); 									// 	   LED1 OFF for U layer
 
 	// M LAYER - Navigation Mode
@@ -204,16 +204,12 @@ int dcs_f4e_pilot_controls()
 									   EXEC( "CAR_mode = 1;"															// 	   Set CAR_mode ON
 											 "printf(\"CAR_mode = 1\\xa\");" ),											// 
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),									//     LED5 ON
-								CHAIN( DOWN+L_CTL, D(10), PULSE+'h', D(), UP+L_CTL, D(100),								// O - HUD Mode - A/G
-									   EXEC( "if((index_stpt_aa)%3 == 2) index_stpt_ag = 4;"							// 	   Set correct steerpoint in A-G mode (element 0 is first element in list)
-											 "else index_stpt_ag = (index_stpt_aa)%3;" ),								// 
+								CHAIN( DOWN+L_CTL, D(10), PULSE+'h', D(), UP+L_CTL, D(),								// O - HUD Mode - A/G
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED3) )); 									//     A-G mode on, LED3 ON for D layer
 	MapKeyRIO(&Throttle, BSB, 	CHAIN( EXEC( "CAR_mode = 0;"															// I - Set CAR_mode OFF
 											 "printf(\"CAR_mode = 0\\xa\");" ),											// 
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),									//     LED5 OFF
 								CHAIN( DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT, D(),								// O - HUD Mode - Cage
-									   EXEC( "if((index_stpt_ag)%5 > 1) index_stpt_aa = 2;"								// 	   Set correct steerpoint in A-A mode (IP and ST default to WP3, element 0 is first element in list)
-											 "else index_stpt_aa = (index_stpt_ag)%5;" ),								//
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED3) ));									// 	   A-G mode off, LED3 OFF for D layer
 
 	
@@ -238,10 +234,10 @@ int dcs_f4e_pilot_controls_jstr()
 	// Target Management Switch
 	// H2U
 	MapKeyIO(&Joystick, H2U, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT ),								// I - Gun/Missile Pinky Switch - Radar
-								USB[0x55] );																			// O - zoom in  (KP*)
+								DX7 );																					// O - zoom in  (KP*)
 	// H2D
 	MapKeyIO(&Joystick, H2D, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'w', D(), UP+L_SHIFT ), 								// I - Gun/Missile Pinky Switch - Gun
-								USB[0x54] );																			// O - zoom out  (KP\)
+								DX9 );																					// O - zoom out  (KP\)
 	// H2R							
 	MapKeyIO(&Joystick, H2R, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT ), 								// I - Gun/Missile Pinky Switch - Heat
 								CHAIN( L_WIN, D(10), KP6 ));															// O - snap view radar
@@ -304,11 +300,13 @@ int dcs_f4e_pilot_controls_jstr()
 								CHAIN( DOWN+R_CTL, D(10), PULSE+'b', D(), UP+R_CTL ),									// ID - Bombing Table - [Toggle]
 								0 );																					// OD - 
 	// CSL
-	MapKeyIOUMD(&Throttle, CSL, 0,																						// IU - Wing Sweep Aft
+	MapKeyIOUMD(&Throttle, CSL, SEQ( CHAIN( DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT ),								// IU - HUD Mode – Cage toggle
+									 CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT )),							//
 								CHAIN( DOWN+'c', D(200), UP+'c' ),														// OU - Cage Button
-								0,																						// IM - Wing Sweep Aft
+								0,																						// IM - 
 								0,																						// OM - 
-								0,																						// ID - Wing Sweep Aft
+								SEQ( CHAIN( DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT ),								// ID - HUD Mode – Cage toggle
+									 CHAIN( DOWN+L_CTL, D(10), PULSE+'h', D(), UP+L_CTL )),								//
 								CHAIN( DOWN+'c', D(200), UP+'c' ));														// OD - Cage Button
 
 

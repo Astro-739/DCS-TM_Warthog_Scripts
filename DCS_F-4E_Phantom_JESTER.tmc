@@ -14,23 +14,18 @@ int dcs_f4e_jester_controls()
 
 	// Target Management Switch
 	// H2U
-	MapKeyIO(&Joystick, H2U, 	0,																						// I - 
-							 	JSTR_context_long );										 							// O - Scan - Lock selected contact
-																														//	   Lock - Drop lock, keep contact focus
-																														//	   Cage - Lock/Unlock contact ahead
+	MapKeyUMD(&Joystick, H2U, 	JSTR_context_long,																		// U - Scan - Lock selected contact / Lock - Drop lock, keep contact focus / Cage - Lock/Unlock contact ahead
+								0,																						// M - 
+							 	JSTR_context_short );										 							// D - Lock
 	// H2D
-	MapKeyIO(&Joystick, H2D, 	0, 																						// I - 
-							 	JSTR_context_double );																	// O - Scan - Reset target selection
-																														//	   Lock - Drop lock and focus
-																														//	   Cage - Exit Cage mode
+	MapKeyUMD(&Joystick, H2D, 	JSTR_context_double,																	// U - Scan - Reset target selection / Lock - Drop lock and focus / Cage - Exit Cage mode
+								0, 																						// M - 
+							 	JSTR_context_short );																	// D - Drop lock
 	// H2R							
-	MapKeyIO(&Joystick, H2R, 	0, 																						// I - 
-							 	JSTR_context_short );		 															// O - Scan - Select next contact
+	MapKey(&Joystick, H2R, 		JSTR_context_short );		 															// Scan - Select next contact
 	// H2L
-	MapKeyIO(&Joystick, H2L, 	0,																						// I -
-							 	0 ); 																					// O - 
-	MapKeyRIO(&Joystick, H2L, 	0,																						// I -
-								0 );																					// O -
+	MapKey(&Joystick, H2L, 		JSTR_rdr_iff ); 																		// Radar > IFF
+	MapKeyR(&Joystick, H2L, 	0 );																					// 
 								
 	// Display Management Switch
 	// H3U

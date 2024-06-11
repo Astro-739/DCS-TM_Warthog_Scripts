@@ -25,6 +25,7 @@ int extlight_covert;
 int speedbrakes_open;
 int speedbrakes_close;
 int groundcrewstartup;
+int jettison_stores;
 
 int steercmdlist, index_stcmd = 0;							// (start with second element after increment, element 0 is first element in list)
 int missilecwlist, index_mslcw = 0;							// (start in off position, element 0 is first element in list)
@@ -204,12 +205,19 @@ int main()
 	speedbrakes_close = CHAIN( D(100), DOWN+L_CTL, D(10), PULSE+'b', D(), UP+L_CTL );									// speedbrake fully retract
 
 	
+	// Jettison Stores function
+	jettison_stores = CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'j', D(), UP+L_CTL+L_SHIFT, D(300),						// Jettison Selector - Stores
+							 DOWN+L_CTL, D(10), DOWN+'j', D(700), UP+'j', D(), UP+L_CTL, D(300),						// Jettison Stores
+							 DOWN+L_CTL+L_ALT, D(10), PULSE+'j', D(), UP+L_CTL+L_ALT );									// Jettison Selector - Off
+
+
 
 	// JESTER calls
 
-	// Radar - Silent/Active
+	// Radar
 	JSTR_rdr_off			= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'0', D(), UP+L_CTL+R_CTL );
 	JSTR_rdr_on				= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'1', D(), UP+L_CTL+R_CTL );
+	JSTR_rdr_iff			= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'7', D(), UP+L_CTL+R_CTL );
 	// Radar - Range
 	JSTR_rdr_range_25n		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'1', D(), UP+L_CTL+L_ALT );
 	JSTR_rdr_range_25w		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'2', D(), UP+L_CTL+L_ALT );
