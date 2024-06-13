@@ -63,6 +63,8 @@ int	JSTR_ins_align;				//	a, 6, 5   start alignment
 int	JSTR_jammer_active;			// a, 5, 5, e, w
 int	JSTR_jammer_stby;			// a, 5, 5, w
 
+int JSTR_taperecorder;
+
 int JSTR_menu;					// a 
 int JSTR_menu_right;			// e
 int JSTR_menu_left;				// q 
@@ -208,7 +210,7 @@ int main()
 
 
 
-	// JESTER calls
+	// JESTER calls --------------------
 
 	// Radar
 	JSTR_rdr_off			= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'0', D(), UP+L_CTL+R_CTL );
@@ -266,7 +268,10 @@ int main()
 
 
 
-	// JSTR functions
+	// JSTR functions ----------- define sequences here, are remembered when switching controls
+	JSTR_taperecorder		= SEQ( CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'7', D(), UP+L_CTL+L_ALT ),			// Jester Command: Systems > AVTR > Standby
+								   CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'6', D(), UP+L_CTL+L_ALT ));			// Jester Command: Systems > AVTR > Record
+	
 	JSTR_rdr_offon			= SEQ( JSTR_rdr_off,										// Radar - Silent/Active
 								   JSTR_rdr_on );
 	JSTR_rwr_ai_norm		= SEQ( JSTR_rwr_ai,											// RWR - Airborne Interceptor / Normal

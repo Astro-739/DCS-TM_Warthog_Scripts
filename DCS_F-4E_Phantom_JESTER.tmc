@@ -125,6 +125,10 @@ int dcs_f4e_jester_controls()
 								JSTR_menu_left );																// OD - Jester UI Left/CCW
 
 
+	// LDGH
+	MapKey(&Throttle, LDGH,   	TEMPO( JSTR_taperecorder, 															// Jester Command: Systems > AVTR > Standby / Record
+									   CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'5', D(), UP+L_CTL+L_ALT ), 500 ));	// Jester Command: Systems > AVTR > Off
+
 
 }	// end dcs_f4e_jester_controls()	================================================================
 
