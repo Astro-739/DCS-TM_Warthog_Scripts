@@ -297,7 +297,7 @@ int dcs_fighter_common()
 									  "else ActKey( PULSE+KEYON+KPENT );" ),									//		snap zoom normal
 								CHAIN( D(100), PULSE+DX31 ),													// OM - Close Speed Brakes
 								PULSE+KPENT,																	// ID - snap zoom normal
-								CHAIN( D(100), PULSE+DX31 ));													// OU - Close Speed Brakes  // TODO PULSE?
+								CHAIN( D(100), PULSE+DX31 ));													// OU - Close Speed Brakes
 
 
 	// SC
