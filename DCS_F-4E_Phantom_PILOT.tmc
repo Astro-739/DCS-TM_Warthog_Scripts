@@ -23,8 +23,8 @@ int dcs_f4e_pilot_controls()
 	// Expand FOV Button - S3
 	MapKey(&Joystick, S3,  		EXEC( "if(LTRN_mode) dcs_f4e_jester_lantirn_controls();"	// Switch to JESTER LANTIRN controls (LTRN_mode ON)
 									  "else dcs_f4e_jester_controls();" ));					// Switch to JESTER controls (LTRN_mode OFF)
-	MapKeyR(&Joystick, S3,  	EXEC( "dcs_fighter_common_jstr();" 							// Switch back to COMMON,
-									  "dcs_f4e_pilot_controls_jstr();" ));					//   and PILOT controls
+	MapKeyR(&Joystick, S3,  	EXEC( "dcs_fighter_common_specific();" 						// Switch back to COMMON,
+									  "dcs_f4e_pilot_controls_specific();" ));				//   and PILOT controls
 
 
 	// Weapon Release Button
@@ -214,10 +214,9 @@ int dcs_f4e_pilot_controls()
 
 	
 	
-	// -------------------- Also load JESTER part of PILOT controls -------------------------------
+	// -------------------- Also load SPECIFIC part of PILOT controls -------------------------------
 	
-	dcs_f4e_pilot_controls_jstr();
-
+	dcs_f4e_pilot_controls_specific();																					// controls to be switched back after JESTER use
 
 
 }	// end dcs_f4e_pilot_controls()	===============================================================
@@ -225,9 +224,9 @@ int dcs_f4e_pilot_controls()
 
 
 
-// -------------------- PILOT CONTROLS to be switched back after JESTER use -----------------------
+// -------------------- PILOT SPECIFIC CONTROLS to be switched back after JESTER use -----------------------
 
-int dcs_f4e_pilot_controls_jstr()
+int dcs_f4e_pilot_controls_specific()
 {
 
 
@@ -310,4 +309,4 @@ int dcs_f4e_pilot_controls_jstr()
 								CHAIN( DOWN+'c', D(200), UP+'c' ));														// OD - Cage Button
 
 
-} 	// end of dcs_f4e_pilot_controls_jstr()	======================================================================
+} 	// end of dcs_f4e_pilot_controls_specific()	=================================================================

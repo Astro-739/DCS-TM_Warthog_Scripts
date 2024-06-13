@@ -360,19 +360,19 @@ int dcs_fighter_common()
 
 
 
-	// ------- also load JESTER part of COMMON controls
+	// ------- also load JESTER part of COMMON controls --------------------------------
 	
-	dcs_fighter_common_jstr();
-
-
+	dcs_fighter_common_specific();																				// controls to be switched back after JESTER use
 
 
 }	// end dcs_fighter_common()	===============================================================
 
 
 
-// COMMON controls to be switched back after JSTR use
-int dcs_fighter_common_jstr()
+
+// -------------------- COMMON SPECIFIC CONTROLS to be switched back after JESTER use -----------------------
+
+int dcs_fighter_common_specific()
 {
 	
 	// MIC Switch (Transmit Switch)
@@ -446,4 +446,4 @@ int dcs_fighter_common_jstr()
 									   enigmacw_ewpicturetoggle, 500 ));										//	   Enigma CW - EW Picture Toggle
 
 
-}	// end dcs_fighter_common_jstr()	======================================================================
+}	// end dcs_fighter_common_specific()	================================================================
