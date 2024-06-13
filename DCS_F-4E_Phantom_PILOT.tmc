@@ -224,7 +224,7 @@ int dcs_f4e_pilot_controls()
 
 
 
-// -------------------- PILOT SPECIFIC CONTROLS to be switched back after JESTER use -----------------------
+// ----------------- PILOT SPECIFIC CONTROLS to be switched back after JESTER use -----------------------
 
 int dcs_f4e_pilot_controls_specific()
 {
