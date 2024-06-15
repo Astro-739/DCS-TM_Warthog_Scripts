@@ -125,11 +125,17 @@ int dcs_f4e_pilot_controls()
 
 	// Flaps Switch
 	// FLAPU
-	MapKey(&Throttle, FLAPU,  	CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'f', D(), UP+L_CTL+L_SHIFT ));			// Flaps/Slats Switch - Norm
+	MapKey(&Throttle, FLAPU,  	CHAIN( D(300), DOWN+L_CTL+L_SHIFT, D(10), PULSE+'f', D(), UP+L_CTL+L_SHIFT ));	// Flaps/Slats Switch - Norm
 	// FLAPM
-	MapKey(&Throttle, FLAPM, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));							// Flaps/Slats Switch - Out
+	MapKeyIO(&Throttle, FLAPM, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'f', D(), UP+R_SHIFT, D(200),					// I - Slats Override Switch Cover - Open
+									   DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'f', D(), UP+R_SHIFT+L_SHIFT ),		//	   Slats Override Switch - In
+								CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));							// O - Flaps/Slats Switch - Out
+	MapKeyRIO(&Throttle, FLAPM,	CHAIN( DOWN+R_CTL, D(10), PULSE+'f', D(), UP+R_CTL ), 							// I - Slats Override Switch Cover - Close
+								0 );																			// O - 
+								
+								//DOWN+R_SHIFT+L_CTL, D(10), PULSE+'f', D(), UP+R_SHIFT+L_CTL, D(200),		// I - Slats Override Switch - Norm															// O - 
 	// FLAPD	
-	MapKey(&Throttle, FLAPD,  	CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'f', D(), UP+L_CTL+L_ALT ));				// Flaps/Slats Switch - Out&Down
+	MapKey(&Throttle, FLAPD,  	CHAIN( D(300), DOWN+L_CTL+L_ALT, D(10), PULSE+'f', D(), UP+L_CTL+L_ALT ));		// Flaps/Slats Switch - Out&Down
 
 	// Engine Operation
 	// EOLIGN
@@ -184,13 +190,17 @@ int dcs_f4e_pilot_controls()
 	//			 [I] ACM Mode
 	// BSF - LED1 ON/OFF
 	MapKeyIO(&Throttle, BSF, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT, D(200),							// I - HUD Mode - A/A
-									   DOWN+'c', D(200), UP+'c', D(),													// 	   Cage Button
+									   DOWN+'c', D(200), UP+'c', D(200),												// 	   Cage Button
+									   DOWN+R_CTL+L_CTL, D(10), PULSE+'r', D(), UP+R_CTL+L_CTL, D(),					//	   STAB AUG Roll - Disengage
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED1) ), 									// 	   LED1 ON for U layer
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT, D(),							// O - HUD Mode - A/A
+								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT, D(200),							// O - HUD Mode - A/A
+									   DOWN+R_CTL+L_CTL, D(10), PULSE+'r', D(), UP+R_CTL+L_CTL, D(),					//	   STAB AUG Roll - Disengage
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED1) )); 									// 	   LED1 ON for U layer
-	MapKeyRIO(&Throttle, BSF, 	CHAIN( DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT, D(),								// I - HUD Mode - Cage
+	MapKeyRIO(&Throttle, BSF, 	CHAIN( DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT, D(200),								// I - HUD Mode - Cage
+									   DOWN+R_CTL+L_SHIFT, D(10), PULSE+'r', D(), UP+R_CTL+L_SHIFT, D(),				//	   STAB AUG Roll - Engage
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED1) ), 									// 	   LED1 OFF for U layer 
-								CHAIN( DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT, D(),								// O - HUD Mode - Cage
+								CHAIN( DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT, D(200),								// O - HUD Mode - Cage
+									   DOWN+R_CTL+L_SHIFT, D(10), PULSE+'r', D(), UP+R_CTL+L_SHIFT, D(),				//	   STAB AUG Roll - Engage
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED1) )); 									// 	   LED1 OFF for U layer
 
 	// M LAYER - Navigation Mode
@@ -262,11 +272,11 @@ int dcs_f4e_pilot_controls_specific()
 	// H3R
 	MapKeyIO(&Joystick, H3R, 	TEMPO( PULSE+']', 																		// I - kneeboard next page
 									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'v', D(), UP+L_SHIFT ), 500 ),   				// 	   [long] Sunglasses toggle
-								CHAIN( DOWN+R_SHIFT, D(10), PULSE+'n', D(), UP+R_SHIFT ));								// O - Navigation Mode - [Next]
+								CHAIN( DOWN+R_ALT, D(10), PULSE+'2', D(), UP+R_ALT ));									// O - RWR Search Button
 	// H3L
 	MapKeyIO(&Joystick, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
 									   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT ), 500 ),					//	   [long] Pilot Body toggle								
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'n', D(), UP+L_SHIFT ));								// O - Navigation Input - [Next]
+								CHAIN( R_ALT, D(10), '5' ));															// O - RWR Target Separation Button
 
 
 

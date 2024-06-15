@@ -154,9 +154,9 @@ int dcs_fighter_common()
 
 
 	// Night Vision function
-	nightvision = SEQ( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(), UP+R_SHIFT, D(),										// Night vision goggles on
+	nightvision = SEQ( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(), UP+R_SHIFT, D(),										// Night vision goggles (NVG) on
 							  EXEC( "nightvision_on = 1;") ),
-					   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(), UP+R_SHIFT, D(),										// Night vision goggles off
+					   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(), UP+R_SHIFT, D(),										// Night vision goggles (NVG) off
 							  EXEC( "nightvision_on = 0;") ));
 
 	// Flashlight function
@@ -166,10 +166,10 @@ int dcs_fighter_common()
 							 EXEC( "flashlight_on = 0;") ));
 
 	// Brightness function
-	brightness_up 	= REXEC( 100, 50, "if(nightvision_on) ActKey( PULSE+KEYON+R_CTL+R_SHIFT+'h' );"		 				// NV Goggle brightness up
+	brightness_up 	= REXEC( 100, 50, "if(nightvision_on) ActKey( PULSE+KEYON+R_CTL+R_SHIFT+'h' );"		 				// NVG brightness up
 									  "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+'.' );"					// Flashlight brightness up
 									  "else ActKey( PULSE+KEYON+DX24 );" );												// HUD/HMCS/Reticle brightness up
-	brightness_down = REXEC( 101, 50, "if(nightvision_on) ActKey( PULSE+KEYON+L_ALT+'h' );"								// NV Goggle brightness down
+	brightness_down = REXEC( 101, 50, "if(nightvision_on) ActKey( PULSE+KEYON+R_ALT+R_SHIFT+'h' );"						// NVG brightness down
 									  "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+',' );"					// Flashlight brightness down
 									  "else ActKey( PULSE+KEYON+DX25 );" );												// HUD/HMCS/Reticle brightness down
 																														// FLIR brightness
