@@ -100,7 +100,7 @@ int main()
 	Configure(&TCAQuadrant34, MODE_EXCLUDED);
 	Configure(&T16000, MODE_EXCLUDED);
 	Configure(&T16000L, MODE_EXCLUDED);
-	Configure(&LMFD, MODE_EXCLUDED);
+	//Configure(&LMFD, MODE_EXCLUDED);
 	Configure(&RMFD, MODE_EXCLUDED);
 	Configure(&TFRPRudder, MODE_EXCLUDED);
 	Configure(&TWCSThrottle, MODE_EXCLUDED);
@@ -294,6 +294,11 @@ int main()
 	// -------------------- COMMON --------------------------------------------
 					
 	dcs_fighter_common();								// load dcs COMMON controls
+														// before aircraft specific, to allow for overwriting of common controls when necessary
+
+	// -------------------- MFD LEFT --------------------------------------------
+					
+	dcs_fighter_mfd();									// load dcs MFD controls
 														// before aircraft specific, to allow for overwriting of common controls when necessary
 
 	// -------------------- CONTROLS ---------------------------------------------
