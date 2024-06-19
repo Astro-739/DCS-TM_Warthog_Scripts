@@ -22,6 +22,7 @@ int extlight_posdim;
 int extlight_position;
 int extlight_formation;		
 int extlight_covert;		
+int extlight_flashsteady;
 int speedbrakes_open;
 int speedbrakes_close;
 int groundcrewstartup;
@@ -154,24 +155,29 @@ int main()
 					 CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'a', D(), UP+L_ALT+L_CTL ));									// Autopilot off
 	
 	// Exterior Lighting - Full
-	extlight_full = CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'l', D(), UP+L_SHIFT+R_SHIFT, D(100),						// Fus & Anti-Col Lights - Bright
-						   DOWN+L_CTL+R_SHIFT, D(10), PULSE+'l', D(), UP+L_CTL+R_SHIFT, D(100),							// Wing-Position & Join-Up Lights - Bright
+	extlight_full = CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'l', D(), UP+L_SHIFT+R_SHIFT, D(200),						// Fus & Anti-Col Lights - Bright
+						   DOWN+L_CTL+R_SHIFT, D(10), PULSE+'l', D(), UP+L_CTL+R_SHIFT, D(200),							// Wing-Position & Join-Up Lights - Bright
 						   DOWN+L_ALT+R_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+R_SHIFT );								// Tail-Position Lights - Bright
 						   
 	// Exterior Lighting - Position Dim
-	extlight_posdim = CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'l', D(), UP+L_SHIFT+R_CTL, D(100),						// Fus & Anti-Col Lights - Off
-							 DOWN+L_CTL+L_ALT, D(10), PULSE+'l', D(), UP+L_CTL+L_ALT, D(100),							// Wing-Position & Join-Up Lights - Dim
+	extlight_posdim = CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'l', D(), UP+L_SHIFT+R_CTL, D(200),						// Fus & Anti-Col Lights - Off
+							 DOWN+L_CTL+L_ALT, D(10), PULSE+'l', D(), UP+L_CTL+L_ALT, D(200),							// Wing-Position & Join-Up Lights - Dim
 							 DOWN+L_ALT+L_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+L_SHIFT );								// Tail-Position Lights - Dim
 
 	// Exterior Lighting - Position
-	extlight_position = CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'l', D(), UP+L_SHIFT+R_CTL, D(100),						// Fus & Anti-Col Lights - Off
-							   DOWN+L_CTL+R_SHIFT, D(10), PULSE+'l', D(), UP+L_CTL+R_SHIFT, D(100),						// Wing-Position & Join-Up Lights - Bright
+	extlight_position = CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'l', D(), UP+L_SHIFT+R_CTL, D(200),						// Fus & Anti-Col Lights - Off
+							   DOWN+L_CTL+R_SHIFT, D(10), PULSE+'l', D(), UP+L_CTL+R_SHIFT, D(200),						// Wing-Position & Join-Up Lights - Bright
 							   DOWN+L_ALT+R_CTL, D(10), PULSE+'l', D(), UP+L_ALT+R_CTL );								// Tail-Position Lights - Off
 						
 	// Exterior Lighting - Covert
-	extlight_covert = CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'l', D(), UP+L_SHIFT+R_CTL, D(100),						// Fus & Anti-Col Lights - Off
-							 DOWN+L_CTL+R_CTL, D(10), PULSE+'l', D(), UP+L_CTL+R_CTL, D(100),							// Wing-Position & Join-Up Lights - Off
+	extlight_covert = CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'l', D(), UP+L_SHIFT+R_CTL, D(200),						// Fus & Anti-Col Lights - Off
+							 DOWN+L_CTL+R_CTL, D(10), PULSE+'l', D(), UP+L_CTL+R_CTL, D(200),							// Wing-Position & Join-Up Lights - Off
 							 DOWN+L_ALT+R_CTL, D(10), PULSE+'l', D(), UP+L_ALT+R_CTL );									// Tail-Position Lights - Off
+
+	// Exterior Lighting - Flash/Steady
+	extlight_flashsteady = SEQ ( CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'l', D(), UP+R_WIN+R_SHIFT ),					// Light Flasher Mode - Flash
+								 CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'l', D(), UP+R_WIN+R_CTL ));						// Light Flasher Mode - Steady
+
 
 
 	// Ground Crew Start-up
