@@ -41,7 +41,7 @@ int main()
 	Configure(&TCAQuadrant34, MODE_EXCLUDED);
 	Configure(&T16000, MODE_EXCLUDED);
 	Configure(&T16000L, MODE_EXCLUDED);
-	Configure(&LMFD, MODE_EXCLUDED);
+	//Configure(&LMFD, MODE_EXCLUDED);
 	Configure(&RMFD, MODE_EXCLUDED);
 	Configure(&TFRPRudder, MODE_EXCLUDED);
 	Configure(&TWCSThrottle, MODE_EXCLUDED);
@@ -58,7 +58,9 @@ int main()
 	
 	// -------------------- COMMON --------------------
 					
-	dcs_fighter_common();
+	dcs_fighter_common();								// load dcs COMMON controls
+	dcs_fighter_mfd();									// load dcs MFD controls (in DCS_Fighter_Common.tmc)
+														// before aircraft specific, to allow for overwriting of common controls when necessary
 
 	// -------------------- LISTS --------------------
 	
@@ -174,22 +176,25 @@ int main()
 								CHAIN( D(200), PULSE+BSP ));													// O - place stick
 
 
-
 	// Display Management Switch
 	// H3U
-	MapKeyIO(&Joystick, H3U, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
-								TEMPO( CHAIN( DOWN+R_ALT, D(10), PULSE+';', D(), UP+R_ALT ),					// O - DMS up
-									   nightvision,	500 ));														// 	   [long] Night Vision Goggles
+	MapKeyIO(&Joystick, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
+									   nightvision, 500 ),																// 	   [long] Night Vision Goggles toggle
+								TEMPO( SEQ( CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_SHIFT ),	// O - DSCG Screen Mode - Radar/TV
+											CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_ALT )),
+									   CHAIN( 0 ), 500 ));																// 	   [long] Helmet Visor toggle
 	// H3D
-	MapKeyIO(&Joystick, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),					// I - kneeboard current position mark point
-									   flashlight, 500 ),														//	   [long] Flashlight on/off
-								CHAIN( R_ALT, D(10), '.' ));													// O - DMS down
+	MapKeyIO(&Joystick, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
+									   flashlight, 500 ),																//	   [long] Flashlight on/off	
+								CHAIN( 0 ));																			// O - 
 	// H3R
-	MapKeyIO(&Joystick, H3R, 	PULSE+']', 																		// I - kneeboard next page
-								CHAIN( R_ALT, D(10), '/' ));													// O - DMS right
+	MapKeyIO(&Joystick, H3R, 	TEMPO( PULSE+']', 																		// I - kneeboard next page
+									   CHAIN( 0 ), 500 ), 												  				// 	   [long] Sunglasses toggle
+								CHAIN( R_ALT, D(10), '2' ));															// O - RWR Search Button
 	// H3L
-	MapKeyIO(&Joystick, H3L, 	PULSE+'[', 																		// I - kneeboard previous page
-								CHAIN( R_ALT, D(10), ',' ));													// O - DMS left
+	MapKeyIO(&Joystick, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
+									   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT ), 500 ),					//	   [long] Pilot Body toggle								
+								CHAIN( R_ALT, D(10), '5' ));															// O - RWR Target Separation Button
 
 
  	// Countermeasure Management Switch
