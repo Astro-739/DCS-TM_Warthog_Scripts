@@ -453,94 +453,94 @@ int dcs_fighter_common_specific()
 
 
 
-// -------------------- MFD LEFT controls -----------------------
+// -------------------- LEFT MFD controls -----------------------
 
 int dcs_fighter_mfd()
 {
 
-	MapKeyIO(&LMFD, OSB01, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'1', D(), UP+R_WIN+R_SHIFT ), 			// I - 
-								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'1', D(), UP+R_WIN+L_SHIFT ));			// O - 
+	MapKeyIO(&LMFD, OSB01, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'1', D(), UP+R_WIN+R_SHIFT ), 			// I - Right MFD OSB 01
+								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'1', D(), UP+R_WIN+L_SHIFT ));			// O - Left MFD OSB 01
 
-	MapKeyIO(&LMFD, OSB02, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'2', D(), UP+R_WIN+R_SHIFT ), 			// I - 
-								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'2', D(), UP+R_WIN+L_SHIFT ));			// O - 
+	MapKeyIO(&LMFD, OSB02, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'2', D(), UP+R_WIN+R_SHIFT ), 			// I - Right MFD OSB 02
+								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'2', D(), UP+R_WIN+L_SHIFT ));			// O - Left MFD OSB 02
 
-	MapKeyIO(&LMFD, OSB03, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'3', D(), UP+R_WIN+R_SHIFT ), 			// I - 
-								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'3', D(), UP+R_WIN+L_SHIFT ));			// O - 
+	MapKeyIO(&LMFD, OSB03, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'3', D(), UP+R_WIN+R_SHIFT ), 			// I - Right MFD OSB 03
+								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'3', D(), UP+R_WIN+L_SHIFT ));			// O - Left MFD OSB 03
 
-	MapKeyIO(&LMFD, OSB04, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'4', D(), UP+R_WIN+R_SHIFT ), 			// I - 
-								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'4', D(), UP+R_WIN+L_SHIFT ));			// O - 
+	MapKeyIO(&LMFD, OSB04, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'4', D(), UP+R_WIN+R_SHIFT ), 			// I - Right MFD OSB 04
+								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'4', D(), UP+R_WIN+L_SHIFT ));			// O - Left MFD OSB 04
 
-	MapKeyIO(&LMFD, OSB05, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'5', D(), UP+R_WIN+R_SHIFT ), 			// I - 
-								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'5', D(), UP+R_WIN+L_SHIFT ));			// O - 
+	MapKeyIO(&LMFD, OSB05, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'5', D(), UP+R_WIN+R_SHIFT ), 			// I - Right MFD OSB 05
+								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'5', D(), UP+R_WIN+L_SHIFT ));			// O - Left MFD OSB 05
 
-	MapKeyIO(&LMFD, OSB06, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, OSB06, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'6', D(), UP+R_WIN+R_SHIFT ), 			// I - Right MFD OSB 06
+								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'6', D(), UP+R_WIN+L_SHIFT ));			// O - Left MFD OSB 06
 
-	MapKeyIO(&LMFD, OSB07, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, OSB07, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'7', D(), UP+R_WIN+R_SHIFT ), 			// I - Right MFD OSB 07
+								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'7', D(), UP+R_WIN+L_SHIFT ));			// O - Left MFD OSB 07
 
-	MapKeyIO(&LMFD, OSB08, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, OSB08, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'8', D(), UP+R_WIN+R_SHIFT ), 			// I - Right MFD OSB 08
+								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'8', D(), UP+R_WIN+L_SHIFT ));			// O - Left MFD OSB 08
 
-	MapKeyIO(&LMFD, OSB09, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, OSB09, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'9', D(), UP+R_WIN+R_SHIFT ), 			// I - Right MFD OSB 09
+								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'9', D(), UP+R_WIN+L_SHIFT ));			// O - Left MFD OSB 09
 
-	MapKeyIO(&LMFD, OSB10, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, OSB10, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'0', D(), UP+R_WIN+R_SHIFT ), 			// I - Right MFD OSB 10
+								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'0', D(), UP+R_WIN+L_SHIFT ));			// O - Left MFD OSB 10
 
-	MapKeyIO(&LMFD, OSB11, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, OSB11, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'1', D(), UP+R_WIN+R_CTL ),				// I - Right MFD OSB 11
+								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'1', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 11
 
-	MapKeyIO(&LMFD, OSB12, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, OSB12, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'2', D(), UP+R_WIN+R_CTL ), 				// I - Right MFD OSB 12
+								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'2', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 12
 
-	MapKeyIO(&LMFD, OSB13, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, OSB13, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'3', D(), UP+R_WIN+R_CTL ), 				// I - Right MFD OSB 13
+								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'3', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 13
 
-	MapKeyIO(&LMFD, OSB14, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, OSB14, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'4', D(), UP+R_WIN+R_CTL ), 				// I - Right MFD OSB 14
+								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'4', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 14
 
-	MapKeyIO(&LMFD, OSB15, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, OSB15, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'5', D(), UP+R_WIN+R_CTL ), 				// I - Right MFD OSB 15
+								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'5', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 15
 
-	MapKeyIO(&LMFD, OSB16, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, OSB16, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'6', D(), UP+R_WIN+R_CTL ), 				// I - Right MFD OSB 16
+								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'6', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 16
 
-	MapKeyIO(&LMFD, OSB17, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, OSB17, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'7', D(), UP+R_WIN+R_CTL ), 				// I - Right MFD OSB 17
+								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'7', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 17
 
-	MapKeyIO(&LMFD, OSB18, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, OSB18, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'8', D(), UP+R_WIN+R_CTL ), 				// I - Right MFD OSB 18
+								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'8', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 18
 
-	MapKeyIO(&LMFD, OSB19, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, OSB19, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'9', D(), UP+R_WIN+R_CTL ), 				// I - Right MFD OSB 19
+								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'9', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 19
 
-	MapKeyIO(&LMFD, OSB20, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, OSB20, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'0', D(), UP+R_WIN+R_CTL ), 				// I - Right MFD OSB 20
+								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'0', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 20
 
-	MapKeyIO(&LMFD, SYMU, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'o', D(), UP+R_WIN+R_SHIFT ), 			// I - 
-								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'o', D(), UP+R_WIN+L_SHIFT ));			// O - 
+	MapKeyIO(&LMFD, SYMU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'o' ), 											// I - Right MFD SYM Up
+								CHAIN( R_WIN+L_SHIFT, D(10), 'o' ));											// O - Left MFD SYM Up
 
-	MapKeyIO(&LMFD, SYMD, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_WIN+R_SHIFT ), 			// I - 
-								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'k', D(), UP+R_WIN+L_SHIFT ));			// O - 
+	MapKeyIO(&LMFD, SYMD, 		CHAIN( R_WIN+R_SHIFT, D(10), 'k' ), 											// I - Right MFD SYM Down
+								CHAIN( R_WIN+L_SHIFT, D(10), 'k' ));											// O - Left MFD SYM Down
 
-	MapKeyIO(&LMFD, CONU, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, CONU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'i' ), 											// I - Right MFD CON Up
+								CHAIN( R_WIN+L_SHIFT, D(10), 'i' ));											// O - Left MFD CON Up
 
-	MapKeyIO(&LMFD, COND, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, COND, 		CHAIN( R_WIN+R_SHIFT, D(10), 'j' ), 											// I - Right MFD CON Down
+								CHAIN( R_WIN+L_SHIFT, D(10), 'j' ));											// O - Left MFD CON Down
 
-	MapKeyIO(&LMFD, BRTU, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, BRTU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'u' ), 											// I - Right MFD BRT Up
+								CHAIN( R_WIN+L_SHIFT, D(10), 'u' ));											// O - Left MFD BRT Up
 
-	MapKeyIO(&LMFD, BRTD, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, BRTD, 		CHAIN( R_WIN+R_SHIFT, D(10), 'h' ), 											// I - Right MFD BRT Down
+								CHAIN( R_WIN+L_SHIFT, D(10), 'h' ));											// O - Left MFD BRT Down
 
-	MapKeyIO(&LMFD, GAINU, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, GAINU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'y' ), 											// I - Right MFD GAIN Up
+								CHAIN( R_WIN+L_SHIFT, D(10), 'y' ));											// O - Left MFD GAIN Up
 
-	MapKeyIO(&LMFD, GAIND, 		0, 																// I - 
-								0 );															// O - 
+	MapKeyIO(&LMFD, GAIND, 		CHAIN( R_WIN+R_SHIFT, D(10), 'g' ), 											// I - Right MFD GAIN Down
+								CHAIN( R_WIN+L_SHIFT, D(10), 'g' ));											// O - Left MFD GAIN Down
 
 
 }	// end dcs_fighter_mfd()	================================================================
