@@ -199,11 +199,11 @@ int dcs_fighter_common()
 							  	0,  																			// ID - 
 							  	DX1); 																			// OD - Trigger First Detent
 	// TG2
-	MapKeyIOUMD(&Joystick, TG2, 0,																				// IU - 
+	MapKeyIOUMD(&Joystick, TG2, SPC,																			// IU - Fire Weapon (GIB)
 								DX6, 																			// OU - Trigger Second Detent
 								0, 																				// IM - 
 								0, 																				// OM - 
-								0, 																				// ID - 
+								SPC, 																			// ID - Fire Weapon (GIB)
 								DX6);																			// OD - Trigger Second Detent
 
 	// Nosewheel Steering Button
