@@ -41,7 +41,7 @@ int dcs_f4e_wso_controls()
 	MapKeyIO(&Joystick, H2R, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT ), 								// I - Gun/Missile Pinky Switch - Heat
 								CHAIN( L_WIN, D(10), KP6 ));															// O - snap view radar
 	// H2L
-	MapKeyIO(&Joystick, H2L, 	0,																						// I -
+	MapKeyIO(&Joystick, H2L, 	CHAIN( DOWN+L_CTL, D(10), DOWN+'i', D(300), UP+L_CTL+'i' ),								// I - Antenna Hand Control Challenge Button
 								CHAIN( DOWN+R_SHIFT, D(10), PULSE+BSP, D(), UP+R_SHIFT, D(),							// O - remove stick
 								L_WIN, D(10), KP2 ));																	//     snap view instruments
 	MapKeyRIO(&Joystick, H2L, 	0,																						// I - 
@@ -115,10 +115,10 @@ int dcs_f4e_wso_controls()
 	// China Hat
 	// CHF
 	MapKeyIO(&Throttle, CHF, 	brightness_up, 																	// I - brightness up for reticle/NVG
-							 	CHAIN( L_ALT+R_SHIFT, D(10), '-' )); 											// O - HUD Trim Dec
+							 	'=' ); 																			// O - Antenna Elevation - Up
 	// CHB
 	MapKeyIO(&Throttle, CHB, 	brightness_down,																// I - brightness down for reticle/NVG
-							 	CHAIN( L_ALT+R_SHIFT, D(10), '=' )); 											// O - HUD Trim Inc
+							 	'-' ); 																			// O - Antenna Elevation - Down
 
 	// Pinky Switch (exterior lighting)
 	// PSF

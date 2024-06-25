@@ -280,11 +280,11 @@ int dcs_f4e_pilot_controls_specific()
 								CHAIN( 0 ));																			// O - 
 	// H3R
 	MapKeyIO(&Joystick, H3R, 	TEMPO( PULSE+']', 																		// I - kneeboard next page
-									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'v', D(), UP+L_SHIFT ), 500 ),   				// 	   [long] Sunglasses toggle
+									   CHAIN( 0 ), 500 ),   															// 	   [long] 
 								CHAIN( R_ALT, D(10), '2' ));															// O - RWR Search Button
 	// H3L
 	MapKeyIO(&Joystick, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
-									   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT ), 500 ),					//	   [long] Pilot Body toggle								
+									   CHAIN( 0 ), 500 ),																//	   [long] 
 								CHAIN( R_ALT, D(10), '5' ));															// O - RWR Target Separation Button
 
 
