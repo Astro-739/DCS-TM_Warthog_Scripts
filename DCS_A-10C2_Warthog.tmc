@@ -40,7 +40,7 @@ int main()
 	Configure(&TCAQuadrant34, MODE_EXCLUDED);
 	Configure(&T16000, MODE_EXCLUDED);
 	Configure(&T16000L, MODE_EXCLUDED);
-	Configure(&LMFD, MODE_EXCLUDED);
+	//Configure(&LMFD, MODE_EXCLUDED);
 	Configure(&RMFD, MODE_EXCLUDED);
 	Configure(&TFRPRudder, MODE_EXCLUDED);
 	Configure(&TWCSThrottle, MODE_EXCLUDED);
@@ -57,7 +57,9 @@ int main()
 	
 	// -------------------- COMMON --------------------
 					
-	dcs_fighter_common();
+	dcs_fighter_common();								// load dcs COMMON controls
+	dcs_fighter_mfd();									// load dcs MFD controls (in DCS_Fighter_Common.tmc)
+														// before aircraft specific, to allow for overwriting of common controls when necessary
 
 	// -------------------- FUNCTIONS --------------------
 	
@@ -371,11 +373,11 @@ int main()
 	// Flaps Switch 
 	// FLAPU
 	MapKey(&Throttle, FLAPU,  		CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ));						// Flaps Up
-	MapKeyR(&Throttle, FLAPU,  		PULSE+'f' );																	// Flaps Down (to middle)	
+	MapKeyR(&Throttle, FLAPU,  		CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));							// Flaps Down (to middle)	
 	// FLAPM
 	MapKey(&Throttle, FLAPM, 		0 );																			// 
 	// FLAPD
-	MapKey(&Throttle, FLAPD,  		PULSE+'f' );																	// Flaps Down (to full)
+	MapKey(&Throttle, FLAPD,  		CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));							// Flaps Down (to full)
 	MapKeyR(&Throttle, FLAPD,  		CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ));						// Flaps Up (to middle)
 
 	// Canopy (TODO - align Common)
@@ -435,7 +437,7 @@ int main()
 
 
 	// SC
-	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+HOME, D(), UP+R_CTL ),					// I - [short] re-centre IR tracker
+	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - [short] re-centre IR tracker
 									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'`', D(), UP+L_SHIFT ),				//     [long] discord game overlay
 									   500 ),
 								'v' );																			// O - China Hat Fwd

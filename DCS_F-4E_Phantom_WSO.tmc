@@ -145,18 +145,18 @@ int dcs_f4e_wso_controls()
 	// Coolie Switch
 	// CSU
 	MapKeyIOUMD(&Throttle, CSU, CHAIN( L_SHIFT, D(10), '-'),										 					// IU - Aural Tone Volume - [Dec]
-								CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+',', D(), UP+L_ALT+R_SHIFT ),					// OU - Radar Receiver Gain (fine) - [Dec]
+								CHAIN( L_ALT+R_SHIFT, D(10), ',' ),														// OU - Radar Receiver Gain (fine) - [Dec]
 								0,																	  					// IM - 
-								CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+',', D(), UP+L_ALT+R_SHIFT ), 					// OM - Radar Receiver Gain (fine) - [Dec]
+								CHAIN( L_ALT+R_SHIFT, D(10), ',' ),									 					// OM - Radar Receiver Gain (fine) - [Dec]
 								CHAIN( L_SHIFT, D(10), '-'),										 					// ID - Aural Tone Volume - [Dec]
-								CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+',', D(), UP+L_ALT+R_SHIFT ));					// OD - Radar Receiver Gain (fine) - [Dec]
+								CHAIN( L_ALT+R_SHIFT, D(10), ',' ));													// OD - Radar Receiver Gain (fine) - [Dec]
 	// CSD
 	MapKeyIOUMD(&Throttle, CSD, CHAIN( L_SHIFT, D(10), '='),										 					// IU - Aural Tone Volume - [Inc]
-								CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'.', D(), UP+L_ALT+R_SHIFT ),					// OU - Radar Receiver Gain (fine) - [Inc]
+								CHAIN( L_ALT+R_SHIFT, D(10), '.' ),														// OU - Radar Receiver Gain (fine) - [Inc]
 								0,																	  					// IM - 
-								CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'.', D(), UP+L_ALT+R_SHIFT ),					// OM - Radar Receiver Gain (fine) - [Inc]
+								CHAIN( L_ALT+R_SHIFT, D(10), '.' ),														// OM - Radar Receiver Gain (fine) - [Inc]
 								CHAIN( L_SHIFT, D(10), '='),										 					// ID - Aural Tone Volume - [Inc]
-								CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'.', D(), UP+L_ALT+R_SHIFT ));					// OD - Radar Receiver Gain (fine) - [Inc]
+								CHAIN( L_ALT+R_SHIFT, D(10), '.' ));													// OD - Radar Receiver Gain (fine) - [Inc]
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, 0,																						// IU - 
 								'n',																					// OU - Air Refuel Release Button (ARR) - missile uncage
