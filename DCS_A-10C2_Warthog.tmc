@@ -125,16 +125,6 @@ int main()
 	// -----------------------------	
 
 
-	// Nosewheel Steering Button
-	// S1
-//	MapKeyIOUMD(&Joystick, S1, 	SEQ( PULSE+F10, PULSE+F1 ),														// IU - F10 map
-//							 	PULSE+INS, 																		// OU - Nosewheel Steering Button
-//							    SEQ( PULSE+F10, PULSE+F1 ), 													// IM - F10 map
-//							    PULSE+INS,															 			// OM - Nosewheel Steering Button
-//							    SEQ( PULSE+F10, PULSE+F1 ),								 						// ID - F10 map
-//							    TEMPO( PULSE+INS,																// OD - [short] Nosewheel Steering Button
-//									   CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'6', D(), UP+L_ALT+R_SHIFT ),	//		[long]  Switch AG weapon type (SMS page Right MFD OSB 6)
-//									   500 ));
 
 	// Weapon Release Button
 	// S2
@@ -186,13 +176,13 @@ int main()
 
  	// Countermeasure Management Switch
 	// H4U
-	MapKeyIO(&Joystick, H4U, 	CHAIN( DOWN+R_ALT, D(10), PULSE+RIGHT, D(), UP+R_ALT ),							// I - Boat Switch - Fwd
+	MapKeyIO(&Joystick, H4U, 	CHAIN( DOWN+R_ALT, D(10), PULSE+RARROW, D(), UP+R_ALT ),						// I - Boat Switch - Fwd
 							 	'7' );																			// O - Countermeasures Management Switch - Fwd
 	// H4D
-	MapKeyIO(&Joystick, H4D, 	CHAIN( DOWN+R_ALT, D(10), PULSE+LEFT, D(), UP+R_ALT ),							// I - Boat Switch - Aft
+	MapKeyIO(&Joystick, H4D, 	CHAIN( DOWN+R_ALT, D(10), PULSE+LARROW, D(), UP+R_ALT ),						// I - Boat Switch - Aft
 							 	'8' ); 																			// O - Countermeasures Management Switch - Aft
 	// H4R
-	MapKeyIO(&Joystick, H4R, 	CHAIN( DOWN+R_ALT, D(10), PULSE+DOWN, D(), UP+R_ALT ),							// I - Boat Switch - Centre
+	MapKeyIO(&Joystick, H4R, 	CHAIN( DOWN+R_ALT, D(10), PULSE+DARROW, D(), UP+R_ALT ),						// I - Boat Switch - Centre
 			  				 	'0' );																			// O - Countermeasures Management Switch - Right
 	// H4L
 	MapKeyIO(&Joystick, H4L, 	0, 																				// I - 

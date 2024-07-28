@@ -459,66 +459,65 @@ int dcs_fighter_common_specific()
 int dcs_fighter_mfd()
 {
 
-	MapKeyIO(&LMFD, OSB01, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'1', D(), UP+R_WIN+R_SHIFT ), 			// I - Right MFD OSB 01
-								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'1', D(), UP+R_WIN+L_SHIFT ));			// O - Left MFD OSB 01
+	MapKeyIO(&LMFD, OSB01, 		CHAIN( R_WIN+R_SHIFT, D(10), '1' ), 											// I - Right MFD OSB 01
+								CHAIN( R_WIN+L_SHIFT, D(10), '1' ));											// O - Left MFD OSB 01
 
-	MapKeyIO(&LMFD, OSB02, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'2', D(), UP+R_WIN+R_SHIFT ), 			// I - Right MFD OSB 02
-								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'2', D(), UP+R_WIN+L_SHIFT ));			// O - Left MFD OSB 02
+	MapKeyIO(&LMFD, OSB02, 		CHAIN( R_WIN+R_SHIFT, D(10), '2' ), 											// I - Right MFD OSB 02
+								CHAIN( R_WIN+L_SHIFT, D(10), '2' ));											// O - Left MFD OSB 02
 
-	MapKeyIO(&LMFD, OSB03, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'3', D(), UP+R_WIN+R_SHIFT ), 					// I - Right MFD OSB 03
-								TEMPO( CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'3', D(), UP+R_WIN+L_SHIFT ),			// O - Left MFD OSB 03
-									   CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'p', D(), UP+R_WIN+L_SHIFT ), 500 ));	//     [long] Left MFD OSB 03 - Arm Gun
+	MapKeyIO(&LMFD, OSB03, 		CHAIN( R_WIN+R_SHIFT, D(10), '3' ), 											// I - Right MFD OSB 03
+								CHAIN( R_WIN+L_SHIFT, D(10), '3' ));											// O - Left MFD OSB 03
 
-	MapKeyIO(&LMFD, OSB04, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'4', D(), UP+R_WIN+R_SHIFT ), 			// I - Right MFD OSB 04
-								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'4', D(), UP+R_WIN+L_SHIFT ));			// O - Left MFD OSB 04
+	MapKeyIO(&LMFD, OSB04, 		CHAIN( R_WIN+R_SHIFT, D(10), '4' ), 											// I - Right MFD OSB 04
+								CHAIN( R_WIN+L_SHIFT, D(10), '4' ));											// O - Left MFD OSB 04
 
-	MapKeyIO(&LMFD, OSB05, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'5', D(), UP+R_WIN+R_SHIFT ), 			// I - Right MFD OSB 05
-								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'5', D(), UP+R_WIN+L_SHIFT ));			// O - Left MFD OSB 05
+	MapKeyIO(&LMFD, OSB05, 		CHAIN( R_WIN+R_SHIFT, D(10), '5' ), 											// I - Right MFD OSB 05
+								CHAIN( R_WIN+L_SHIFT, D(10), '5' ));											// O - Left MFD OSB 05
 
-	MapKeyIO(&LMFD, OSB06, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'6', D(), UP+R_WIN+R_SHIFT ), 			// I - Right MFD OSB 06
-								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'6', D(), UP+R_WIN+L_SHIFT ));			// O - Left MFD OSB 06
+	MapKeyIO(&LMFD, OSB06, 		CHAIN( R_WIN+R_SHIFT, D(10), '6' ), 											// I - Right MFD OSB 06
+								CHAIN( R_WIN+L_SHIFT, D(10), '6' ));											// O - Left MFD OSB 06
 
-	MapKeyIO(&LMFD, OSB07, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'7', D(), UP+R_WIN+R_SHIFT ), 			// I - Right MFD OSB 07
-								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'7', D(), UP+R_WIN+L_SHIFT ));			// O - Left MFD OSB 07
+	MapKeyIO(&LMFD, OSB07, 		CHAIN( R_WIN+R_SHIFT, D(10), '7' ), 											// I - Right MFD OSB 07
+								CHAIN( R_WIN+L_SHIFT, D(10), '7' ));											// O - Left MFD OSB 07
 
-	MapKeyIO(&LMFD, OSB08, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'8', D(), UP+R_WIN+R_SHIFT ), 			// I - Right MFD OSB 08
-								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'8', D(), UP+R_WIN+L_SHIFT ));			// O - Left MFD OSB 08
+	MapKeyIO(&LMFD, OSB08, 		CHAIN( R_WIN+R_SHIFT, D(10), '8' ), 											// I - Right MFD OSB 08
+								CHAIN( R_WIN+L_SHIFT, D(10), '8' ));											// O - Left MFD OSB 08
 
-	MapKeyIO(&LMFD, OSB09, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'9', D(), UP+R_WIN+R_SHIFT ), 			// I - Right MFD OSB 09
-								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'9', D(), UP+R_WIN+L_SHIFT ));			// O - Left MFD OSB 09
+	MapKeyIO(&LMFD, OSB09, 		CHAIN( R_WIN+R_SHIFT, D(10), '9' ), 											// I - Right MFD OSB 09
+								CHAIN( R_WIN+L_SHIFT, D(10), '9' ));											// O - Left MFD OSB 09
 
-	MapKeyIO(&LMFD, OSB10, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'0', D(), UP+R_WIN+R_SHIFT ), 			// I - Right MFD OSB 10
-								CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'0', D(), UP+R_WIN+L_SHIFT ));			// O - Left MFD OSB 10
+	MapKeyIO(&LMFD, OSB10, 		CHAIN( R_WIN+R_SHIFT, D(10), '0' ), 											// I - Right MFD OSB 10
+								CHAIN( R_WIN+L_SHIFT, D(10), '0' ));											// O - Left MFD OSB 10
 
-	MapKeyIO(&LMFD, OSB11, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'1', D(), UP+R_WIN+R_CTL ),				// I - Right MFD OSB 11
-								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'1', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 11
+	MapKeyIO(&LMFD, OSB11, 		CHAIN( R_WIN+R_CTL, D(10), '1' ),												// I - Right MFD OSB 11
+								CHAIN( R_WIN+L_CTL, D(10), '1' ));												// O - Left MFD OSB 11
 
-	MapKeyIO(&LMFD, OSB12, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'2', D(), UP+R_WIN+R_CTL ), 				// I - Right MFD OSB 12
-								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'2', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 12
+	MapKeyIO(&LMFD, OSB12, 		CHAIN( R_WIN+R_CTL, D(10), '2' ), 												// I - Right MFD OSB 12
+								CHAIN( R_WIN+L_CTL, D(10), '2' ));												// O - Left MFD OSB 12
 
-	MapKeyIO(&LMFD, OSB13, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'3', D(), UP+R_WIN+R_CTL ), 				// I - Right MFD OSB 13
-								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'3', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 13
+	MapKeyIO(&LMFD, OSB13, 		CHAIN( R_WIN+R_CTL, D(10), '3' ), 												// I - Right MFD OSB 13
+								CHAIN( R_WIN+L_CTL, D(10), '3' ));												// O - Left MFD OSB 13
 
-	MapKeyIO(&LMFD, OSB14, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'4', D(), UP+R_WIN+R_CTL ), 				// I - Right MFD OSB 14
-								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'4', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 14
+	MapKeyIO(&LMFD, OSB14, 		CHAIN( R_WIN+R_CTL, D(10), '4' ), 												// I - Right MFD OSB 14
+								CHAIN( R_WIN+L_CTL, D(10), '4' ));												// O - Left MFD OSB 14
 
-	MapKeyIO(&LMFD, OSB15, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'5', D(), UP+R_WIN+R_CTL ), 				// I - Right MFD OSB 15
-								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'5', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 15
+	MapKeyIO(&LMFD, OSB15, 		CHAIN( R_WIN+R_CTL, D(10), '5' ), 												// I - Right MFD OSB 15
+								CHAIN( R_WIN+L_CTL, D(10), '5' ));												// O - Left MFD OSB 15
 
-	MapKeyIO(&LMFD, OSB16, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'6', D(), UP+R_WIN+R_CTL ), 				// I - Right MFD OSB 16
-								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'6', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 16
+	MapKeyIO(&LMFD, OSB16, 		CHAIN( R_WIN+R_CTL, D(10), '6' ), 												// I - Right MFD OSB 16
+								CHAIN( R_WIN+L_CTL, D(10), '6' ));												// O - Left MFD OSB 16
 
-	MapKeyIO(&LMFD, OSB17, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'7', D(), UP+R_WIN+R_CTL ), 				// I - Right MFD OSB 17
-								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'7', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 17
+	MapKeyIO(&LMFD, OSB17, 		CHAIN( R_WIN+R_CTL, D(10), '7' ), 												// I - Right MFD OSB 17
+								CHAIN( R_WIN+L_CTL, D(10), '7' ));												// O - Left MFD OSB 17
 
-	MapKeyIO(&LMFD, OSB18, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'8', D(), UP+R_WIN+R_CTL ), 				// I - Right MFD OSB 18
-								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'8', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 18
+	MapKeyIO(&LMFD, OSB18, 		CHAIN( R_WIN+R_CTL, D(10), '8' ), 												// I - Right MFD OSB 18
+								CHAIN( R_WIN+L_CTL, D(10), '8' ));												// O - Left MFD OSB 18
 
-	MapKeyIO(&LMFD, OSB19, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'9', D(), UP+R_WIN+R_CTL ), 				// I - Right MFD OSB 19
-								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'9', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 19
+	MapKeyIO(&LMFD, OSB19, 		CHAIN( R_WIN+R_CTL, D(10), '9' ), 												// I - Right MFD OSB 19
+								CHAIN( R_WIN+L_CTL, D(10), '9' ));												// O - Left MFD OSB 19
 
-	MapKeyIO(&LMFD, OSB20, 		CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'0', D(), UP+R_WIN+R_CTL ), 				// I - Right MFD OSB 20
-								CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'0', D(), UP+R_WIN+L_CTL ));				// O - Left MFD OSB 20
+	MapKeyIO(&LMFD, OSB20, 		CHAIN( R_WIN+R_CTL, D(10), '0' ), 												// I - Right MFD OSB 20
+								CHAIN( R_WIN+L_CTL, D(10), '0' ));												// O - Left MFD OSB 20
 
 	MapKeyIO(&LMFD, SYMU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'o' ), 											// I - Right MFD SYM Up
 								CHAIN( R_WIN+L_SHIFT, D(10), 'o' ));											// O - Left MFD SYM Up

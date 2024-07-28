@@ -8,6 +8,14 @@
 int dcs_f4e_pilot_controls()
 {
 
+	// -------------------- LEFT MFD -------------------------------------------------
+
+	MapKeyIO(&LMFD, OSB03, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'3', D(), UP+R_WIN+R_SHIFT ), 					// I - Right MFD OSB 03
+								TEMPO( CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'3', D(), UP+R_WIN+L_SHIFT ),			// O - Left MFD OSB 03
+									   CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'p', D(), UP+R_WIN+L_SHIFT ), 500 ));	//     [long] Left MFD OSB 03 - Arm Gun
+
+
+
 	// -------------------- FLIGHT STICK -------------------------------------------------
 
 	// -- DCS_Fighter_Common ---------
@@ -229,6 +237,9 @@ int dcs_f4e_pilot_controls()
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED3) ));									// 	   A-G mode off, LED3 OFF for D layer
 
 	
+
+
+
 	
 	// -------------------- Also load SPECIFIC part of PILOT controls -------------------------------
 	
