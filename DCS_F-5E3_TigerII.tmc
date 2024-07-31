@@ -312,7 +312,7 @@ int main()
 									 CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'y', D(), UP+R_CTL+R_SHIFT, D(),	//     Left Boost Pump Switch - ON/OFF
 											DOWN+R_CTL+R_SHIFT, D(10), PULSE+'i', D(), UP+R_CTL+R_SHIFT)),		//     Right Boost Pump Switch - ON/OFF
 								SEQ( CHAIN( L_CTL+L_SHIFT, D(10), 'c' ),										// O - Left Engine Start Button
-									 CHAIN( DOWN+R_ALT, D(10), PULSE+HOME, D(), UP+R_ALT )));					//	   Throttle Left - IDLE
+									 CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT )));				//	   Throttle Left - IDLE
 
 	// EOLMOTOR
 	MapKeyIO(&Throttle, EOLMOTOR, 0,																			// I - 
@@ -328,7 +328,7 @@ int main()
 	MapKeyIO(&Throttle, EFLNORM, 	0,																			// I - 
 									0 );																		// O - (Front seat)
 	// EFLOVER
-	MapKeyIO(&Throttle, EFLOVER, 	DX32,																		// I - Aileron Limiter (Hold to turn off)
+	MapKeyIO(&Throttle, EFLOVER, 	DX22,																		// I - Aileron Limiter (Hold to turn off)
 									0 );																		// O - (Back seat)
 	// EFRNORM
 	MapKeyIOUMD(&Throttle, EFRNORM, 0,																			// IU - 
