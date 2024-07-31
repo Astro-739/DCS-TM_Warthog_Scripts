@@ -26,11 +26,24 @@ define AB 77											// detent position at AB% of full throttle reach
 int main()
 {
 	Configure(&HCougar, MODE_EXCLUDED);
+	Configure(&Joystick, MODE_EXCLUDED);                    // Warthog Joystick
 	Configure(&JoystickF18, MODE_EXCLUDED);
+	//Configure(&Throttle, MODE_EXCLUDED);                  // Warthog Throttle
 	Configure(&A320Pilot, MODE_EXCLUDED);
 	Configure(&A320Copilot, MODE_EXCLUDED);
 	Configure(&TCAQuadrant12, MODE_EXCLUDED);
 	Configure(&TCAQuadrant34, MODE_EXCLUDED);
+	Configure(&TCAYokeBoeing, MODE_EXCLUDED);
+	Configure(&TCAQBoeing12, MODE_EXCLUDED);
+	Configure(&TCAQBoeing34, MODE_EXCLUDED);
+	Configure(&TCASidestickXPilot, MODE_EXCLUDED);
+	Configure(&TCASidestickXCopilot, MODE_EXCLUDED);
+	Configure(&ViperTQS, MODE_EXCLUDED);
+	Configure(&ViperBBox, MODE_EXCLUDED);
+	//Configure(&AVA_F16, MODE_EXCLUDED);
+    Configure(&AVA_F18, MODE_EXCLUDED);
+	Configure(&FarmStickRight, MODE_EXCLUDED);
+	Configure(&FarmStickLeft, MODE_EXCLUDED);
 	Configure(&T16000, MODE_EXCLUDED);
 	Configure(&T16000L, MODE_EXCLUDED);
 	//Configure(&LMFD, MODE_EXCLUDED);
@@ -38,7 +51,7 @@ int main()
 	Configure(&TFRPRudder, MODE_EXCLUDED);
 	Configure(&TWCSThrottle, MODE_EXCLUDED);
 	Configure(&TFRPHARudder, MODE_EXCLUDED);
-	
+
 	if(Init(&EventHandle)) return 1;
 	
 	SetKBRate(40, 50);									// (a,b) a = pulse duration, b = delay duration
@@ -46,7 +59,7 @@ int main()
 	
 	// -------------------- IOUMD Buttons --------------------
 	
-	SetShiftButton(&Joystick, S4, &Throttle, BSF, BSB, 0);
+	SetShiftButton(&AVA_F16, S4, &Throttle, BSF, BSB, 0);
 	
 	// -------------------- COMMON --------------------
 					
@@ -103,7 +116,7 @@ int main()
 
 	// Weapon Release Button
 	// S2
-	MapKeyIOUMD(&Joystick, S2,  SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),										// IU - Emergency All Jettison Button Cover - OPEN
+	MapKeyIOUMD(&AVA_F16, S2,  SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),										// IU - Emergency All Jettison Button Cover - OPEN
 									 CHAIN( L_SHIFT+L_CTL, D(10), '0' )),										//		Emergency All Jettison Button
 							    CHAIN( R_ALT, D(10), SPC ),														// OU - weapon release
 								SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),										// IM - Emergency All Jettison Button Cover - OPEN
@@ -114,7 +127,7 @@ int main()
 							    CHAIN( R_ALT, D(10), SPC ));													// OD - weapon release
 
 	// Expand FOV Button - S3
-	MapKeyIOUMD(&Joystick, S3,  0, 																				// IU -
+	MapKeyIOUMD(&AVA_F16, S3,  0, 																				// IU -
 							    0,																				// OU - 
 							    0, 																				// IM -
 							    0,													 							// OM - 
@@ -123,48 +136,48 @@ int main()
 
 	// Target Management Switch
 	// H2U
-	MapKeyIO(&Joystick, H2U, 	PULSE+ENT,																		// I - AN/APQ-159 Radar ACQ Button
+	MapKeyIO(&AVA_F16, H2U, 	PULSE+ENT,																		// I - AN/APQ-159 Radar ACQ Button
 							 	USB[0x55]);		 																// O - zoom in  (KP*) 
 	// H2R							
-	MapKeyIO(&Joystick, H2R, 	0,																				// I -
+	MapKeyIO(&AVA_F16, H2R, 	0,																				// I -
 							 	CHAIN( L_WIN, D(10), KP6 )); 													// O - snap view right 
 	// H2D
-	MapKeyIO(&Joystick, H2D, 	0,																				// I -
+	MapKeyIO(&AVA_F16, H2D, 	0,																				// I -
 							 	USB[0x54]);																		// O - zoom out  (KP\)
 	// H2L
-	MapKeyIO(&Joystick, H2L, 	0,																				// I -
+	MapKeyIO(&AVA_F16, H2L, 	0,																				// I -
 							 	CHAIN( L_WIN, D(10), KP4 )); 													// O - snap view left 
 
 	// Display Management Switch
 	// H3U
-	MapKeyIO(&Joystick, H3U, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
+	MapKeyIO(&AVA_F16, H3U, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
 								CHAIN( R_ALT, D(10), '7' ));													// O - RWR Indicator Control SEARCH Button
 	// H3R
-	MapKeyIO(&Joystick, H3R, 	PULSE+']', 																		// I - kneeboard next page
+	MapKeyIO(&AVA_F16, H3R, 	PULSE+']', 																		// I - kneeboard next page
 								CHAIN( R_ALT, D(10), 'y' ));													// O - RWR Indicator Control T Button
 	// H3D
-	MapKeyIO(&Joystick, H3D, 	CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
+	MapKeyIO(&AVA_F16, H3D, 	CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
 								CHAIN( R_ALT, D(10), '6' ));													// O - RWR Indicator Control MODE Button
 	// H3L
-	MapKeyIO(&Joystick, H3L, 	TEMPO( PULSE+'[', 																// I - kneeboard previous page
+	MapKeyIO(&AVA_F16, H3L, 	TEMPO( PULSE+'[', 																// I - kneeboard previous page
 									   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT ), 500 ),			//	   [long] Pilot Body toggle								
 								CHAIN( R_ALT, D(10), 'i' ));													// O - RWR Indicator Control UNKNOWN SHIP Button
 
  	// Countermeasure Management Switch
 	// H4U	
-	MapKeyIO(&Joystick, H4U, 	0,																				// I - 
+	MapKeyIO(&AVA_F16, H4U, 	0,																				// I - 
 							 	PULSE+'5');																		// O - Dogfight/Resume Search Switch - FORWARD (DM)
 	// H4R
-	MapKeyIO(&Joystick, H4R, 	0, 																				// I - PROGRAM Knob - CW
+	MapKeyIO(&AVA_F16, H4R, 	0, 																				// I - PROGRAM Knob - CW
 			  				 	PULSE+'r');																		// O - Dogfight/Resume Search Switch - CENTER-PRESS (RESUME SEARCH)
 	// H4D
-	MapKeyIO(&Joystick, H4D, 	0, 																				// I -
+	MapKeyIO(&AVA_F16, H4D, 	0, 																				// I -
 							 	PULSE+'6'); 																	// O - Dogfight/Resume Search Switch - AFT (DG)
 	// H4L
-	MapKeyIO(&Joystick, H4L, 	0, 																				// I - PROGRAM Knob - CCW
+	MapKeyIO(&AVA_F16, H4L, 	0, 																				// I - PROGRAM Knob - CCW
 							 	0); 																			// O - 
 	// H4P
-	MapKeyIO(&Joystick, H4P, 	DX19, 																			// I - srs ptt (in combination with Discord ptm)
+	MapKeyIO(&AVA_F16, H4P, 	DX19, 																			// I - srs ptt (in combination with Discord ptm)
 							 	'q'); 																			// O - CHAFF/FLARE Dispense Button
 
 	
