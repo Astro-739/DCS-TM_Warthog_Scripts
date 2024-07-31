@@ -71,12 +71,12 @@ int main()
 							 DOWN+L_CTL, D(10), PULSE+'l', D(), UP+L_CTL );										// Exterior Lights Beacon Switch - OFF
 
 	// Ground Crew Start-up
-	groundcrewstartup = CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F1, D(8000), 	// Radio menu (\), Ground crew, Wheel Chocks, Place 
-							   PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F1, D(10000),	// Radio menu (\), Ground crew, Ground Air Supply, Connect
-							   PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F3, D(25000), // Radio menu (\), Ground crew, Ground Air Supply, Apply
-							   PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F3, D(25000),	// Radio menu (\), Ground crew, Ground Air Supply, Apply
-							   PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F2, D(10000),	// Radio menu (\), Ground crew, Ground Air Supply, Disconnect
-							   PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F2 );			// Radio menu (\), Ground crew, Wheel Chocks, Remove
+	groundcrewstartup = SEQ( CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F1, D(8000), 	// Radio menu (\), Ground crew, Wheel Chocks, Place 
+							   		PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F1, D(10000),	// Radio menu (\), Ground crew, Ground Air Supply, Connect
+							   		PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F3 ), 			// Radio menu (\), Ground crew, Ground Air Supply, Apply
+							 CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F3, D(25000),	// Radio menu (\), Ground crew, Ground Air Supply, Apply
+							   		PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F2, D(10000),	// Radio menu (\), Ground crew, Ground Air Supply, Disconnect
+							   		PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F2 ));			// Radio menu (\), Ground crew, Wheel Chocks, Remove
 
 
 	// Speedbrake functions
