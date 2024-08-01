@@ -1,5 +1,5 @@
 // PILOT file for DCS_F-4E_Phantom.tmc  by Astro
-// version 1, May 2024
+// version 3, Aug 2024
 
 
 
@@ -21,9 +21,9 @@ int dcs_f4e_pilot_controls()
 
 	// JSTR layer
 	// Expand FOV Button - S3
-	MapKey(&Joystick, S3,  		EXEC( "if(LTRN_mode) dcs_f4e_jester_lantirn_controls();"	// Switch to JESTER LANTIRN controls (LTRN_mode ON)
+	MapKey(&AVA_F16, S3,  		EXEC( "if(LTRN_mode) dcs_f4e_jester_lantirn_controls();"	// Switch to JESTER LANTIRN controls (LTRN_mode ON)
 									  "else dcs_f4e_jester_controls();" ));					// Switch to JESTER controls (LTRN_mode OFF)
-	MapKeyR(&Joystick, S3,  	EXEC( "dcs_fighter_common_specific();" 						// Switch back to COMMON,
+	MapKeyR(&AVA_F16, S3,  	EXEC( "dcs_fighter_common_specific();" 						// Switch back to COMMON,
 									  "dcs_f4e_pilot_controls_specific();" ));				//   and PILOT controls
 
 	// -------------------------------
@@ -31,7 +31,7 @@ int dcs_f4e_pilot_controls()
 
 	// Weapon Release Button
 	// S2
-	MapKeyIOUMD(&Joystick, S2,  jettison_stores,																		// IU - Jettison Stores
+	MapKeyIOUMD(&AVA_F16, S2,  jettison_stores,																		// IU - Jettison Stores
 							    DX2,																					// OU - weapon release
 								jettison_stores,																		// IM - Jettison Stores
 							    0,																					 	// OM - 
@@ -45,19 +45,19 @@ int dcs_f4e_pilot_controls()
 
  	// Countermeasure Management Switch
 	// H4U	
-	MapKeyIO(&Joystick, H4U, 	0,																						// I - 
+	MapKeyIO(&AVA_F16, H4U, 	0,																						// I - 
 							 	CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'q', D(), UP+L_ALT+L_SHIFT ));					// O - Dispense Program - Flares
 	// H4D
-	MapKeyIO(&Joystick, H4D, 	0,																						// I - 
+	MapKeyIO(&AVA_F16, H4D, 	0,																						// I - 
 							 	CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'q', D(), UP+L_ALT+L_CTL ));						// O - Dispense Program - Normal
 	// H4R
-	MapKeyIO(&Joystick, H4R, 	0,																						// I - 
+	MapKeyIO(&AVA_F16, H4R, 	0,																						// I - 
 			  				 	0 );																					// O - 
 	// H4L
-	MapKeyIO(&Joystick, H4L, 	0,									 													// I - 
+	MapKeyIO(&AVA_F16, H4L, 	0,									 													// I - 
 							 	0 ); 																					// O - 
 	// H4P
-	MapKeyIO(&Joystick, H4P, 	0, 																						// I - 
+	MapKeyIO(&AVA_F16, H4P, 	0, 																						// I - 
 							 	CHAIN( DOWN+L_ALT, D(10), PULSE+'q', D(), UP+L_ALT )); 									// O - Countermeasure Dispense
 
 	
@@ -251,42 +251,42 @@ int dcs_f4e_pilot_controls_specific()
 
 	// Target Management Switch
 	// H2U
-	MapKeyIO(&Joystick, H2U, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT, D(200),							// I - Gun/Missile Pinky Switch - Radar
+	MapKeyIO(&AVA_F16, H2U, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT, D(200),							// I - Gun/Missile Pinky Switch - Radar
 									   DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ),								//	   HUD Mode - A/A
 								DX7 );																					// O - zoom in  (KP*)
 	// H2D
-	MapKeyIO(&Joystick, H2D, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'w', D(), UP+L_SHIFT, D(200),							// I - Gun/Missile Pinky Switch - Gun
+	MapKeyIO(&AVA_F16, H2D, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'w', D(), UP+L_SHIFT, D(200),							// I - Gun/Missile Pinky Switch - Gun
 									   DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT ),									// 	   HUD Mode - Cage
 								DX9 );																					// O - zoom out  (KP\)
 	// H2R							
-	MapKeyIO(&Joystick, H2R, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT, D(200),							// I - Gun/Missile Pinky Switch - Heat
+	MapKeyIO(&AVA_F16, H2R, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT, D(200),							// I - Gun/Missile Pinky Switch - Heat
 									   DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ),								//	   HUD Mode - A/A
 								CHAIN( L_WIN, D(10), KP6 ));															// O - snap view radar
 	// H2L
-	MapKeyIO(&Joystick, H2L, 	0,																						// I -
+	MapKeyIO(&AVA_F16, H2L, 	0,																						// I -
 								CHAIN( DOWN+R_SHIFT, D(10), PULSE+BSP, D(), UP+R_SHIFT, D(),							// O - remove stick
 								L_WIN, D(10), KP2 ));																	//     snap view instruments
-	MapKeyRIO(&Joystick, H2L, 	0,																						// I - 
+	MapKeyRIO(&AVA_F16, H2L, 	0,																						// I - 
 								CHAIN( D(200), DOWN+R_CTL, D(10), PULSE+BSP, D(), UP+R_CTL ));							// O - place stick
 
 
 	// Display Management Switch
 	// H3U
-	MapKeyIO(&Joystick, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
+	MapKeyIO(&AVA_F16, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
 									   nightvision, 500 ),																// 	   [long] Night Vision Goggles toggle
 								TEMPO( SEQ( CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_SHIFT ),	// O - DSCG Screen Mode - Radar/TV
 											CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_ALT )),
 									   CHAIN( DOWN+L_CTL, D(10), PULSE+'v', D(), UP+L_CTL ), 500 ));					// 	   [long] Helmet Visor toggle
 	// H3D
-	MapKeyIO(&Joystick, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
+	MapKeyIO(&AVA_F16, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
 									   flashlight, 500 ),																//	   [long] Flashlight on/off	
 								CHAIN( 0 ));																			// O - 
 	// H3R
-	MapKeyIO(&Joystick, H3R, 	TEMPO( PULSE+']', 																		// I - kneeboard next page
+	MapKeyIO(&AVA_F16, H3R, 	TEMPO( PULSE+']', 																		// I - kneeboard next page
 									   CHAIN( 0 ), 500 ),   															// 	   [long] 
 								CHAIN( R_ALT, D(10), '2' ));															// O - RWR Search Button
 	// H3L
-	MapKeyIO(&Joystick, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
+	MapKeyIO(&AVA_F16, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
 									   CHAIN( 0 ), 500 ),																//	   [long] 
 								CHAIN( R_ALT, D(10), '5' ));															// O - RWR Target Separation Button
 

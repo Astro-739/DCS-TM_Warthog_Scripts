@@ -1,5 +1,5 @@
-// DCS F-16C Viper Thrustmaster Warthog Script by Astro
-// version 1, Jun 2023
+// DCS F-16C Viper Thrustmaster Warthog/AVA/MFD Script by Astro
+// version 3, Aug 2024
 
 
 include "target.tmh"
@@ -22,15 +22,28 @@ define AB 75											// detent position at AB% of full throttle reach
 int main()
 {
 	Configure(&HCougar, MODE_EXCLUDED);
+	Configure(&Joystick, MODE_EXCLUDED);                    // Warthog Joystick
 	Configure(&JoystickF18, MODE_EXCLUDED);
+	//Configure(&Throttle, MODE_EXCLUDED);                  // Warthog Throttle
 	Configure(&A320Pilot, MODE_EXCLUDED);
 	Configure(&A320Copilot, MODE_EXCLUDED);
 	Configure(&TCAQuadrant12, MODE_EXCLUDED);
 	Configure(&TCAQuadrant34, MODE_EXCLUDED);
+	Configure(&TCAYokeBoeing, MODE_EXCLUDED);
+	Configure(&TCAQBoeing12, MODE_EXCLUDED);
+	Configure(&TCAQBoeing34, MODE_EXCLUDED);
+	Configure(&TCASidestickXPilot, MODE_EXCLUDED);
+	Configure(&TCASidestickXCopilot, MODE_EXCLUDED);
+	Configure(&ViperTQS, MODE_EXCLUDED);
+	Configure(&ViperBBox, MODE_EXCLUDED);
+	//Configure(&AVA_F16, MODE_EXCLUDED);					// AVA F16
+    Configure(&AVA_F18, MODE_EXCLUDED);
+	Configure(&FarmStickRight, MODE_EXCLUDED);
+	Configure(&FarmStickLeft, MODE_EXCLUDED);
 	Configure(&T16000, MODE_EXCLUDED);
 	Configure(&T16000L, MODE_EXCLUDED);
-	//Configure(&LMFD, MODE_EXCLUDED);
-	Configure(&RMFD, MODE_EXCLUDED);
+	//Configure(&LMFD, MODE_EXCLUDED);						// Left MFD
+	Configure(&RMFD, MODE_EXCLUDED);						// Right MFD
 	Configure(&TFRPRudder, MODE_EXCLUDED);
 	Configure(&TWCSThrottle, MODE_EXCLUDED);
 	Configure(&TFRPHARudder, MODE_EXCLUDED);
@@ -42,7 +55,7 @@ int main()
 	
 	// -------------------- IOUMD Buttons --------------------
 	
-	SetShiftButton(&Joystick, S4, &Throttle, BSF, BSB, 0);
+	SetShiftButton(&AVA_F16, S4, &Throttle, BSF, BSB, 0);
 	
 	// -------------------- COMMON --------------------
 					
@@ -90,7 +103,7 @@ int main()
 
 	// Nosewheel Steering Button
 	// S1
-	MapKeyIOUMD(&Joystick, S1, 	SEQ( PULSE+F10, PULSE+F1 ),														// IU - F10 map
+	MapKeyIOUMD(&AVA_F16, S1, 	SEQ( PULSE+F10, PULSE+F1 ),														// IU - F10 map
 							 	's', 																			// OU - NWS A/R DISC MSL STEP Button
 							    SEQ( PULSE+F10, PULSE+F1 ), 													// IM - F10 map
 							    's',																 			// OM - NWS A/R DISC MSL STEP Button
@@ -101,11 +114,11 @@ int main()
 
 	// Weapon Release Button
 	// S2
-	MapKeyIO(&Joystick, S2,  	CHAIN( L_SHIFT, D(10), 'e' ), 													// I - EMER STORES JETTISON Button
+	MapKeyIO(&AVA_F16, S2,  	CHAIN( L_SHIFT, D(10), 'e' ), 													// I - EMER STORES JETTISON Button
 								DX2);																			// O - Weapon Release
 
 	// Expand FOV Button - S3
-	MapKeyIOUMD(&Joystick, S3,  0,																				// IU - 
+	MapKeyIOUMD(&AVA_F16, S3,  0,																				// IU - 
 								override,																		// OU - dogfight then missile override
 							    0, 																				// IM -
 							    autopilot_ALThold,													 			// OM - autopilot on/off (Autopilot PITCH Switch - ALT HOLD)
@@ -115,52 +128,52 @@ int main()
 
 	// Target Management Switch
 	// H2U
-	MapKeyIO(&Joystick, H2U, 	CHAIN( R_CTL, D(10), UARROW ),													// I - TMS up (KP*)
+	MapKeyIO(&AVA_F16, H2U, 	CHAIN( R_CTL, D(10), UARROW ),													// I - TMS up (KP*)
 							 	USB[0x55]);		 																// O - zoom in 
 	// H2D
-	MapKeyIO(&Joystick, H2D, 	CHAIN( R_CTL, D(10), DARROW ),													// I - TMS down  (KP\)
+	MapKeyIO(&AVA_F16, H2D, 	CHAIN( R_CTL, D(10), DARROW ),													// I - TMS down  (KP\)
 							 	USB[0x54]);																		// O - zoom out
 	// H2R							
-	MapKeyIO(&Joystick, H2R, 	CHAIN( R_CTL, D(10), RARROW ),													// I - TMS right
+	MapKeyIO(&AVA_F16, H2R, 	CHAIN( R_CTL, D(10), RARROW ),													// I - TMS right
 							 	CHAIN( L_WIN, D(10), KP6 )); 													// O - snap view right MFD
 	// H2L
-	MapKeyIO(&Joystick, H2L, 	CHAIN( R_CTL, D(10), LARROW ),													// I - TMS left
+	MapKeyIO(&AVA_F16, H2L, 	CHAIN( R_CTL, D(10), LARROW ),													// I - TMS left
 							 	CHAIN( L_WIN, D(10), KP4 )); 													// O - snap view left MFD
 
 	// Display Management Switch
 	// H3U
-	MapKeyIO(&Joystick, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),				// I - kneeboard on/off
+	MapKeyIO(&AVA_F16, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),				// I - kneeboard on/off
 									   nightvision, 500 ),														// 	   [long] Night Vision Goggles toggle
 								TEMPO( CHAIN( DOWN+R_ALT, D(10), PULSE+';', D(), UP+R_ALT ),					// O - DMS up
 									   CHAIN( DOWN+L_CTL, D(10), PULSE+'v', D(), UP+L_CTL ), 500 ));			// 	   [long] Helmet Visor toggle
 	// H3D
-	MapKeyIO(&Joystick, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),					// I - kneeboard current position mark point
+	MapKeyIO(&AVA_F16, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),					// I - kneeboard current position mark point
 									   flashlight, 500 ),														//	   [long] Flashlight on/off
 								CHAIN( R_ALT, D(10), '.' ));													// O - DMS down
 	// H3R
-	MapKeyIO(&Joystick, H3R, 	PULSE+']', 																		// I - kneeboard next page
+	MapKeyIO(&AVA_F16, H3R, 	PULSE+']', 																		// I - kneeboard next page
 								CHAIN( R_ALT, D(10), '/' ));													// O - DMS right
 	// H3L
-	MapKeyIO(&Joystick, H3L, 	TEMPO( PULSE+'[', 																// I - kneeboard previous page
+	MapKeyIO(&AVA_F16, H3L, 	TEMPO( PULSE+'[', 																// I - kneeboard previous page
 									   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT ), 500 ),			//	   [long] Pilot Body toggle
 								CHAIN( R_ALT, D(10), ',' ));													// O - DMS left
 
 
  	// Countermeasure Management Switch
 	// H4U
-	MapKeyIO(&Joystick, H4U, 	CHAIN( DOWN+L_SHIFT+L_CTL, D(10), PULSE+'f', D(), UP+L_SHIFT+L_CTL ),			// I - ECM XMIT Switch - Up
+	MapKeyIO(&AVA_F16, H4U, 	CHAIN( DOWN+L_SHIFT+L_CTL, D(10), PULSE+'f', D(), UP+L_SHIFT+L_CTL ),			// I - ECM XMIT Switch - Up
 							 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+';', D(), UP+R_SHIFT ));						// O - Countermeasures Management Switch - Fwd
 	// H4D
-	MapKeyIO(&Joystick, H4D, 	CHAIN( DOWN+L_SHIFT+L_CTL, D(10), PULSE+'v', D(), UP+L_SHIFT+L_CTL ),			// I - ECM XMIT Switch - Down
+	MapKeyIO(&AVA_F16, H4D, 	CHAIN( DOWN+L_SHIFT+L_CTL, D(10), PULSE+'v', D(), UP+L_SHIFT+L_CTL ),			// I - ECM XMIT Switch - Down
 							 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'.', D(), UP+R_SHIFT )); 						// O - Countermeasures Management Switch - Aft
 	// H4R
-	MapKeyIO(&Joystick, H4R, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ), 							// I - PROGRAM Knob - CW
+	MapKeyIO(&AVA_F16, H4R, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ), 							// I - PROGRAM Knob - CW
 			  				 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'/', D(), UP+R_SHIFT ));						// O - Countermeasures Management Switch - Right
 	// H4L
-	MapKeyIO(&Joystick, H4L, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ), 						// I - PROGRAM Knob - CCW
+	MapKeyIO(&AVA_F16, H4L, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ), 						// I - PROGRAM Knob - CCW
 							 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+',', D(), UP+R_SHIFT )); 						// O - Countermeasures Management Switch - Left
 	// H4P
-	MapKeyIO(&Joystick, H4P, 	0, 																				// I - 
+	MapKeyIO(&AVA_F16, H4P, 	0, 																				// I - 
 							 	CHAIN( DOWN+L_ALT, D(10), DOWN+'f', D(100), UP+'f', D(), UP+L_ALT ));			// O - CHAFF/FLARE Dispense Button (program 5)
 
 
@@ -355,13 +368,13 @@ int main()
 									CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'h', D(), UP+L_CTL+L_ALT ));				// O - HOOK Switch - UP
 	// EFROVER
 	MapKeyIO(&Throttle, EFROVER, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'f', D(), UP+R_SHIFT,	D(), 					// I - AIR REFUEL Switch - OPEN
-										   //EXEC( "SetSCurve(&Joystick, JOYX, 0, 0, 0, 0, -1);"					//	    set joyX curves for aerial refuelling
-										   // 	 "SetSCurve(&Joystick, JOYY, 0, 0, 0, 0, -1);" ), D(), 				// 	  	set joyY curves for aerial refuelling
+										   //EXEC( "SetSCurve(&AVA_F16, JOYX, 0, 0, 0, 0, -1);"					//	    set joyX curves for aerial refuelling
+										   // 	 "SetSCurve(&AVA_F16, JOYY, 0, 0, 0, 0, -1);" ), D(), 				// 	  	set joyY curves for aerial refuelling
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),							// 		LED5 ON for Aerial Refuelling
 									CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'h', D(), UP+L_CTL+L_SHIFT ));			// O - HOOK Switch - DOWN
 	MapKeyRIO(&Throttle, EFROVER, 	CHAIN( DOWN+R_CTL, D(10), PULSE+'f', D(), UP+R_CTL, D(),						// I - AIR REFUEL Switch - CLOSE
-										   //EXEC( "SetSCurve(&Joystick, JOYX, 0, 0, 0, 0, 0);"						//		set joyX curves back to normal
-										   //	 "SetSCurve(&Joystick, JOYY, 0, 0, 0, 0, 0);" ), D(), 				//		set joyY curves back to normal
+										   //EXEC( "SetSCurve(&AVA_F16, JOYX, 0, 0, 0, 0, 0);"						//		set joyX curves back to normal
+										   //	 "SetSCurve(&AVA_F16, JOYY, 0, 0, 0, 0, 0);" ), D(), 				//		set joyY curves back to normal
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),							// 		LED5 OFF for Aerial Refuelling
 									0 );																			// O - 
 

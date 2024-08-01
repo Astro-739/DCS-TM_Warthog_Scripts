@@ -1,5 +1,5 @@
 // RIO file for DCS_F-4E_Phantom.tmc  by Astro
-// version 1, May 2024
+// version 3, Aug 2024
 
 
 
@@ -22,8 +22,8 @@ int dcs_f4e_wso_controls()
 
 	// JSTR layer
 	// Expand FOV Button - S3
-	MapKey(&Joystick, S3,  		0 );													// Switch off
-	MapKeyR(&Joystick, S3,  	0 ); 													// Switch off 
+	MapKey(&AVA_F16, S3,  		0 );													// Switch off
+	MapKeyR(&AVA_F16, S3,  	0 ); 													// Switch off 
 
 
 	// Weapon Release Button
@@ -32,39 +32,39 @@ int dcs_f4e_wso_controls()
 
 	// Target Management Switch
 	// H2U
-	MapKeyIO(&Joystick, H2U, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT ),								// I - Gun/Missile Pinky Switch - Radar
+	MapKeyIO(&AVA_F16, H2U, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT ),								// I - Gun/Missile Pinky Switch - Radar
 								USB[0x55] );																			// O - zoom in  (KP*)
 	// H2D
-	MapKeyIO(&Joystick, H2D, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'w', D(), UP+L_SHIFT ), 								// I - Gun/Missile Pinky Switch - Gun
+	MapKeyIO(&AVA_F16, H2D, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'w', D(), UP+L_SHIFT ), 								// I - Gun/Missile Pinky Switch - Gun
 								USB[0x54] );																			// O - zoom out  (KP\)
 	// H2R							
-	MapKeyIO(&Joystick, H2R, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT ), 								// I - Gun/Missile Pinky Switch - Heat
+	MapKeyIO(&AVA_F16, H2R, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT ), 								// I - Gun/Missile Pinky Switch - Heat
 								CHAIN( L_WIN, D(10), KP6 ));															// O - snap view radar
 	// H2L
-	MapKeyIO(&Joystick, H2L, 	CHAIN( DOWN+L_CTL, D(10), DOWN+'i', D(300), UP+L_CTL+'i' ),								// I - Antenna Hand Control Challenge Button
+	MapKeyIO(&AVA_F16, H2L, 	CHAIN( DOWN+L_CTL, D(10), DOWN+'i', D(300), UP+L_CTL+'i' ),								// I - Antenna Hand Control Challenge Button
 								CHAIN( DOWN+R_SHIFT, D(10), PULSE+BSP, D(), UP+R_SHIFT, D(),							// O - remove stick
 								L_WIN, D(10), KP2 ));																	//     snap view instruments
-	MapKeyRIO(&Joystick, H2L, 	0,																						// I - 
+	MapKeyRIO(&AVA_F16, H2L, 	0,																						// I - 
 								CHAIN( D(200), DOWN+R_CTL, D(10), PULSE+BSP, D(), UP+R_CTL ));							// O - place stick
 
 
 	// Display Management Switch
 	// H3U
-	MapKeyIO(&Joystick, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
+	MapKeyIO(&AVA_F16, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
 									   nightvision, 500 ),																// 	   [long] Night Vision Goggles toggle
 								TEMPO( CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+']', D(), UP+L_ALT+R_SHIFT ),			// O - Radar Range - [CW]
 									   CHAIN( DOWN+L_CTL, D(10), PULSE+'v', D(), UP+L_CTL ), 500 ));					// 	   [long] Helmet Visor toggle
 	// H3D
-	MapKeyIO(&Joystick, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
+	MapKeyIO(&AVA_F16, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
 									   flashlight, 500 ),																//	   [long] Flashlight on/off	
 								CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'[', D(), UP+L_ALT+R_SHIFT ));					// O - Radar Range - [CCW]
 	// H3R
-	MapKeyIO(&Joystick, H3R, 	TEMPO( PULSE+']', 																		// I - kneeboard next page
+	MapKeyIO(&AVA_F16, H3R, 	TEMPO( PULSE+']', 																		// I - kneeboard next page
 									   CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'.', D(), UP+L_ALT+L_SHIFT ), 500 ),   	// 	   [long] Radar Display Mode - [CW]
 								TEMPO( CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+']', D(), UP+L_ALT+L_SHIFT ),			// O - Target Aspect - [CW]
 									   CHAIN( R_ALT, D(10), '2' ), 500 ));												//	   [long] RWR Search Button
 	// H3L
-	MapKeyIO(&Joystick, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
+	MapKeyIO(&AVA_F16, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
 									   CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+',', D(), UP+L_ALT+L_SHIFT ), 500 ),		//	   [long] Radar Display Mode - [CCW]
 								TEMPO( CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'[', D(), UP+L_ALT+L_SHIFT ),			// O - Target Aspect - [CW]
 									   CHAIN( R_ALT, D(10), '5' ), 500 ));												//	   [long] RWR Target Separation Button
@@ -73,19 +73,19 @@ int dcs_f4e_wso_controls()
 
  	// Countermeasure Management Switch
 	// H4U	
-	MapKeyIO(&Joystick, H4U, 	0,																						// I - 
+	MapKeyIO(&AVA_F16, H4U, 	0,																						// I - 
 			  				 	0 );																					// O - 
 	// H4D
-	MapKeyIO(&Joystick, H4D, 	0,																						// I - 
+	MapKeyIO(&AVA_F16, H4D, 	0,																						// I - 
 			  				 	0 );																					// O - 
 	// H4R
-	MapKeyIO(&Joystick, H4R, 	0,																						// I - 
+	MapKeyIO(&AVA_F16, H4R, 	0,																						// I - 
 			  				 	0 );																					// O - 
 	// H4L
-	MapKeyIO(&Joystick, H4L, 	0,									 													// I - 
+	MapKeyIO(&AVA_F16, H4L, 	0,									 													// I - 
 							 	0 ); 																					// O - 
 	// H4P
-	MapKeyIO(&Joystick, H4P, 	0, 																						// I - 
+	MapKeyIO(&AVA_F16, H4P, 	0, 																						// I - 
 							 	CHAIN( DOWN+L_ALT, D(10), PULSE+'q', D(), UP+L_ALT )); 									// O - Countermeasure Dispense
 
 	

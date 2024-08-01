@@ -1,5 +1,5 @@
-// DCS A-4E-C Thrustmaster Warthog Script by Astro
-// version 1, Aug 2023
+// DCS A-4E-C Thrustmaster Warthog/AVA/MFD Script by Astro
+// version 3, Aug 2024
 
 
 include "target.tmh"
@@ -34,15 +34,28 @@ define AB 100											// detent position at AB% of full throttle reach
 int main()
 {
 	Configure(&HCougar, MODE_EXCLUDED);
+	Configure(&Joystick, MODE_EXCLUDED);                    // Warthog Joystick
 	Configure(&JoystickF18, MODE_EXCLUDED);
+	//Configure(&Throttle, MODE_EXCLUDED);                  // Warthog Throttle
 	Configure(&A320Pilot, MODE_EXCLUDED);
 	Configure(&A320Copilot, MODE_EXCLUDED);
 	Configure(&TCAQuadrant12, MODE_EXCLUDED);
 	Configure(&TCAQuadrant34, MODE_EXCLUDED);
+	Configure(&TCAYokeBoeing, MODE_EXCLUDED);
+	Configure(&TCAQBoeing12, MODE_EXCLUDED);
+	Configure(&TCAQBoeing34, MODE_EXCLUDED);
+	Configure(&TCASidestickXPilot, MODE_EXCLUDED);
+	Configure(&TCASidestickXCopilot, MODE_EXCLUDED);
+	Configure(&ViperTQS, MODE_EXCLUDED);
+	Configure(&ViperBBox, MODE_EXCLUDED);
+	//Configure(&AVA_F16, MODE_EXCLUDED);					// AVA F16
+    Configure(&AVA_F18, MODE_EXCLUDED);
+	Configure(&FarmStickRight, MODE_EXCLUDED);
+	Configure(&FarmStickLeft, MODE_EXCLUDED);
 	Configure(&T16000, MODE_EXCLUDED);
 	Configure(&T16000L, MODE_EXCLUDED);
-	//Configure(&LMFD, MODE_EXCLUDED);
-	Configure(&RMFD, MODE_EXCLUDED);
+	//Configure(&LMFD, MODE_EXCLUDED);						// Left MFD
+	Configure(&RMFD, MODE_EXCLUDED);						// Right MFD
 	Configure(&TFRPRudder, MODE_EXCLUDED);
 	Configure(&TWCSThrottle, MODE_EXCLUDED);
 	Configure(&TFRPHARudder, MODE_EXCLUDED);
@@ -54,7 +67,7 @@ int main()
 	
 	// -------------------- IOUMD Buttons --------------------
 	
-	SetShiftButton(&Joystick, S4, &Throttle, BSF, BSB, 0);
+	SetShiftButton(&AVA_F16, S4, &Throttle, BSF, BSB, 0);
 	
 	// -------------------- COMMON --------------------
 					
@@ -144,7 +157,7 @@ int main()
 
 	// Weapon Release Button
 	// S2
-	MapKeyIOUMD(&Joystick, S2,  SEQ( CHAIN( L_ALT+L_SHIFT, D(10), '6' ),										// IU - Emergency Release Selector - AL
+	MapKeyIOUMD(&AVA_F16, S2,  SEQ( CHAIN( L_ALT+L_SHIFT, D(10), '6' ),										// IU - Emergency Release Selector - AL
 									 CHAIN( L_CTL, D(10), 'j' )),												//		Emergency Stores Release Handle
 							    CHAIN( L_ALT, D(10), SPC ),														// OU - weapon release
 								SEQ( CHAIN( L_ALT+L_SHIFT, D(10), '6' ),										// IM - Emergency Release Selector - AL
@@ -155,63 +168,63 @@ int main()
 							    CHAIN( L_ALT, D(10), SPC ));													// OD - weapon release
 
 	// Expand FOV Button - S3
-	MapKey(&Joystick, S3,  		0 );																			// 
-	MapKeyR(&Joystick, S3,  	0 );																			// 
+	MapKey(&AVA_F16, S3,  		0 );																			// 
+	MapKeyR(&AVA_F16, S3,  	0 );																			// 
 
 
 	// Target Management Switch
 	// H2U
-	MapKeyIO(&Joystick, H2U, 	PULSE+'8',																		// I - Weapon Function Selector Switch - CW
+	MapKeyIO(&AVA_F16, H2U, 	PULSE+'8',																		// I - Weapon Function Selector Switch - CW
 							 	USB[0x55] );	 																// O - zoom in 
 	// H2D
-	MapKeyIO(&Joystick, H2D, 	PULSE+'7',																		// I - Weapon Function Selector Switch - CCW
+	MapKeyIO(&AVA_F16, H2D, 	PULSE+'7',																		// I - Weapon Function Selector Switch - CCW
 							 	USB[0x54] );																	// O - zoom out
 	// H2R							
-	MapKeyIO(&Joystick, H2R, 	0,																				// I - 
+	MapKeyIO(&AVA_F16, H2R, 	0,																				// I - 
 							 	CHAIN( L_WIN, D(10), KP6 )); 													// O - snap view right MFD
 	// H2L
-	MapKeyIO(&Joystick, H2L, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'9', D(), UP+L_SHIFT ),						// I - Guns Charging Switch - READY
+	MapKeyIO(&AVA_F16, H2L, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'9', D(), UP+L_SHIFT ),						// I - Guns Charging Switch - READY
 								CHAIN( PULSE+BSP, D(), L_WIN, D(10), KP4 ));									// O - remove stick, snap view instruments
-	MapKeyRIO(&Joystick, H2L, 	0,																				// I - 
+	MapKeyRIO(&AVA_F16, H2L, 	0,																				// I - 
 								CHAIN( D(200), PULSE+BSP ));													// O - place stick
 
 
 	// Display Management Switch
 	// H3U
-	MapKeyIO(&Joystick, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
+	MapKeyIO(&AVA_F16, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
 									   nightvision, 500 ),																// 	   [long] Night Vision Goggles toggle
 								TEMPO( SEQ( CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_SHIFT ),	// O - DSCG Screen Mode - Radar/TV
 											CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_ALT )),
 									   CHAIN( 0 ), 500 ));																// 	   [long] Helmet Visor toggle
 	// H3D
-	MapKeyIO(&Joystick, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
+	MapKeyIO(&AVA_F16, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
 									   flashlight, 500 ),																//	   [long] Flashlight on/off	
 								CHAIN( 0 ));																			// O - 
 	// H3R
-	MapKeyIO(&Joystick, H3R, 	TEMPO( PULSE+']', 																		// I - kneeboard next page
+	MapKeyIO(&AVA_F16, H3R, 	TEMPO( PULSE+']', 																		// I - kneeboard next page
 									   CHAIN( 0 ), 500 ), 												  				// 	   [long] Sunglasses toggle
 								CHAIN( R_ALT, D(10), '2' ));															// O - RWR Search Button
 	// H3L
-	MapKeyIO(&Joystick, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
+	MapKeyIO(&AVA_F16, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
 									   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT ), 500 ),					//	   [long] Pilot Body toggle								
 								CHAIN( R_ALT, D(10), '5' ));															// O - RWR Target Separation Button
 
 
  	// Countermeasure Management Switch
 	// H4U	
-	MapKeyIO(&Joystick, H4U, 	0,																						// I - 
+	MapKeyIO(&AVA_F16, H4U, 	0,																						// I - 
 							 	CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'q', D(), UP+L_ALT+L_SHIFT ));					// O - Chaff Dispenser Select - 1
 	// H4D
-	MapKeyIO(&Joystick, H4D, 	0, 																						// I - 
+	MapKeyIO(&AVA_F16, H4D, 	0, 																						// I - 
 							 	CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'q', D(), UP+L_ALT+L_CTL ));						// O - Chaff Dispenser Select - 2
 	// H4R
-	MapKeyIO(&Joystick, H4R, 	CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'j', D(), UP+L_ALT+L_SHIFT ),					// I - AN/APR-25 Function Selector Switch - CW
+	MapKeyIO(&AVA_F16, H4R, 	CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'j', D(), UP+L_ALT+L_SHIFT ),					// I - AN/APR-25 Function Selector Switch - CW
 			  				 	CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'q', D(), UP+L_ALT+R_SHIFT ));					// O - Chaff Dispenser Select - Both
 	// H4L
-	MapKeyIO(&Joystick, H4L, 	CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'j', D(), UP+L_ALT+L_CTL ),						// I - AN/APR-25 Function Selector Switch - CCW
+	MapKeyIO(&AVA_F16, H4L, 	CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'j', D(), UP+L_ALT+L_CTL ),						// I - AN/APR-25 Function Selector Switch - CCW
 							 	CHAIN( DOWN+L_ALT+R_CTL, D(10), PULSE+'q', D(), UP+L_ALT+R_CTL )); 						// O - Chaff Power Switch - PWR
 	// H4P
-	MapKeyIO(&Joystick, H4P, 	0, 																						// I - 
+	MapKeyIO(&AVA_F16, H4P, 	0, 																						// I - 
 							 	PULSE+'q' ); 																			// O - JATO Firing Button (ALE-29A Burst)
 	
 	

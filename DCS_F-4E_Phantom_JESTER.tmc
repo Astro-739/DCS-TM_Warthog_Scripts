@@ -1,5 +1,5 @@
 // JESTER file for DCS_F-4E_Phantom.tmc  by Astro
-// version 1, May 2024
+// version 3, Aug 2024
 
 
 
@@ -14,35 +14,35 @@ int dcs_f4e_jester_controls()
 
 	// Target Management Switch
 	// H2U
-	MapKeyUMD(&Joystick, H2U, 	JSTR_context_long,																		// U - Scan - Lock selected contact / Lock - Drop lock, keep contact focus / Cage - Lock/Unlock contact ahead
+	MapKeyUMD(&AVA_F16, H2U, 	JSTR_context_long,																		// U - Scan - Lock selected contact / Lock - Drop lock, keep contact focus / Cage - Lock/Unlock contact ahead
 								0,																						// M - 
 							 	JSTR_context_short );										 							// D - Lock
 	// H2D
-	MapKeyUMD(&Joystick, H2D, 	JSTR_context_double,																	// U - Scan - Reset target selection / Lock - Drop lock and focus / Cage - Exit Cage mode
+	MapKeyUMD(&AVA_F16, H2D, 	JSTR_context_double,																	// U - Scan - Reset target selection / Lock - Drop lock and focus / Cage - Exit Cage mode
 								0, 																						// M - 
 							 	JSTR_context_short );																	// D - Drop lock
 	// H2R							
-	MapKey(&Joystick, H2R, 		JSTR_context_short );		 															// Scan - Select next contact
+	MapKey(&AVA_F16, H2R, 		JSTR_context_short );		 															// Scan - Select next contact
 	// H2L
-	MapKey(&Joystick, H2L, 		JSTR_rdr_iff ); 																		// Radar > IFF
-	MapKeyR(&Joystick, H2L, 	0 );																					// 
+	MapKey(&AVA_F16, H2L, 		JSTR_rdr_iff ); 																		// Radar > IFF
+	MapKeyR(&AVA_F16, H2L, 	0 );																					// 
 								
 	// Display Management Switch
 	// H3U
-	MapKeyIO(&Joystick, H3U, 	0,																						// I - 
+	MapKeyIO(&AVA_F16, H3U, 	0,																						// I - 
 								TEMPO( SEQ( JSTR_rdr_range_50n, JSTR_rdr_range_50w ),									// O - Radar range 50 narrow/wide
 									   EXEC( "index_elev = (index_elev+1)%5;"											//     
 											 "ActKey( KEYON+PULSE+X(radarelevlist, index_elev) );" ), 500 ));			//     [long] Radar elevation step up
 	// H3D
-	MapKeyIO(&Joystick, H3D, 	0,																						// I - 
+	MapKeyIO(&AVA_F16, H3D, 	0,																						// I - 
 								TEMPO( SEQ( JSTR_rdr_range_25n, JSTR_rdr_range_25w ),									// O - Radar range 25 narrow/wide
 									   EXEC( "index_elev = (index_elev+4)%5;"											//     
 											 "ActKey( KEYON+PULSE+X(radarelevlist, index_elev) );" ), 500 ));			// 	   [long] Radar elevation step down
 	// H3R
-	MapKeyIO(&Joystick, H3R, 	0, 																						// I - 
+	MapKeyIO(&AVA_F16, H3R, 	0, 																						// I - 
 								0 );																					// O - 
 	// H3L
-	MapKeyIO(&Joystick, H3L, 	0, 																						// I - 
+	MapKeyIO(&AVA_F16, H3L, 	0, 																						// I - 
 								0 );																					// O - 
 
 
