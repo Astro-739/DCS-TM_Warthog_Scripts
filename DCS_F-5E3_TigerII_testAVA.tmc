@@ -40,14 +40,14 @@ int main()
 	Configure(&TCASidestickXCopilot, MODE_EXCLUDED);
 	Configure(&ViperTQS, MODE_EXCLUDED);
 	Configure(&ViperBBox, MODE_EXCLUDED);
-	//Configure(&AVA_F16, MODE_EXCLUDED);
+	//Configure(&AVA_F16, MODE_EXCLUDED);					// AVA F16
     Configure(&AVA_F18, MODE_EXCLUDED);
 	Configure(&FarmStickRight, MODE_EXCLUDED);
 	Configure(&FarmStickLeft, MODE_EXCLUDED);
 	Configure(&T16000, MODE_EXCLUDED);
 	Configure(&T16000L, MODE_EXCLUDED);
-	//Configure(&LMFD, MODE_EXCLUDED);
-	Configure(&RMFD, MODE_EXCLUDED);
+	//Configure(&LMFD, MODE_EXCLUDED);						// Left MFD
+	Configure(&RMFD, MODE_EXCLUDED);						// Right MFD
 	Configure(&TFRPRudder, MODE_EXCLUDED);
 	Configure(&TWCSThrottle, MODE_EXCLUDED);
 	Configure(&TFRPHARudder, MODE_EXCLUDED);
