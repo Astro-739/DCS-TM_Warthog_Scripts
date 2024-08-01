@@ -1,5 +1,5 @@
-// DCS F-5E3 Tiger II Thrustmaster Warthog Script by Astro
-// version 1, Feb 2023
+// DCS F-5E3 Tiger II Thrustmaster Warthog/AVA/MFD Script by Astro
+// version 3, Aug 2024
 
 
 include "target.tmh"
