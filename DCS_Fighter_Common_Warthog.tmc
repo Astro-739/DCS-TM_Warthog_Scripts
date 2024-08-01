@@ -192,14 +192,14 @@ int dcs_fighter_common()
 
 	// Camera/Gun Trigger
 	// TG1
-	MapKeyIOUMD(&AVA_F16, TG1, 	0,	 																			// IU - 
+	MapKeyIOUMD(&Joystick, TG1, 0,	 																			// IU - 
 								DX1, 																			// OU - Trigger First Detent
 							  	0,  																			// IM - 
 							  	0,  																			// OM - 
 							  	0,  																			// ID - 
 							  	DX1); 																			// OD - Trigger First Detent
 	// TG2
-	MapKeyIOUMD(&AVA_F16, TG2, 	SPC,																			// IU - Fire Weapon (GIB)
+	MapKeyIOUMD(&Joystick, TG2, SPC,																			// IU - Fire Weapon (GIB)
 								DX6, 																			// OU - Trigger Second Detent
 								0, 																				// IM - 
 								0, 																				// OM - 
@@ -208,34 +208,34 @@ int dcs_fighter_common()
 
 	// Nosewheel Steering Button
 	// S1
-	MapKeyIO(&AVA_F16, S1,  	SEQ( PULSE+F10, PULSE+F1 ),														// I - map
+	MapKeyIO(&Joystick, S1,  	SEQ( PULSE+F10, PULSE+F1 ),														// I - map
 							 	DX3 ); 																			// O - Nosewheel Steering Button
 
 	// Trim Switch
 	// H1U
-	MapKeyIO(&AVA_F16, H1U, 	TEMPO( CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'m', D(), UP+L_SHIFT+R_SHIFT ), 		// I - Toggle Mirrors
+	MapKeyIO(&Joystick, H1U, 	TEMPO( CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'m', D(), UP+L_SHIFT+R_SHIFT ), 		// I - Toggle Mirrors
 						 	 		   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'v', D(), UP+L_SHIFT ), 500 ),   				// 	   [long] Sunglasses toggle
 								CHAIN( R_CTL, D(10), ';' )); 															// O - trim nose down
 	// H1R
-	MapKeyIO(&AVA_F16, H1R, 	TEMPO( PULSE+F2, 																		// I - F2 outside view
+	MapKeyIO(&Joystick, H1R, 	TEMPO( PULSE+F2, 																		// I - F2 outside view
 									   CHAIN( DOWN+R_CTL, D(10), PULSE+F2, D(), UP+R_CTL ), 500 ),						//     [long] Object Camera toggle
 							 	CHAIN( R_CTL, D(10), '/' )); 															// O - trim right wing down
 	// H1D
-	MapKeyIO(&AVA_F16, H1D, 	TEMPO( PULSE+F1, 																		// I - F1 cockpit view
+	MapKeyIO(&Joystick, H1D, 	TEMPO( PULSE+F1, 																		// I - F1 cockpit view
 									   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT ), 500 ),					//	   [long] Pilot Body toggle
 							 	CHAIN( R_CTL, D(10), '.' )); 															// O - trim nose up
 	// H1L	
-	MapKeyIO(&AVA_F16, H1L, 	TEMPO( PULSE+F6, 																		// I - F6 weapon view
+	MapKeyIO(&Joystick, H1L, 	TEMPO( PULSE+F6, 																		// I - F6 weapon view
 									   CHAIN( DOWN+L_CTL, D(10), PULSE+F6, D(), UP+L_CTL ), 500 ),						//     [long] F6 weapon to target view
 							 	CHAIN( R_CTL, D(10), ',' )); 															// O - trim left wing down
 
 
 	// JOYX
-	MapAxis(&AVA_F16, JOYX, DX_X_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
-	SetSCurve(&AVA_F16, JOYX, 0, 0, 0, 0, 0);
+	MapAxis(&Joystick, JOYX, DX_X_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
+	SetSCurve(&Joystick, JOYX, 0, 0, 0, 0, 0);
 	// JOYY
-	MapAxis(&AVA_F16, JOYY, DX_Y_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
-	SetSCurve(&AVA_F16, JOYY, 0, 0, 0, 0, 0);
+	MapAxis(&Joystick, JOYY, DX_Y_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
+	SetSCurve(&Joystick, JOYY, 0, 0, 0, 0, 0);
 	// Rotate Axes
 	RotateDXAxis(DX_X_AXIS, DX_Y_AXIS, -5);																		// rotate axes 5 deg
 	
