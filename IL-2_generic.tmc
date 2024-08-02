@@ -1,5 +1,6 @@
 // IL-2 generic profile by Astro
-// version 1, Jun 2022
+// TARGET version 3.0.24.618
+// version 2, Aug 2024
 
 
 include "target.tmh"
@@ -7,15 +8,28 @@ include "target.tmh"
 int main()
 {
 	Configure(&HCougar, MODE_EXCLUDED);
+	Configure(&Joystick, MODE_EXCLUDED);                    // Warthog Joystick
 	Configure(&JoystickF18, MODE_EXCLUDED);
+	//Configure(&Throttle, MODE_EXCLUDED);                  // Warthog Throttle
 	Configure(&A320Pilot, MODE_EXCLUDED);
 	Configure(&A320Copilot, MODE_EXCLUDED);
 	Configure(&TCAQuadrant12, MODE_EXCLUDED);
 	Configure(&TCAQuadrant34, MODE_EXCLUDED);
+	Configure(&TCAYokeBoeing, MODE_EXCLUDED);
+	Configure(&TCAQBoeing12, MODE_EXCLUDED);
+	Configure(&TCAQBoeing34, MODE_EXCLUDED);
+	Configure(&TCASidestickXPilot, MODE_EXCLUDED);
+	Configure(&TCASidestickXCopilot, MODE_EXCLUDED);
+	Configure(&ViperTQS, MODE_EXCLUDED);
+	Configure(&ViperBBox, MODE_EXCLUDED);
+	//Configure(&AVA_F16, MODE_EXCLUDED);					// AVA F16
+    Configure(&AVA_F18, MODE_EXCLUDED);
+	Configure(&FarmStickRight, MODE_EXCLUDED);
+	Configure(&FarmStickLeft, MODE_EXCLUDED);
 	Configure(&T16000, MODE_EXCLUDED);
 	Configure(&T16000L, MODE_EXCLUDED);
-	Configure(&LMFD, MODE_EXCLUDED);
-	Configure(&RMFD, MODE_EXCLUDED);
+	Configure(&LMFD, MODE_EXCLUDED);						// Left MFD
+	Configure(&RMFD, MODE_EXCLUDED);						// Right MFD
 	Configure(&TFRPRudder, MODE_EXCLUDED);
 	Configure(&TWCSThrottle, MODE_EXCLUDED);
 	Configure(&TFRPHARudder, MODE_EXCLUDED);
@@ -26,21 +40,21 @@ int main()
 	SetKBLayout(KB_ENG);
 	
 	// IO shift button
-	SetShiftButton(&Joystick, S4, &Throttle, BSF, BSB, 0);
+	SetShiftButton(&AVA_F16, S4, &Throttle, BSF, BSB, 0);
 	
 
 	// -------------------- FLIGHT STICK --------------------
 
 	// Trigger Switch
 	// TG1
-	MapKeyIOUMD(&Joystick, TG1, DX6, 																	// IU - cannon
+	MapKeyIOUMD(&AVA_F16, TG1, DX6, 																	// IU - cannon
 								SPC, 																	// OU - guns + cannon
 							  	DX1,  																	// IM - guns
 							  	DX1,  																	// OM - guns
 							  	DX1,  																	// ID - guns
 							  	DX1 ); 																	// OD - guns
 	// TG2
-	MapKeyIOUMD(&Joystick, TG2, 0,																		// IU - 
+	MapKeyIOUMD(&AVA_F16, TG2, 0,																		// IU - 
 								0, 																		// OU - 
 								0, 																		// IM - 
 								0, 																		// OM - 
@@ -49,12 +63,12 @@ int main()
 	
 	// Master Mode Button
 	// S1
-	MapKeyIO(&Joystick, S1,  	PULSE+'o',																// I - map, briefing
+	MapKeyIO(&AVA_F16, S1,  	PULSE+'o',																// I - map, briefing
 								CHAIN( DOWN+L_CTL, D(10), PULSE+'c', D(), UP+L_CTL )); 					// O - switch combat post
 
 	// Weapon Release Button
 	// S2
-	MapKeyIOUMD(&Joystick, S2,  0, 																		// IU - 
+	MapKeyIOUMD(&AVA_F16, S2,  0, 																		// IU - 
 							    CHAIN( D(500), DOWN+L_SHIFT, D(530), DOWN+'d', D(580), UP+L_SHIFT ), 	// OU - jettison stores (500 ms)
 							    CHAIN( DOWN+L_CTL, D(10), PULSE+SPC, D(), UP+L_CTL ), 					// IM - shoot flare
 							    0, 																		// OM -
@@ -62,7 +76,7 @@ int main()
 							    PULSE+'b' );															// OD - bombs, containers, paras
 
 	// S3
-	MapKeyIOUMD(&Joystick, S3,  0, 																		// IU -
+	MapKeyIOUMD(&AVA_F16, S3,  0, 																		// IU -
 							    SEQ( 'f', L_SHIFT+'f' ), 												// OU - flaps down/up
 							    0, 																		// IM -
 							    CHAIN( DOWN+L_SHIFT, D(10), PULSE+'a', D(), UP+L_SHIFT ),				// OM - auto level
@@ -71,77 +85,77 @@ int main()
 
 	// Trim Switch
 	// H1U
-	MapKeyIO(&Joystick, H1U, 	PULSE+F4, 																// I - F4 outside view
+	MapKeyIO(&AVA_F16, H1U, 	PULSE+F4, 																// I - F4 outside view
 								CHAIN( R_CTL, D(10), UARROW)); 											// O - elevation trim down
 	// H1R
-	MapKeyIO(&Joystick, H1R, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+F2, D(), UP+L_SHIFT ), 				// I - LShft F2 friendly a/c view
+	MapKeyIO(&AVA_F16, H1R, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+F2, D(), UP+L_SHIFT ), 				// I - LShft F2 friendly a/c view
 								CHAIN( R_CTL, D(10), RARROW));											// O - aileron trim right
 	// H1D
-	MapKeyIO(&Joystick, H1D, 	PULSE+F1, 																// I - F1 cockpit view
+	MapKeyIO(&AVA_F16, H1D, 	PULSE+F1, 																// I - F1 cockpit view
 								CHAIN( R_CTL, D(10), DARROW)); 											// O - elevation trim up
 	// H1L	
-	MapKeyIO(&Joystick, H1L, 	PULSE+F6, 																// I - F6 weapon view
+	MapKeyIO(&AVA_F16, H1L, 	PULSE+F6, 																// I - F6 weapon view
 								CHAIN( R_CTL, D(10), LARROW)); 											// O - aileron trim left
 
 	// Target Management Switch
 	// H2U
-	MapKeyIO(&Joystick, H2U, 	KP0, 																	// I - view up
+	MapKeyIO(&AVA_F16, H2U, 	KP0, 																	// I - view up
 								USB[87] );																// O - zoom in
 	// H2R							
-	MapKeyIO(&Joystick, H2R, 	KP3, 																	// I - view tail right
+	MapKeyIO(&AVA_F16, H2R, 	KP3, 																	// I - view tail right
 								KP2);																	// O - view tail
 	// H2D
-	MapKeyIO(&Joystick, H2D, 	PULSE+'v', 																// I - bomb sight
+	MapKeyIO(&AVA_F16, H2D, 	PULSE+'v', 																// I - bomb sight
 								USB[86] );																// O - zoom out
 	// H2L
-	MapKeyIO(&Joystick, H2L, 	KP1, 																	// I - view tail left
+	MapKeyIO(&AVA_F16, H2L, 	KP1, 																	// I - view tail left
 								USB[99] );																// O - view instruments
 
 	// Display Management Switch
 	// H3U
-	MapKeyIOUMD(&Joystick, H3U, CHAIN( DOWN+R_ALT, D(10), PULSE+'1', D(), UP+R_ALT), 					// IU - gunners fire at will
+	MapKeyIOUMD(&AVA_F16, H3U, CHAIN( DOWN+R_ALT, D(10), PULSE+'1', D(), UP+R_ALT), 					// IU - gunners fire at will
 								CHAIN( DOWN+L_ALT, D(10), PULSE+'7', D(), UP+L_ALT), 					// OU - patrol for air enemies
 								CHAIN( DOWN+R_ALT, D(10), PULSE+'1', D(), UP+R_ALT), 					// IM - gunners fire at will
 								CHAIN( DOWN+L_ALT, D(10), PULSE+'3', D(), UP+L_ALT), 					// OM - return to our mission
 								CHAIN( DOWN+R_ALT, D(10), PULSE+'1', D(), UP+R_ALT), 					// ID - gunners fire at will
 								CHAIN( DOWN+L_ALT, D(10), PULSE+'8', D(), UP+L_ALT));					// OD - patrol for ground enemies
 	// H3R
-	MapKeyIOUMD(&Joystick, H3R, CHAIN( DOWN+R_ALT, D(10), PULSE+'9', D(), UP+R_ALT),  					// IU - gunners attack long range
+	MapKeyIOUMD(&AVA_F16, H3R, CHAIN( DOWN+R_ALT, D(10), PULSE+'9', D(), UP+R_ALT),  					// IU - gunners attack long range
 							    CHAIN( DOWN+L_ALT, D(10), PULSE+'4', D(), UP+L_ALT),					// OU - do like me
 								CHAIN( DOWN+R_ALT, D(10), PULSE+'9', D(), UP+R_ALT),					// IM - gunners attack long range
 								CHAIN( DOWN+L_CTL, D(10), PULSE+'8', D(), UP+L_CTL),					// OM - formation right
 								CHAIN( DOWN+R_ALT, D(10), PULSE+'9', D(), UP+R_ALT),					// ID - gunners attack long range
 								CHAIN( DOWN+L_ALT, D(10), PULSE+'4', D(), UP+L_ALT));					// OD - do like me
 	// H3D
-	MapKeyIO(&Joystick, H3D, 	CHAIN( DOWN+R_ALT, D(10), PULSE+'6', D(), UP+R_ALT), 					// I - gunners attack ground targets
+	MapKeyIO(&AVA_F16, H3D, 	CHAIN( DOWN+R_ALT, D(10), PULSE+'6', D(), UP+R_ALT), 					// I - gunners attack ground targets
 								CHAIN( DOWN+L_ALT, D(10), PULSE+'0', D(), UP+L_ALT)); 					// O - return to base
 	// H3L
-	MapKeyIO(&Joystick, H3L, 	CHAIN( DOWN+R_ALT, D(10), PULSE+'8', D(), UP+R_ALT), 					// I - gunners attack normal range
+	MapKeyIO(&AVA_F16, H3L, 	CHAIN( DOWN+R_ALT, D(10), PULSE+'8', D(), UP+R_ALT), 					// I - gunners attack normal range
 								CHAIN( DOWN+L_CTL, D(10), PULSE+'7', D(), UP+L_CTL)); 					// O - formation left
 
  	// Countermeasure Management Switch
 	// H4U
-	MapKeyIO(&Joystick, H4U, 	CHAIN( L_ALT, D(10), '='), 												// I - open outlet cowl shutters
+	MapKeyIO(&AVA_F16, H4U, 	CHAIN( L_ALT, D(10), '='), 												// I - open outlet cowl shutters
 								CHAIN( R_SHIFT, D(10), '=')); 											// O - increase RPM
 	// H4R
-	MapKeyIO(&Joystick, H4R, 	CHAIN( R_CTL, D(10), '='), 												// I - open water radiator / inlet cowl
+	MapKeyIO(&AVA_F16, H4R, 	CHAIN( R_CTL, D(10), '='), 												// I - open water radiator / inlet cowl
 								CHAIN( R_WIN, D(10), '=')); 											// O - open oil radiator
 	// H4D
-	MapKeyIO(&Joystick, H4D, 	CHAIN( L_ALT, D(10), '-'), 												// I - close outlet cowl shutters
+	MapKeyIO(&AVA_F16, H4D, 	CHAIN( L_ALT, D(10), '-'), 												// I - close outlet cowl shutters
 								CHAIN( R_SHIFT, D(10), '-')); 											// O - decrease RPM
 	// H4L
-	MapKeyIO(&Joystick, H4L, 	CHAIN( R_CTL, D(10), '-'), 												// I - close water radiator / inlet cowl
+	MapKeyIO(&AVA_F16, H4L, 	CHAIN( R_CTL, D(10), '-'), 												// I - close water radiator / inlet cowl
 								CHAIN( R_WIN, D(10), '-')); 											// O - close oil radiator
 	// H4P
-	MapKeyIO(&Joystick, H4P, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(70), UP+L_SHIFT), 				// I - engine supercharger gear
+	MapKeyIO(&AVA_F16, H4P, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(70), UP+L_SHIFT), 				// I - engine supercharger gear
 								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'b', D(70), UP+L_SHIFT)); 			// O - engine boost
 
 	// JOYX
-	MapAxis(&Joystick, JOYX, DX_X_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
-	SetSCurve(&Joystick, JOYX, 0, 0, 0, 0, 0);
+	MapAxis(&AVA_F16, JOYX, DX_X_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
+	SetSCurve(&AVA_F16, JOYX, 0, 0, 0, 0, 0);
 	// JOYY
-	MapAxis(&Joystick, JOYY, DX_Y_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
-	SetSCurve(&Joystick, JOYY, 0, 0, 0, 0, 0);
+	MapAxis(&AVA_F16, JOYY, DX_Y_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
+	SetSCurve(&AVA_F16, JOYY, 0, 0, 0, 0, 0);
 	// Rotate Axes
 	RotateDXAxis(DX_X_AXIS, DX_Y_AXIS, -5);																// rotate axes 5 deg
 
