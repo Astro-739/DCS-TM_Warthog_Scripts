@@ -357,19 +357,6 @@ int autopilot_mode()
 
 
 
-// -------------------- TCS MENU ---------------------------------------------
-
-//int checktcsmenu()
-//{
-//	if (!tcs_menu_on) {
-//		ActKey(KEYON+PULSE+JSTR_TCS_menu);												// Turn on TCS menu (when not already on)
-//		tcs_menu_on = 1;
-//		LTRN_mode = 1;																	// LTRN_mode ON
-//		dcs_f4e_jester_lantirn_controls();												// Load JESTER LANTIRN controls
-//	}
-//}
-
-
 
 // -------------------- AFTERBURNER DETENT ------------------------------------------
 

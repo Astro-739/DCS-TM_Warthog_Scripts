@@ -24,7 +24,7 @@ int dcs_f4e_pilot_controls()
 	// Expand FOV Button - S3
 	MapKey(&AVA_F16, S3,  		EXEC( "if(LTRN_mode) dcs_f4e_jester_lantirn_controls();"	// Switch to JESTER LANTIRN controls (LTRN_mode ON)
 									  "else dcs_f4e_jester_controls();" ));					// Switch to JESTER controls (LTRN_mode OFF)
-	MapKeyR(&AVA_F16, S3,  	EXEC( "dcs_fighter_common_specific();" 						// Switch back to COMMON,
+	MapKeyR(&AVA_F16, S3,  		EXEC( "dcs_fighter_common_specific();" 						// Switch back to COMMON,
 									  "dcs_f4e_pilot_controls_specific();" ));				//   and PILOT controls
 
 	// -------------------------------
@@ -32,7 +32,7 @@ int dcs_f4e_pilot_controls()
 
 	// Weapon Release Button
 	// S2
-	MapKeyIOUMD(&AVA_F16, S2,  jettison_stores,																		// IU - Jettison Stores
+	MapKeyIOUMD(&AVA_F16, S2,  	jettison_stores,																		// IU - Jettison Stores
 							    DX2,																					// OU - weapon release
 								jettison_stores,																		// IM - Jettison Stores
 							    0,																					 	// OM - 

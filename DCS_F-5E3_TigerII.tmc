@@ -117,7 +117,7 @@ int main()
 
 	// Weapon Release Button
 	// S2
-	MapKeyIOUMD(&AVA_F16, S2,  SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),										// IU - Emergency All Jettison Button Cover - OPEN
+	MapKeyIOUMD(&AVA_F16, S2,  	SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),										// IU - Emergency All Jettison Button Cover - OPEN
 									 CHAIN( L_SHIFT+L_CTL, D(10), '0' )),										//		Emergency All Jettison Button
 							    CHAIN( R_ALT, D(10), SPC ),														// OU - weapon release
 								SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),										// IM - Emergency All Jettison Button Cover - OPEN
@@ -128,7 +128,7 @@ int main()
 							    CHAIN( R_ALT, D(10), SPC ));													// OD - weapon release
 
 	// Expand FOV Button - S3
-	MapKeyIOUMD(&AVA_F16, S3,  0, 																				// IU -
+	MapKeyIOUMD(&AVA_F16, S3,  	0, 																				// IU -
 							    0,																				// OU - 
 							    0, 																				// IM -
 							    0,													 							// OM - 
