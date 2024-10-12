@@ -349,6 +349,7 @@ int main()
 	// EFRNORM
 	MapKeyIOUMD(&Throttle, EFRNORM, 0,																			// IU - 
 								0,																				// OU - 
+								// TODO *** put this in mapkey release
 								CHAIN( PULSE+'p', D(100), DOWN+'p', D(500), UP+'p', PULSE+'p' ),				// IM - Cut Drag Chute
 								0,																				// OM - (Raise tail hook)
 								0,																				// ID - 

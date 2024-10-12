@@ -34,9 +34,9 @@ define AB 100											// detent position at AB% of full throttle reach
 int main()
 {
 	Configure(&HCougar, MODE_EXCLUDED);
-	Configure(&Joystick, MODE_EXCLUDED);                    // Warthog Joystick
+	Configure(&Joystick, MODE_EXCLUDED);                    // Warthog Joystick excluded
 	Configure(&JoystickF18, MODE_EXCLUDED);
-	//Configure(&Throttle, MODE_EXCLUDED);                  // Warthog Throttle
+	//Configure(&Throttle, MODE_EXCLUDED);                  // Warthog Throttle included
 	Configure(&A320Pilot, MODE_EXCLUDED);
 	Configure(&A320Copilot, MODE_EXCLUDED);
 	Configure(&TCAQuadrant12, MODE_EXCLUDED);
@@ -48,14 +48,14 @@ int main()
 	Configure(&TCASidestickXCopilot, MODE_EXCLUDED);
 	Configure(&ViperTQS, MODE_EXCLUDED);
 	Configure(&ViperBBox, MODE_EXCLUDED);
-	//Configure(&AVA_F16, MODE_EXCLUDED);					// AVA F16
+	//Configure(&AVA_F16, MODE_EXCLUDED);					// AVA F16 included
     Configure(&AVA_F18, MODE_EXCLUDED);
 	Configure(&FarmStickRight, MODE_EXCLUDED);
 	Configure(&FarmStickLeft, MODE_EXCLUDED);
 	Configure(&T16000, MODE_EXCLUDED);
 	Configure(&T16000L, MODE_EXCLUDED);
-	//Configure(&LMFD, MODE_EXCLUDED);						// Left MFD
-	Configure(&RMFD, MODE_EXCLUDED);						// Right MFD
+	//Configure(&LMFD, MODE_EXCLUDED);						// Left MFD included
+	Configure(&RMFD, MODE_EXCLUDED);						// Right MFD excluded
 	Configure(&TFRPRudder, MODE_EXCLUDED);
 	Configure(&TWCSThrottle, MODE_EXCLUDED);
 	Configure(&TFRPHARudder, MODE_EXCLUDED);
@@ -90,7 +90,7 @@ int main()
 							 "DeferCall( deferdelay, &ActKey, PULSE+KEYON+'m' );"			// delayed pulse to give a/c time to switch mode
 							 "mastermode = (mastermode+1)%4;"								// walk through all modes (until NAV)
 							 "deferdelay = deferdelay + 100;"								// delay is absolute, so needs to be increased for every while loop
-							 //"printf(\" mastermode %i \\xa\", mastermode);"				// print current mastermode inoutput window
+							 //"printf(\" mastermode %i \\xa\", mastermode);"				// print current mastermode in output window
 						   "}" );
 
 

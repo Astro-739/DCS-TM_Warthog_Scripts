@@ -67,6 +67,15 @@ int	cv_inbound;
 int	cv_salute;
 int	cv_calltheball;
 
+int jtac_checkin15;				// F4, F1
+int jtac_checkin30;				// F4, F2
+int jtac_followoncomms;			// F1
+int jtac_readytocopy;			// F1
+int jtac_readytocopyremarks;	// F1
+int jtac_readback;				// F1
+int jtac_attackcomplete;		// F1
+int jtac_checkout;				// F2 soms F7
+
 int ground_requeststartup;
 int ground_requesttaxitakeoff;
 int ground_rearmrefuel;
@@ -135,6 +144,10 @@ int dcs_fighter_common()
 	awacs_vectortanker			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F7, D(200), PULSE+F3 ); 						// Radio menu (\), AWACS, Vector to Tanker
 	awacs_requestpicture		= CHAIN( PULSE+USB[0x31], D(200), PULSE+F7, D(200), PULSE+F5 ); 						// Radio menu (\), AWACS, Request Picture
 	awacs_declare				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F7, D(200), PULSE+F6 ); 						// Radio menu (\), AWACS, Declare
+
+	jtac_checkin15				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F4, D(200), PULSE+F1 ); 						// Radio menu (\), JTAC, Check in for 15
+	jtac_followoncomms			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 ); 											// Radio menu (\), JTAC, Follow-on Comms
+	jtac_checkout				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F2 ); 											// Radio menu (\), JTAC, Check Out
 
 	atc_inbound					= CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ); 		// Radio menu (\), ATC, Airfield, Inbound
 	atc_requestlanding			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 );				 							// Request landing short menu
@@ -419,8 +432,10 @@ int dcs_fighter_common_specific()
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"						//		[long] [AAR]  -
 											 "else ActKey( PULSE+KEYON+flight_echelonright );" ),	500 ),		//		[long] Flight - Formation Echelon Right
 								DX28,																			// OM - M_MSR
-								TEMPO( flight_trail,															// ID - Flight - Formation Trail
-									   flight_lineabreast, 500 ),												// 		[long] Flight - Formation Line Abreast
+								TEMPO( jtac_followoncomms,														// ID - JTAC - Follow-on Comms (readback, etc)
+									   jtac_checkin15, 500 ),													// 		[long] JTAC - Check in for 15 minutes
+								//TEMPO( flight_trail,															// ID - Flight - Formation Trail
+								//	   flight_lineabreast, 500 ),												// 		[long] Flight - Formation Line Abreast
 								DX28 );																			// OD - D_MSR
 	// MSL
 	MapKeyIOUMD(&Throttle, MSL, TEMPO( awacs_declare,								 							// IU - AWACS Declare
