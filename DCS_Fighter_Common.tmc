@@ -432,10 +432,10 @@ int dcs_fighter_common_specific()
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"						//		[long] [AAR]  -
 											 "else ActKey( PULSE+KEYON+flight_echelonright );" ),	500 ),		//		[long] Flight - Formation Echelon Right
 								DX28,																			// OM - M_MSR
-								TEMPO( jtac_followoncomms,														// ID - JTAC - Follow-on Comms (readback, etc)
-									   jtac_checkin15, 500 ),													// 		[long] JTAC - Check in for 15 minutes
-								//TEMPO( flight_trail,															// ID - Flight - Formation Trail
-								//	   flight_lineabreast, 500 ),												// 		[long] Flight - Formation Line Abreast
+								//TEMPO( jtac_followoncomms,													// ID - JTAC - Follow-on Comms (readback, etc)
+								//	   jtac_checkin15, 500 ),													// 		[long] JTAC - Check in for 15 minutes
+								TEMPO( flight_trail,															// ID - Flight - Formation Trail
+									   flight_lineabreast, 500 ),												// 		[long] Flight - Formation Line Abreast
 								DX28 );																			// OD - D_MSR
 	// MSL
 	MapKeyIOUMD(&Throttle, MSL, TEMPO( awacs_declare,								 							// IU - AWACS Declare
