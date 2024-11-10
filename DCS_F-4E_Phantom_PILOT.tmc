@@ -15,6 +15,8 @@ int dcs_f4e_pilot_controls()
 	// TG - Gun Trigger
 	// S1 - Nosewheel Steering Button
 	// H1 - Trim Switch
+	// TMS - Target Management Switch (in specific control section at end of file)
+	// DMS - Display Management Switch (in specific control section at end of file)
 	// JOYX
 	// JOYY
 	// -------------------------------
@@ -38,10 +40,6 @@ int dcs_f4e_pilot_controls()
 							    0,																					 	// OM - 
 							    jettison_stores,																		// ID - Jettison Stores
 							    DX2 );																					// OD - weapon release
-
-
-	// Target Management Switch			- in specific control section at end of file
-	// Display Management Switch		- in specific control section at end of file
 
 
  	// Countermeasure Management Switch
@@ -262,11 +260,11 @@ int dcs_f4e_pilot_controls_specific()
 	// H2R							
 	MapKeyIO(&AVA_F16, H2R, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT, D(200),							// I - Gun/Missile Pinky Switch - Heat
 									   DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ),								//	   HUD Mode - A/A
-								CHAIN( L_WIN, D(10), KP6 ));															// O - snap view radar
+								CHAIN( L_WIN, D(10), KP6 ));															// O - snap view radar   // TODO switch to DX8
 	// H2L
 	MapKeyIO(&AVA_F16, H2L, 	0,																						// I -
 								CHAIN( DOWN+R_SHIFT, D(10), PULSE+BSP, D(), UP+R_SHIFT, D(),							// O - remove stick
-								L_WIN, D(10), KP2 ));																	//     snap view instruments
+								L_WIN, D(10), KP2 ));																	//     snap view instruments   // TODO switch to DX10
 	MapKeyRIO(&AVA_F16, H2L, 	0,																						// I - 
 								CHAIN( D(200), DOWN+R_CTL, D(10), PULSE+BSP, D(), UP+R_CTL ));							// O - place stick
 

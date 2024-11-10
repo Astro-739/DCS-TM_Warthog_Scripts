@@ -67,12 +67,11 @@ int main()
 	// -------------------- FUNCTIONS --------------------
 	
 	// Autopilot function
+	autopilot_ALThold = SEQ( CHAIN( DOWN+L_CTL+L_SHIFT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_SHIFT ),	// Autopilot PITCH Switch - ALT HOLD  (extra 100ms needed by DCS)
+							 CHAIN( DOWN+L_CTL, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL ));					// Autopilot PITCH Switch - A/P OFF   (extra 100ms needed by DCS)
 	
-	autopilot_ALThold = SEQ( CHAIN( DOWN+L_SHIFT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_SHIFT ),			// Autopilot PITCH Switch - ALT HOLD  (extra 100ms needed by DCS)
-							 CHAIN( DOWN+L_CTL, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL ));				// Autopilot PITCH Switch - A/P OFF   (extra 100ms needed by DCS)
-	
-	autopilot_ATThold = SEQ( CHAIN( DOWN+L_ALT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_ALT ),				// Autopilot PITCH Switch - ATT HOLD  (extra 100ms needed by DCS)
-							 CHAIN( DOWN+L_CTL, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL ));				// Autopilot PITCH Switch - A/P OFF   (extra 100ms needed by DCS)
+	autopilot_ATThold = SEQ( CHAIN( DOWN+L_CTL+L_ALT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_ALT ),		// Autopilot PITCH Switch - ATT HOLD  (extra 100ms needed by DCS)
+							 CHAIN( DOWN+L_CTL, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL ));					// Autopilot PITCH Switch - A/P OFF   (extra 100ms needed by DCS)
 	
 	// A-A override function
 	override_dog = 0;
@@ -251,19 +250,20 @@ int main()
 								CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x57], D(), UP+L_CTL ),						// ID - ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
 								DX14);																			// OD - ENABLE Switch - Depress
 	// CSR
-	MapKeyIOUMD(&Throttle, CSR, 0, 																				// IU - 
+	MapKeyIOUMD(&Throttle, CSR, CHAIN( L_CTL, D(10), RARROW ), 													// IU - ICP Data Control Switch - SEQ (dobber sequence)
 							 	PULSE+'c',																		// OU - UNCAGE Switch
-								0, 																				// IM - 
-								0, 																				// OM - 
-								0, 																				// ID - 
+								CHAIN( L_CTL, D(10), RARROW ), 													// IM - ICP Data Control Switch - SEQ (dobber sequence)
+								TEMPO( CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'v', D(), UP+R_CTL+R_SHIFT ),	// OM - FUEL QTY SEL Knob - CW
+									   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'c', D(), UP+R_CTL+R_SHIFT )), 	//		[long] FUEL QTY SEL Knob - NORM
+								CHAIN( L_CTL, D(10), RARROW ), 													// ID - ICP Data Control Switch - SEQ (dobber sequence)
 								PULSE+'c');																		// OD - UNCAGE Switch
 	// CSL
 	MapKeyIOUMD(&Throttle, CSL, CHAIN( L_CTL, D(10), LARROW ), 													// IU - ICP Data Control Switch - RET (dobber return)
-								0,																				// OU - 
+								CHAIN( L_CTL, D(10), KP7 ),														// OU - ICP Priority Function Button - 7(MARK)
 								CHAIN( L_CTL, D(10), LARROW ), 													// IM - ICP Data Control Switch - RET (dobber return)
-								0, 																				// OM - 
+								CHAIN( L_CTL, D(10), KP7 ), 													// OM - ICP Priority Function Button - 7(MARK)
 								CHAIN( L_CTL, D(10), LARROW ), 													// ID - ICP Data Control Switch - RET (dobber return)
-								0);																				// OD - 
+								CHAIN( L_CTL, D(10), KP7 ));													// OD - ICP Priority Function Button - 7(MARK)
 
 	// Speedbrake Switch
 	// SPDF
