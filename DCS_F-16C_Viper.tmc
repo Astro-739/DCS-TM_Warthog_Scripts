@@ -11,6 +11,9 @@ include "DCS_Fighter_Common.tmc"
 
 int autopilot_ALThold;	
 int autopilot_ATThold;
+int autopilot_off;
+int autopilot;
+char autopilot_mode;
 
 int override;	
 char override_dog;		
@@ -67,12 +70,22 @@ int main()
 	// -------------------- FUNCTIONS --------------------
 	
 	// Autopilot function
-	autopilot_ALThold = SEQ( CHAIN( DOWN+L_CTL+L_SHIFT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_SHIFT ),	// Autopilot PITCH Switch - ALT HOLD  (extra 100ms needed by DCS)
-							 CHAIN( DOWN+L_CTL, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL ));					// Autopilot PITCH Switch - A/P OFF   (extra 100ms needed by DCS)
+	autopilot_ALThold = CHAIN( DOWN+L_CTL+L_SHIFT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_SHIFT,	// Autopilot PITCH Switch - ALT HOLD  (extra 100ms needed by DCS)
+							   EXEC( "autopilot_mode = 1;" ));
+							 //CHAIN( DOWN+L_CTL, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL ));					// Autopilot PITCH Switch - A/P OFF   (extra 100ms needed by DCS)
 	
-	autopilot_ATThold = SEQ( CHAIN( DOWN+L_CTL+L_ALT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_ALT ),		// Autopilot PITCH Switch - ATT HOLD  (extra 100ms needed by DCS)
-							 CHAIN( DOWN+L_CTL, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL ));					// Autopilot PITCH Switch - A/P OFF   (extra 100ms needed by DCS)
+	autopilot_ATThold = CHAIN( DOWN+L_CTL+L_ALT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_ALT,		// Autopilot PITCH Switch - ATT HOLD  (extra 100ms needed by DCS)
+							   EXEC( "autopilot_mode = 1;" ));
+							 //CHAIN( DOWN+L_CTL, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL ));					// Autopilot PITCH Switch - A/P OFF   (extra 100ms needed by DCS)
 	
+	autopilot_off = CHAIN( DOWN+L_CTL, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL, 								// Autopilot PITCH Switch - A/P OFF   (extra 100ms needed by DCS)
+						   EXEC( "autopilot_mode = 0;" ));
+	
+	autopilot_mode = 0;
+
+	autopilot = EXEC( "if(!autopilot_mode) ActKey( PULSE+KEYON+autopilot_ALThold );"
+					  "if(autopilot_mode) ActKey( PULSE+KEYON+autopilot_off );"	);
+
 	// A-A override function
 	override_dog = 0;
 	
@@ -121,7 +134,7 @@ int main()
 	MapKeyIOUMD(&AVA_F16, S3,  0,																				// IU - 
 								override,																		// OU - dogfight then missile override
 							    0, 																				// IM -
-							    autopilot_ALThold,													 			// OM - autopilot on/off (Autopilot PITCH Switch - ALT HOLD)
+							    autopilot,															 			// OM - autopilot on/off (Autopilot PITCH Switch - ALT HOLD)
 							    0,														 						// ID - 
 							    0);																				// OD - 
 
@@ -202,8 +215,8 @@ int main()
 
 	// Autopilot
 	// APENG	
-	MapKeyIO(&Throttle, APENG, 	autopilot_ATThold,																// I - Autopilot ATT on/off (Autopilot PITCH Switch - ATT HOLD)
-								autopilot_ALThold );															// O - Autopilot ALT on/off (Autopilot PITCH Switch - ALT HOLD)
+	MapKeyIO(&Throttle, APENG, 	autopilot_ATThold,																// I - Autopilot ATT on (Autopilot PITCH Switch - ATT HOLD)
+								autopilot );																	// O - Autopilot ALT on or AP Off (Autopilot PITCH Switch - ALT HOLD)
 	// APDIS
 	MapKey(&Throttle, APDIS, 	0); 																			// 
 	// APPAT
@@ -254,7 +267,8 @@ int main()
 							 	PULSE+'c',																		// OU - UNCAGE Switch
 								CHAIN( L_CTL, D(10), RARROW ), 													// IM - ICP Data Control Switch - SEQ (dobber sequence)
 								TEMPO( CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'v', D(), UP+R_CTL+R_SHIFT ),	// OM - FUEL QTY SEL Knob - CW
-									   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'c', D(), UP+R_CTL+R_SHIFT )), 	//		[long] FUEL QTY SEL Knob - NORM
+									   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'c', D(), UP+R_CTL+R_SHIFT ), 	//		[long] FUEL QTY SEL Knob - NORM
+									   500 ),																	//
 								CHAIN( L_CTL, D(10), RARROW ), 													// ID - ICP Data Control Switch - SEQ (dobber sequence)
 								PULSE+'c');																		// OD - UNCAGE Switch
 	// CSL
