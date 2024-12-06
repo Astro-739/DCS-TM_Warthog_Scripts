@@ -70,15 +70,13 @@ int main()
 	// -------------------- FUNCTIONS --------------------
 	
 	// Autopilot function
-	autopilot_ALThold = CHAIN( DOWN+L_CTL+L_SHIFT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_SHIFT,	// Autopilot PITCH Switch - ALT HOLD  (extra 100ms needed by DCS)
+	autopilot_ALThold = CHAIN( DOWN+L_CTL+L_SHIFT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_SHIFT,		// Autopilot PITCH Switch - ALT HOLD  (extra 100ms needed by DCS)
 							   EXEC( "autopilot_mode = 1;" ));
-							 //CHAIN( DOWN+L_CTL, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL ));					// Autopilot PITCH Switch - A/P OFF   (extra 100ms needed by DCS)
 	
-	autopilot_ATThold = CHAIN( DOWN+L_CTL+L_ALT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_ALT,		// Autopilot PITCH Switch - ATT HOLD  (extra 100ms needed by DCS)
+	autopilot_ATThold = CHAIN( DOWN+L_CTL+L_ALT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_ALT,			// Autopilot PITCH Switch - ATT HOLD  (extra 100ms needed by DCS)
 							   EXEC( "autopilot_mode = 1;" ));
-							 //CHAIN( DOWN+L_CTL, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL ));					// Autopilot PITCH Switch - A/P OFF   (extra 100ms needed by DCS)
 	
-	autopilot_off = CHAIN( DOWN+L_CTL, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL, 								// Autopilot PITCH Switch - A/P OFF   (extra 100ms needed by DCS)
+	autopilot_off = CHAIN( DOWN+L_CTL, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL, 							// Autopilot PITCH Switch - A/P OFF   (extra 100ms needed by DCS)
 						   EXEC( "autopilot_mode = 0;" ));
 	
 	autopilot_mode = 0;
