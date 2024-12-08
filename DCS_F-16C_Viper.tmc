@@ -69,6 +69,11 @@ int main()
 
 	// -------------------- FUNCTIONS --------------------
 	
+	// Start-up Sequence (overwrites common)    //TODO test if overwrite works
+	startup = SEQ( CHAIN( L_ALT, D(10), 's' ), 												// MAIN PWR Switch - BATT
+				   CHAIN( R_SHIFT, D(10), 's' ), 											// MAIN PWR Switch - MAIN PWR
+				   CHAIN( R_CTL, D(10), 's' )); 											// JFS Switch - START 1
+
 	// Autopilot function
 	autopilot_ALThold = CHAIN( DOWN+L_CTL+L_SHIFT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_SHIFT,		// Autopilot PITCH Switch - ALT HOLD  (extra 100ms needed by DCS)
 							   EXEC( "autopilot_mode = 1;" ));
@@ -341,16 +346,18 @@ int main()
 									0);																				// OD - 
 
 	// Engine Operation
-	// EOLIGN
-	MapKeyIO(&Throttle, EOLIGN,		SEQ( CHAIN( L_ALT, D(10), 's' ), 												// I - MAIN PWR Switch - BATT
-										 CHAIN( R_SHIFT, D(10), 's' ), 												// 	   MAIN PWR Switch - MAIN PWR
-										 CHAIN( R_CTL, D(10), 's' )), 												//     JFS Switch - START 1
-									CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));						// O - Throttle - IDLE
+	// EOLIGN (overwrites common)  //TODO test
+	MapKeyIO(&Throttle, EOLIGN,		startup, 																		// I - Start-up Sequence
+									CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));						// O - Right Throttle - IDLE
+	// EOLNORM in common
 	// EOLMOTOR
 	MapKeyIO(&Throttle, EOLMOTOR, 	CHAIN( DOWN+L_SHIFT, D(10), DOWN+'s', D(100), UP+'s', D(), UP+L_SHIFT ),		// I - JFS Switch - START 2
 									0); 																			// O - 
-	// EORIGN
+	// EORIGN (overwrites common)
 	MapKey(&Throttle, EORIGN, 		0); 																			// 
+	// EORNORM in common
+	// EORMOTOR in common
+
 
 	// Engine Override Left
 	// EFLNORM

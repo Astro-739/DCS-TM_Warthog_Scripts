@@ -77,6 +77,12 @@ int main()
 
 	// -------------------- FUNCTIONS --------------------
 	
+	// Start-up Sequence    // TODO test
+	startup = SEQ( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'s', D(), UP+R_SHIFT ), 					// Battery power
+				   CHAIN( DOWN+L_ALT, D(10), PULSE+'s', D(), UP+L_ALT ), 						// Inverter STBY
+				   CHAIN( DOWN+R_CTL, D(10), PULSE+'s', D(), UP+R_CTL )); 						// APU generator power
+
+
 	// Master Modes function
 	mastermode = 0;																			// mastermode 0,1,2,3		NAV, GUN, CCIP, CCRP
 	deferdelay = 0;
@@ -347,7 +353,7 @@ int main()
 	MapKey(&Throttle, FLAPD,  		CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));							// Flaps Down (to full)
 	MapKeyR(&Throttle, FLAPD,  		CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ));						// Flaps Up (to middle)
 
-	// Canopy (TODO - align Common)
+	// Canopy //TODO - align Common
 	// RDRNRM
 	MapKeyIOUMD(&Throttle, RDRNRM, 	0, 																				// IU - 
 									0,																				// OU - 
@@ -363,20 +369,18 @@ int main()
 
 
 	// Engine Operation
-	// EOLIGN
-	MapKeyIO(&Throttle, EOLIGN,		SEQ( CHAIN( DOWN+L_ALT, D(10), PULSE+'s', D(), UP+L_ALT ), 						// I - Battery power
-										 CHAIN( DOWN+R_SHIFT, D(10), PULSE+'s', D(), UP+R_SHIFT ), 					// 	   Inverter STBY
-										 CHAIN( DOWN+R_CTL, D(10), PULSE+'s', D(), UP+R_CTL )), 					//     APU generator power
-									CHAIN( DOWN+R_ALT, D(10), PULSE+HOME, D(), UP+R_ALT ));							// O - Left Throttle - IDLE
+	// EOLIGN (overwrites common)    // TODO test
+//	MapKeyIO(&Throttle, EOLIGN,		startup,																		// I - Start-up Sequence
+//									CHAIN( DOWN+R_ALT, D(10), PULSE+HOME, D(), UP+R_ALT ));							// O - Left Throttle - IDLE
 	// EOLMOTOR
-	MapKeyIO(&Throttle, EOLMOTOR, 	0,																				// I - 
-									0 ); 																			// O - 
+//	MapKeyIO(&Throttle, EOLMOTOR, 	0,																				// I - 
+//									0 ); 																			// O - 
 	// EORIGN
-	MapKeyIO(&Throttle, EORIGN, 	0, 																				// I - 
-									CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));						// O - Right Throttle - IDLE
+//	MapKeyIO(&Throttle, EORIGN, 	0, 																				// I - 
+//									CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));						// O - Right Throttle - IDLE
 	// EORMOTOR
-	MapKeyIO(&Throttle, EORMOTOR, 	0,																				// I - 
-									0 );																			// O - 
+//	MapKeyIO(&Throttle, EORMOTOR, 	0,																				// I - 
+//									0 );																			// O - 
 
 	// Engine Override Left
 	// EFLNORM

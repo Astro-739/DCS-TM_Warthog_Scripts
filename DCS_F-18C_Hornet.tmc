@@ -343,15 +343,14 @@ int main()
 
 	// Engine Operation
 	// EOLIGN
-	MapKeyIO(&Throttle, EOLIGN,		SEQ( CHAIN( L_ALT, D(10), 's' ), 												// I - MAIN PWR Switch - BATT
-										 CHAIN( R_SHIFT, D(10), 's' ), 												// 	   MAIN PWR Switch - MAIN PWR
-										 CHAIN( R_CTL, D(10), 's' )), 												//     JFS Switch - START 1
-									CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));						// O - Throttle - IDLE
+	// EOLNORM in common
 	// EOLMOTOR
-	MapKeyIO(&Throttle, EOLMOTOR, 	CHAIN( DOWN+L_SHIFT, D(10), DOWN+'s', D(100), UP+'s', D(), UP+L_SHIFT ),		// I - JFS Switch - START 2
+	MapKeyIO(&Throttle, EOLMOTOR, 	0,																				// I - 
 									0); 																			// O - 
 	// EORIGN
 	MapKey(&Throttle, EORIGN, 		0); 																			// 
+	// EORNORM in common
+	// EORMOTOR in common
 
 	// Engine Override Left
 	// EFLNORM

@@ -83,6 +83,8 @@ int ground_rearmrefuel;
 int refuel_inbound;
 int refuel_precontact;
 
+int startup;
+
 int pilotbody;
 int helmetvisor;
 int sunglasses;
@@ -171,7 +173,11 @@ int dcs_fighter_common()
 	vhf_callradiomenu			= CHAIN( DOWN+R_CTL, D(10), PULSE+USB[0x31], D(), UP+R_CTL );							// Transmit Switch - VHF (call radio menu)
 	
 
-    // Cockpit Visuals
+    // Start-up Sequence
+	startup 	= CHAIN( R_SHIFT, D(10), 's' ); 																		// Battery / MAIN PWR Switch
+
+
+	// Cockpit Visuals
 	pilotbody   = CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT );												// Pilot Body toggle
 	helmetvisor = CHAIN( DOWN+L_CTL, D(10), PULSE+'v', D(), UP+L_CTL );													// Helmet visor toggle
     sunglasses  = CHAIN( DOWN+L_SHIFT, D(10), PULSE+'v', D(), UP+L_SHIFT ); 		  									// Sunglasses toggle
@@ -347,22 +353,28 @@ int dcs_fighter_common()
 										   // 	 "SetSCurve(&AVA_F16, JOYY, 0, 0, 0, 0, -1);" ), D(), 				// 	  	set joyY curves for aerial refuelling
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5), D(),						// 		LED5 ON for Aerial Refuelling
 									   	   EXEC( "AAR_mode = 1;"													//		AAR_mode on
-											     "printf(\"AAR_mode = 1\\xa\");" ) ),								// 		print state to output window
+											     "printf(\"AAR_mode = 1\\xa\");" )),								// 		print state to output window
 									CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'h', D(), UP+L_CTL+L_SHIFT ));			// O - HOOK Switch - DOWN
 	MapKeyRIO(&Throttle, EFROVER, 	CHAIN( DOWN+R_CTL, D(10), PULSE+'f', D(), UP+R_CTL, D(),						// I - AIR REFUEL Switch - CLOSE
 										   //EXEC( "SetSCurve(&AVA_F16, JOYX, 0, 0, 0, 0, 0);"						//		set joyX curves back to normal
 										   //	 "SetSCurve(&AVA_F16, JOYY, 0, 0, 0, 0, 0);" ), D(), 				//		set joyY curves back to normal
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5), D(),						// 		LED5 OFF for Aerial Refuelling
 										   EXEC( "AAR_mode = 0;" 													//		AAR_mode off
-											 	 "printf(\"AAR_mode = 0\\xa\");" ) ),								// 		print state to output window
+											 	 "printf(\"AAR_mode = 0\\xa\");" )),								// 		print state to output window
 									0 );																			// O - 
 
-
+	// Engine Operation
+	// EOLIGN
+	MapKeyIO(&Throttle, EOLIGN,		startup,																	// I - Start-up sequence
+									CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));					// O - Left Throttle - IDLE
 	// EOLNORM
 	MapKey(&Throttle, EOLNORM, 	0 );																			//
 	// EOLMOTOR
 	MapKeyIO(&Throttle, EOLMOTOR, 0 ); 																			//
 
+	// EORIGN
+	MapKeyIO(&Throttle, EOLIGN,		0,																			// I - 
+									CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));					// O - Right Throttle - IDLE
 	// EORNORM
 	MapKey(&Throttle, EORNORM, 	0 );																			// 
 	// EORMOTOR
