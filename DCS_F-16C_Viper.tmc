@@ -367,7 +367,7 @@ int main()
 	// EFLOVER
 	MapKeyIO(&Throttle, EFLOVER, 	CHAIN( DX22, D(),																// I - MANUAL PITCH Override Switch - OVRD   // TODO ********* FIX DX in DCS
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),							// 	   LED5 ON for MANUAL PITCH Override
-										   0 );																		// O - 
+									0 );																			// O - 
 
 	// Engine idle/off (overwrite of common)
 	// IDLELON
