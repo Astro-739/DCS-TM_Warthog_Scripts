@@ -216,6 +216,7 @@ int main()
 	// EACON/OFF Landing Gear
 	// EOLNORM
 	// EORNORM/MOTOR
+	// EFRNORM/OVER
 	// SC
 	// APUON/OFF
 	// RDRNRM/DIS Canopy
@@ -377,7 +378,7 @@ int main()
 	MapKeyIO(&Throttle, EORMOTOR, 	0,																				// I - 
 									0 );																			// O - 
 
-	// Engine Override
+	// Engine Override Left
 	// EFLNORM
 	MapKeyIO(&Throttle, EFLNORM, 	0,																				// I - 
 									CHAIN( PULSE+DX26, D(), 														// O - Flight control - NORMAL  ********* FIX DX in DCS
@@ -386,21 +387,6 @@ int main()
 	MapKeyIO(&Throttle, EFLOVER, 	0,																				// I - 
 									CHAIN( PULSE+DX26, D(),															// O - Flight control - MANUAL REVERSION    ********* FIX DX in DCS
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ));							// 	   LED5 ON for MANUAL
-	// EFRNORM
-	MapKeyIO(&Throttle, EFRNORM, 	0,																				// I - 
-									0 );																			// O - 
-	// EFROVER
-	MapKeyIO(&Throttle, EFROVER, 	0,																				// I - 
-									CHAIN( DOWN+R_SHIFT, D(10), PULSE+'f', D(), UP+R_SHIFT,	D(), 					// O - Air refuel control - OPEN
-										   //EXEC( "SetSCurve(&AVA_F16, JOYX, 0, 0, 0, 0, -1);"						//	    set joyX curves for aerial refuelling
-										   // 	 "SetSCurve(&AVA_F16, JOYY, 0, 0, 0, 0, -1);" ), D(), 				// 	  	set joyY curves for aerial refuelling
-										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ));							// 		LED5 ON for Aerial Refuelling
-	MapKeyRIO(&Throttle, EFROVER, 	0,																				// I - 
-									CHAIN( DOWN+R_SHIFT, D(10), PULSE+'f', D(), UP+R_SHIFT, D(),					// O - Air refuel control - CLOSE
-										   //EXEC( "SetSCurve(&AVA_F16, JOYX, 0, 0, 0, 0, 0);"						//		set joyX curves back to normal
-										   //	 "SetSCurve(&AVA_F16, JOYY, 0, 0, 0, 0, 0);" ), D(), 				//		set joyY curves back to normal
-										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ));							// 		LED5 OFF for Aerial Refuelling
-
 
 	// SC
 	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - [short] re-centre IR tracker

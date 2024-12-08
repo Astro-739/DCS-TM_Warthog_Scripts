@@ -198,6 +198,7 @@ int main()
 	// EACON/OFF Landing Gear
 	// EOLNORM
 	// EORNORM/MOTOR
+	// EFRNORM/OVER
 	// SC
 	// APUON/OFF
 	// RDRNRM/DIS Canopy
@@ -224,22 +225,6 @@ int main()
 	// APALT
 	MapKey(&Throttle, APALT, 	CHAIN( DOWN+L_ALT, D(10), PULSE+'a', D(), UP+L_ALT ));							// Autopilot ROLL Switch - STRG SEL
 
-	// MIC Switch (Transmit Switch)
-	// MSR
-//	MapKeyIOUMD(&Throttle, MSR, flight_attackmytarget, 															// IU - Flight - Attack My Target
-//								CHAIN( L_CTL, D(10), 'i' ),														// OU - Transmit Switch - IFF OUT
-//								EXEC( "if(Throttle[EFROVER]) ActKey( PULSE+KEYON+L_WIN+'a' );"					// IM - A/A refueling - "Ready for precontact" radio call
-//									  "else ActKey( PULSE+KEYON+L_ALT+USB[0x34] );" ),							//      Rearming and Refueling Window   (L_ALT+')
-//								CHAIN( L_CTL, D(10), 'i' ),														// OM - Transmit Switch - IFF OUT
-//								flight_attackmytarget, 															// ID - Flight - Attack My Target
-//								CHAIN( L_CTL, D(10), 'i' ));													// OD - Transmit Switch - IFF OUT
-	// MSL
-//	MapKeyIOUMD(&Throttle, MSL, awacs_requestbogeydope,								 							// IU - Request AWACS Bogey Dope
-//								CHAIN( L_SHIFT, D(10), 'i' ), 													// OU - Transmit Switch - IFF IN 
-//								awacs_requestbogeydope,															// IM - Request AWACS Bogey Dope
-//								CHAIN( L_SHIFT, D(10), 'i' ), 													// OM - Transmit Switch - IFF IN
-//								awacs_requestbogeydope,															// ID - Request AWACS Bogey Dope
-//								CHAIN( L_SHIFT, D(10), 'i' ));													// OD - Transmit Switch - IFF IN
 
 	// Coolie Switch
 	// CSU
@@ -346,7 +331,7 @@ int main()
 	MapKey(&Throttle, FLAPD,  		CHAIN( DOWN+R_CTL, D(10), PULSE+'r', D(), UP+R_CTL ));							// RF Switch - SILENT
 
 
-	// Canopy
+	// Canopy        //TODO DX23
 	// RDRNRM
 	MapKeyIOUMD(&Throttle, RDRNRM, 	0, 																				// IU - 
 									0,																				// OU - 
@@ -367,7 +352,7 @@ int main()
 	// EORIGN
 	MapKey(&Throttle, EORIGN, 		0); 																			// 
 
-	// Engine Override
+	// Engine Override Left
 	// EFLNORM
 	MapKeyIO(&Throttle, EFLNORM, 	CHAIN( 0, D(), 																	// I - MANUAL PITCH Override Switch - NORM
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),							// 	   LED5 OFF for MANUAL PITCH Override
@@ -376,22 +361,8 @@ int main()
 	MapKeyIO(&Throttle, EFLOVER, 	CHAIN( DX22, D(),																// I - MANUAL PITCH Override Switch - OVRD   // TODO ********* FIX DX in DCS
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),							// 	   LED5 ON for MANUAL PITCH Override
 										   0 );																		// O - 
-	// EFRNORM
-	MapKeyIO(&Throttle, EFRNORM, 	0, 																				// I - 
-									CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'h', D(), UP+L_CTL+L_ALT ));				// O - HOOK Switch - UP
-	// EFROVER
-	MapKeyIO(&Throttle, EFROVER, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'f', D(), UP+R_SHIFT,	D(), 					// I - AIR REFUEL Switch - OPEN
-										   //EXEC( "SetSCurve(&AVA_F16, JOYX, 0, 0, 0, 0, -1);"					//	    set joyX curves for aerial refuelling
-										   // 	 "SetSCurve(&AVA_F16, JOYY, 0, 0, 0, 0, -1);" ), D(), 				// 	  	set joyY curves for aerial refuelling
-										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),							// 		LED5 ON for Aerial Refuelling
-									CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'h', D(), UP+L_CTL+L_SHIFT ));			// O - HOOK Switch - DOWN
-	MapKeyRIO(&Throttle, EFROVER, 	CHAIN( DOWN+R_CTL, D(10), PULSE+'f', D(), UP+R_CTL, D(),						// I - AIR REFUEL Switch - CLOSE
-										   //EXEC( "SetSCurve(&AVA_F16, JOYX, 0, 0, 0, 0, 0);"						//		set joyX curves back to normal
-										   //	 "SetSCurve(&AVA_F16, JOYY, 0, 0, 0, 0, 0);" ), D(), 				//		set joyY curves back to normal
-										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),							// 		LED5 OFF for Aerial Refuelling
-									0 );																			// O - 
 
-	// Engine idle/off
+	// Engine idle/off (overwrite of common)
 	// IDLELON
 	MapKey(&Throttle, IDLELON, 		CHAIN( DOWN+R_SHIFT, D(10), PULSE+END, D(), UP+R_SHIFT ));						// Throttle - OFF
 	MapKeyR(&Throttle, IDLELON, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));						// Throttle - IDLE
