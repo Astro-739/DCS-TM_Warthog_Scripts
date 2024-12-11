@@ -425,7 +425,7 @@ int main()
 
 
 
-	// Engine Override
+	// Engine Override Left
 	// EFLNORM	
 	MapKeyIO(&Throttle, EFLNORM, 	0,													// I - 
 									CHAIN( PULSE+'1', D(100),							// O - Switch to PILOT cockpit
