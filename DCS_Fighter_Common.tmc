@@ -375,7 +375,7 @@ int dcs_fighter_common()
 	// EOLNORM
 	MapKey(&Throttle, EOLNORM, 	0 );																			//
 	// EOLMOTOR
-	MapKeyIO(&Throttle, EOLMOTOR, 0 ); 		// groundcrew														//
+	MapKeyIO(&Throttle, EOLMOTOR, 0 ); 		//TODO groundcrew														//
 
 	// EORIGN
 	MapKeyIO(&Throttle, EOLIGN,		0,																			// I - 
