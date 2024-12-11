@@ -146,10 +146,10 @@ int main()
 
 
 
-	// Weapon Release Button
+	// Weapon Release Button  ---  moved to Common
 	// S2
-	MapKeyIO(&AVA_F16, S2,  	CHAIN( L_CTL, D(10), 'w' ), 													// I - Jettison Weapons
-								DX2);																			// O - Weapon Release
+//	MapKeyIO(&AVA_F16, S2,  	CHAIN( L_CTL, D(10), 'w' ), 													// I - Jettison Weapons
+//								DX2);																			// O - Weapon Release
 
 	// Expand FOV Button - S3
 	MapKeyUMD(&AVA_F16, S3,  	0,																				// U - [always use A-A]

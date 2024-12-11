@@ -237,6 +237,11 @@ int dcs_fighter_common()
 								SPC, 																			// ID - Fire Weapon (GIB)
 								DX6);																			// OD - Trigger Second Detent
 
+	// Weapon Release Button
+	// S2
+	MapKeyIO(&AVA_F16, S2,  	CHAIN( L_SHIFT, D(10), 'e' ), 													// I - EMER STORES JETTISON Button
+								DX2);																			// O - Weapon Release
+
 	// Nosewheel Steering Button
 	// S1
 	MapKeyIO(&AVA_F16, S1,  	SEQ( PULSE+F10, PULSE+F1 ),														// I - map

@@ -176,7 +176,7 @@ int main()
 
 	// Expand FOV Button - S3
 	MapKey(&AVA_F16, S3,  		0 );																			// 
-	MapKeyR(&AVA_F16, S3,  	0 );																			// 
+	MapKeyR(&AVA_F16, S3,  		0 );																			// 
 
 
 	// Target Management Switch
