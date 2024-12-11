@@ -195,6 +195,7 @@ int main()
 	// SC
 	// APUON/OFF
 	// RDRNRM/DIS Canopy
+	// LDGH
 	// IDLELON/IDLERON
 	// THR_LEFT
 	// THR_RIGHT
@@ -303,7 +304,7 @@ int main()
 							  	CHAIN( extlight_covtoform, D(), 												// O - extlight_covtoform
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED4) )); 							//     LED4 OFF
 
-	// LDGH
+	// LDGH - moved to Common
 //	MapKeyIOUMD(&Throttle, LDGH, 0, 																			// IU - 
 //								CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x38], D(), UP+R_ALT ),						// OU - Master Caution Button
 //								0, 																				// IM - 

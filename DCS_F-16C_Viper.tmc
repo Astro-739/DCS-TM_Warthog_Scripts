@@ -134,12 +134,9 @@ int main()
 								DX2);																			// O - Weapon Release
 
 	// Expand FOV Button - S3
-	MapKeyIOUMD(&AVA_F16, S3,  0,																				// IU - 
-								override,																		// OU - dogfight then missile override
-							    0, 																				// IM -
-							    autopilot,															 			// OM - autopilot on/off (Autopilot PITCH Switch - ALT HOLD)
-							    0,														 						// ID - 
-							    0);																				// OD - 
+	MapKeyUMD(&AVA_F16, S3,     override,																		// U - dogfight then missile override
+							    autopilot,															 			// M - autopilot on/off (Autopilot PITCH Switch - ALT HOLD)
+							    0);																				// D - 
 
 
 	// Target Management Switch

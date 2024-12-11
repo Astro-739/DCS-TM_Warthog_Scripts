@@ -226,6 +226,7 @@ int main()
 	// SC
 	// APUON/OFF
 	// RDRNRM/DIS Canopy
+	// LDGH
 	// IDLELON/IDLERON
 	// THR_LEFT
 	// THR_RIGHT
@@ -335,7 +336,7 @@ int main()
 	MapKeyIO(&Throttle, LTB, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'e', D(), UP+L_CTL ), 								// I - EJECT
 								'q' );																				// O - Left Throttle Button
 								
-	// LDGH
+	// LDGH - moved to Common
 //	MapKeyIOUMD(&Throttle, LDGH, 	0, 																				// IU - 
 //									CHAIN( L_CTL, D(10), 'm' ),														// OU - Master Caution Button
 //									0, 																				// IM - 
