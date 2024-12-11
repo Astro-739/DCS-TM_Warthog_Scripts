@@ -210,12 +210,12 @@ int main()
 
 
 	// Air-to-Air Refuelling
-																														// Master Arm Off
-																														// RIO set WCS Switch - STBY
-																														// Refuel Probe to ALL EXTD or FUS EXTD
-																														// Fuel Dump Switch Off
-																														// Air Source to L ENG
-																														// Wing Sweep to Bomb (?)
+
+
+	// Drag Chute function (defined in Common)
+	dragchute_deploy	= PULSE+'p';																					// Deploy Drag-Parachute
+	dragchute_release	= CHAIN( DOWN+R_CTL, D(10), PULSE+'p', D(), UP+R_CTL );											// Release Drag-Parachute
+
 
 	// Speedbrake functions
 	speedbrakes_open  = PULSE+'b'; 																						// speedbrake extend
