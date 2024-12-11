@@ -84,6 +84,8 @@ int refuel_inbound;
 int refuel_precontact;
 
 int startup;
+int dragchute_deploy;
+int dragchute_release;
 
 int pilotbody;
 int helmetvisor;
@@ -106,7 +108,6 @@ char afterburnerdetent_present = 0;						// 0 - no detent present,
 														// 1 - detent present, at mil power
 char afterburnerdetent_lifted = 0;						// 0 - detent prevents throttle from going into afterburner, 
 														// 1 - detent is lifted and throttle moves into afterburner
-
 
 char CAR_mode = 0;										// CarrierOps mode
 char WHDN_mode = 1;										// Wheels Down mode (assumption start on ground)
@@ -176,13 +177,15 @@ int dcs_fighter_common()
     // Start-up Sequence
 	startup 	= CHAIN( R_SHIFT, D(10), 's' ); 																		// Battery / MAIN PWR Switch
 
+	// Drag Chute
+	dragchute_deploy	= 0;																							// Drag Chute defined per aircraft when needed
+	dragchute_release	= 0;
 
 	// Cockpit Visuals
 	pilotbody   = CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT );												// Pilot Body toggle
 	helmetvisor = CHAIN( DOWN+L_CTL, D(10), PULSE+'v', D(), UP+L_CTL );													// Helmet visor toggle
     sunglasses  = CHAIN( DOWN+L_SHIFT, D(10), PULSE+'v', D(), UP+L_SHIFT ); 		  									// Sunglasses toggle
 	mirrors     = CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'m', D(), UP+L_SHIFT+R_SHIFT ); 							// Toggle Mirrors
-
 
 	// Night Vision function
 	nightvision = SEQ( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(), UP+R_SHIFT, D(),										// Night vision goggles (NVG) on
@@ -343,7 +346,7 @@ int dcs_fighter_common()
 									   500),
 								0 );																			// O - 
 
-	// APUON
+	// APUON (APU & Air Refuel)
 	MapKeyIO(&Throttle, APUON, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'f', D(), UP+R_SHIFT,	D(), 					// I - AIR REFUEL Switch - OPEN
 									   //EXEC( "SetSCurve(&AVA_F16, JOYX, 0, 0, 0, 0, -1);"						//	    set joyX curves for aerial refuelling
 									   // 	 "SetSCurve(&AVA_F16, JOYY, 0, 0, 0, 0, -1);" ), D(), 				// 	  	set joyY curves for aerial refuelling
@@ -361,15 +364,23 @@ int dcs_fighter_common()
 	// APUOFF
 	MapKey(&Throttle, APUOFF, 	0 );																			//
 
-	// Engine Override Right (Air Refuel & Hook)
+	// Engine Override Right (Hook & Drag Chute)
 	// EFRNORM
-	MapKeyIO(&Throttle, EFRNORM, 	0, 																				// I - 
-									CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'h', D(), UP+L_CTL+L_ALT ));				// O - HOOK Switch - UP
+	MapKeyIO(&Throttle, EFRNORM, 		0, 																				// I - 
+										0 );																			// O - 
 	// EFROVER
-	MapKeyIO(&Throttle, EFROVER, 	0,
-									CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'h', D(), UP+L_CTL+L_SHIFT ));			// O - HOOK Switch - DOWN
-	MapKeyRIO(&Throttle, EFROVER, 	0,
-									0 );																			// O - 
+	MapKeyIOUMD(&Throttle, EFROVER, 	0,																				// IU - 
+										0,																				// OU - 
+										dragchute_deploy,																// IM - Drag Chute deploy
+										CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'h', D(), UP+L_CTL+L_SHIFT ),			// OM - HOOK Switch - DOWN
+										0,																				// ID - 
+										0 );																			// OD - 
+	MapKeyRIOUMD(&Throttle, EFROVER, 	0,																				// IU -
+										0,																				// OU - 
+										dragchute_release,																// IM - Drag Chute release
+										CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'h', D(), UP+L_CTL+L_ALT ),				// OM - HOOK Switch - UP
+										0,																				// ID - 
+										0 );																			// OD - 
 
 	// Engine Operation
 	// EOLIGN
