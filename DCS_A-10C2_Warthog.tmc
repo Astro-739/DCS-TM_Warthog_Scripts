@@ -336,12 +336,12 @@ int main()
 								'q' );																				// O - Left Throttle Button
 								
 	// LDGH
-	MapKeyIOUMD(&Throttle, LDGH, 	0, 																				// IU - 
-									CHAIN( L_CTL, D(10), 'm' ),														// OU - Master Caution Button
-									0, 																				// IM - 
-									CHAIN( L_CTL, D(10), 'm' ),														// OM - Master Caution Button
-									0, 																				// ID - 
-									CHAIN( L_CTL, D(10), 'm' ));													// OD - Master Caution Button
+//	MapKeyIOUMD(&Throttle, LDGH, 	0, 																				// IU - 
+//									CHAIN( L_CTL, D(10), 'm' ),														// OU - Master Caution Button
+//									0, 																				// IM - 
+//									CHAIN( L_CTL, D(10), 'm' ),														// OM - Master Caution Button
+//									0, 																				// ID - 
+//									CHAIN( L_CTL, D(10), 'm' ));													// OD - Master Caution Button
 
 	// Flaps Switch 
 	// FLAPU

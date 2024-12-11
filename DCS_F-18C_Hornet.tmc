@@ -316,12 +316,12 @@ int main()
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED4) )); 								//     LED4 ON
 								
 	// LDGH
-	MapKeyIOUMD(&Throttle, LDGH, 	0, 																				// IU - 
-									CHAIN( R_CTL, D(10), 'c' ),														// OU - Master Caution Button
-									CHAIN( DOWN+R_CTL, D(10), PULSE+BSP, D(), UP+R_CTL ), 							// IM - Upload F-16 DTC (Data Cartridge)
-									CHAIN( R_CTL, D(10), 'c' ),														// OM - Master Caution Button
-									0, 																				// ID - 
-									CHAIN( R_CTL, D(10), 'c' ));													// OD - Master Caution Button
+//	MapKeyIOUMD(&Throttle, LDGH, 	0, 																				// IU - 
+//									CHAIN( R_CTL, D(10), 'c' ),														// OU - Master Caution Button
+//									CHAIN( DOWN+R_CTL, D(10), PULSE+BSP, D(), UP+R_CTL ), 							// IM - Upload F-16 DTC (Data Cartridge)
+//									CHAIN( R_CTL, D(10), 'c' ),														// OM - Master Caution Button
+//									0, 																				// ID - 
+//									CHAIN( R_CTL, D(10), 'c' ));													// OD - Master Caution Button
 
 	// Flaps Switch (RF Switch)
 	// FLAPU
