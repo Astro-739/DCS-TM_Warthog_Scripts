@@ -356,12 +356,12 @@ int main()
 
 	// Canopy //TODO - align Common
 	// RDRNRM
-	MapKeyIOUMD(&Throttle, RDRNRM, 	0, 																				// IU - 
-									0,																				// OU - 
-									0,																				// IM -
-									CHAIN( DOWN+L_CTL, D(10), PULSE+'c', D(), UP+L_CTL ),							// OM - Canopy - OPEN/CLOSE
-									0,																				// ID - 
-									0 );																			// OD - 
+//	MapKeyIOUMD(&Throttle, RDRNRM, 	0, 																				// IU - 
+//									0,																				// OU - 
+//									0,																				// IM -
+//									CHAIN( DOWN+L_CTL, D(10), PULSE+'c', D(), UP+L_CTL ),							// OM - Canopy - OPEN/CLOSE
+//									0,																				// ID - 
+//									0 );																			// OD - 
 
 	// APUON   -  moved to Common //TODO test
 //	MapKey(&Throttle, APUON, 		CHAIN( DOWN+L_SHIFT, D(10), PULSE+'a', D(), UP+L_SHIFT ));						//   APU Start
