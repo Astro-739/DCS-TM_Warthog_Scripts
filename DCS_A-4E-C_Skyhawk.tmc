@@ -208,11 +208,11 @@ int main()
 								CHAIN( 0 ));																			// O - 
 	// H3R
 	MapKeyIO(&AVA_F16, H3R, 	TEMPO( PULSE+']', 																		// I - kneeboard next page
-									   CHAIN( 0 ), 500 ), 												  				// 	   [long] Sunglasses toggle
+									   CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+']', D(), UP+R_SHIFT+L_SHIFT ), 500 ),	//	   [long] Kneeboard Next Shortcut
 								CHAIN( R_ALT, D(10), '2' ));															// O - RWR Search Button
 	// H3L
 	MapKeyIO(&AVA_F16, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
-									   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT ), 500 ),					//	   [long] Pilot Body toggle								
+									   CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'[', D(), UP+R_SHIFT+L_SHIFT ), 500 ),	//	   [long] Kneeboard Previous Shortcut
 								CHAIN( R_ALT, D(10), '5' ));															// O - RWR Target Separation Button
 
 
@@ -333,13 +333,6 @@ int main()
 							  	CHAIN( extlight_formation, D(), 												// O - extlight_formation
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED4) )); 							//     LED4 OFF
 
-	// LDGH
-	MapKeyIOUMD(&Throttle, LDGH, 0, 																			// IU - 
-								CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x38], D(), UP+R_ALT ),						// OU - Master Caution Button
-								0, 																				// IM - 
-								CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x38], D(), UP+R_ALT ),						// OM - Master Caution Button
-								0, 																				// ID - 
-								CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x38], D(), UP+R_ALT ));					// OD - Master Caution Button
 
 	// Flaps Switch
 	// FLAPU
@@ -359,13 +352,6 @@ int main()
 								groundcrewstartup ); 															// O - Ground Crew Start-up
 	// EORIGN
 	MapKey(&Throttle, EORIGN, 	0 ); 																			// 
-
-
-	// SC
-	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - [short] re-centre IR tracker
-									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'`', D(), UP+L_SHIFT ),				//     [long] discord game overlay
-									   500),
-								CHAIN( 0 ));																	// O - 
 
 
 	// U LAYER - [O] Air-to-Air Mode
