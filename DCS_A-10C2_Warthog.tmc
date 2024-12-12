@@ -171,21 +171,21 @@ int main()
 	MapKeyIO(&AVA_F16, H2L, 	CHAIN( L_CTL, D(10), LARROW ),													// I - TMS left
 							 	DX10 ); 																		// O - snap view left MFD (LWIN+KP4)
 
-	// Display Management Switch
+	// Display Management Switch - moved to Common  //TODO test
 	// H3U
-	MapKeyIO(&AVA_F16, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),				// I - kneeboard on/off
-									   nightvision, 500 ),														//	   [long] Night Vision Goggles
-								'u' );																			// O - Coolie Switch Up
+//	MapKeyIO(&AVA_F16, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),				// I - kneeboard on/off
+//									   nightvision, 500 ),														//	   [long] Night Vision Goggles
+//								'u' );																			// O - Coolie Switch Up
 	// H3D
-	MapKeyIO(&AVA_F16, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),					// I - kneeboard current position mark point
-									   flashlight, 500 ),														//	   [long] Flashlight on/off
-								'j' );																			// O - Coolie Switch Down
+//	MapKeyIO(&AVA_F16, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),					// I - kneeboard current position mark point
+//									   flashlight, 500 ),														//	   [long] Flashlight on/off
+//								'j' );																			// O - Coolie Switch Down
 	// H3R
-	MapKeyIO(&AVA_F16, H3R, 	PULSE+']', 																		// I - kneeboard next page
-								'k' );																			// O - Coolie Switch Right
+//	MapKeyIO(&AVA_F16, H3R, 	PULSE+']', 																		// I - kneeboard next page
+//								'k' );																			// O - Coolie Switch Right
 	// H3L
-	MapKeyIO(&AVA_F16, H3L, 	PULSE+'[', 																		// I - kneeboard previous page
-								'h' );																			// O - Coolie Switch Left
+//	MapKeyIO(&AVA_F16, H3L, 	PULSE+'[', 																		// I - kneeboard previous page
+//								'h' );																			// O - Coolie Switch Left
 
 
 	//							TEMPO( CHAIN( DOWN+R_ALT, D(10), PULSE+RARROW, D(), UP+R_ALT ),					// ID - Boat Switch Forward
