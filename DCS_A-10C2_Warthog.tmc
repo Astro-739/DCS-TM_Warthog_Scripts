@@ -386,11 +386,11 @@ int main()
 	// Engine Override Left
 	// EFLNORM
 	MapKeyIO(&Throttle, EFLNORM, 	0,																				// I - 
-									CHAIN( PULSE+DX26, D(), 														// O - Flight control - NORMAL  ********* FIX DX in DCS
+									CHAIN( PULSE+DX22, D(), 														// O - Flight control - NORMAL  ********* FIX DX in DCS
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ));							// 	   LED5 OFF for NORMAL
 	// EFLOVER
 	MapKeyIO(&Throttle, EFLOVER, 	0,																				// I - 
-									CHAIN( PULSE+DX26, D(),															// O - Flight control - MANUAL REVERSION    ********* FIX DX in DCS
+									CHAIN( PULSE+DX22, D(),															// O - Flight control - MANUAL REVERSION    ********* FIX DX in DCS
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ));							// 	   LED5 ON for MANUAL
 
 	// SC
