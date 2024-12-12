@@ -253,16 +253,16 @@ int dcs_fighter_common()
 	// Trim Switch
 	// H1U
 	MapKeyIO(&AVA_F16, H1U, 	TEMPO( mirrors, 																// I - Toggle Mirrors
-						 	 		   sunglasses, 500 ),   													// 	   [long] Sunglasses toggle
+						 	 		   helmetvisor, 500 ),   													// 	   [long] Helmet Visor toggle
 								CHAIN( R_CTL, D(10), ';' )); 													// O - trim nose down
-	// H1R
-	MapKeyIO(&AVA_F16, H1R, 	TEMPO( PULSE+F2, 																// I - F2 outside view
-									   CHAIN( DOWN+R_CTL, D(10), PULSE+F2, D(), UP+R_CTL ), 500 ),				//     [long] Object Camera toggle
-							 	CHAIN( R_CTL, D(10), '/' )); 													// O - trim right wing down
 	// H1D
 	MapKeyIO(&AVA_F16, H1D, 	TEMPO( PULSE+F1, 																// I - F1 cockpit view
 									   pilotbody, 500 ),														//	   [long] Pilot Body toggle
 							 	CHAIN( R_CTL, D(10), '.' )); 													// O - trim nose up
+	// H1R
+	MapKeyIO(&AVA_F16, H1R, 	TEMPO( PULSE+F2, 																// I - F2 outside view
+									   sunglasses, 500 ),														//     [long] Sunglasses toggle
+							 	CHAIN( R_CTL, D(10), '/' )); 													// O - trim right wing down
 	// H1L	
 	MapKeyIO(&AVA_F16, H1L, 	TEMPO( PULSE+F6, 																// I - F6 weapon view
 									   CHAIN( DOWN+L_CTL, D(10), PULSE+F6, D(), UP+L_CTL ), 500 ),				//     [long] F6 weapon to target view
