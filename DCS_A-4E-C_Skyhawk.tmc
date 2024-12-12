@@ -241,12 +241,15 @@ int main()
 	// Left Throttle Button
 	// MSU/D/R/L/P
 	// EACON/OFF Landing Gear
+	// SPB
 	// EOLNORM
 	// EORNORM/MOTOR
 	// SC
 	// APUON/OFF
 	// RDRNRM/DIS Canopy
 	// IDLELON/IDLERON
+	// EFLNORM/OVER
+	// EFRNORM/OVER
 	// THR_LEFT
 	// THR_RIGHT
 	// THR_FC
@@ -300,28 +303,6 @@ int main()
 								0,																				// OM - 
 								0,																				// ID - 
 								0 );																			// OD - 
-
-	// Speedbrake Switch      // ***TODO also in common
-	// SPDF
-//	MapKeyIO(&Throttle, SPDF, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x55], D(), UP+R_SHIFT ),					// I - snap zoom max   (R_SHIFT+KP*)
-//								speedbrakes_open );																// O - Open Speed Brakes
-//	MapKeyRIO(&Throttle, SPDF, 	PULSE+KPENT,																	// I - snap zoom normal
-//								speedbrakes_close );															// O - Close Speed Brakes
-	// SPDB
-//	MapKeyIOUMD(&Throttle, SPDB, CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),				// IU - snap zoom min    (R_SHIFT+KP/)
-//								speedbrakes_open,																// OU - Open Speed Brakes Momentary
-//								EXEC( "if(WHDN_mode) ActKey( KEYON+'w' );" 										// IM - [WHDN] wheel brake
-//									  "else ActKey( PULSE+KEYON+USB[0x54] );" ),								//		snap zoom min
-//								speedbrakes_open,																// OM - Open Speed Brakes Momentary
-//								CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),					// ID - snap zoom min    (R_SHIFT+KP/)
-//								speedbrakes_open );																// OD - Open Speed Brakes Momentary
-//	MapKeyRIOUMD(&Throttle, SPDB, PULSE+KPENT,																	// IU - snap zoom normal
-//								speedbrakes_close,																// OU - Close Speed Brakes
-//								EXEC( "if(WHDN_mode) ActKey( 'w' );"											// IM - [WHDN] release 'w'
-//									  "else ActKey( PULSE+KEYON+KPENT );" ),									//		snap zoom normal
-//								speedbrakes_close,																// OM - Close Speed Brakes
-//								PULSE+KPENT,																	// ID - snap zoom normal
-//								speedbrakes_close );															// OU - Close Speed Brakes
 
 								
 	// China Hat
@@ -379,30 +360,6 @@ int main()
 	// EORIGN
 	MapKey(&Throttle, EORIGN, 	0 ); 																			// 
 
-
-	// Engine Override
-	// EFLNORM	
-	MapKey(&Throttle, EFLNORM, 	0 );																			// 
-	// EFLOVER
-	MapKeyIO(&Throttle, EFLOVER, 0,																				// 
-								0 );																			// 
-								
-	// EFRNORM
-	MapKeyIOUMD(&Throttle, EFRNORM, 0,																			// IU - 
-								0,																				// OU - 
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ),						// IM - Hook Retract
-								CHAIN( 0,																		// OM - ******** TODO ********
-									   EXEC( "AAR_mode = 0;" )),												//		AAR_mode off
-								0,																				// ID - 
-								0 );																			// OD - 
-	// EFROVER
-	MapKeyIOUMD(&Throttle, EFROVER, 0,																			// IU - 
-								0,																				// OU - 
-								CHAIN( DOWN+L_CTL, D(10), PULSE+'h', D(), UP+L_CTL ),							// IM - Hook Extend
-								CHAIN( 0,																		// OM - ******** TODO ********
-									   EXEC( "AAR_mode = 1;" )),												//		AAR_mode on
-								0,																				// ID - 
-								0 );																			// OD - 
 
 	// SC
 	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - [short] re-centre IR tracker
