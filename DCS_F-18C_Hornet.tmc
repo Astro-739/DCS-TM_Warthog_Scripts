@@ -148,16 +148,16 @@ int main()
 
 	// Target Management Switch
 	// H2U
-	MapKeyIO(&AVA_F16, H2U, 	CHAIN( R_CTL, D(10), UARROW ),													// I - TMS up (KP*)
+	MapKeyIO(&AVA_F16, H2U, 	ENT,																			// I - Throttle Designator Controller - DEPRESS
 							 	DX7 );			 																// O - zoom in 
 	// H2D
-	MapKeyIO(&AVA_F16, H2D, 	CHAIN( R_CTL, D(10), DARROW ),													// I - TMS down  (KP\)
+	MapKeyIO(&AVA_F16, H2D, 	DX3,																			// I - Undesignate/Nose Wheel Steer Switch
 							 	DX9 );																			// O - zoom out
 	// H2R							
-	MapKeyIO(&AVA_F16, H2R, 	CHAIN( R_CTL, D(10), RARROW ),													// I - TMS right
+	MapKeyIO(&AVA_F16, H2R, 	0,																				// I - 
 							 	DX8 );						 													// O - snap view right MFD (LWIN+KP6)
 	// H2L
-	MapKeyIO(&AVA_F16, H2L, 	CHAIN( R_CTL, D(10), LARROW ),													// I - TMS left
+	MapKeyIO(&AVA_F16, H2L, 	CHAIN( R_ALT, D(10), 'l' ),														// I - Sensor Control Switch - Depress
 							 	DX10 ); 																		// O - snap view left MFD (LWIN+KP4)
 
 	// Display Management Switch - moved to Common  //TODO test
