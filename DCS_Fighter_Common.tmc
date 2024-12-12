@@ -177,7 +177,7 @@ int dcs_fighter_common()
     // Start-up Sequence
 	startup 	= CHAIN( R_SHIFT, D(10), 's' ); 																		// Battery / MAIN PWR Switch
 
-	// Drag Chute
+	// Drag Chute (to be specified per airplane)
 	dragchute_deploy	= 0;																							// Drag Chute defined per aircraft when needed
 	dragchute_release	= 0;
 

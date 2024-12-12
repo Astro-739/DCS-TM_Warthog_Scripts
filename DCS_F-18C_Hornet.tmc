@@ -181,20 +181,20 @@ int main()
 
  	// Countermeasure Management Switch
 	// H4U
-	MapKeyIO(&AVA_F16, H4U, 	CHAIN( DOWN+L_SHIFT+L_CTL, D(10), PULSE+'f', D(), UP+L_SHIFT+L_CTL ),			// I - ECM XMIT Switch - Up
-							 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+';', D(), UP+R_SHIFT ));						// O - Countermeasures Management Switch - Fwd
+	MapKeyIO(&AVA_F16, H4U, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'w', D(), UP+L_SHIFT ),						// I - Select Sparrow
+							 	PULSE+'e' );																	// O - Dispense Switch - Forward (CHAFF)
 	// H4D
-	MapKeyIO(&AVA_F16, H4D, 	CHAIN( DOWN+L_SHIFT+L_CTL, D(10), PULSE+'v', D(), UP+L_SHIFT+L_CTL ),			// I - ECM XMIT Switch - Down
-							 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'.', D(), UP+R_SHIFT )); 						// O - Countermeasures Management Switch - Aft
+	MapKeyIO(&AVA_F16, H4D, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'x', D(), UP+L_SHIFT ),						// I - Select Gun
+							 	PULSE+'d' );																	// O - Dispense Switch - Aft (FLARE)
 	// H4R
-	MapKeyIO(&AVA_F16, H4R, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ), 							// I - PROGRAM Knob - CW
-			  				 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'/', D(), UP+R_SHIFT ));						// O - Countermeasures Management Switch - Right
+	MapKeyIO(&AVA_F16, H4R, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT ), 						// I - Select AMRAAM
+			  				 	0 );																			// O - CMS - Right
 	// H4L
-	MapKeyIO(&AVA_F16, H4L, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ), 						// I - PROGRAM Knob - CCW
-							 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+',', D(), UP+R_SHIFT )); 						// O - Countermeasures Management Switch - Left
+	MapKeyIO(&AVA_F16, H4L, 	0, 																				// I - 
+							 	0 ); 																			// O - CMS - Left
 	// H4P
-	MapKeyIO(&AVA_F16, H4P, 	0, 																				// I - 
-							 	CHAIN( DOWN+L_ALT, D(10), DOWN+'f', D(100), UP+'f', D(), UP+L_ALT ));			// O - CHAFF/FLARE Dispense Button (program 5)
+	MapKeyIO(&AVA_F16, H4P, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT ), 						// I - Select Sidewinder
+							 	CHAIN( DOWN+L_ALT, D(10), DOWN+'f', D(100), UP+'f', D(), UP+L_ALT ));			// O - Dispense Button
 
 
 
