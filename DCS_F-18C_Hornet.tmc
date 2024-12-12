@@ -271,10 +271,10 @@ int main()
 	// China Hat
 	// CHF
 	MapKeyIO(&Throttle, CHF, 	brightness_up, 																	// I - brightness up for goggle/HMCS
-							 	REXEC( 20, 200, "ActKey( PULSE+KEYON+'=' );" ));								// O - ANT ELEV Knob - CCW    (REXEC to slow down repeat press)
+							 	REXEC( 20, 200, "ActKey( PULSE+KEYON+'=' );" ));								// O - Radar Elevation Control - Up    (REXEC to slow down repeat press)
 	// CHB
 	MapKeyIO(&Throttle, CHB, 	brightness_down,																// I - brightness down for goggle/HMCS
-							 	REXEC( 21, 200, "ActKey( PULSE+KEYON+'-' );" ));								// O - ANT ELEV Knob - CW    (REXEC to slow down repeat press)
+							 	REXEC( 21, 200, "ActKey( PULSE+KEYON+'-' );" ));								// O - Radar Elevation Control - Down  (REXEC to slow down repeat press)
 
 	// Pinky Switch (exterior lighting)
 	// PSF
