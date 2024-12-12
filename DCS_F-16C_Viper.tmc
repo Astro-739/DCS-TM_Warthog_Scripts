@@ -113,6 +113,7 @@ int main()
 	// S1 - Nosewheel Steering Button
 	// S2 - Weapon Release Button
 	// H1 - Trim Switch
+	// H3 - Display Management Switch
 	// JOYX
 	// JOYY
 	// -----------------------------	

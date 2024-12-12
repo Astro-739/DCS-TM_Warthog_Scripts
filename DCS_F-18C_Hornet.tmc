@@ -100,13 +100,6 @@ int main()
 								   		  "else ActKey( PULSE+KEYON+DX3 );")),
 							   DX3, 500 );
 
-	// Comms functions
-//	U_MSR_short	= CHAIN( DOWN+L_CTL, D(10), DOWN+'i', D(100), UP+'i', D(), UP+L_CTL );							// Transmit Switch - IFF OUT	
-//	U_MSR_long	= 0;
-//	U_MSL_short	= CHAIN( DOWN+L_SHIFT, D(10), DOWN+'i', D(100), UP+'i', D(), UP+L_SHIFT );						// Transmit Switch - IFF IN
-//	U_MSL_long	= 0;
-
-
 
 
 	// -------------------- FLIGHT STICK --------------------
@@ -116,34 +109,16 @@ int main()
 	// S1 - Nosewheel Steering Button
 	// S2 - Weapon Release Button
 	// H1 - Trim Switch
+	// H3 - Display Management Switch
 	// JOYX
 	// JOYY
 	// -----------------------------	
 
 
-	// Nosewheel Steering Button
-	// S1
-	MapKeyIOUMD(&AVA_F16, S1, 	SEQ( PULSE+F10, PULSE+F1 ),														// IU - F10 map
-							 	's', 																			// OU - NWS A/R DISC MSL STEP Button
-							    SEQ( PULSE+F10, PULSE+F1 ), 													// IM - F10 map
-							    's',																 			// OM - NWS A/R DISC MSL STEP Button
-							    SEQ( PULSE+F10, PULSE+F1 ),								 						// ID - F10 map
-							    TEMPO( PULSE+'s',																// OD - [short] NWS A/R DISC MSL STEP Button
-									   CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'6', D(), UP+L_ALT+R_SHIFT ),	//		[long]  Switch AG weapon type (SMS page Right MFD OSB 6)
-									   500 ));
-
-	// Weapon Release Button  -- moved to common
-	// S2
-//	MapKeyIO(&AVA_F16, S2,  	CHAIN( L_SHIFT, D(10), 'e' ), 													// I - EMER STORES JETTISON Button
-//								DX2);																			// O - Weapon Release
-
 	// Expand FOV Button - S3
-	MapKeyIOUMD(&AVA_F16, S3,  0,																				// IU - 
-								override,																		// OU - dogfight then missile override
-							    0, 																				// IM -
-							    autopilot,															 			// OM - autopilot on/off (Autopilot PITCH Switch - ALT HOLD)
-							    0,														 						// ID - 
-							    0);																				// OD - 
+	MapKeyUMD(&AVA_F16, S3,     0,																				// U - 
+							    'a',															 				// M - Autopilot/Nosewheel Steering Disengage (Paddle) Switch
+							    0);																				// D - 
 
 
 	// Target Management Switch
