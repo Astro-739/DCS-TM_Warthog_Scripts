@@ -313,7 +313,7 @@ int dcs_f4e_pilot_controls_specific()
 								0 );																 					// OD - 
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, 0,																						// IU - 
-								'n',																					// OU - Air Refuel Release Button (ARR) - missile uncage
+								DX11,																					// OU - Air Refuel Release Button (ARR) - missile uncage
 								CHAIN( DOWN+R_CTL, D(10), PULSE+'b', D(), UP+R_CTL ),									// IM - Bombing Table - [Toggle]
 								PULSE+'n', 																				// OM - Air Refuel Release Button (ARR)
 								CHAIN( DOWN+R_CTL, D(10), PULSE+'b', D(), UP+R_CTL ),									// ID - Bombing Table - [Toggle]

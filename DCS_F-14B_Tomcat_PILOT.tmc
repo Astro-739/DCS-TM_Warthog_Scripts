@@ -336,7 +336,7 @@ int dcs_f14_pilot_controls_specific()
 								JSTR_agwpn_comppilot );												 					// OD - Set Computer Pilot Weapons (CCIP)
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, CHAIN( L_ALT, D(10), 'w' ),																// IU - Wing Sweep Forward
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'c', D(), UP+L_SHIFT ),								// OU - CAGE-SEAM button
+								DX11,																					// OU - CAGE-SEAM button
 								CHAIN( L_ALT, D(10), 'w' ),																// IM - Wing Sweep Forward
 								TEMPO( 0, PULSE+'m', 500 ),																// OM - [long] Toggle Mirrors
 								CHAIN( L_ALT, D(10), 'w' ),																// ID - Wing Sweep Forward

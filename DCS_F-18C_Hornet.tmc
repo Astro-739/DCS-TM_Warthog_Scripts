@@ -231,13 +231,13 @@ int main()
 								DX14);																			// OD - ENABLE Switch - Depress
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, CHAIN( L_CTL, D(10), RARROW ), 													// IU - ICP Data Control Switch - SEQ (dobber sequence)
-							 	PULSE+'c',																		// OU - UNCAGE Switch
+							 	DX11,																			// OU - Cage/Uncage Button
 								CHAIN( L_CTL, D(10), RARROW ), 													// IM - ICP Data Control Switch - SEQ (dobber sequence)
 								TEMPO( CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'v', D(), UP+R_CTL+R_SHIFT ),	// OM - FUEL QTY SEL Knob - CW
 									   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'c', D(), UP+R_CTL+R_SHIFT ), 	//		[long] FUEL QTY SEL Knob - NORM
 									   500 ),																	//
 								CHAIN( L_CTL, D(10), RARROW ), 													// ID - ICP Data Control Switch - SEQ (dobber sequence)
-								PULSE+'c');																		// OD - UNCAGE Switch
+								DX11 );																			// OD - Cage/Uncage Button
 	// CSL
 	MapKeyIOUMD(&Throttle, CSL, CHAIN( L_CTL, D(10), LARROW ), 													// IU - ICP Data Control Switch - RET (dobber return)
 								CHAIN( L_CTL, D(10), KP7 ),														// OU - ICP Priority Function Button - 7(MARK)
