@@ -82,10 +82,6 @@ int main()
 									   CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'p', D(), UP+R_WIN+L_SHIFT ), 500 ));	//     [long] Left MFD OSB 03 - Arm Gun
 
 
-	// -------------------- LISTS --------------------
-	
-	// 
-
 	// -------------------- FUNCTIONS --------------------
 					
 	// Autopilot function
@@ -134,13 +130,6 @@ int main()
 							 CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F2, D(100), PULSE+F2, D(13000), 	// Radio menu (\), Ground crew, Ground Electric Power, Off
 									PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F2 ));			// Radio menu (\), Ground crew, Wheel Chocks, Remove
 
-
-	// Air-to-Air Refuelling - // TODO *********
-																														// Master Arm Off
-																														// RIO set WCS Switch - STBY
-																														// Refuel Probe to ALL EXTD or FUS EXTD
-																														// Fuel Dump Switch Off
-																														// Air Source to L ENG
 
 	// Speedbrake functions
 	speedbrakes_open  = CHAIN( D(100), DOWN+L_SHIFT, D(10), PULSE+'b', D(), UP+L_SHIFT );								// speedbrake extend
