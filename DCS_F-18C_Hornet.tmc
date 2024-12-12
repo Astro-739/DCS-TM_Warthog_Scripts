@@ -18,6 +18,8 @@ char autopilot_mode;
 int override;	
 char override_dog;		
 
+int nosewheelsteering;
+
 define AB 75											// detent position at AB% of full throttle reach
 
 
@@ -91,6 +93,12 @@ int main()
 					 "if(override_dog) ActKey( PULSE+KEYON+L_CTL+'4' );"										// DOGFIGHT/Missile Override Switch - MISSILE OVERRIDE
 					 "override_dog = !override_dog;" );
 
+
+	// Nosewheel Steering function
+	nosewheelsteering = TEMPO( SEQ( PULSE+DX3,
+							  		EXEC( "if(WHDN) ActKey( PULSE+KEYON+'a' );" 
+								   		  "else ActKey( PULSE+KEYON+DX3 );")),
+							   DX3, 500 );
 
 	// Comms functions
 //	U_MSR_short	= CHAIN( DOWN+L_CTL, D(10), DOWN+'i', D(100), UP+'i', D(), UP+L_CTL );							// Transmit Switch - IFF OUT	
