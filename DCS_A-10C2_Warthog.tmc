@@ -363,10 +363,10 @@ int main()
 									0,																				// ID - 
 									0 );																			// OD - 
 
-	// APUON
-	MapKey(&Throttle, APUON, 		CHAIN( DOWN+L_SHIFT, D(10), PULSE+'a', D(), UP+L_SHIFT ));						//   APU Start
+	// APUON   -  moved to Common //TODO test
+//	MapKey(&Throttle, APUON, 		CHAIN( DOWN+L_SHIFT, D(10), PULSE+'a', D(), UP+L_SHIFT ));						//   APU Start
 	// APUOFF
-	MapKey(&Throttle, APUOFF, 		CHAIN( DOWN+L_CTL, D(10), PULSE+'a', D(), UP+L_CTL ));							//   APU Off
+//	MapKey(&Throttle, APUOFF, 		CHAIN( DOWN+L_CTL, D(10), PULSE+'a', D(), UP+L_CTL ));							//   APU Off
 
 
 	// Engine Operation
