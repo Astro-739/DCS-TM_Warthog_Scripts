@@ -359,7 +359,7 @@ int dcs_fighter_common()
 								CHAIN( D(100), PULSE+DX31 ));													// OU - Close Speed Brakes
 
 
-	// SC
+	// SC (IR head tracking)
 	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - re-centre IR tracker
 									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'`', D(), UP+L_SHIFT ),				//     [long] discord game overlay
 									   500),
@@ -384,7 +384,7 @@ int dcs_fighter_common()
 	MapKey(&Throttle, APUOFF, 	0 );																			//
 
 
-	// Engine Override Left
+	// Engine Override Left (Front/Back seat, manual pitch override)
 	// EFLNORM	
 	MapKey(&Throttle, EFLNORM, 	0 );																			// 
 	// EFLOVER
@@ -408,7 +408,7 @@ int dcs_fighter_common()
 										0,																				// ID - 
 										0 );																			// OD - 
 
-	// Engine Operation
+	// Engine Operation (Engine idle, start-up sequence, groundcrew, afterburner detent)
 	// EOLIGN
 	MapKeyIO(&Throttle, EOLIGN,		startup,																	// I - Start-up sequence
 									CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));					// O - Left Throttle - IDLE
@@ -547,7 +547,7 @@ int dcs_fighter_common_specific()
 
 
 									   
-	// LDGH
+	// LDGH (Master Caution)
 	MapKeyIO(&Throttle, LDGH,   0, 																				// I - 
 								CHAIN( DOWN+L_ALT, D(10), PULSE+'m', D(), UP+L_ALT ));							// O - Master Caution Button
 
