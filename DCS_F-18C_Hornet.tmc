@@ -292,12 +292,12 @@ int main()
 
 	// Canopy    //TODO check only common, or override necessary
 	// RDRNRM
-	MapKeyIOUMD(&Throttle, RDRNRM, 	0, 																				// IU - 
-									0,																				// OU - 
-									CHAIN( DOWN+L_SHIFT, D(10), PULSE+'c', D(), UP+L_SHIFT ),						// IM - Canopy Handle - DOWN/UP
-									CHAIN( L_CTL, D(10), 'c' ),														// OM - Canopy - OPEN/CLOSE
-									0,																				// ID - 
-									0);																				// OD - 
+//	MapKeyIOUMD(&Throttle, RDRNRM, 	0, 																				// IU - 
+//									0,																				// OU - 
+//									CHAIN( DOWN+L_SHIFT, D(10), PULSE+'c', D(), UP+L_SHIFT ),						// IM - Canopy Handle - DOWN/UP
+//									CHAIN( L_CTL, D(10), 'c' ),														// OM - Canopy - OPEN/CLOSE
+//									0,																				// ID - 
+//									0);																				// OD - 
 
 	// APU off DX35 here to override Common?
 
@@ -334,33 +334,25 @@ int main()
 
 	// U LAYER - Air-to-Air Mode
 	// BSF - LED1 ON/OFF
-	MapKeyIO(&Throttle, BSF, 	CHAIN( override, D(100),														// I - DOGFIGHT/Missile Override Switch - DOGFIGHT
-									   DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT ),						// 	   MASTER ARM Switch - MASTER ARM
-								CHAIN( PULSE+'1', D(100),														// O - A-A mode on
+	MapKeyIO(&Throttle, BSF, 	0,																				// I - DOGFIGHT
+								CHAIN( DOWN+'1', D(200), UP+'1',												// O - A-A mode on
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED1) )); 							// 	   LED1 ON for U layer
-	MapKeyRIO(&Throttle, BSF, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'0', D(), UP+L_CTL,								// I - DOGFIGHT/Missile Override Switch - CENTER
-									   EXEC( "override_dog = 0;" ), D(100) ),									//	   reset override status
-								CHAIN( DOWN+L_CTL, D(10), PULSE+'0', D(), UP+L_CTL,								// O - DOGFIGHT/Missile Override Switch - CENTER
-									   EXEC( "override_dog = 0;" ),	D(),										//	   in case override was started when in A-A mode
-									   PULSE+'1', D(100),														// 	   A-A mode off
+	MapKeyRIO(&Throttle, BSF, 	0,																				// I - DOGFIGHT
+								CHAIN( DOWN+'1', D(200), UP+'1',												// O - A-A mode off
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED1) )); 							//     LED1 OFF for U layer
 	
 	// M LAYER - Navigation Mode
 	// BSM - LED2 ON/OFF
-	MapKey(&Throttle, BSM, 		CHAIN( D(200), LED(&Throttle, LED_ONOFF, LED_CURRENT+LED2)));					// LED2 ON for M layer
+	MapKey(&Throttle, BSM, 		CHAIN( D(300), LED(&Throttle, LED_ONOFF, LED_CURRENT+LED2)));					// LED2 ON for M layer
 	MapKeyR(&Throttle, BSM, 	LED(&Throttle, LED_ONOFF, LED_CURRENT-LED2)); 									// LED2 OFF for M layer
 
 	// D LAYER - Air-to-Ground Mode
 	// BSB - LED3 ON/OFF
-	MapKeyIO(&Throttle, BSB, 	CHAIN( PULSE+'2', D(100),														// I - A-G mode on
-									   DOWN+R_SHIFT+R_CTL, D(10), PULSE+'a', D(), UP+R_SHIFT+R_CTL,	D(),		//     MASTER ARM Switch - SIMULATE
-									   DOWN+R_SHIFT, D(10), PULSE+'e', D(), UP+R_SHIFT ),						//	   GND JETT ENABLE Switch - ENABLE
-								CHAIN( PULSE+'2', D(100),														// O - A-G mode on
+	MapKeyIO(&Throttle, BSB, 	0,																				// I - 
+								CHAIN( DOWN+'2', D(200), UP+'2',												// O - A-G mode on
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED3) )); 							//     LED3 ON for D layer
-	MapKeyRIO(&Throttle, BSB, 	CHAIN( PULSE+'2', D(100),														// I - A-G mode off
-									   DOWN+R_CTL, D(10), PULSE+'a', D(), UP+R_CTL, D(),						//     MASTER ARM Switch - OFF
-									   DOWN+R_CTL, D(10), PULSE+'e', D(), UP+R_CTL ),							//	   GND JETT ENABLE Switch - OFF
-								CHAIN( PULSE+'2', D(100),														// O - A-G mode off
+	MapKeyRIO(&Throttle, BSB, 	0,																				// I - 
+								CHAIN( DOWN+'2', D(200), UP+'2',												// O - A-G mode off
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED3) )); 							//     LED3 OFF for D layer
 
 
@@ -372,9 +364,11 @@ int afterburnerdetent(int x)
 {
 	if (x == 1) {		// Activate detent
 		SetCustomCurve(&Throttle, THR_LEFT, LIST(0,0, 25,25, 50,50, AB,AB, 100,AB));
+		SetCustomCurve(&Throttle, THR_RIGHT, LIST(0,0, 25,25, 50,50, AB,AB, 100,AB));
 	}
 	else {				// Throttle back to full reach
 		SetSCurve(&Throttle, THR_LEFT, 0, 0, 0, 0, 0);
+		SetSCurve(&Throttle, THR_RIGHT, 0, 0, 0, 0, 0);
 	}
 }
 

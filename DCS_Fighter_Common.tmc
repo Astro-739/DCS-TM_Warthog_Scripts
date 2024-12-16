@@ -389,6 +389,7 @@ int dcs_fighter_common()
 	MapKey(&Throttle, EFLNORM, 	0 );																			// 
 	// EFLOVER
 	MapKey(&Throttle, EFLOVER,  0 );																			// 
+	MapKeyR(&Throttle, EFLOVER, 0 );																			// 
 
 	// Engine Override Right (Hook & Drag Chute)
 	// EFRNORM
