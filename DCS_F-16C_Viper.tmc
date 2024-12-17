@@ -69,7 +69,7 @@ int main()
 
 	// -------------------- FUNCTIONS --------------------
 	
-	// Start-up Sequence (overwrites common)    //TODO test if overwrite works
+	// Start-up Sequence (overwrites common)
 	startup = SEQ( CHAIN( L_ALT, D(10), 's' ), 												// MAIN PWR Switch - BATT
 				   CHAIN( R_SHIFT, D(10), 's' ), 											// MAIN PWR Switch - MAIN PWR
 				   CHAIN( R_CTL, D(10), 's' )); 											// JFS Switch - START 1

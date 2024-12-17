@@ -174,7 +174,7 @@ int dcs_fighter_common()
 	vhf_callradiomenu			= CHAIN( DOWN+R_CTL, D(10), PULSE+USB[0x31], D(), UP+R_CTL );							// Transmit Switch - VHF (call radio menu)
 	
 
-    // Start-up Sequence
+    // Start-up Sequence (can be specified per airplane)
 	startup 	= CHAIN( R_SHIFT, D(10), 's' ); 																		// Battery / MAIN PWR Switch
 
 	// Drag Chute (to be specified per airplane)

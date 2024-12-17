@@ -335,24 +335,24 @@ int main()
 	// U LAYER - Air-to-Air Mode
 	// BSF - LED1 ON/OFF
 	MapKeyIO(&Throttle, BSF, 	0,																				// I - DOGFIGHT
-								CHAIN( DOWN+'1', D(200), UP+'1',												// O - A-A mode on
+								CHAIN( DOWN+'1', D(100), UP+'1',												// O - A-A mode on
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED1) )); 							// 	   LED1 ON for U layer
 	MapKeyRIO(&Throttle, BSF, 	0,																				// I - DOGFIGHT
-								CHAIN( DOWN+'1', D(200), UP+'1',												// O - A-A mode off
+								CHAIN( DOWN+'1', D(100), UP+'1',												// O - A-A mode off
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED1) )); 							//     LED1 OFF for U layer
 	
 	// M LAYER - Navigation Mode
 	// BSM - LED2 ON/OFF
-	MapKey(&Throttle, BSM, 		CHAIN( D(300), LED(&Throttle, LED_ONOFF, LED_CURRENT+LED2)));					// LED2 ON for M layer
+	MapKey(&Throttle, BSM, 		CHAIN( D(200), LED(&Throttle, LED_ONOFF, LED_CURRENT+LED2)));					// LED2 ON for M layer
 	MapKeyR(&Throttle, BSM, 	LED(&Throttle, LED_ONOFF, LED_CURRENT-LED2)); 									// LED2 OFF for M layer
 
 	// D LAYER - Air-to-Ground Mode
 	// BSB - LED3 ON/OFF
 	MapKeyIO(&Throttle, BSB, 	0,																				// I - 
-								CHAIN( DOWN+'2', D(200), UP+'2',												// O - A-G mode on
+								CHAIN( DOWN+'2', D(100), UP+'2',												// O - A-G mode on
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED3) )); 							//     LED3 ON for D layer
 	MapKeyRIO(&Throttle, BSB, 	0,																				// I - 
-								CHAIN( DOWN+'2', D(200), UP+'2',												// O - A-G mode off
+								CHAIN( DOWN+'2', D(100), UP+'2',												// O - A-G mode off
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED3) )); 							//     LED3 OFF for D layer
 
 
