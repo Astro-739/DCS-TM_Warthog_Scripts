@@ -419,7 +419,7 @@ int dcs_fighter_common()
 	MapKeyIO(&Throttle, EOLMOTOR, 0 ); 		//TODO groundcrew														//
 
 	// EORIGN
-	MapKeyIO(&Throttle, EOLIGN,		0,																			// I - 
+	MapKeyIO(&Throttle, EORIGN,		0,																			// I - 
 									CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));					// O - Right Throttle - IDLE
 	// EORNORM
 	MapKey(&Throttle, EORNORM, 	0 );																			// 
