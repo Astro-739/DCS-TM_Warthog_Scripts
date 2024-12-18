@@ -527,7 +527,7 @@ int dcs_fighter_common_specific()
 								DX28 );																			// OD - D_MSR
 	// MSL
 	MapKeyIOUMD(&Throttle, MSL, TEMPO( awacs_declare,								 							// IU - AWACS Declare
-									   awacs_bogeydope, 500 ),													// 		[long] Flight - Request AWACS Bogey Dope
+									   awacs_requestpicture, 500 ),												// 		[long] AWACS Request Picture
 								DX30,																			// OU - U_MSL
 								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_calltheball );" 				// IM - [CAR]  Call the Ball
 											 "else if(WHDN_mode) ActKey( PULSE+KEYON+ground_rearmrefuel );" 	//		[WHDN] Rearming and Refueling Window   (L_ALT+')
@@ -536,10 +536,10 @@ int dcs_fighter_common_specific()
 									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 							// 		[long] [CAR]  -
 											 "else if(WHDN_mode) ActKey( PULSE+KEYON+0 );" 						//		[long] [WHDN] -
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"						//		[long] [AAR]  -
-											 "else ActKey( PULSE+KEYON+awacs_bogeydope );" ),	500 ),			//		[long] Request AWACS Bogey Dope
+											 "else ActKey( PULSE+KEYON+awacs_requestpicture );" ),	500 ),		//		[long] AWACS Request Picture
 								DX30,																			// OM - M_MSL
 								TEMPO( flight_radaroffon,														// ID - Flight - Radar Off/On
-									   awacs_bogeydope, 500 ),													// 		[long] Request AWACS Bogey Dope
+									   awacs_requestpicture, 500 ),													// 		[long] AWACS Request Picture
 								DX30 );																			// OD - D_MSL
 	// MSP 
 	MapKeyIO(&Throttle, MSP, 	PULSE+F12,																		// I - F12 exit menu
