@@ -200,10 +200,10 @@ int dcs_fighter_common()
 							 EXEC( "flashlight_on = 0;") ));
 
 	// Brightness function
-	brightness_up 	= REXEC( 100, 50, "if(nightvision_on) ActKey( PULSE+KEYON+R_CTL+R_SHIFT+'h' );"		 				// NVG brightness up
+	brightness_up 	= REXEC( 100, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_CTL+R_SHIFT+'h' );"		 				// NVG brightness up
 									  "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+'.' );"					// Flashlight brightness up
 									  "else ActKey( PULSE+KEYON+DX24 );" );												// HUD/HMCS/Reticle brightness up
-	brightness_down = REXEC( 101, 50, "if(nightvision_on) ActKey( PULSE+KEYON+R_ALT+R_SHIFT+'h' );"						// NVG brightness down
+	brightness_down = REXEC( 101, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_ALT+R_SHIFT+'h' );"						// NVG brightness down
 									  "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+',' );"					// Flashlight brightness down
 									  "else ActKey( PULSE+KEYON+DX25 );" );												// HUD/HMCS/Reticle brightness down
 																														// FLIR brightness
@@ -414,22 +414,22 @@ int dcs_fighter_common()
 	MapKeyIO(&Throttle, EOLIGN,		startup,																	// I - Start-up sequence
 									CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));					// O - Left Throttle - IDLE
 	// EOLNORM
-	MapKey(&Throttle, EOLNORM, 	0 );																			//
+	MapKey(&Throttle, EOLNORM, 		0 );																		//
 	// EOLMOTOR
-	MapKeyIO(&Throttle, EOLMOTOR, 0 ); 		//TODO groundcrew														//
+	MapKeyIO(&Throttle, EOLMOTOR, 	0 ); 		//TODO groundcrew														//
 
 	// EORIGN
 	MapKeyIO(&Throttle, EORIGN,		0,																			// I - 
 									CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));					// O - Right Throttle - IDLE
 	// EORNORM
-	MapKey(&Throttle, EORNORM, 	0 );																			// 
+	MapKey(&Throttle, EORNORM, 		0 );																		// 
 	// EORMOTOR
-	MapKeyIO(&Throttle, EORMOTOR, 0,																			// I - 
-								EXEC( "afterburnerdetent_present = 1;" 											// O - Engage afterburner detent
-									  "afterburnerdetent(1);" ));
-	MapKeyRIO(&Throttle, EORMOTOR, 0,																			// I - 
-								EXEC( "afterburnerdetent_present = 0;" 											// O - Disengage afterburner detent
-									  "afterburnerdetent(0);" ));
+	MapKeyIO(&Throttle, EORMOTOR, 	0,																			// I - 
+									EXEC( "afterburnerdetent_present = 1;" 										// O - Engage afterburner detent
+										  "afterburnerdetent(1);" ));
+	MapKeyRIO(&Throttle, EORMOTOR, 	0,																			// I - 
+									EXEC( "afterburnerdetent_present = 0;" 										// O - Disengage afterburner detent
+										  "afterburnerdetent(0);" ));
 
 
 	// Engine idle/off
