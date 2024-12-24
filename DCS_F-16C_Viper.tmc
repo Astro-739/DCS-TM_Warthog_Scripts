@@ -222,20 +222,20 @@ int main()
 	MapKeyIOUMD(&Throttle, CSD, TEMPO( CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x57], D(), UP+L_CTL ),				// IU - ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
 									   CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'0', D(), UP+L_ALT+R_SHIFT ),	// 		[long] HSD zoom in (Right MFD OSB 20 on HSD page)
 									   500 ),																	// 
-								DX12,																			// OU - ENABLE Switch - Depress
+								DX24,																			// OU - ENABLE Switch - Depress
 								CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x57], D(), UP+L_CTL ),						// IM - ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
-								DX12, 																			// OM - ENABLE Switch - Depress
+								DX24, 																			// OM - ENABLE Switch - Depress
 								CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x57], D(), UP+L_CTL ),						// ID - ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
-								DX12);																			// OD - ENABLE Switch - Depress
+								DX24);																			// OD - ENABLE Switch - Depress
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, CHAIN( L_CTL, D(10), RARROW ), 													// IU - ICP Data Control Switch - SEQ (dobber sequence)
-							 	DX11,																			// OU - UNCAGE Switch
+							 	DX23,																			// OU - UNCAGE Switch
 								CHAIN( L_CTL, D(10), RARROW ), 													// IM - ICP Data Control Switch - SEQ (dobber sequence)
 								TEMPO( CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'v', D(), UP+R_CTL+R_SHIFT ),	// OM - FUEL QTY SEL Knob - CW
 									   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'c', D(), UP+R_CTL+R_SHIFT ), 	//		[long] FUEL QTY SEL Knob - NORM
 									   500 ),																	//
 								CHAIN( L_CTL, D(10), RARROW ), 													// ID - ICP Data Control Switch - SEQ (dobber sequence)
-								DX11 );																			// OD - UNCAGE Switch
+								DX23 );																			// OD - UNCAGE Switch
 	// CSL
 	MapKeyIOUMD(&Throttle, CSL, CHAIN( L_CTL, D(10), LARROW ), 													// IU - ICP Data Control Switch - RET (dobber return)
 								CHAIN( L_CTL, D(10), KP7 ),														// OU - ICP Priority Function Button - 7(MARK)
@@ -313,7 +313,7 @@ int main()
 	MapKey(&Throttle, FLAPD,  		CHAIN( DOWN+R_CTL, D(10), PULSE+'r', D(), UP+R_CTL ));							// RF Switch - SILENT
 
 
-	// Canopy        //TODO DX23
+	// Canopy        //TODO DX11
 	// RDRNRM
 	MapKeyIOUMD(&Throttle, RDRNRM, 	0, 																				// IU - 
 									0,																				// OU - 

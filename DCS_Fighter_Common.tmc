@@ -202,10 +202,10 @@ int dcs_fighter_common()
 	// Brightness function
 	brightness_up 	= REXEC( 100, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_CTL+R_SHIFT+'h' );"		 				// NVG brightness up
 									  "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+'.' );"					// Flashlight brightness up
-									  "else ActKey( PULSE+KEYON+DX24 );" );												// HUD/HMCS/Reticle brightness up
+									  "else ActKey( PULSE+KEYON+DX37 );" );												// HUD/HMCS/Reticle brightness up
 	brightness_down = REXEC( 101, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_ALT+R_SHIFT+'h' );"						// NVG brightness down
 									  "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+',' );"					// Flashlight brightness down
-									  "else ActKey( PULSE+KEYON+DX25 );" );												// HUD/HMCS/Reticle brightness down
+									  "else ActKey( PULSE+KEYON+DX38 );" );												// HUD/HMCS/Reticle brightness down
 																														// FLIR brightness
 							  
 	// Enigma CW Server function
@@ -315,7 +315,7 @@ int dcs_fighter_common()
 	// Canopy
 	// RDRNRM
 	MapKeyUMD(&Throttle, RDRNRM, 0, 																			// U - 
-								DX23,																			// M - Canopy - OPEN/CLOSE (always return switch to RDRDIS)
+								DX11,																			// M - Canopy - OPEN/CLOSE (always return switch to RDRDIS)
 								0 );																			// D -  
 	// RDRDIS
 	MapKeyUMD(&Throttle, RDRDIS, 0,																				// U -  
@@ -345,14 +345,14 @@ int dcs_fighter_common()
 	// SPDB
 	MapKeyIOUMD(&Throttle, SPDB, CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),				// IU - snap zoom min    (R_SHIFT+KP/)
 								DX32,																			// OU - Open Speed Brakes Momentary
-								EXEC( "if(WHDN_mode) ActKey( KEYON+DX13 );" 									// IM - [WHDN] wheel brake 
+								EXEC( "if(WHDN_mode) ActKey( KEYON+DX12 );" 									// IM - [WHDN] wheel brake 
 									  "else ActKey( PULSE+KEYON+USB[0x54] );" ),								//		snap zoom min
 								DX32,																			// OM - Open Speed Brakes Momentary
 								CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),					// ID - snap zoom min    (R_SHIFT+KP/)
 								DX32 );																			// OD - Open Speed Brakes Momentary
 	MapKeyRIOUMD(&Throttle, SPDB, PULSE+KPENT,																	// IU - snap zoom normal
 								CHAIN( D(100), PULSE+DX31 ),													// OU - Close Speed Brakes
-								EXEC( "if(WHDN_mode) ActKey( DX13 );"											// IM - [WHDN] release DX13
+								EXEC( "if(WHDN_mode) ActKey( DX12 );"											// IM - [WHDN] release DX12
 									  "else ActKey( PULSE+KEYON+KPENT );" ),									//		snap zoom normal
 								CHAIN( D(100), PULSE+DX31 ),													// OM - Close Speed Brakes
 								PULSE+KPENT,																	// ID - snap zoom normal

@@ -116,10 +116,14 @@ int main()
 
 
 	// Expand FOV Button - S3
-	MapKeyUMD(&AVA_F16, S3,     0,																				// U - 
+	MapKeyUMD(&AVA_F16, S3,     'a',																			// U - Autopilot/Nosewheel Steering Disengage (Paddle) Switch
 							    'a',															 				// M - Autopilot/Nosewheel Steering Disengage (Paddle) Switch
-							    0);																				// D - 
+							    'a' );																			// D - Autopilot/Nosewheel Steering Disengage (Paddle) Switch
 
+	// Nosewheel Steering Button
+	// S1
+	// MapKeyIO(&AVA_F16, S1,  	SEQ( PULSE+F10, PULSE+F1 ),														// I - map
+	//						 	nosewheelsteering ); 															// O - Nosewheel Steering Button
 
 	// Target Management Switch
 	// H2U
@@ -213,13 +217,11 @@ int main()
 								DX14);																			// OD - ENABLE Switch - Depress
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, CHAIN( L_CTL, D(10), RARROW ), 													// IU - ICP Data Control Switch - SEQ (dobber sequence)
-							 	DX11,																			// OU - Cage/Uncage Button
+							 	DX23,																			// OU - Cage/Uncage Button
 								CHAIN( L_CTL, D(10), RARROW ), 													// IM - ICP Data Control Switch - SEQ (dobber sequence)
-								TEMPO( CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'v', D(), UP+R_CTL+R_SHIFT ),	// OM - FUEL QTY SEL Knob - CW
-									   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'c', D(), UP+R_CTL+R_SHIFT ), 	//		[long] FUEL QTY SEL Knob - NORM
-									   500 ),																	//
+								DX23,																			// OM - Cage/Uncage Button
 								CHAIN( L_CTL, D(10), RARROW ), 													// ID - ICP Data Control Switch - SEQ (dobber sequence)
-								DX11 );																			// OD - Cage/Uncage Button
+								DX23 );																			// OD - Cage/Uncage Button
 	// CSL
 	MapKeyIOUMD(&Throttle, CSL, CHAIN( L_CTL, D(10), LARROW ), 													// IU - ICP Data Control Switch - RET (dobber return)
 								CHAIN( L_CTL, D(10), KP7 ),														// OU - ICP Priority Function Button - 7(MARK)
@@ -305,10 +307,10 @@ int main()
 	// EOLIGN
 	// EOLNORM in common
 	// EOLMOTOR
-	MapKeyIO(&Throttle, EOLMOTOR, 	0,																				// I - 
-									0); 																			// O - 
+	// MapKeyIO(&Throttle, EOLMOTOR, 	0,																				// I - 
+	// 								0); 																			// O - 
 	// EORIGN
-	MapKey(&Throttle, EORIGN, 		0); 																			// 
+	// MapKey(&Throttle, EORIGN, 		0); 																			// 
 	// EORNORM in common
 	// EORMOTOR in common
 

@@ -239,7 +239,7 @@ int main()
 								0);																				// OD - 
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'7', D(), UP+L_CTL+L_SHIFT ),		 	// IU - Armament Position Selector Switch (RIGHT WINGTIP) - ON/OFF
-							 	DX11,																			// OU - Missile Uncage Switch
+							 	DX23,																			// OU - Missile Uncage Switch
 								0, 																				// IM - 
 								TEMPO( 0, PULSE+'m', 500 ),														// OM - [long] Toggle Mirrors
 								0, 																				// ID - 
