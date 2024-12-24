@@ -160,8 +160,8 @@ int dcs_fighter_common()
 	atc_inbound					= CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ); 		// Radio menu (\), ATC, Airfield, Inbound
 	atc_requestlanding			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 );				 							// Request landing short menu
 
-	ground_requeststartup		= CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F3 );		// Request start-up
-	ground_requesttaxitakeoff	= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 );				 							// Request taxi, take-off short menu
+	ground_requeststartup		= CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F3 );		// Radio menu (\), ATC, Airfield, Request start-up
+	ground_requesttaxitakeoff	= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 );				 							// Radio menu (\), Request taxi, take-off short menu
 	ground_rearmrefuel			= CHAIN( DOWN+L_ALT, D(10), PULSE+USB[0x34], D(), UP+L_ALT );        			  		// Rearming and Refueling Window   (L_ALT+')
 	
 	cv_requestlaunch			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F3, D(200), PULSE+F2 ); 		// TODO Radio menu (\), xxxxxxx
@@ -200,10 +200,10 @@ int dcs_fighter_common()
 							 EXEC( "flashlight_on = 0;") ));
 
 	// Brightness function
-	brightness_up 	= REXEC( 100, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_CTL+R_SHIFT+'h' );"		 				// NVG brightness up
+	brightness_up 	= REXEC( 100, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_CTL+R_SHIFT+'h' );"		 			// NVG brightness up
 									  "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+'.' );"					// Flashlight brightness up
 									  "else ActKey( PULSE+KEYON+DX37 );" );												// HUD/HMCS/Reticle brightness up
-	brightness_down = REXEC( 101, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_ALT+R_SHIFT+'h' );"						// NVG brightness down
+	brightness_down = REXEC( 101, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_ALT+R_SHIFT+'h' );"					// NVG brightness down
 									  "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+',' );"					// Flashlight brightness down
 									  "else ActKey( PULSE+KEYON+DX38 );" );												// HUD/HMCS/Reticle brightness down
 																														// FLIR brightness
@@ -357,6 +357,14 @@ int dcs_fighter_common()
 								CHAIN( D(100), PULSE+DX31 ),													// OM - Close Speed Brakes
 								PULSE+KPENT,																	// ID - snap zoom normal
 								CHAIN( D(100), PULSE+DX31 ));													// OU - Close Speed Brakes
+
+	// China Hat
+	// CHF
+	MapKeyIO(&Throttle, CHF, 	brightness_up, 																	// I - brightness up (HUD/HMCS/Reticle - Flashlight - NVG)
+							 	DX13 ); 																		// O - Radar Elevation Antenna Control - CW/Up
+	// CHB
+	MapKeyIO(&Throttle, CHB, 	brightness_down,																// I - brightness down (HUD/HMCS/Reticle - Flashlight - NVG)
+							 	DX14 ); 																		// O - Radar Elevation Antenna Control - CCW/Down
 
 
 	// SC (IR head tracking)
