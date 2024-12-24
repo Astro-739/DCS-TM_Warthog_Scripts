@@ -59,9 +59,6 @@ int awacs_declare;
 int uhf_callradiomenu;
 int vhf_callradiomenu;
 
-int atc_inbound;
-int atc_requestlanding;
-
 int	cv_requestlaunch;
 int	cv_inbound;
 int	cv_salute;
@@ -76,9 +73,14 @@ int jtac_readback;				// F1
 int jtac_attackcomplete;		// F1
 int jtac_checkout;				// F2 soms F7
 
-int ground_requeststartup;
-int ground_requesttaxitakeoff;
 int ground_rearmrefuel;
+int ground_removewheelchocks;
+int groundcrew;
+
+int atc_requeststartup;
+int atc_requesttaxitakeoff;
+int atc_inbound;
+int atc_requestlanding;
 
 int refuel_inbound;
 int refuel_precontact;
@@ -157,12 +159,13 @@ int dcs_fighter_common()
 	jtac_followoncomms			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 ); 											// Radio menu (\), JTAC, Follow-on Comms
 	jtac_checkout				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F2 ); 											// Radio menu (\), JTAC, Check Out
 
+	ground_rearmrefuel			= CHAIN( DOWN+L_ALT, D(10), PULSE+USB[0x34], D(), UP+L_ALT );        			  		// Rearming and Refueling Window   (L_ALT+')
+	ground_removewheelchocks	= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F5, D(200), PULSE+F2 );		// Radio menu (\), Prev, GroundCrew, Wheel Chocks, Remove
+
+	atc_requeststartup			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F3 );		// Radio menu (\), ATC, Airfield, Request start-up
+	atc_requesttaxitakeoff		= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 );		// Radio menu (\), Prev, ATC, Airfield, Request taxi/take-off
 	atc_inbound					= CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ); 		// Radio menu (\), ATC, Airfield, Inbound
 	atc_requestlanding			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 );				 							// Request landing short menu
-
-	ground_requeststartup		= CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F3 );		// Radio menu (\), ATC, Airfield, Request start-up
-	ground_requesttaxitakeoff	= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 );				 							// Radio menu (\), Request taxi, take-off short menu
-	ground_rearmrefuel			= CHAIN( DOWN+L_ALT, D(10), PULSE+USB[0x34], D(), UP+L_ALT );        			  		// Rearming and Refueling Window   (L_ALT+')
 	
 	cv_requestlaunch			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F3, D(200), PULSE+F2 ); 		// TODO Radio menu (\), xxxxxxx
 	cv_inbound					= SEQ( CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ), 	// Radio menu (\), ATC, CV, Inbound
@@ -177,7 +180,10 @@ int dcs_fighter_common()
     // Start-up Sequence (can be specified per airplane)
 	startup 	= CHAIN( R_SHIFT, D(10), 's' ); 																		// Battery / MAIN PWR Switch
 
-	// Drag Chute (to be specified per airplane)
+	// Ground Crew Sequence (can be specified per airplane)
+	groundcrew  = 0;																									// Ground Crew defined per aircraft when needed
+
+	// Drag Chute (can be specified per airplane)
 	dragchute_deploy	= 0;																							// Drag Chute defined per aircraft when needed
 	dragchute_release	= 0;
 
@@ -424,7 +430,8 @@ int dcs_fighter_common()
 	// EOLNORM
 	MapKey(&Throttle, EOLNORM, 		0 );																		//
 	// EOLMOTOR
-	MapKeyIO(&Throttle, EOLMOTOR, 	0 ); 		//TODO groundcrew														//
+	MapKeyIO(&Throttle, EOLMOTOR, 	0,																			// I - 
+									groundcrew ); 						//TODO groundcrew						// O - TEST
 
 	// EORIGN
 	MapKeyIO(&Throttle, EORIGN,		0,																			// I - 
@@ -488,7 +495,7 @@ int dcs_fighter_common_specific()
 									   flight_pincerright, 500 ),												// 		[long] Flight - Pincer Right
 								DX27,																			// OU - Transmit Switch - Radio 1 (VOIP)
 								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_requestlaunch );" 			// IM - [CAR]  Request Catapult Launch
-											 "else if(WHDN_mode) ActKey( PULSE+KEYON+ground_requeststartup );" 	//		[WHDN] Request Engine Start
+											 "else if(WHDN_mode) ActKey( PULSE+KEYON+atc_requeststartup );" 	//		[WHDN] Request Engine Start
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"						//		[AAR]  -
 											 "else ActKey( PULSE+KEYON+flight_rejoinformation );" ),			//		Flight - Rejoin Formation
 									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 							// 		[long] [CAR]  -
@@ -520,7 +527,7 @@ int dcs_fighter_common_specific()
 									   flight_lineabreast, 500 ),												// 		[long] Flight - Formation Line Abreast
 								DX28,																			// OU - U_MSR
 								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_salute );" 					// IM - [CAR]  Salute
-											 "else if(WHDN_mode) ActKey( PULSE+KEYON+ground_requesttaxitakeoff );" 	//	[WHDN] Request taxi, take-off (short menu)
+											 "else if(WHDN_mode) ActKey( PULSE+KEYON+atc_requesttaxitakeoff );" 	//	[WHDN] Request taxi, take-off (short menu)
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+refuel_precontact );"		//		[AAR]  "Ready for precontact" radio call
 											 "else ActKey( PULSE+KEYON+flight_fingerfour );" ),					//		Flight - Finger Four
 									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 							// 		[long] [CAR]  -

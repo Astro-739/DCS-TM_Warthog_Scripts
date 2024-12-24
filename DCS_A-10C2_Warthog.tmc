@@ -77,11 +77,13 @@ int main()
 
 	// -------------------- FUNCTIONS --------------------
 	
-	// Start-up Sequence    // TODO test
+	// Start-up Sequence (in Common)
 	startup = SEQ( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'s', D(), UP+R_SHIFT ), 					// Battery power
 				   CHAIN( DOWN+L_ALT, D(10), PULSE+'s', D(), UP+L_ALT ), 						// Inverter STBY
 				   CHAIN( DOWN+R_CTL, D(10), PULSE+'s', D(), UP+R_CTL )); 						// APU generator power
 
+	// Gound Crew (in Common)
+	groundcrew = CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F5, D(200), PULSE+F2 );		// Radio menu (\), Prev, GroundCrew, Wheel Chocks, Remove
 
 	// Master Modes function
 	mastermode = 0;																			// mastermode 0,1,2,3		NAV, GUN, CCIP, CCRP
@@ -186,12 +188,6 @@ int main()
 	// H3L
 //	MapKeyIO(&AVA_F16, H3L, 	PULSE+'[', 																		// I - kneeboard previous page
 //								'h' );																			// O - Coolie Switch Left
-
-
-	//							TEMPO( CHAIN( DOWN+R_ALT, D(10), PULSE+RARROW, D(), UP+R_ALT ),					// ID - Boat Switch Forward
-	//							CHAIN( DOWN+R_ALT, D(10), PULSE+LARROW, D(), UP+R_ALT ),						// ID - Boat Switch Aft
-	//							CHAIN( DOWN+R_ALT, D(10), PULSE+DARROW, D(), UP+R_ALT ),						// ID - Boat Switch Centre
-
 
 
  	// Countermeasure Management Switch
@@ -344,34 +340,6 @@ int main()
 	MapKey(&Throttle, FLAPD,  		CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));							// Flaps Down (to full)
 	MapKeyR(&Throttle, FLAPD,  		CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ));						// Flaps Up (to middle)
 
-	// Canopy //TODO - align Common
-	// RDRNRM
-//	MapKeyIOUMD(&Throttle, RDRNRM, 	0, 																				// IU - 
-//									0,																				// OU - 
-//									0,																				// IM -
-//									CHAIN( DOWN+L_CTL, D(10), PULSE+'c', D(), UP+L_CTL ),							// OM - Canopy - OPEN/CLOSE
-//									0,																				// ID - 
-//									0 );																			// OD - 
-
-	// APUON   -  moved to Common //TODO test
-//	MapKey(&Throttle, APUON, 		CHAIN( DOWN+L_SHIFT, D(10), PULSE+'a', D(), UP+L_SHIFT ));						//   APU Start
-	// APUOFF
-//	MapKey(&Throttle, APUOFF, 		CHAIN( DOWN+L_CTL, D(10), PULSE+'a', D(), UP+L_CTL ));							//   APU Off
-
-
-	// Engine Operation
-	// EOLIGN (overwrites common)    // TODO test
-//	MapKeyIO(&Throttle, EOLIGN,		startup,																		// I - Start-up Sequence
-//									CHAIN( DOWN+R_ALT, D(10), PULSE+HOME, D(), UP+R_ALT ));							// O - Left Throttle - IDLE
-	// EOLMOTOR
-//	MapKeyIO(&Throttle, EOLMOTOR, 	0,																				// I - 
-//									0 ); 																			// O - 
-	// EORIGN
-//	MapKeyIO(&Throttle, EORIGN, 	0, 																				// I - 
-//									CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));						// O - Right Throttle - IDLE
-	// EORMOTOR
-//	MapKeyIO(&Throttle, EORMOTOR, 	0,																				// I - 
-//									0 );																			// O - 
 
 	// Engine Override Left
 	// EFLNORM
