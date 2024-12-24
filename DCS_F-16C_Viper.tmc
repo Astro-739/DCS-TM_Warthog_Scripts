@@ -97,13 +97,6 @@ int main()
 					 "override_dog = !override_dog;" );
 
 
-	// Comms functions
-//	U_MSR_short	= CHAIN( DOWN+L_CTL, D(10), DOWN+'i', D(100), UP+'i', D(), UP+L_CTL );							// Transmit Switch - IFF OUT	
-//	U_MSR_long	= 0;
-//	U_MSL_short	= CHAIN( DOWN+L_SHIFT, D(10), DOWN+'i', D(100), UP+'i', D(), UP+L_SHIFT );						// Transmit Switch - IFF IN
-//	U_MSL_long	= 0;
-
-
 
 
 	// -------------------- FLIGHT STICK --------------------
@@ -244,7 +237,7 @@ int main()
 								CHAIN( L_CTL, D(10), LARROW ), 													// ID - ICP Data Control Switch - RET (dobber return)
 								CHAIN( L_CTL, D(10), KP7 ));													// OD - ICP Priority Function Button - 7(MARK)
 
-	// Speedbrake Switch
+	// Speedbrake Switch   // TODO to Common?
 	// SPDF
 	MapKeyIO(&Throttle, SPDF, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x55], D(), UP+R_SHIFT ),					// I - snap zoom max   (R_SHIFT+KP*)
 							   	DX31 );																			// O - speedbrake extend and stay in place
@@ -253,14 +246,14 @@ int main()
 	// SPDB
 	MapKeyIOUMD(&Throttle, SPDB, CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),				// IU - snap zoom min    (R_SHIFT+KP/)
 								CHAIN( L_SHIFT, D(10), 'b' ),													// OU - speedbrake extend (momentary)
-								EXEC( "if(WHDN_mode) ActKey( KEYON+'w' );" 										// IM - [WHDN] wheel brake
+								EXEC( "if(WHDN_mode) ActKey( KEYON+DX12 );" 									// IM - [WHDN] wheel brake
 									  "else ActKey( PULSE+KEYON+USB[0x54] );" ),								//		snap zoom min
 								CHAIN( L_SHIFT, D(10), 'b' ),													// OM - speedbrake extend (momentary)
 								CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),					// ID - snap zoom min    (R_SHIFT+KP/)
 								CHAIN( L_SHIFT, D(10), 'b' ));													// OD - speedbrake extend (momentary)
 	MapKeyRIOUMD(&Throttle, SPDB, PULSE+KPENT,																	// IU - snap zoom normal
 								CHAIN( D(100), DOWN+L_CTL, D(10), PULSE+'b', D(), UP+L_CTL ),					// OU - speedbrake fully retract
-								EXEC( "if(WHDN_mode) ActKey( 'w' );"											// IM - [WHDN] release 'w'
+								EXEC( "if(WHDN_mode) ActKey( DX12 );"											// IM - [WHDN] release DX12
 									  "else ActKey( PULSE+KEYON+KPENT );" ),									//		snap zoom normal
 								CHAIN( D(100), DOWN+L_CTL, D(10), PULSE+'b', D(), UP+L_CTL ),					// OM - speedbrake fully retract
 								PULSE+KPENT,																	// ID - snap zoom normal
@@ -269,10 +262,10 @@ int main()
 	// China Hat
 	// CHF
 	MapKeyIO(&Throttle, CHF, 	brightness_up, 																	// I - brightness up for goggle/HMCS
-							 	REXEC( 20, 200, "ActKey( PULSE+KEYON+'=' );" ));								// O - ANT ELEV Knob - CCW    (REXEC to slow down repeat press)
+							 	REXEC( 20, 200, "ActKey( PULSE+KEYON+DX14 );" ));								// O - ANT ELEV Knob - CCW/down    (REXEC to slow down repeat press)
 	// CHB
 	MapKeyIO(&Throttle, CHB, 	brightness_down,																// I - brightness down for goggle/HMCS
-							 	REXEC( 21, 200, "ActKey( PULSE+KEYON+'-' );" ));								// O - ANT ELEV Knob - CW    (REXEC to slow down repeat press)
+							 	REXEC( 21, 200, "ActKey( PULSE+KEYON+DX13 );" ));								// O - ANT ELEV Knob - CW/up    (REXEC to slow down repeat press)
 
 	// Pinky Switch (exterior lighting)
 	// PSF
@@ -296,13 +289,6 @@ int main()
 							  	CHAIN( DOWN+R_CTL, D(10), PULSE+'l', D(), UP+R_CTL, D(), 							// O - MASTER Switch - A-C covert
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED4) )); 								//     LED4 ON
 								
-	// LDGH
-//	MapKeyIOUMD(&Throttle, LDGH, 	0, 																				// IU - 
-//									CHAIN( R_CTL, D(10), 'c' ),														// OU - Master Caution Button
-//									CHAIN( DOWN+R_CTL, D(10), PULSE+BSP, D(), UP+R_CTL ), 							// IM - Upload F-16 DTC (Data Cartridge)
-//									CHAIN( R_CTL, D(10), 'c' ),														// OM - Master Caution Button
-//									0, 																				// ID - 
-//									CHAIN( R_CTL, D(10), 'c' ));													// OD - Master Caution Button
 
 	// Flaps Switch (RF Switch)
 	// FLAPU
@@ -313,17 +299,17 @@ int main()
 	MapKey(&Throttle, FLAPD,  		CHAIN( DOWN+R_CTL, D(10), PULSE+'r', D(), UP+R_CTL ));							// RF Switch - SILENT
 
 
-	// Canopy        //TODO DX11
+	// Canopy
 	// RDRNRM
 	MapKeyIOUMD(&Throttle, RDRNRM, 	0, 																				// IU - 
 									0,																				// OU - 
 									CHAIN( DOWN+L_SHIFT, D(10), PULSE+'c', D(), UP+L_SHIFT ),						// IM - Canopy Handle - DOWN/UP
-									CHAIN( L_CTL, D(10), 'c' ),														// OM - Canopy - OPEN/CLOSE
+									DX11,																			// OM - Canopy - OPEN/CLOSE
 									0,																				// ID - 
 									0);																				// OD - 
 
 	// Engine Operation
-	// EOLIGN (overwrites common)  //TODO test
+	// EOLIGN (overwrites common)
 	MapKeyIO(&Throttle, EOLIGN,		startup, 																		// I - Start-up Sequence
 									CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));						// O - Right Throttle - IDLE
 	// EOLNORM in common
