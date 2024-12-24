@@ -118,14 +118,14 @@ int main()
 	// Weapon Release Button
 	// S2
 	MapKeyIOUMD(&AVA_F16, S2,  	SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),										// IU - Emergency All Jettison Button Cover - OPEN
-									 CHAIN( L_SHIFT+L_CTL, D(10), '0' )),										//		Emergency All Jettison Button
-							    CHAIN( R_ALT, D(10), SPC ),														// OU - weapon release
+									 CHAIN( L_SHIFT, D(10), 'e' )),												//		Emergency All Jettison Button
+							    DX2,																			// OU - weapon release
 								SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),										// IM - Emergency All Jettison Button Cover - OPEN
-									 CHAIN( L_SHIFT+L_CTL, D(10), '0' )),										//		Emergency All Jettison Button
+									 CHAIN( L_SHIFT, D(10), 'e' )),												//		Emergency All Jettison Button
 							    0,																			 	// OM - 
 							    SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),										// ID - Emergency All Jettison Button Cover - OPEN
-									 CHAIN( L_SHIFT+L_CTL, D(10), '0' )),										//		Emergency All Jettison Button
-							    CHAIN( R_ALT, D(10), SPC ));													// OD - weapon release
+									 CHAIN( L_SHIFT, D(10), 'e' )),												//		Emergency All Jettison Button
+							    DX2 );																			// OD - weapon release
 
 	// Expand FOV Button - S3
 	MapKeyIOUMD(&AVA_F16, S3,  	0, 																				// IU -
@@ -138,48 +138,50 @@ int main()
 	// Target Management Switch
 	// H2U
 	MapKeyIO(&AVA_F16, H2U, 	PULSE+ENT,																		// I - AN/APQ-159 Radar ACQ Button
-							 	USB[0x55]);		 																// O - zoom in  (KP*) 
-	// H2R							
-	MapKeyIO(&AVA_F16, H2R, 	0,																				// I -
-							 	CHAIN( L_WIN, D(10), KP6 )); 													// O - snap view right 
+							 	DX7 );			 																// O - zoom in  (KP*) 
 	// H2D
 	MapKeyIO(&AVA_F16, H2D, 	0,																				// I -
-							 	USB[0x54]);																		// O - zoom out  (KP\)
+							 	DX9 );																			// O - zoom out  (KP\)
+	// H2R							
+	MapKeyIO(&AVA_F16, H2R, 	0,																				// I -
+							 	DX8 ); 																			// O - snap view right 
 	// H2L
 	MapKeyIO(&AVA_F16, H2L, 	0,																				// I -
-							 	CHAIN( L_WIN, D(10), KP4 )); 													// O - snap view left 
+							 	DX10 ); 																		// O - snap view left 
 
 	// Display Management Switch
 	// H3U
-	MapKeyIO(&AVA_F16, H3U, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
-								CHAIN( R_ALT, D(10), '7' ));													// O - RWR Indicator Control SEARCH Button
-	// H3R
-	MapKeyIO(&AVA_F16, H3R, 	PULSE+']', 																		// I - kneeboard next page
-								CHAIN( R_ALT, D(10), 'y' ));													// O - RWR Indicator Control T Button
+	MapKeyIO(&AVA_F16, H3U, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),								// I - kneeboard on/off
+								CHAIN( R_ALT, D(10), '7' ));															// O - RWR Indicator Control SEARCH Button
 	// H3D
-	MapKeyIO(&AVA_F16, H3D, 	CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
-								CHAIN( R_ALT, D(10), '6' ));													// O - RWR Indicator Control MODE Button
+	MapKeyIO(&AVA_F16, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
+									   flashlight, 500 ),																//	   [long] Flashlight on/off
+								CHAIN( R_ALT, D(10), '6' ));															// O - RWR Indicator Control MODE Button
+	// H3R
+	MapKeyIO(&AVA_F16, H3R, 	TEMPO( PULSE+']', 																		// I - kneeboard next page
+									   CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+']', D(), UP+R_SHIFT+L_SHIFT ), 500 ),	//	   [long] Kneeboard Next Shortcut
+								CHAIN( R_ALT, D(10), 'y' ));															// O - RWR Indicator Control T Button
 	// H3L
-	MapKeyIO(&AVA_F16, H3L, 	TEMPO( PULSE+'[', 																// I - kneeboard previous page
-									   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT ), 500 ),			//	   [long] Pilot Body toggle								
-								CHAIN( R_ALT, D(10), 'i' ));													// O - RWR Indicator Control UNKNOWN SHIP Button
+	MapKeyIO(&AVA_F16, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
+									   CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'[', D(), UP+R_SHIFT+L_SHIFT ), 500 ),	//	   [long] Kneeboard Previous Shortcut
+								CHAIN( R_ALT, D(10), 'i' ));															// O - RWR Indicator Control UNKNOWN SHIP Button
 
  	// Countermeasure Management Switch
 	// H4U	
 	MapKeyIO(&AVA_F16, H4U, 	0,																				// I - 
-							 	PULSE+'5');																		// O - Dogfight/Resume Search Switch - FORWARD (DM)
-	// H4R
-	MapKeyIO(&AVA_F16, H4R, 	0, 																				// I - PROGRAM Knob - CW
-			  				 	PULSE+'r');																		// O - Dogfight/Resume Search Switch - CENTER-PRESS (RESUME SEARCH)
+							 	PULSE+'5' );																	// O - Dogfight/Resume Search Switch - FORWARD (DM)
 	// H4D
 	MapKeyIO(&AVA_F16, H4D, 	0, 																				// I -
-							 	PULSE+'6'); 																	// O - Dogfight/Resume Search Switch - AFT (DG)
+							 	PULSE+'6' ); 																	// O - Dogfight/Resume Search Switch - AFT (DG)
+	// H4R
+	MapKeyIO(&AVA_F16, H4R, 	0, 																				// I - PROGRAM Knob - CW
+			  				 	PULSE+'r' );																	// O - Dogfight/Resume Search Switch - CENTER-PRESS (RESUME SEARCH)
 	// H4L
 	MapKeyIO(&AVA_F16, H4L, 	0, 																				// I - PROGRAM Knob - CCW
-							 	0); 																			// O - 
+							 	0 ); 																			// O - 
 	// H4P
-	MapKeyIO(&AVA_F16, H4P, 	DX19, 																			// I - srs ptt (in combination with Discord ptm)
-							 	'q'); 																			// O - CHAFF/FLARE Dispense Button
+	MapKeyIO(&AVA_F16, H4P, 	0, 																				// I - 
+							 	'q' ); 																			// O - CHAFF/FLARE Dispense Button
 
 	
 	
@@ -213,13 +215,13 @@ int main()
 								SEQ( CHAIN( DOWN+R_CTL, D(10), PULSE+'9', D(), UP+R_CTL ),						// O - AN/APQ-159 Radar Mode Selector - STBY
 									 CHAIN( DOWN+R_CTL, D(10), PULSE+'0', D(), UP+R_CTL )));					// 	   AN/APQ-159 Radar Mode Selector - OPER
 	// APDIS
-	MapKey(&Throttle, APDIS, 	0); 																			// 
+	MapKey(&Throttle, APDIS, 	0 ); 																			// 
 	// APPAT
-	MapKey(&Throttle, APPAT, 	PULSE+'2'); 																	// AN/ASG-31 Sight Mode Selector - A/A1 GUNS
+	MapKey(&Throttle, APPAT, 	PULSE+'2' ); 																	// AN/ASG-31 Sight Mode Selector - A/A1 GUNS
 	// APAH
-	MapKey(&Throttle, APAH, 	PULSE+'1');																		// AN/ASG-31 Sight Mode Selector - MSL
+	MapKey(&Throttle, APAH, 	PULSE+'1' );																	// AN/ASG-31 Sight Mode Selector - MSL
 	// APALT
-	MapKey(&Throttle, APALT, 	PULSE+'4');																		// AN/ASG-31 Sight Mode Selector - MAN
+	MapKey(&Throttle, APALT, 	PULSE+'4' );																	// AN/ASG-31 Sight Mode Selector - MAN
 
 
 	// Coolie Switch
@@ -241,7 +243,7 @@ int main()
 	MapKeyIOUMD(&Throttle, CSR, CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'7', D(), UP+L_CTL+L_SHIFT ),		 	// IU - Armament Position Selector Switch (RIGHT WINGTIP) - ON/OFF
 							 	DX23,																			// OU - Missile Uncage Switch
 								0, 																				// IM - 
-								TEMPO( 0, PULSE+'m', 500 ),														// OM - [long] Toggle Mirrors
+								0,																				// OM - 
 								0, 																				// ID - 
 								0);																				// OD - 
 	// CSL
@@ -278,11 +280,11 @@ int main()
 								
 	// China Hat
 	// CHF
-	MapKeyIO(&Throttle, CHF, 	brightness_up, 																	// I - brightness up for reticle/NVG
-							 	CHAIN( R_SHIFT, D(10), ']' )); 													// O - AN/APQ-159 Radar Elevation Antenna Tilt Control - CW/Up
+	//MapKeyIO(&Throttle, CHF, 	brightness_up, 																	// I - brightness up for reticle/NVG
+	//						 	DX13 ); 																		// O - AN/APQ-159 Radar Elevation Antenna Tilt Control - CW/Up
 	// CHB
-	MapKeyIO(&Throttle, CHB, 	brightness_down,																// I - brightness down for reticle/NVG
-							 	CHAIN( R_SHIFT, D(10), '[' )); 													// O - AN/APQ-159 Radar Elevation Antenna Tilt Control - CCW/Down
+	//MapKeyIO(&Throttle, CHB, 	brightness_down,																// I - brightness down for reticle/NVG
+	//						 	DX14 ); 																		// O - AN/APQ-159 Radar Elevation Antenna Tilt Control - CCW/Down
 
 	// Pinky Switch (exterior lighting)
 	// PSF
@@ -304,13 +306,6 @@ int main()
 							  	CHAIN( extlight_covtoform, D(), 												// O - extlight_covtoform
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED4) )); 							//     LED4 OFF
 
-	// LDGH - moved to Common
-//	MapKeyIOUMD(&Throttle, LDGH, 0, 																			// IU - 
-//								CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x38], D(), UP+R_ALT ),						// OU - Master Caution Button
-//								0, 																				// IM - 
-//								CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x38], D(), UP+R_ALT ),						// OM - Master Caution Button
-//								0, 																				// ID - 
-//								CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x38], D(), UP+R_ALT ));					// OD - Master Caution Button
 
 	// Flaps Switch
 	// FLAPU
