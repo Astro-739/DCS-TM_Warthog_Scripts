@@ -91,6 +91,9 @@ int startup;
 int dragchute_deploy;
 int dragchute_release;
 
+int speedbrakes_open;
+int speedbrakes_close;
+
 int pilotbody;
 int helmetvisor;
 int sunglasses;
@@ -191,6 +194,10 @@ int dcs_fighter_common()
 	// Drag Chute (can be specified per airplane)
 	dragchute_deploy	= 0;																							// Drag Chute defined per aircraft when needed
 	dragchute_release	= 0;
+
+	// Speedbrake (can be specified per airplane)
+	speedbrakes_open	= DX32																							// Open speedbrakes
+	speedbrakes_close	= CHAIN( D(100), PULSE+DX31 )																	// Close speedbrakes
 
 	// Cockpit Visuals
 	pilotbody   = CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT );												// Pilot Body toggle
@@ -350,24 +357,24 @@ int dcs_fighter_common()
 	// Speedbrake Switch
 	// SPDF
 	MapKeyIO(&Throttle, SPDF, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x55], D(), UP+R_SHIFT ),					// I - snap zoom max   (R_SHIFT+KP*)
-								DX32 );																			// O - Open Speed Brakes
+								speedbrakes_open );																// O - Open Speed Brakes
 	MapKeyRIO(&Throttle, SPDF, 	PULSE+KPENT,																	// I - snap zoom normal
 								CHAIN( D(100), PULSE+DX31 ));													// O - Close Speed Brakes
 	// SPDB
 	MapKeyIOUMD(&Throttle, SPDB, CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),				// IU - snap zoom min    (R_SHIFT+KP/)
-								DX32,																			// OU - Open Speed Brakes Momentary
+								speedbrakes_open,																// OU - Open Speed Brakes Momentary
 								EXEC( "if(WHDN_mode) ActKey( KEYON+DX12 );" 									// IM - [WHDN] wheel brake 
 									  "else ActKey( PULSE+KEYON+USB[0x54] );" ),								//		snap zoom min
-								DX32,																			// OM - Open Speed Brakes Momentary
+								speedbrakes_open,																// OM - Open Speed Brakes Momentary
 								CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),					// ID - snap zoom min    (R_SHIFT+KP/)
-								DX32 );																			// OD - Open Speed Brakes Momentary
+								speedbrakes_open );																// OD - Open Speed Brakes Momentary
 	MapKeyRIOUMD(&Throttle, SPDB, PULSE+KPENT,																	// IU - snap zoom normal
-								CHAIN( D(100), PULSE+DX31 ),													// OU - Close Speed Brakes
+								speedbrakes_close,																// OU - Close Speed Brakes
 								EXEC( "if(WHDN_mode) ActKey( DX12 );"											// IM - [WHDN] release DX12
 									  "else ActKey( PULSE+KEYON+KPENT );" ),									//		snap zoom normal
-								CHAIN( D(100), PULSE+DX31 ),													// OM - Close Speed Brakes
+								speedbrakes_close,																// OM - Close Speed Brakes
 								PULSE+KPENT,																	// ID - snap zoom normal
-								CHAIN( D(100), PULSE+DX31 ));													// OU - Close Speed Brakes
+								speedbrakes_close );															// OU - Close Speed Brakes
 
 	// China Hat
 	// CHF
