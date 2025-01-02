@@ -231,11 +231,15 @@ int main()
 								DX23 );																			// OD - UNCAGE Switch
 	// CSL
 	MapKeyIOUMD(&Throttle, CSL, CHAIN( L_CTL, D(10), LARROW ), 													// IU - ICP Data Control Switch - RET (dobber return)
-								CHAIN( L_CTL, D(10), KP7 ),														// OU - ICP Priority Function Button - 7(MARK)
+								TEMPO( CHAIN( L_CTL, D(10), KP7 ),												// OU - ICP Priority Function Button - 7 (MARK)
+									   CHAIN( L_CTL, D(10), KP0 ), 500 ),										//		[long] ICP Priority Function Button - 0 (M-SEL)
 								CHAIN( L_CTL, D(10), LARROW ), 													// IM - ICP Data Control Switch - RET (dobber return)
-								CHAIN( L_CTL, D(10), KP7 ), 													// OM - ICP Priority Function Button - 7(MARK)
+								TEMPO( CHAIN( L_CTL, D(10), KP7 ),												// OM - ICP Priority Function Button - 7 (MARK)
+									   CHAIN( L_CTL, D(10), KP0 ), 500 ),										//		[long] ICP Priority Function Button - 0 (M-SEL)
 								CHAIN( L_CTL, D(10), LARROW ), 													// ID - ICP Data Control Switch - RET (dobber return)
-								CHAIN( L_CTL, D(10), KP7 ));													// OD - ICP Priority Function Button - 7(MARK)
+								TEMPO( CHAIN( L_CTL, D(10), KP7 ),												// OD - ICP Priority Function Button - 7 (MARK)
+									   CHAIN( L_CTL, D(10), KP0 ), 500 ));										//		[long] ICP Priority Function Button - 0 (M-SEL)
+									   
 
 	// Speedbrake Switch   // TODO to Common?
 	// SPDF
