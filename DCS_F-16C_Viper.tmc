@@ -240,28 +240,6 @@ int main()
 								TEMPO( CHAIN( L_CTL, D(10), KP7 ),												// OD - ICP Priority Function Button - 7 (MARK)
 									   CHAIN( L_CTL, D(10), KP0 ), 500 ));										//		[long] ICP Priority Function Button - 0 (M-SEL)
 									   
-
-	// Speedbrake Switch   // TODO to Common?
-	// SPDF
-	MapKeyIO(&Throttle, SPDF, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x55], D(), UP+R_SHIFT ),					// I - snap zoom max   (R_SHIFT+KP*)
-							   	DX31 );																			// O - speedbrake extend and stay in place
-	MapKeyRIO(&Throttle, SPDF, 	PULSE+KPENT,																	// I - snap zoom normal
-								CHAIN( DOWN+L_CTL, D(10), PULSE+'b', D(), UP+L_CTL ));							// O - speedbrake fully retract
-	// SPDB
-	MapKeyIOUMD(&Throttle, SPDB, CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),				// IU - snap zoom min    (R_SHIFT+KP/)
-								CHAIN( L_SHIFT, D(10), 'b' ),													// OU - speedbrake extend (momentary)
-								EXEC( "if(WHDN_mode) ActKey( KEYON+DX12 );" 									// IM - [WHDN] wheel brake
-									  "else ActKey( PULSE+KEYON+USB[0x54] );" ),								//		snap zoom min
-								CHAIN( L_SHIFT, D(10), 'b' ),													// OM - speedbrake extend (momentary)
-								CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),					// ID - snap zoom min    (R_SHIFT+KP/)
-								CHAIN( L_SHIFT, D(10), 'b' ));													// OD - speedbrake extend (momentary)
-	MapKeyRIOUMD(&Throttle, SPDB, PULSE+KPENT,																	// IU - snap zoom normal
-								CHAIN( D(100), DOWN+L_CTL, D(10), PULSE+'b', D(), UP+L_CTL ),					// OU - speedbrake fully retract
-								EXEC( "if(WHDN_mode) ActKey( DX12 );"											// IM - [WHDN] release DX12
-									  "else ActKey( PULSE+KEYON+KPENT );" ),									//		snap zoom normal
-								CHAIN( D(100), DOWN+L_CTL, D(10), PULSE+'b', D(), UP+L_CTL ),					// OM - speedbrake fully retract
-								PULSE+KPENT,																	// ID - snap zoom normal
-								CHAIN( D(100), DOWN+L_CTL, D(10), PULSE+'b', D(), UP+L_CTL ));					// OD - speedbrake fully retract
 								
 	// China Hat
 	// CHF
