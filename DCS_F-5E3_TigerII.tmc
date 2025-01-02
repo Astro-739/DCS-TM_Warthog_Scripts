@@ -16,8 +16,8 @@ int extlight_covert;
 
 int groundcrewstartup;
 
-int speedbrakes_open;
-int speedbrakes_close;
+//int speedbrakes_open;
+//int speedbrakes_close;
 
 define AB 77											// detent position at AB% of full throttle reach
 
@@ -255,27 +255,27 @@ int main()
 								0);																				// OD - 
 
 
-	// Speedbrake Switch
+	// Speedbrake Switch   // TODO TEST
 	// SPDF
-	MapKeyIO(&Throttle, SPDF, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x55], D(), UP+R_SHIFT ),					// I - snap zoom max   (R_SHIFT+KP*)
-								speedbrakes_open );																// O - Open Speed Brakes
-	MapKeyRIO(&Throttle, SPDF, 	PULSE+KPENT,																	// I - snap zoom normal
-								speedbrakes_close );															// O - Close Speed Brakes
+//	MapKeyIO(&Throttle, SPDF, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x55], D(), UP+R_SHIFT ),					// I - snap zoom max   (R_SHIFT+KP*)
+//								speedbrakes_open );																// O - Open Speed Brakes
+//	MapKeyRIO(&Throttle, SPDF, 	PULSE+KPENT,																	// I - snap zoom normal
+//								speedbrakes_close );															// O - Close Speed Brakes
 	// SPDB
-	MapKeyIOUMD(&Throttle, SPDB, CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),				// IU - snap zoom min    (R_SHIFT+KP/)
-								speedbrakes_open,																// OU - Open Speed Brakes Momentary
-								EXEC( "if(WHDN_mode) ActKey( KEYON+'w' );" 										// IM - [WHDN] wheel brake
-									  "else ActKey( PULSE+KEYON+USB[0x54] );" ),								//		snap zoom min
-								speedbrakes_open,																// OM - Open Speed Brakes Momentary
-								CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),					// ID - snap zoom min    (R_SHIFT+KP/)
-								speedbrakes_open );																// OD - Open Speed Brakes Momentary
-	MapKeyRIOUMD(&Throttle, SPDB, PULSE+KPENT,																	// IU - snap zoom normal
-								speedbrakes_close,																// OU - Close Speed Brakes
-								EXEC( "if(WHDN_mode) ActKey( 'w' );"											// IM - [WHDN] release 'w'
-									  "else ActKey( PULSE+KEYON+KPENT );" ),									//		snap zoom normal
-								speedbrakes_close,																// OM - Close Speed Brakes
-								PULSE+KPENT,																	// ID - snap zoom normal
-								speedbrakes_close );															// OU - Close Speed Brakes
+//	MapKeyIOUMD(&Throttle, SPDB, CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),				// IU - snap zoom min    (R_SHIFT+KP/)
+//								speedbrakes_open,																// OU - Open Speed Brakes Momentary
+//								EXEC( "if(WHDN_mode) ActKey( KEYON+'w' );" 										// IM - [WHDN] wheel brake
+//									  "else ActKey( PULSE+KEYON+USB[0x54] );" ),								//		snap zoom min
+//								speedbrakes_open,																// OM - Open Speed Brakes Momentary
+//								CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),					// ID - snap zoom min    (R_SHIFT+KP/)
+//								speedbrakes_open );																// OD - Open Speed Brakes Momentary
+//	MapKeyRIOUMD(&Throttle, SPDB, PULSE+KPENT,																	// IU - snap zoom normal
+//								speedbrakes_close,																// OU - Close Speed Brakes
+//								EXEC( "if(WHDN_mode) ActKey( 'w' );"											// IM - [WHDN] release 'w'
+//									  "else ActKey( PULSE+KEYON+KPENT );" ),									//		snap zoom normal
+//								speedbrakes_close,																// OM - Close Speed Brakes
+//								PULSE+KPENT,																	// ID - snap zoom normal
+//								speedbrakes_close );															// OU - Close Speed Brakes
 
 								
 	// China Hat
