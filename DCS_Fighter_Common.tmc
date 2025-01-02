@@ -84,8 +84,8 @@ int atc_requesttaxitakeoff;
 int atc_inbound;
 int atc_requestlanding;
 
-int refuel_inbound;
-int refuel_precontact;
+int tanker_inbound;
+int tanker_precontact;
 
 int startup;
 int dragchute_deploy;
@@ -169,10 +169,13 @@ int dcs_fighter_common()
 	atc_inbound					= CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ); 		// Radio menu (\), ATC, Airfield, Inbound
 	atc_requestlanding			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 );				 							// Request landing short menu
 	
+	tanker_inbound				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F6, D(200), PULSE+F1 ); 						// Radio menu (\), Tanker menu, inbound
+	tanker_precontact			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 ); 											// Radio menu (\), Ready Pre-Contact (menu shortcut)
+
 	cv_requestlaunch			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F3, D(200), PULSE+F2 ); 		// TODO Radio menu (\), xxxxxxx
 	cv_inbound					= SEQ( CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ), 	// Radio menu (\), ATC, CV, Inbound
 									   CHAIN( PULSE+USB[0x31], D(200), PULSE+F2 )); 									// Radio menu (\), See you at 10 (menu shortcut)
-	cv_salute					= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'u', D(), UP+L_SHIFT ); 							// Salute
+	cv_salute					= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'u', D(), UP+L_SHIFT ); 							// Salute  // TODO new command in DCS - deck crew stuff
 	cv_calltheball				= CHAIN( DOWN+L_WIN, D(10), PULSE+'x', D(), UP+L_WIN ); 								// Call the Ball
 	
 	uhf_callradiomenu			= CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x31], D(), UP+R_ALT );							// Transmit Switch - UHF (call radio menu)
@@ -387,7 +390,8 @@ int dcs_fighter_common()
 									   // 	 "SetSCurve(&AVA_F16, JOYY, 0, 0, 0, 0, -1);" ), D(), 				// 	  	set joyY curves for aerial refuelling
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5), D(),						// 		LED5 ON for Aerial Refuelling
 									   EXEC( "AAR_mode = 1;"													//		AAR_mode on
-										     "printf(\"AAR_mode = 1\\xa\");" )),								// 		print state to output window
+										     "WHDN_mode = 0;"													//		check WHDN_mode = 0, otherwise conflicts //TODO test
+											 "printf(\"AAR_mode = 1\\xa\");" )),								// 		print state to output window
 								PULSE+DX35 );																	// O - APU on
 	MapKeyRIO(&Throttle, APUON, CHAIN( DOWN+R_CTL, D(10), PULSE+'f', D(), UP+R_CTL, D(),						// I - AIR REFUEL Switch - CLOSE
 									   //EXEC( "SetSCurve(&AVA_F16, JOYX, 0, 0, 0, 0, 0);"						//		set joyX curves back to normal
@@ -503,7 +507,7 @@ int dcs_fighter_common_specific()
 									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 							// 		[long] [CAR]  -
 											 "else if(WHDN_mode) ActKey( PULSE+KEYON+0 );"						//		[long] [WHDN] -
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"						//		[long] [AAR]  -
-											 "else ActKey( PULSE+KEYON+flight_opencloseformation );" ),	500 ),	//		[long] Flight - Open/Close Formation
+											 "else ActKey( PULSE+KEYON+flight_opencloseformation );" ), 500 ),	//		[long] Flight - Open/Close Formation
 								DX27,																			// OM - Transmit Switch - Radio 1 (VOIP)
 								TEMPO( flight_attackgroundtargets,												// ID - Flight - Attack ground targets
 									   flight_attackairdefences, 500 ),											//		[long] Flight - Attack air defences
@@ -512,14 +516,14 @@ int dcs_fighter_common_specific()
 	MapKeyIOUMD(&Throttle, MSD, TEMPO( flight_completemissionrejoin,											// IU - Flight - Complete mission and rejoin
 									   flight_coverme, 500 ),													// 		[long] Flight - Cover Me
 								DX29,																			// OU - Transmit Switch - Radio 2 (VOIP)
-								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_inbound );" 					// IM - [CAR]  Inbound / See you at 10
+								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_inbound );" 					// IM - [CAR] CV Inbound / See you at 10
 											 "else if(WHDN_mode) ActKey( PULSE+KEYON+atc_requestlanding );" 	//		[WHDN] Request Landing
-											 "else if(AAR_mode) ActKey( PULSE+KEYON+refuel_inbound );"			//		[AAR]  Inbound
+											 "else if(AAR_mode) ActKey( PULSE+KEYON+tanker_inbound );"			//		[AAR]  Tanker Inbound
 											 "else ActKey( PULSE+KEYON+atc_inbound );" ),						//		ATC - Inbound
 									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 							// 		[long] [CAR]  -
 											 "else if(WHDN_mode) ActKey( PULSE+KEYON+0 );" 						//		[long] [WHDN] -
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"						//		[long] [AAR]  -
-											 "else ActKey( PULSE+KEYON+flight_rtb);" ),	500 ),					//		[long] Flight - RTB
+											 "else ActKey( PULSE+KEYON+flight_rtb);" ), 500 ),					//		[long] Flight - RTB
 								DX29,																			// OM - Transmit Switch - Radio 2 (VOIP)
 								TEMPO( flight_completemissionrejoin,											// ID - Flight - Complete mission and rejoin
 									   0, 500 ),																//		[long] Flight - 
@@ -528,14 +532,14 @@ int dcs_fighter_common_specific()
 	MapKeyIOUMD(&Throttle, MSR, TEMPO( flight_spreadfour, 														// IU - Flight - Formation Spread Four
 									   flight_lineabreast, 500 ),												// 		[long] Flight - Formation Line Abreast
 								DX28,																			// OU - U_MSR
-								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_salute );" 					// IM - [CAR]  Salute
+								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_salute );" 					// IM - [CAR] CV Salute
 											 "else if(WHDN_mode) ActKey( PULSE+KEYON+atc_requesttaxitakeoff );" 	//	[WHDN] Request taxi, take-off (short menu)
-											 "else if(AAR_mode) ActKey( PULSE+KEYON+refuel_precontact );"		//		[AAR]  "Ready for precontact" radio call
+											 "else if(AAR_mode) ActKey( PULSE+KEYON+tanker_precontact );"		//		[AAR]  Tanker "Ready for precontact" radio call
 											 "else ActKey( PULSE+KEYON+flight_fingerfour );" ),					//		Flight - Finger Four
 									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 							// 		[long] [CAR]  -
 											 "else if(WHDN_mode) ActKey( PULSE+KEYON+0 );" 						//		[long] [WHDN] -
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"						//		[long] [AAR]  -
-											 "else ActKey( PULSE+KEYON+flight_echelonright );" ),	500 ),		//		[long] Flight - Formation Echelon Right
+											 "else ActKey( PULSE+KEYON+flight_echelonright );" ), 500 ),		//		[long] Flight - Formation Echelon Right
 								DX28,																			// OM - M_MSR
 								//TEMPO( jtac_followoncomms,													// ID - JTAC - Follow-on Comms (readback, etc)
 								//	   jtac_checkin15, 500 ),													// 		[long] JTAC - Check in for 15 minutes
@@ -553,7 +557,7 @@ int dcs_fighter_common_specific()
 									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 							// 		[long] [CAR]  -
 											 "else if(WHDN_mode) ActKey( PULSE+KEYON+0 );" 						//		[long] [WHDN] -
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"						//		[long] [AAR]  -
-											 "else ActKey( PULSE+KEYON+awacs_requestpicture );" ),	500 ),		//		[long] AWACS Request Picture
+											 "else ActKey( PULSE+KEYON+awacs_requestpicture );" ), 500 ),		//		[long] AWACS Request Picture
 								DX30,																			// OM - M_MSL
 								TEMPO( flight_radaroffon,														// ID - Flight - Radar Off/On
 									   awacs_requestpicture, 500 ),													// 		[long] AWACS Request Picture
