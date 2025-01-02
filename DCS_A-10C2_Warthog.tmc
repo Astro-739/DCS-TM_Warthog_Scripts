@@ -15,9 +15,6 @@ int mastermode_aa;
 int mastermode_nav;
 int deferdelay;
 
-int speedbrakes_open;
-int speedbrakes_close;
-
 int extlight_full;				
 int extlight_position;
 int extlight_formation;			
@@ -126,7 +123,7 @@ int main()
 							 LED(&Throttle, LED_ONOFF, LED_CURRENT-LED4) ); 									// LED4 OFF	
 
 
-	// Speedbrake functions
+	// Speedbrake functions (overwrite Common)
 	speedbrakes_open  = CHAIN( EXEC( "StopAutoRepeat(6);" ), D(), 												// stop repeat in case speedbrakes are still closing
 							   DX32 );																			// press DX32 to open (Speed Brake Switch Aft)
 
@@ -281,27 +278,27 @@ int main()
 
 
 
-	// Speedbrake Switch
+	// Speedbrake Switch   // TODO TEST
 	// SPDF
-	MapKeyIO(&Throttle, SPDF, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x55], D(), UP+R_SHIFT ),					// I - snap zoom max   (R_SHIFT+KP*)
-							   	speedbrakes_open );																// O - Open Speed Brakes (Speed Brake Switch Aft)
-	MapKeyRIO(&Throttle, SPDF, 	PULSE+KPENT,																	// I - snap zoom normal
-								speedbrakes_close );															// O - Close Speed Brakes (Speed Brake Switch Forward)
+//	MapKeyIO(&Throttle, SPDF, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x55], D(), UP+R_SHIFT ),					// I - snap zoom max   (R_SHIFT+KP*)
+//							   	speedbrakes_open );																// O - Open Speed Brakes (Speed Brake Switch Aft)
+//	MapKeyRIO(&Throttle, SPDF, 	PULSE+KPENT,																	// I - snap zoom normal
+//								speedbrakes_close );															// O - Close Speed Brakes (Speed Brake Switch Forward)
 	// SPDB
-	MapKeyIOUMD(&Throttle, SPDB, CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),				// IU - snap zoom min    (R_SHIFT+KP/)
-								speedbrakes_open,																// OU - Open Speed Brakes Momentary (Speed Brake Switch Aft)
-								EXEC( "if(WHDN_mode) ActKey( KEYON+'w' );" 										// IM - [WHDN] wheel brake
-									  "else ActKey( PULSE+KEYON+USB[0x54] );" ),								//		snap zoom min
-								speedbrakes_open,																// OM - Open Speed Brakes Momentary (Speed Brake Switch Aft)
-								CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),					// ID - snap zoom min    (R_SHIFT+KP/)
-								speedbrakes_open );																// OD - Open Speed Brakes Momentary (Speed Brake Switch Aft)
-	MapKeyRIOUMD(&Throttle, SPDB, PULSE+KPENT,																	// IU - snap zoom normal
-								speedbrakes_close,																// OU - Close Speed Brakes (Speed Brake Switch Forward)
-								EXEC( "if(WHDN_mode) ActKey( 'w' );"											// IM - [WHDN] release 'w'
-									  "else ActKey( PULSE+KEYON+KPENT );" ),									//		snap zoom normal
-								speedbrakes_close,																// OM - Close Speed Brakes (Speed Brake Switch Forward)
-								PULSE+KPENT,																	// ID - snap zoom normal
-								speedbrakes_close );															// OU - Close Speed Brakes (Speed Brake Switch Forward)
+//	MapKeyIOUMD(&Throttle, SPDB, CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),				// IU - snap zoom min    (R_SHIFT+KP/)
+//								speedbrakes_open,																// OU - Open Speed Brakes Momentary (Speed Brake Switch Aft)
+//								EXEC( "if(WHDN_mode) ActKey( KEYON+'w' );" 										// IM - [WHDN] wheel brake
+//									  "else ActKey( PULSE+KEYON+USB[0x54] );" ),								//		snap zoom min
+//								speedbrakes_open,																// OM - Open Speed Brakes Momentary (Speed Brake Switch Aft)
+//								CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),					// ID - snap zoom min    (R_SHIFT+KP/)
+//								speedbrakes_open );																// OD - Open Speed Brakes Momentary (Speed Brake Switch Aft)
+//	MapKeyRIOUMD(&Throttle, SPDB, PULSE+KPENT,																	// IU - snap zoom normal
+//								speedbrakes_close,																// OU - Close Speed Brakes (Speed Brake Switch Forward)
+//								EXEC( "if(WHDN_mode) ActKey( 'w' );"											// IM - [WHDN] release 'w'
+//									  "else ActKey( PULSE+KEYON+KPENT );" ),									//		snap zoom normal
+//								speedbrakes_close,																// OM - Close Speed Brakes (Speed Brake Switch Forward)
+//								PULSE+KPENT,																	// ID - snap zoom normal
+//								speedbrakes_close );															// OU - Close Speed Brakes (Speed Brake Switch Forward)
 	
 						
 	// China Hat
