@@ -195,9 +195,9 @@ int dcs_fighter_common()
 	dragchute_deploy	= 0;																							// Drag Chute defined per aircraft when needed
 	dragchute_release	= 0;
 
-	// Speedbrake (can be specified per airplane)
-	speedbrakes_open	= DX32																							// Open speedbrakes
-	speedbrakes_close	= CHAIN( D(100), PULSE+DX31 )																	// Close speedbrakes
+	// Speedbrakes (can be specified per airplane)
+	speedbrakes_open	= DX32;																							// Open speedbrakes
+	speedbrakes_close	= CHAIN( D(100), PULSE+DX31 );																	// Close speedbrakes
 
 	// Cockpit Visuals
 	pilotbody   = CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT );												// Pilot Body toggle
