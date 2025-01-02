@@ -203,18 +203,14 @@ int main()
 
 	// Coolie Switch
 	// CSU
-	MapKeyIOUMD(&Throttle, CSU, TEMPO( CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x56], D(), UP+L_CTL ),				// IU - ICP DED Increment/Decrement Switch - Decrement   (L_CTL+NUM-)
-									   CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'9', D(), UP+L_ALT+R_SHIFT ),	// 		[long] HSD zoom out (Right MFD OSB 19 on HSD page)
-									   500 ),																	// 
+	MapKeyIOUMD(&Throttle, CSU, CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x56], D(), UP+L_CTL ),						// IU - ICP DED Increment/Decrement Switch - Decrement   (L_CTL+NUM-)
 								CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'9', D(), UP+L_ALT+R_SHIFT ),			// OU - Slave/Bore toggle (Right MFD OSB 19 on SMS page)
 								CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x56], D(), UP+L_CTL ),						// IM - ICP DED Increment/Decrement Switch - Decrement   (L_CTL+NUM-)
 								0, 																				// OM - 
 								CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x56], D(), UP+L_CTL ),						// ID - ICP DED Increment/Decrement Switch - Decrement   (L_CTL+NUM-)
 								0);																				// OD - 
 	// CSD
-	MapKeyIOUMD(&Throttle, CSD, TEMPO( CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x57], D(), UP+L_CTL ),				// IU - ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
-									   CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'0', D(), UP+L_ALT+R_SHIFT ),	// 		[long] HSD zoom in (Right MFD OSB 20 on HSD page)
-									   500 ),																	// 
+	MapKeyIOUMD(&Throttle, CSD, CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x57], D(), UP+L_CTL ),						// IU - ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
 								DX24,																			// OU - ENABLE Switch - Depress
 								CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x57], D(), UP+L_CTL ),						// IM - ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
 								DX24, 																			// OM - ENABLE Switch - Depress
@@ -310,7 +306,7 @@ int main()
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),							// 	   LED5 OFF for MANUAL PITCH Override
 									0 );																			// O - 
 	// EFLOVER
-	MapKeyIO(&Throttle, EFLOVER, 	CHAIN( DX22, D(),																// I - MANUAL PITCH Override Switch - OVRD   // TODO ********* FIX DX in DCS
+	MapKeyIO(&Throttle, EFLOVER, 	CHAIN( DX22, D(),																// I - MANUAL PITCH Override Switch - OVRD
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),							// 	   LED5 ON for MANUAL PITCH Override
 									0 );																			// O - 
 
