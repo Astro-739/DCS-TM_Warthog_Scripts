@@ -18,6 +18,11 @@ char autopilot_mode;
 int override;	
 char override_dog;		
 
+int extlight_full;
+int extlight_formation;
+int extlight_position;
+int extlight_covert;
+
 define AB 75											// detent position at AB% of full throttle reach
 
 
@@ -89,12 +94,28 @@ int main()
 	autopilot = EXEC( "if(!autopilot_mode) ActKey( PULSE+KEYON+autopilot_ALThold );"
 					  "if(autopilot_mode) ActKey( PULSE+KEYON+autopilot_off );"	);
 
+
+	// External Lights
+	extlight_full		= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'l', D(), UP+R_SHIFT, D(100), 						// MASTER Switch - NORM
+								 DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'l', D(), UP+R_SHIFT+L_SHIFT, D(100),		// WING/TAIL Switch - BRT
+								 DOWN+R_CTL+L_SHIFT, D(10), PULSE+'l', D(), UP+R_CTL+L_SHIFT );					// FUSELAGE Switch - BRT
+	extlight_position	= CHAIN( DOWN+R_CTL, D(10), PULSE+'l', D(), UP+R_CTL, D(100),							// MASTER Switch - A-C covert
+								 DOWN+R_SHIFT+L_CTL, D(10), PULSE+'l', D(), UP+R_SHIFT+L_CTL, D(100),			// WING/TAIL Switch - OFF
+								 DOWN+R_CTL+L_CTL, D(10), PULSE+'l', D(), UP+R_CTL+L_CTL );						// FUSELAGE Switch - OFF
+	extlight_formation  = 0;
+	extlight_covert		= CHAIN( DOWN+L_CTL, D(10), PULSE+'l', D(), UP+L_CTL, D(100), 							// MASTER Switch - ALL covert
+								 DOWN+R_SHIFT+L_CTL, D(10), PULSE+'l', D(), UP+R_SHIFT+L_CTL, D(100),			// WING/TAIL Switch - OFF
+								 DOWN+R_CTL+L_CTL, D(10), PULSE+'l', D(), UP+R_CTL+L_CTL );						// FUSELAGE Switch - OFF
+
+
 	// A-A override function
 	override_dog = 0;
 	
 	override = EXEC( "if(!override_dog) ActKey( PULSE+KEYON+L_CTL+'3' );"										// DOGFIGHT/Missile Override Switch - DOGFIGHT
 					 "if(override_dog) ActKey( PULSE+KEYON+L_CTL+'4' );"										// DOGFIGHT/Missile Override Switch - MISSILE OVERRIDE
 					 "override_dog = !override_dog;" );
+
+
 
 
 
@@ -245,28 +266,25 @@ int main()
 	MapKeyIO(&Throttle, CHB, 	brightness_down,																// I - brightness down for goggle/HMCS
 							 	REXEC( 21, 200, "ActKey( PULSE+KEYON+DX14 );" ));								// O - ANT ELEV Knob - CCW/down    (REXEC to slow down repeat press)
 
+
 	// Pinky Switch (exterior lighting)
 	// PSF
 	MapKeyIO(&Throttle, PSF, 	CHAIN( DOWN+R_ALT, D(10), PULSE+'l', D(), UP+R_ALT ),								// I - FLASH STEADY Switch - FLASH/STEADY
-								CHAIN( DOWN+R_SHIFT, D(10), PULSE+'l', D(), UP+R_SHIFT, D(100), 					// O - MASTER Switch - NORM
-									   DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'l', D(), UP+R_SHIFT+L_SHIFT, D(100),		//	   WING/TAIL Switch - BRT
-									   DOWN+R_CTL+L_SHIFT, D(10), PULSE+'l', D(), UP+R_CTL+L_SHIFT, D(),			//	   FUSELAGE Switch - BRT
+								CHAIN( extlight_full, 																//	   FUSELAGE Switch - BRT
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED4) )); 								//     LED4 ON								
 	MapKeyRIO(&Throttle, PSF, 	0, 																					// I - 
-							  	CHAIN( DOWN+R_CTL, D(10), PULSE+'l', D(), UP+R_CTL, D(100),							// O - MASTER Switch - A-C covert
-									   DOWN+R_SHIFT+L_CTL, D(10), PULSE+'l', D(), UP+R_SHIFT+L_CTL, D(100),			//	   WING/TAIL Switch - OFF
-									   DOWN+R_CTL+L_CTL, D(10), PULSE+'l', D(), UP+R_CTL+L_CTL ));					//	   FUSELAGE Switch - OFF
+							  	extlight_position );																//	   FUSELAGE Switch - OFF
 	// PSB
 	MapKeyIO(&Throttle, PSB, 	SEQ( CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'l', D(), UP+R_SHIFT+L_ALT, D(),		// I - WING/TAIL Switch - DIM
 											DOWN+R_CTL+L_ALT, D(10), PULSE+'l', D(), UP+R_CTL+L_ALT ),				// 	   FUSELAGE Switch - DIM
 									 CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'l', D(), UP+R_SHIFT+L_SHIFT, D(),	//	   WING/TAIL Switch - BRT
 											DOWN+R_CTL+L_SHIFT, D(10), PULSE+'l', D(), UP+R_CTL+L_SHIFT )),			//	   FUSELAGE Switch - BRT
-							 	CHAIN( DOWN+L_CTL, D(10), PULSE+'l', D(), UP+L_CTL, D(), 							// O - MASTER Switch - ALL covert
+							 	CHAIN( extlight_covert, D(), 														// O - MASTER Switch - ALL covert
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED4) )); 								//     LED4 OFF
 	MapKeyRIO(&Throttle, PSB, 	0, 																					// I - 
-							  	CHAIN( DOWN+R_CTL, D(10), PULSE+'l', D(), UP+R_CTL, D(), 							// O - MASTER Switch - A-C covert
+							  	CHAIN( extlight_position, D(), 														// O - MASTER Switch - A-C covert
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED4) )); 								//     LED4 ON
-								
+
 
 	// Flaps Switch (RF Switch)
 	// FLAPU
