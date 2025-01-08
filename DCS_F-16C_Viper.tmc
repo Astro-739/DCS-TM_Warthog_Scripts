@@ -100,7 +100,7 @@ int main()
 								 DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'l', D(), UP+R_SHIFT+L_SHIFT, D(100),		// WING/TAIL Switch - BRT
 								 DOWN+R_CTL+L_SHIFT, D(10), PULSE+'l', D(), UP+R_CTL+L_SHIFT );					// FUSELAGE Switch - BRT
 	extlight_position	= CHAIN( DOWN+R_CTL, D(10), PULSE+'l', D(), UP+R_CTL, D(100),							// MASTER Switch - A-C covert
-								 DOWN+R_SHIFT+L_CTL, D(10), PULSE+'l', D(), UP+R_SHIFT+L_CTL, D(100),			// WING/TAIL Switch - OFF
+								 DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'l', D(), UP+R_SHIFT+L_SHIFT, D(100),		// WING/TAIL Switch - BRT
 								 DOWN+R_CTL+L_CTL, D(10), PULSE+'l', D(), UP+R_CTL+L_CTL );						// FUSELAGE Switch - OFF
 	extlight_formation  = 0;
 	extlight_covert		= CHAIN( DOWN+L_CTL, D(10), PULSE+'l', D(), UP+L_CTL, D(100), 							// MASTER Switch - ALL covert
