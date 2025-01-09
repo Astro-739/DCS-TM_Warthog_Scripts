@@ -15,10 +15,10 @@ int ap_path;
 int ap_althdg;
 int ap_alt;
 
-int extlight_full;			
+//int extlight_full;			
 int extlight_posdim;	
-int extlight_formation;		
-int extlight_covert;
+//int extlight_formation;		
+//int extlight_covert;
 int extlight_flash_steady;
 
 int speedbrakes_open;

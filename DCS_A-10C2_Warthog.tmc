@@ -15,10 +15,10 @@ int mastermode_aa;
 int mastermode_nav;
 int deferdelay;
 
-int extlight_full;				
-int extlight_position;
-int extlight_formation;			
-int extlight_covert;			
+//int extlight_full;				
+//int extlight_position;
+//int extlight_formation;			
+//int extlight_covert;			
 
 define AB 100											// detent position at AB% of full throttle reach
 
@@ -311,15 +311,15 @@ int main()
 
 	// Pinky Switch (exterior lighting)
 	// PSF
-	MapKeyIO(&Throttle, PSF, 	0,																					// I - 
-								extlight_full );		 															// O - Exterior Light Full (pinky switch aft)
-	MapKeyRIO(&Throttle, PSF, 	0, 																					// I - 
-							  	extlight_position );																// O - position lights to dimsteady / strobes off (pinky switch fwd)
+//	MapKeyIO(&Throttle, PSF, 	0,																					// I - 
+//								extlight_full );		 															// O - Exterior Light Full (pinky switch aft)
+//	MapKeyRIO(&Throttle, PSF, 	0, 																					// I - 
+//							  	extlight_position );																// O - position lights to dimsteady / strobes off (pinky switch fwd)
 	// PSB
-	MapKeyIO(&Throttle, PSB, 	extlight_formation, 																// I - formation lights (pinky switch aft)
-								extlight_covert );											 						// O - all covert (pinky switch centre)
-	MapKeyRIO(&Throttle, PSB, 	extlight_position,																	// I - position lights to dimsteady / strobes off (pinky switch fwd)
-							  	extlight_position );																// O - position lights to dimsteady / strobes off (pinky switch fwd)
+//	MapKeyIO(&Throttle, PSB, 	extlight_formation, 																// I - formation lights (pinky switch aft)
+//								extlight_covert );											 						// O - all covert (pinky switch centre)
+//	MapKeyRIO(&Throttle, PSB, 	extlight_position,																	// I - position lights to dimsteady / strobes off (pinky switch fwd)
+//							  	extlight_position );																// O - position lights to dimsteady / strobes off (pinky switch fwd)
 
 
 	// Left Throttle Button

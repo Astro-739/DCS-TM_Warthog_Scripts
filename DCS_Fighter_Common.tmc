@@ -109,6 +109,11 @@ char flashlight_on = 0;
 int brightness_up;	
 int brightness_down;	
 
+int extlight_full;
+int extlight_formation;
+int extlight_position;
+int extlight_covert;
+
 int enigmacw_bogeydope;
 int enigmacw_ewpicturetoggle;
 
@@ -199,6 +204,12 @@ int dcs_fighter_common()
 	// Speedbrakes (can be specified per airplane)
 	speedbrakes_open	= DX32;																							// Open speedbrakes
 	speedbrakes_close	= CHAIN( D(100), PULSE+DX31 );																	// Close speedbrakes
+
+	// Exterior Lights (can be specified per airplane)
+	extlight_full = 0;
+	extlight_position = 0;
+	extlight_formation = 0;
+	extlight_covert = 0;
 
 	// Cockpit Visuals
 	pilotbody   = CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT );												// Pilot Body toggle
@@ -384,6 +395,15 @@ int dcs_fighter_common()
 	// CHB
 	MapKeyIO(&Throttle, CHB, 	brightness_down,																// I - brightness down (HUD/HMCS/Reticle - Flashlight - NVG)
 							 	DX14 ); 																		// O - Radar Elevation Antenna Control - CCW/Down
+
+
+	// Pinky Switch (exterior lighting)
+	// PSF
+	MapKey(&Throttle, PSF, 		extlight_full );	 															// Exterior Lights Full
+	MapKeyR(&Throttle, PSF, 	extlight_position );															// Exterior Lights Position
+	// PSB
+	MapKey(&Throttle, PSB, 		extlight_covert );			 													// Exterior Lights Covert
+	MapKeyR(&Throttle, PSB, 	extlight_position );															// Exterior Lights Position
 
 
 	// SC (IR head tracking)

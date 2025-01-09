@@ -17,10 +17,10 @@ include "DCS_Fighter_Common.tmc"							// all dcs fighter COMMON controls
 // -------------------- INITIALISE ---------------------------------------------
 
 int autopilot;
-int extlight_full;			
+//int extlight_full;			
 int extlight_posdim;	
-int extlight_formation;		
-int extlight_covert;		
+//int extlight_formation;		
+//int extlight_covert;		
 int speedbrakes_open;
 int speedbrakes_close;
 int groundcrewstartup;

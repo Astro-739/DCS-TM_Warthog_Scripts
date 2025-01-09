@@ -9,10 +9,10 @@ include "DCS_Fighter_Common.tmc"
 
 // -------------------- INITIALISE --------------------
 
-int extlight_full;				
+//int extlight_full;				
 int extlight_fulltoform;		
 int extlight_covtoform;			
-int extlight_covert;			
+//int extlight_covert;			
 
 int groundcrewstartup;
 
