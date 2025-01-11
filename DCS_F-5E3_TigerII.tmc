@@ -1,13 +1,13 @@
 // DCS F-5E3 Tiger II Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.24.618
-// version 1.3, Aug 2024
+// version 2.0, Jan 2025
 
 
 include "target.tmh"
 include "DCS_Fighter_Common.tmc"
 
 
-// -------------------- INITIALISE --------------------
+// -------------------------- INITIALISE ----------------------------
 
 //int extlight_full;				
 int extlight_fulltoform;		
@@ -22,7 +22,7 @@ int groundcrewstartup;
 define AB 77											// detent position at AB% of full throttle reach
 
 
-// -------------------- MAIN --------------------
+// -------------------------- MAIN F-5E -----------------------------------------------------------
 
 int main()
 {
@@ -58,17 +58,16 @@ int main()
 	SetKBRate(40, 50);									// (a,b) a = pulse duration, b = delay duration
 	SetKBLayout(KB_ENG);
 	
-	// -------------------- IOUMD Buttons --------------------
+	// --------------------- IOUMD Buttons --------------------------
 	
 	SetShiftButton(&AVA_F16, S4, &Throttle, BSF, BSB, 0);
 	
-	// -------------------- COMMON --------------------
+	// -------------------- COMMON FUNCTIONS ------------------------
 					
-	dcs_fighter_common();								// load dcs COMMON controls
-	dcs_fighter_mfd();									// load dcs MFD controls (in DCS_Fighter_Common.tmc)
-														// before aircraft specific, to allow for overwriting of common controls when necessary
+	dcs_fighter_common_functions();						// load dcs COMMON functions
 
-	// -------------------- FUNCTIONS --------------------
+
+	// -------------------- AIRCRAFT FUNCTIONS ----------------------
 					
 	// Exterior Lighting - Full
 	extlight_full = CHAIN( DOWN+R_ALT+R_CTL, D(10), DOWN+'i', D(1000), UP+'i', D(), UP+R_ALT+R_CTL, D(),		// Exterior Lights Nav Knob - CW/Increase
@@ -103,7 +102,16 @@ int main()
 
 
 
-	// -------------------- FLIGHT STICK --------------------
+	// -------------------- COMMON CONTROLS -------------------------
+					
+	dcs_fighter_common_controls();						// load dcs COMMON controls
+	dcs_fighter_mfd();									// load dcs MFD controls (in DCS_Fighter_Common.tmc)
+														// before aircraft controls, to allow for overwriting of common controls when necessary
+
+
+	// -------------------- AIRCRAFT CONTROLS -----------------------
+
+	// ---------------------- FLIGHT STICK --------------------------
 
 	// --DCS_Fighter_Common---------
 	// TG - Camera/Gun Trigger
@@ -186,7 +194,7 @@ int main()
 	
 	
  
-	// -------------------- THROTTLE --------------------
+	// ------------------------ THROTTLE ----------------------------
 
 	// --DCS_Fighter_Common---------
 	// Left Throttle Button
@@ -380,10 +388,10 @@ int main()
 
 
 
-}
+}	// =====  end main()  =========================================================================
 
 
-// -------------------- AFTERBURNER DETENT --------------------
+// -------------------- AFTERBURNER DETENT --------------------------
 
 int afterburnerdetent(int x)
 {
@@ -398,7 +406,7 @@ int afterburnerdetent(int x)
 }
 
 
-// -------------------- EVENTHANDLE --------------------
+// ------------------------ EVENTHANDLE -----------------------------
 
 int EventHandle(int type, alias o, int x)
 {
