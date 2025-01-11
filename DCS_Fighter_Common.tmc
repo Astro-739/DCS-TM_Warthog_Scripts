@@ -409,10 +409,12 @@ int dcs_fighter_common_controls()
 							 	DX14 ); 																		// O - Radar Elevation Antenna Control - CCW/Down
 
 
-	// Pinky Switch (exterior lighting)  ---- // TODO rebuild
+	// Pinky Switch (exterior lighting)
 	// PSF
-	MapKey(&Throttle, PSF, 		extlight_full );	 															// Exterior Lights Full
-	MapKeyR(&Throttle, PSF, 	extlight_position );															// Exterior Lights Position
+	MapKeyIO(&Throttle, PSF, 	extlight_flashsteady, 															// I - Exterior lights flash/steady toggle
+								extlight_full );	 															// O - Exterior Lights Full
+	MapKeyRIO(&Throttle, PSF, 	0,																				// I - 
+								extlight_position );															// O - Exterior Lights Position
 	// PSB
 	MapKey(&Throttle, PSB, 		extlight_covert );			 													// Exterior Lights Covert
 	MapKeyR(&Throttle, PSB, 	extlight_position );															// Exterior Lights Position
