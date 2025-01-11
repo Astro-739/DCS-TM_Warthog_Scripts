@@ -109,29 +109,11 @@ define AB 75											// detent position at AB% of full throttle reach (80% for
 
 int main()
 {
-	Configure(&HCougar, MODE_EXCLUDED);
-	Configure(&JoystickF18, MODE_EXCLUDED);
-	Configure(&A320Pilot, MODE_EXCLUDED);
-	Configure(&A320Copilot, MODE_EXCLUDED);
-	Configure(&TCAQuadrant12, MODE_EXCLUDED);
-	Configure(&TCAQuadrant34, MODE_EXCLUDED);
-	Configure(&T16000, MODE_EXCLUDED);
-	Configure(&T16000L, MODE_EXCLUDED);
-	Configure(&LMFD, MODE_EXCLUDED);
-	Configure(&RMFD, MODE_EXCLUDED);
-	Configure(&TFRPRudder, MODE_EXCLUDED);
-	Configure(&TWCSThrottle, MODE_EXCLUDED);
-	Configure(&TFRPHARudder, MODE_EXCLUDED);
+	// -------------------- COMMON CONFIGURATION --------------------
+					
+	dcs_fighter_common_configuration();					// load dcs COMMON config
 	
-	if(Init(&EventHandle)) return 1;
-	
-	SetKBRate(40, 50);									// (a < b) a = pulse duration, b = delay duration
-	SetKBLayout(KB_ENG);
-	
-	// -------------------- IOUMD Buttons -------------------------------------
-	
-	SetShiftButton(&Joystick, S4, &Throttle, BSF, BSB, 0);
-	
+
 	// -------------------- COMMON --------------------------------------------
 					
 	dcs_fighter_common();								// load dcs COMMON controls

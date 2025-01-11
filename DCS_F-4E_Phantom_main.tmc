@@ -92,41 +92,9 @@ define AB 69											// detent position at AB% of full throttle reach
 
 int main()
 {
-	Configure(&HCougar, MODE_EXCLUDED);
-	Configure(&Joystick, MODE_EXCLUDED);                    // Warthog Joystick
-	Configure(&JoystickF18, MODE_EXCLUDED);
-	//Configure(&Throttle, MODE_EXCLUDED);                  // Warthog Throttle
-	Configure(&A320Pilot, MODE_EXCLUDED);
-	Configure(&A320Copilot, MODE_EXCLUDED);
-	Configure(&TCAQuadrant12, MODE_EXCLUDED);
-	Configure(&TCAQuadrant34, MODE_EXCLUDED);
-	Configure(&TCAYokeBoeing, MODE_EXCLUDED);
-	Configure(&TCAQBoeing12, MODE_EXCLUDED);
-	Configure(&TCAQBoeing34, MODE_EXCLUDED);
-	Configure(&TCASidestickXPilot, MODE_EXCLUDED);
-	Configure(&TCASidestickXCopilot, MODE_EXCLUDED);
-	Configure(&ViperTQS, MODE_EXCLUDED);
-	Configure(&ViperBBox, MODE_EXCLUDED);
-	//Configure(&AVA_F16, MODE_EXCLUDED);					// AVA F16
-    Configure(&AVA_F18, MODE_EXCLUDED);
-	Configure(&FarmStickRight, MODE_EXCLUDED);
-	Configure(&FarmStickLeft, MODE_EXCLUDED);
-	Configure(&T16000, MODE_EXCLUDED);
-	Configure(&T16000L, MODE_EXCLUDED);
-	//Configure(&LMFD, MODE_EXCLUDED);						// Left MFD
-	Configure(&RMFD, MODE_EXCLUDED);						// Right MFD
-	Configure(&TFRPRudder, MODE_EXCLUDED);
-	Configure(&TWCSThrottle, MODE_EXCLUDED);
-	Configure(&TFRPHARudder, MODE_EXCLUDED);
-	
-	if(Init(&EventHandle)) return 1;
-	
-	SetKBRate(40, 50);									// (a < b) a = pulse duration, b = delay duration
-	SetKBLayout(KB_ENG);
-	
-	// --------------------- IOUMD Buttons --------------------------
-	
-	SetShiftButton(&AVA_F16, S4, &Throttle, BSF, BSB, 0);
+	// -------------------- COMMON CONFIGURATION --------------------
+					
+	dcs_fighter_common_configuration();					// load dcs COMMON config
 	
 
 	// -------------------- COMMON FUNCTIONS ------------------------
