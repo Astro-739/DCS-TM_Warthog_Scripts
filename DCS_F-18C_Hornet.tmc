@@ -1,6 +1,6 @@
 // DCS F-18C Hornet Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.24.618
-// version 1, Dec 2024
+// version 1.0, Dec 2024
 
 
 include "target.tmh"
