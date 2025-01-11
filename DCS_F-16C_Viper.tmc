@@ -15,6 +15,11 @@ int autopilot_off;
 int autopilot;
 char autopilot_mode;
 
+int extlight_full;
+int extlight_formation;
+int extlight_position;
+int extlight_covert;
+
 int override;	
 char override_dog;		
 
@@ -279,6 +284,14 @@ int main()
 //							 	extlight_covert );			 														// O - MASTER Switch - ALL covert
 //	MapKeyRIO(&Throttle, PSB, 	0, 																					// I - 
 //							  	extlight_position );																// O - MASTER Switch - A-C covert
+
+	// Pinky Switch (exterior lighting)
+	// PSF
+	MapKey(&Throttle, PSF, 		extlight_full );	 															// Exterior Lights Full
+	MapKeyR(&Throttle, PSF, 	extlight_position );															// Exterior Lights Position
+	// PSB
+	MapKey(&Throttle, PSB, 		extlight_covert );			 													// Exterior Lights Covert
+	MapKeyR(&Throttle, PSB, 	extlight_position );															// Exterior Lights Position
 
 
 	// Flaps Switch (RF Switch)

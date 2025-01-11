@@ -109,11 +109,6 @@ char flashlight_on = 0;
 int brightness_up;	
 int brightness_down;	
 
-int extlight_full;
-int extlight_formation;
-int extlight_position;
-int extlight_covert;
-
 int enigmacw_bogeydope;
 int enigmacw_ewpicturetoggle;
 
@@ -397,7 +392,7 @@ int dcs_fighter_common()
 							 	DX14 ); 																		// O - Radar Elevation Antenna Control - CCW/Down
 
 
-	// Pinky Switch (exterior lighting)
+	// Pinky Switch (exterior lighting)  ---- // TODO rebuild
 	// PSF
 	MapKey(&Throttle, PSF, 		extlight_full );	 															// Exterior Lights Full
 	MapKeyR(&Throttle, PSF, 	extlight_position );															// Exterior Lights Position
