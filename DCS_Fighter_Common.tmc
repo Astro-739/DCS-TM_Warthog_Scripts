@@ -1,6 +1,6 @@
 // DCS Fighter Common Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.24.618
-// version 1.5, Aug 2024
+// version 2.0, Jan 2025
 //
 // All common functions across DCS modules:
 // - Gun Trigger first/second detent
@@ -95,6 +95,12 @@ int dragchute_release;
 int speedbrakes_open;
 int speedbrakes_close;
 
+int extlight_full;
+int extlight_formation;
+int extlight_position;
+int extlight_covert;
+int extlight_flashsteady;
+
 int pilotbody;
 int helmetvisor;
 int sunglasses;
@@ -124,9 +130,9 @@ char AAR_mode = 0;										// Air-to-Air Refuelling mode
 
 
 
-// -------------------- FIGHTER COMMON --------------------
+// -------------------- FIGHTER COMMON FUNCTIONS --------------------------------------------------
 
-int dcs_fighter_common()
+int dcs_fighter_common_functions()
 {
 
 	// -------------------- FUNCTIONS --------------------
@@ -205,6 +211,7 @@ int dcs_fighter_common()
 	extlight_position = 0;
 	extlight_formation = 0;
 	extlight_covert = 0;
+	extlight_flashsteady = 0;
 
 	// Cockpit Visuals
 	pilotbody   = CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT );												// Pilot Body toggle
@@ -238,7 +245,17 @@ int dcs_fighter_common()
 	enigmacw_ewpicturetoggle 	= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F1, D(200), PULSE+F5 ); 		// Radio menu (\), Other, EW, EW Picture Toggle
 
 
-	// -------------------- INITIAL VALUES ---------------------------------------
+
+}	// =====  end dcs_fighter_common_functions()  =================================================
+
+
+
+// -------------------- FIGHTER COMMON CONTROLS ---------------------------------------------------
+
+int dcs_fighter_common_controls()
+{
+
+	// -------------------- INITIAL VALUES --------------------------
 
 	printf("\xa--- Initial Mode Values ---\xa");																// 
 	printf("AAR_mode = %i\xa", AAR_mode);																		// print initial AAR_mode
@@ -247,7 +264,7 @@ int dcs_fighter_common()
 
 
 
-	// -------------------- FLIGHT STICK --------------------
+	// ------------------------ FLIGHT STICK ------------------------
 
 	// Camera/Gun Trigger
 	// TG1
@@ -503,17 +520,17 @@ int dcs_fighter_common()
 
 
 
-	// ------- also load SPECIFIC part of COMMON controls --------------------------------
+	// ------- also load SPECIFIC part of COMMON controls -----------
 	
 	dcs_fighter_common_specific();																				// controls to be switched back after JESTER use
 
 
-}	// end dcs_fighter_common()	===============================================================
+}	// =====  end dcs_fighter_common_controls()	 ==================================================
 
 
 
 
-// -------------------- COMMON SPECIFIC CONTROLS to be switched back after JESTER use -----------------------
+// ----------- COMMON SPECIFIC CONTROLS to be switched back after JESTER use ----------------------
 
 int dcs_fighter_common_specific()
 {
@@ -598,11 +615,11 @@ int dcs_fighter_common_specific()
 
 
 
-}	// end dcs_fighter_common_specific()	================================================================
+}	// end dcs_fighter_common_specific()	=======================================================
 
 
 
-// -------------------- LEFT MFD controls -----------------------
+// -------------------- LEFT MFD controls ---------------------------------------------------------
 
 int dcs_fighter_mfd()
 {
@@ -692,4 +709,4 @@ int dcs_fighter_mfd()
 								CHAIN( R_WIN+L_SHIFT, D(10), 'g' ));											// O - Left MFD GAIN Down
 
 
-}	// end dcs_fighter_mfd()	================================================================
+}	// =====  end dcs_fighter_mfd()  ==============================================================

@@ -1,13 +1,13 @@
 // DCS F-16C Viper Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.24.618
-// version 1.3, Aug 2024
+// version 2.0, Jan 2025
 
 
 include "target.tmh"
 include "DCS_Fighter_Common.tmc"
 
 
-// -------------------- INITIALISE --------------------
+// -------------------------- INITIALISE ----------------------------
 
 int autopilot_ALThold;	
 int autopilot_ATThold;
@@ -15,18 +15,13 @@ int autopilot_off;
 int autopilot;
 char autopilot_mode;
 
-int extlight_full;
-int extlight_formation;
-int extlight_position;
-int extlight_covert;
-
 int override;	
 char override_dog;		
 
 define AB 75											// detent position at AB% of full throttle reach
 
 
-// -------------------- MAIN --------------------
+// -------------------------- MAIN F-16C ----------------------------------------------------------
 
 int main()
 {
@@ -62,17 +57,16 @@ int main()
 	SetKBRate(40, 50);																							// (a < b) a = pulse duration, b = delay duration
 	SetKBLayout(KB_ENG);
 	
-	// -------------------- IOUMD Buttons --------------------
+	// --------------------- IOUMD Buttons --------------------------
 	
 	SetShiftButton(&AVA_F16, S4, &Throttle, BSF, BSB, 0);
 	
-	// -------------------- COMMON --------------------
+	// -------------------- COMMON FUNCTIONS ------------------------
 					
-	dcs_fighter_common();								// load dcs COMMON controls
-	dcs_fighter_mfd();									// load dcs MFD controls (in DCS_Fighter_Common.tmc)
-														// before aircraft specific, to allow for overwriting of common controls when necessary
+	dcs_fighter_common_functions();						// load dcs COMMON functions
 
-	// -------------------- FUNCTIONS --------------------
+
+	// -------------------- AIRCRAFT FUNCTIONS ----------------------
 	
 	// Start-up Sequence (overwrites common)
 	startup = SEQ( CHAIN( L_ALT, D(10), 's' ), 												// MAIN PWR Switch - BATT
@@ -109,6 +103,12 @@ int main()
 								 DOWN+R_SHIFT+L_CTL, D(10), PULSE+'l', D(), UP+R_SHIFT+L_CTL, D(100),			// WING/TAIL Switch - OFF
 								 DOWN+R_CTL+L_CTL, D(10), PULSE+'l', D(), UP+R_CTL+L_CTL, D(),					// FUSELAGE Switch - OFF
 								 LED(&Throttle, LED_ONOFF, LED_CURRENT-LED4) );									// LED4 OFF
+	extlight_flashsteady = CHAIN( DOWN+R_ALT, D(10), PULSE+'l', D(), UP+R_ALT );								// FLASH STEADY Switch - FLASH/STEADY
+
+//	extlight_dimbright 		SEQ( CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'l', D(), UP+R_SHIFT+L_ALT, D(),		// WING/TAIL Switch - DIM
+//										DOWN+R_CTL+L_ALT, D(10), PULSE+'l', D(), UP+R_CTL+L_ALT ),				// FUSELAGE Switch - DIM
+//								 CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'l', D(), UP+R_SHIFT+L_SHIFT, D(),	// WING/TAIL Switch - BRT
+//										DOWN+R_CTL+L_SHIFT, D(10), PULSE+'l', D(), UP+R_CTL+L_SHIFT )),			// FUSELAGE Switch - BRT
 
 
 	// A-A override function
@@ -122,8 +122,16 @@ int main()
 
 
 
+	// -------------------- COMMON CONTROLS -------------------------
+					
+	dcs_fighter_common_controls();						// load dcs COMMON controls
+	dcs_fighter_mfd();									// load dcs MFD controls (in DCS_Fighter_Common.tmc)
+														// before aircraft controls, to allow for overwriting of common controls when necessary
 
-	// -------------------- FLIGHT STICK --------------------
+
+	// -------------------- AIRCRAFT CONTROLS -----------------------
+
+	// ---------------------- FLIGHT STICK --------------------------
 
 	// --DCS_Fighter_Common---------
 	// TG - Camera/Gun Trigger
@@ -189,7 +197,7 @@ int main()
 
 
  
-	// -------------------- THROTTLE --------------------
+	// ------------------------ THROTTLE ----------------------------
 
 	// --DCS_Fighter_Common---------
 	// Left Throttle Button
@@ -269,29 +277,6 @@ int main()
 	MapKeyIO(&Throttle, CHB, 	brightness_down,																// I - brightness down for goggle/HMCS
 							 	REXEC( 21, 200, "ActKey( PULSE+KEYON+DX14 );" ));								// O - ANT ELEV Knob - CCW/down    (REXEC to slow down repeat press)
 
-
-	// Pinky Switch (exterior lighting)
-	// PSF
-//	MapKeyIO(&Throttle, PSF, 	CHAIN( DOWN+R_ALT, D(10), PULSE+'l', D(), UP+R_ALT ),								// I - FLASH STEADY Switch - FLASH/STEADY
-//								extlight_full );	 																//	   FUSELAGE Switch - BRT
-//	MapKeyRIO(&Throttle, PSF, 	0, 																					// I - 
-//							  	extlight_position );																//	   FUSELAGE Switch - OFF
-	// PSB
-//	MapKeyIO(&Throttle, PSB, 	SEQ( CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'l', D(), UP+R_SHIFT+L_ALT, D(),		// I - WING/TAIL Switch - DIM
-//											DOWN+R_CTL+L_ALT, D(10), PULSE+'l', D(), UP+R_CTL+L_ALT ),				// 	   FUSELAGE Switch - DIM
-//									 CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'l', D(), UP+R_SHIFT+L_SHIFT, D(),	//	   WING/TAIL Switch - BRT
-//											DOWN+R_CTL+L_SHIFT, D(10), PULSE+'l', D(), UP+R_CTL+L_SHIFT )),			//	   FUSELAGE Switch - BRT
-//							 	extlight_covert );			 														// O - MASTER Switch - ALL covert
-//	MapKeyRIO(&Throttle, PSB, 	0, 																					// I - 
-//							  	extlight_position );																// O - MASTER Switch - A-C covert
-
-	// Pinky Switch (exterior lighting)
-	// PSF
-	MapKey(&Throttle, PSF, 		extlight_full );	 															// Exterior Lights Full
-	MapKeyR(&Throttle, PSF, 	extlight_position );															// Exterior Lights Position
-	// PSB
-	MapKey(&Throttle, PSB, 		extlight_covert );			 													// Exterior Lights Covert
-	MapKeyR(&Throttle, PSB, 	extlight_position );															// Exterior Lights Position
 
 
 	// Flaps Switch (RF Switch)
@@ -382,9 +367,10 @@ int main()
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED3) )); 							//     LED3 OFF for D layer
 
 
-}
+}	// =====  end main()  =========================================================================
 
-// -------------------- AFTERBURNER DETENT --------------------
+
+// -------------------- AFTERBURNER DETENT --------------------------
 
 int afterburnerdetent(int x)
 {
@@ -398,7 +384,7 @@ int afterburnerdetent(int x)
 
 
 
-// -------------------- EVENTHANDLE --------------------
+// ------------------------ EVENTHANDLE -----------------------------
 
 int EventHandle(int type, alias o, int x)
 {
