@@ -383,7 +383,7 @@ int dcs_fighter_common_controls()
 	MapKeyIO(&Throttle, SPDF, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x55], D(), UP+R_SHIFT ),					// I - snap zoom max   (R_SHIFT+KP*)
 								speedbrakes_open );																// O - Open Speed Brakes
 	MapKeyRIO(&Throttle, SPDF, 	PULSE+KPENT,																	// I - snap zoom normal
-								CHAIN( D(100), PULSE+DX31 ));													// O - Close Speed Brakes
+								speedbrakes_close );															// O - Close Speed Brakes
 	// SPDB
 	MapKeyIOUMD(&Throttle, SPDB, CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),				// IU - snap zoom min    (R_SHIFT+KP/)
 								speedbrakes_open,																// OU - Open Speed Brakes Momentary

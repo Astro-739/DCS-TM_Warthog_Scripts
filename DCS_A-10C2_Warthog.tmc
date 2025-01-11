@@ -15,11 +15,6 @@ int mastermode_aa;
 int mastermode_nav;
 int deferdelay;
 
-int extlight_full;				
-int extlight_position;
-int extlight_formation;			
-int extlight_covert;			
-
 define AB 100											// detent position at AB% of full throttle reach
 
 
