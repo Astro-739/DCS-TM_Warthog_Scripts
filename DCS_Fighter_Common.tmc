@@ -30,7 +30,7 @@
 
 
 
-// -------------------- INITIALISE --------------------
+// ------------------------ INITIALISE ------------------------------
 
 int flight_engagebandits;
 int flight_coverme;
@@ -170,7 +170,7 @@ int dcs_fighter_common_configuration()
 	
 	SetShiftButton(&AVA_F16, S4, &Throttle, BSF, BSB, 0);
 
-}	// =====  end dcs_fighter_common_configuration()  =================================================
+}	// =====  end dcs_fighter_common_configuration()  =============================================
 
 
 
@@ -178,9 +178,6 @@ int dcs_fighter_common_configuration()
 
 int dcs_fighter_common_functions()
 {
-
-	// -------------------- FUNCTIONS --------------------
-					
 	// AI Flight Comms
 	flight_engagebandits 		= CHAIN( DOWN+L_WIN, D(10), PULSE+'b', D(), UP+L_WIN );									// Flight - Engage Bandits
 	flight_coverme				= CHAIN( DOWN+L_WIN, D(10), PULSE+'w', D(), UP+L_WIN );									// Flight - Cover Me
@@ -299,7 +296,7 @@ int dcs_fighter_common_functions()
 int dcs_fighter_common_controls()
 {
 
-	// -------------------- INITIAL VALUES --------------------------
+	// ---------------------- INITIAL VALUES ------------------------
 
 	printf("\xa--- Initial Mode Values ---\xa");																// 
 	printf("AAR_mode = %i\xa", AAR_mode);																		// print initial AAR_mode
@@ -386,7 +383,7 @@ int dcs_fighter_common_controls()
 	
 	
  
-	// -------------------- THROTTLE --------------------
+	// ------------------------ THROTTLE ----------------------------
 
 
 	// Left Throttle Button
@@ -566,9 +563,9 @@ int dcs_fighter_common_controls()
 
 
 
-	// ------- also load SPECIFIC part of COMMON controls -----------
+	// --------- also load SWITCH part of COMMON controls -----------
 	
-	dcs_fighter_common_specific();																				// controls to be switched back after JESTER use
+	dcs_fighter_common_switch();																				// controls to be switched back after JESTER use
 
 
 }	// =====  end dcs_fighter_common_controls()	 ==================================================
@@ -576,9 +573,9 @@ int dcs_fighter_common_controls()
 
 
 
-// ----------- COMMON SPECIFIC CONTROLS to be switched back after JESTER use ----------------------
+// ------------- COMMON SWITCH CONTROLS to be switched back after JESTER use ----------------------
 
-int dcs_fighter_common_specific()
+int dcs_fighter_common_switch()
 {
 	
 	// MIC Switch (Transmit Switch)
@@ -661,7 +658,7 @@ int dcs_fighter_common_specific()
 
 
 
-}	// end dcs_fighter_common_specific()	=======================================================
+}	// end dcs_fighter_common_switch()	===========================================================
 
 
 
