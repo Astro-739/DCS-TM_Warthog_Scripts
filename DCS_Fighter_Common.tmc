@@ -274,11 +274,11 @@ int dcs_fighter_common_functions()
 
 	// Brightness function
 	brightness_up 	= REXEC( 100, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_CTL+R_SHIFT+'h' );"		 			// NVG brightness up
-									  "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+'.' );"					// Flashlight brightness up
-									  "else ActKey( PULSE+KEYON+DX37 );" );												// HUD/HMCS/Reticle brightness up
+									   "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+'.' );"				// Flashlight brightness up
+									   "else ActKey( PULSE+KEYON+DX37 );" );											// HUD/HMCS/Reticle brightness up
 	brightness_down = REXEC( 101, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_ALT+R_SHIFT+'h' );"					// NVG brightness down
-									  "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+',' );"					// Flashlight brightness down
-									  "else ActKey( PULSE+KEYON+DX38 );" );												// HUD/HMCS/Reticle brightness down
+									   "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+',' );"				// Flashlight brightness down
+									   "else ActKey( PULSE+KEYON+DX38 );" );											// HUD/HMCS/Reticle brightness down
 																														// FLIR brightness
 							  
 	// Enigma CW Server function
@@ -323,15 +323,15 @@ int dcs_fighter_common_controls()
 								SPC, 																			// ID - Fire Weapon (GIB)
 								DX6);																			// OD - Trigger Second Detent
 
-	// Weapon Release Button
-	// S2
-	MapKeyIO(&AVA_F16, S2,  	CHAIN( L_SHIFT, D(10), 'e' ), 													// I - EMER STORES JETTISON Button
-								DX2);																			// O - Weapon Release
-
 	// Nosewheel Steering Button
 	// S1
 	MapKeyIO(&AVA_F16, S1,  	SEQ( PULSE+F10, PULSE+F1 ),														// I - map
 							 	DX3 ); 																			// O - Nosewheel Steering Button
+
+	// Weapon Release Button
+	// S2
+	MapKeyIO(&AVA_F16, S2,  	CHAIN( L_SHIFT, D(10), 'e' ), 													// I - EMER STORES JETTISON Button
+								DX2);																			// O - Weapon Release
 
 	// Trim Switch
 	// H1U
@@ -664,7 +664,7 @@ int dcs_fighter_common_switch()
 
 // -------------------- LEFT MFD controls ---------------------------------------------------------
 
-int dcs_fighter_mfd()
+int dcs_fighter_common_mfd()
 {
 
 	MapKeyIO(&LMFD, OSB01, 		CHAIN( R_WIN+R_SHIFT, D(10), '1' ), 											// I - Right MFD OSB 01
@@ -752,4 +752,4 @@ int dcs_fighter_mfd()
 								CHAIN( R_WIN+L_SHIFT, D(10), 'g' ));											// O - Left MFD GAIN Down
 
 
-}	// =====  end dcs_fighter_mfd()  ==============================================================
+}	// =====  end dcs_fighter_common_mfd()  ==============================================================

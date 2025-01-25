@@ -281,7 +281,7 @@ int main()
 	// -------------------- COMMON CONTROLS -------------------------
 					
 	dcs_fighter_common_controls();						// load dcs COMMON controls
-	dcs_fighter_mfd();									// load dcs MFD controls (in DCS_Fighter_Common.tmc)
+	dcs_fighter_common_mfd();							// load dcs MFD controls
 														// before aircraft controls, to allow for overwriting of common controls when necessary
 
 	// -------------------- AIRCRAFT CONTROLS -----------------------

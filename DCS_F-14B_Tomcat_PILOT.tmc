@@ -64,13 +64,17 @@ int dcs_f14_pilot_controls()
 
 	// --DCS_Fighter_Common---------
 	// Left Throttle Button
-	// MSU/D/R/L/P
+	// SPDF/B
+	// CHF/B
+	// MSU/D/P
+	// PSF/B
 	// EACON/OFF Landing Gear
-	// EOLNORM
-	// EORNORM/MOTOR
+	// EOLIGN/OVER
+	// EORIGN/OVER
+	// EFLNORM/OVER
+	// EFRNORM/OVER
 	// SC
 	// APUON/OFF
-	// LDGH
 	// RDRNRM/DIS Canopy
 	// IDLELON/IDLERON
 	// THR_LEFT

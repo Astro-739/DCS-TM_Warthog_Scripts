@@ -94,7 +94,7 @@ int main()
 	// -------------------- COMMON CONTROLS -------------------------
 					
 	dcs_fighter_common_controls();						// load dcs COMMON controls
-	dcs_fighter_mfd();									// load dcs MFD controls (in DCS_Fighter_Common.tmc)
+	dcs_fighter_common_mfd();							// load dcs MFD controls
 														// before aircraft controls, to allow for overwriting of common controls when necessary
 
 
@@ -170,10 +170,14 @@ int main()
 
 	// --DCS_Fighter_Common---------
 	// Left Throttle Button
+	// SPDF/B
+	// CHF/B
 	// MSU/D/P
+	// PSF/B
 	// EACON/OFF Landing Gear
-	// EOLNORM
-	// EORNORM/MOTOR
+	// EOLIGN/OVER
+	// EORIGN/OVER
+	// EFLNORM/OVER
 	// EFRNORM/OVER
 	// SC
 	// APUON/OFF
