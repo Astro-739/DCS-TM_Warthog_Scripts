@@ -220,8 +220,8 @@ int dcs_fighter_common_functions()
 	atc_inbound					= CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ); 		// Radio menu (\), ATC, Airfield, Inbound
 	atc_requestlanding			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 );				 							// Request landing short menu
 	
-	tanker_inbound				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F6, D(200), PULSE+F1 ); 						// Radio menu (\), Tanker menu, inbound
-	tanker_precontact			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 ); 											// Radio menu (\), Ready Pre-Contact (menu shortcut)
+	tanker_inbound				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F6, D(200), PULSE+F1, D(10000), PULSE+F12 ); 		// Radio menu (\), Tanker menu, inbound, 3s delay, Exit
+	tanker_precontact			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(10000), PULSE+F12 ); 						// Radio menu (\), Ready Pre-Contact (menu shortcut), 3s delay, Radio menu (\)
 
 	cv_requestlaunch			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F3, D(200), PULSE+F2 ); 		// TODO Radio menu (\), xxxxxxx
 	cv_inbound					= SEQ( CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ), 	// Radio menu (\), ATC, CV, Inbound
