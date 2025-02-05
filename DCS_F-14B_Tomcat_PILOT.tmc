@@ -1,5 +1,7 @@
 // PILOT file for DCS_F-14B_Tomcat.tmc  by Astro
-// version 1.2, Oct 2023
+// TARGET version 3.0.24.618
+// version 2.0, Feb 2025
+
 
 
 
@@ -21,15 +23,15 @@ int dcs_f14_pilot_controls()
 
 	// JSTR layer
 	// Expand FOV Button - S3
-	MapKey(&Joystick, S3,  		EXEC( "if(LTRN_mode) dcs_f14_jester_lantirn_controls();"	// Switch to JESTER LANTIRN controls (LTRN_mode ON)
-									  "else dcs_f14_jester_controls();" ));					// Switch to JESTER controls (LTRN_mode OFF)
-	MapKeyR(&Joystick, S3,  	EXEC( "dcs_fighter_common_switch();" 							// Switch back to COMMON,
-									  "dcs_f14_pilot_controls_switch();" ));					//   and PILOT controls
+	MapKey(&AVA_F16, S3,  	EXEC( "if(LTRN_mode) dcs_f14_jester_lantirn_controls();"		// Switch to JESTER LANTIRN controls (LTRN_mode ON)
+								  "else dcs_f14_jester_controls();" ));						// Switch to JESTER controls (LTRN_mode OFF)
+	MapKeyR(&AVA_F16, S3,  	EXEC( "dcs_fighter_common_switch();" 							// Switch back to COMMON,
+								  "dcs_f14_pilot_controls_switch();" ));					//   and PILOT controls
 
 
 	// Weapon Release Button
 	// S2
-	MapKeyIOUMD(&Joystick, S2,  SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),												// IU - Emergency All Jettison Button Cover - OPEN
+	MapKeyIOUMD(&AVA_F16, S2,  SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),												// IU - Emergency All Jettison Button Cover - OPEN
 									 CHAIN( L_SHIFT+L_CTL, D(10), '0' )),												//		Emergency All Jettison Button
 							    CHAIN( R_ALT, D(10), SPC ),																// OU - weapon release
 								SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),												// IM - Emergency All Jettison Button Cover - OPEN
@@ -42,19 +44,19 @@ int dcs_f14_pilot_controls()
 
  	// Countermeasure Management Switch
 	// H4U	
-	MapKeyIO(&Joystick, H4U, 	CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'t', D(), UP+R_SHIFT+L_SHIFT ),				// I - Target designate up / VSL HI
+	MapKeyIO(&AVA_F16, H4U, 	CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'t', D(), UP+R_SHIFT+L_SHIFT ),				// I - Target designate up / VSL HI
 							 	CHAIN( L_SHIFT, D(10), 'd' ));															// O - DLC Thumbwheel Forward
 	// H4D
-	MapKeyIO(&Joystick, H4D, 	CHAIN( DOWN+R_SHIFT+L_CTL, D(10), PULSE+'t', D(), UP+R_SHIFT+L_CTL ), 					// I - Target designate down / VSL LO
+	MapKeyIO(&AVA_F16, H4D, 	CHAIN( DOWN+R_SHIFT+L_CTL, D(10), PULSE+'t', D(), UP+R_SHIFT+L_CTL ), 					// I - Target designate down / VSL LO
 							 	CHAIN( L_CTL, D(10), 'd' ));															// O - DLC Thumbwheel Aft
 	// H4R
-	MapKeyIO(&Joystick, H4R, 	CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'t', D(), UP+R_SHIFT+L_ALT ), 					// I - Target designate fwd / PAL
+	MapKeyIO(&AVA_F16, H4R, 	CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'t', D(), UP+R_SHIFT+L_ALT ), 					// I - Target designate fwd / PAL
 			  				 	0);																						// O - 
 	// H4L
-	MapKeyIO(&Joystick, H4L, 	CHAIN( L_SHIFT+L_CTL, D(10), 't' ), 													// I - PLM button
+	MapKeyIO(&AVA_F16, H4L, 	CHAIN( L_SHIFT+L_CTL, D(10), 't' ), 													// I - PLM button
 							 	0); 																					// O - 
 	// H4P
-	MapKeyIO(&Joystick, H4P, 	0, 																						// I - 
+	MapKeyIO(&AVA_F16, H4P, 	0, 																						// I - 
 							 	CHAIN( DOWN+L_ALT, D(10), PULSE+'d', D(), UP+L_ALT )); 									// O - DLC Toggle / Countermeasure Dispense
 
 	
@@ -274,39 +276,39 @@ int dcs_f14_pilot_controls_switch()
 
 	// Target Management Switch
 	// H2U
-	MapKeyIO(&Joystick, H2U, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'w', D(), UP+R_SHIFT ),								// I - Weapon Selector up
+	MapKeyIO(&AVA_F16, H2U, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'w', D(), UP+R_SHIFT ),								// I - Weapon Selector up
 								USB[0x55] );																			// O - zoom in  (KP*)
 	// H2D
-	MapKeyIO(&Joystick, H2D, 	CHAIN( DOWN+R_CTL, D(10), PULSE+'w', D(), UP+R_CTL ), 									// I - Weapon Selector down
+	MapKeyIO(&AVA_F16, H2D, 	CHAIN( DOWN+R_CTL, D(10), PULSE+'w', D(), UP+R_CTL ), 									// I - Weapon Selector down
 								USB[0x54] );																			// O - zoom out  (KP\)
 	// H2R							
-	MapKeyIO(&Joystick, H2R, 	CHAIN( DOWN+R_ALT, D(10), PULSE+'w', D(), UP+R_ALT ), 									// I - Weapon Selector press
+	MapKeyIO(&AVA_F16, H2R, 	CHAIN( DOWN+R_ALT, D(10), PULSE+'w', D(), UP+R_ALT ), 									// I - Weapon Selector press
 								CHAIN( L_WIN, D(10), KP6 ));															// O - snap view right
 	// H2L
-	MapKeyIO(&Joystick, H2L, 	0,																						// I -
+	MapKeyIO(&AVA_F16, H2L, 	0,																						// I -
 								CHAIN( DOWN+R_SHIFT, D(10), PULSE+BSP, D(), UP+R_SHIFT, D(),							// O - remove stick
 								L_WIN, D(10), KP4 ));																	//     snap view instruments
-	MapKeyRIO(&Joystick, H2L, 	0,																						// I - 
+	MapKeyRIO(&AVA_F16, H2L, 	0,																						// I - 
 								CHAIN( D(200), DOWN+R_CTL, D(10), PULSE+BSP, D(), UP+R_CTL ));							// O - place stick
 
 
 	// Display Management Switch
 	// H3U
-	MapKeyIO(&Joystick, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
+	MapKeyIO(&AVA_F16, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
 									   nightvision, 500 ),																// 	   [long] Night Vision Goggles toggle
 								CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'v', D(), UP+L_ALT+R_SHIFT ));					// O - VDI Mode Toggle
 	// H3D
-	MapKeyIO(&Joystick, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
+	MapKeyIO(&AVA_F16, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
 									   flashlight, 500 ),																//	   [long] Flashlight on/off	
 								CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'h', D(), UP+L_ALT+R_SHIFT ));					// O - HSD Mode Toggle
 	// H3R
-	MapKeyIO(&Joystick, H3R, 	PULSE+']', 																				// I - kneeboard next page
+	MapKeyIO(&AVA_F16, H3R, 	PULSE+']', 																				// I - kneeboard next page
 								TEMPO( EXEC( "index_stcmd = (index_stcmd+1)%5;"											// O - Steer CMD next
 											 "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ),					// 		
 									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'7', D(), UP+L_SHIFT ),						// 	   [long] Display mode next
 									   500 ));																			//
 	// H3L
-	MapKeyIO(&Joystick, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
+	MapKeyIO(&AVA_F16, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
 									   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT ), 500 ),					//	   [long] Pilot Body toggle
 								TEMPO( EXEC( "index_stcmd = (index_stcmd+4)%5;"											// O - Steer CMD previous
 											 "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ),					// 		
