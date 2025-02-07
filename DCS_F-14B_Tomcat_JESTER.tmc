@@ -6,12 +6,12 @@
 
 
 
-// -------------------- JESTER CONTROLS -------------------------------------------------
+// ------------------------------ F-14B JESTER CONTROLS -------------------------------------------
 
 int dcs_f14_jester_controls()
 {
 
-	// -------------------- FLIGHT STICK -------------------------------------------------
+	// -------------------- FLIGHT STICK ----------------------------
 
 
 	// Target Management Switch
@@ -64,7 +64,7 @@ int dcs_f14_jester_controls()
 
 
 
-	// -------------------- THROTTLE -------------------------------------------------
+	// ----------------------- THROTTLE -----------------------------
 
 	// MIC Switch (Transmit Switch)
 	// MSU
@@ -152,18 +152,18 @@ int dcs_f14_jester_controls()
 
 
 
-}	// end dcs_f14_jester_controls()	================================================================
+}	// =====  end dcs_f14_jester_controls()  ======================================================
 
 
 
 
 
-// -------------------- JESTER LANTIRN CONTROLS -------------------------------------------------
+// ------------------------------ JESTER LANTIRN CONTROLS -----------------------------------------
 
 int dcs_f14_jester_lantirn_controls()
 {
 
-	// -------------------- FLIGHT STICK -------------------------------------------------
+	// -------------------- FLIGHT STICK ----------------------------
 
 	// Target Management Switch - LANTIRN
 	// H2U
@@ -199,7 +199,7 @@ int dcs_f14_jester_lantirn_controls()
 								JSTR_lntrn_srch_armoractive );															// O - LANTIRN - Search any active Armour
 
 
-	// -------------------- THROTTLE -------------------------------------------------
+	// -------------------- THROTTLE --------------------------------
 
 	// MIC Switch (Transmit Switch) - LANTIRN
 	// MSU
@@ -271,4 +271,4 @@ int dcs_f14_jester_lantirn_controls()
 
 
 
-}	// end dcs_f14_jester_lantirn_controls()	==========================================================
+}	// =====  end dcs_f14_jester_lantirn_controls()  ==============================================

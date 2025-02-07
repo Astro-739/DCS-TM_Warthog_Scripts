@@ -23,9 +23,6 @@ int autopilot;
 int extlight_posdim;	
 //int extlight_formation;		
 //int extlight_covert;		
-//int speedbrakes_open;
-//int speedbrakes_close;
-int groundcrewstartup;
 
 int steercmdlist, index_stcmd = 0;							// (start with second element after increment, element 0 is first element in list)
 int radarrangelist, index_range = 2;						// (current is middle of five (assumption 100 nm), element 2, element 0 is first element in list)
@@ -178,62 +175,55 @@ int main()
 	// -------------------- FUNCTIONS ---------------------------------------------
 					
 	// Autopilot function
-	autopilot = SEQ( CHAIN( EXEC( "autopilot_mode();" ), D(200),														// Set autopilot mode
-							DOWN+L_ALT+L_SHIFT, D(10), PULSE+'p', D(), UP+L_ALT+L_SHIFT ),								// Autopilot on
-					 CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'p', D(), UP+L_ALT+L_CTL ));									// Autopilot off
+	autopilot 	= SEQ( CHAIN( EXEC( "autopilot_mode();" ), D(200),														// Set autopilot mode
+							  DOWN+L_ALT+L_SHIFT, D(10), PULSE+'p', D(), UP+L_ALT+L_SHIFT ),							// Autopilot on
+					   CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'p', D(), UP+L_ALT+L_CTL ));								// Autopilot off
 	
+	// Ground Crew Start-up
+	groundcrew	= SEQ( CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F1, D(10000), 			// Radio menu (\), Ground crew, Wheel Chocks, Place 
+							  PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F2, D(100), PULSE+F1, D(13000), 			// Radio menu (\), Ground crew, Ground Electric Power, On
+							  PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F1, D(13000) ),		// Radio menu (\), Ground crew, Ground Air Supply, Connect
+					   CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F2, D(13000),			// Radio menu (\), Ground crew, Ground Air Supply, Disconnect
+							  PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F2, D(100), PULSE+F2, D(13000), 			// Radio menu (\), Ground crew, Ground Electric Power, Off
+							  PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F2 ));					// Radio menu (\), Ground crew, Wheel Chocks, Remove
+
 	// Exterior Lighting - Full
-	extlight_full = CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'l', D(), UP+L_SHIFT+R_SHIFT, D(100),						// Lights Anti Collision ON
-						   DOWN+L_CTL+R_SHIFT, D(10), PULSE+'l', D(), UP+L_CTL+R_SHIFT, D(100),							// Lights Position Wing BRT
-						   DOWN+L_ALT+R_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+R_SHIFT,	D(100),							// Lights Position Tail BRT
-						   PULSE+'l', D(100),																			// Exterior Lights Master Switch ON
-						   REXEC( 0, 100, "ActKey( PULSE+KEYON+R_CTL+'l' );", RNOSTOP ), 								// Lights Formation Brightnes Down
-						   D(800),																						// loop 8x
-						   EXEC( "StopAutoRepeat(0);" ));																// stop loop
+	extlight_full 		= CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'l', D(), UP+L_SHIFT+R_SHIFT, D(100),				// Lights Anti Collision ON
+							     DOWN+L_CTL+R_SHIFT, D(10), PULSE+'l', D(), UP+L_CTL+R_SHIFT, D(100),					// Lights Position Wing BRT
+						   		 DOWN+L_ALT+R_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+R_SHIFT,	D(100),					// Lights Position Tail BRT
+						   		 PULSE+'l', D(100),																		// Exterior Lights Master Switch ON
+						   		 REXEC( 0, 100, "ActKey( PULSE+KEYON+R_CTL+'l' );", RNOSTOP ), 							// Lights Formation Brightnes Down
+						   		 D(800),																				// loop 8x
+						   		 EXEC( "StopAutoRepeat(0);" ));															// stop loop
 						   
 	// Exterior Lighting - Position Dim
-	extlight_posdim = CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'l', D(), UP+L_SHIFT+R_CTL, D(100),						// Lights Anti Collision OFF
-							 DOWN+L_CTL+L_ALT, D(10), PULSE+'l', D(), UP+L_CTL+L_ALT, D(100),							// Lights Position Wing DIM
-							 DOWN+L_ALT+L_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+L_SHIFT, D(100),						// Lights Position Tail DIM
-							 PULSE+'l', D(100),																			// Exterior Lights Master Switch ON
-							 REXEC( 1, 100, "ActKey( PULSE+KEYON+R_CTL+'l' );", RNOSTOP ), 								// Lights Formation Brightnes Down
-							 D(800),																					//   loop 8x
-							 EXEC( "StopAutoRepeat(1);" ));																//   stop loop
+	extlight_posdim 	= CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'l', D(), UP+L_SHIFT+R_CTL, D(100),					// Lights Anti Collision OFF
+							 	 DOWN+L_CTL+L_ALT, D(10), PULSE+'l', D(), UP+L_CTL+L_ALT, D(100),						// Lights Position Wing DIM
+							 	 DOWN+L_ALT+L_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+L_SHIFT, D(100),					// Lights Position Tail DIM
+								 PULSE+'l', D(100),																		// Exterior Lights Master Switch ON
+								 REXEC( 1, 100, "ActKey( PULSE+KEYON+R_CTL+'l' );", RNOSTOP ), 							// Lights Formation Brightnes Down
+								 D(800),																				//   loop 8x
+								 EXEC( "StopAutoRepeat(1);" ));															//   stop loop
 						   
 	// Exterior Lighting - Formation
-	extlight_formation = CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'l', D(), UP+L_SHIFT+R_CTL, D(100),					// Lights Anti Collision OFF
-								DOWN+L_CTL+R_CTL, D(10), PULSE+'l', D(), UP+L_CTL+R_CTL, D(100),						// Lights Position Wing OFF
-								DOWN+L_ALT+R_CTL, D(10), PULSE+'l', D(), UP+L_ALT+R_CTL, D(100),						// Lights Position Tail OFF
-								PULSE+'l', D(100),																		// Exterior Lights Master Switch ON
-								REXEC( 2, 100, "ActKey( PULSE+KEYON+R_SHIFT+'l' );", RNOSTOP ), 						// Lights Formation Brightnes Up
-								D(800),																					//   loop 8x
-								EXEC( "StopAutoRepeat(2);" ));															//   stop loop
+	extlight_formation 	= CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'l', D(), UP+L_SHIFT+R_CTL, D(100),					// Lights Anti Collision OFF
+								 DOWN+L_CTL+R_CTL, D(10), PULSE+'l', D(), UP+L_CTL+R_CTL, D(100),						// Lights Position Wing OFF
+								 DOWN+L_ALT+R_CTL, D(10), PULSE+'l', D(), UP+L_ALT+R_CTL, D(100),						// Lights Position Tail OFF
+								 PULSE+'l', D(100),																		// Exterior Lights Master Switch ON
+								 REXEC( 2, 100, "ActKey( PULSE+KEYON+R_SHIFT+'l' );", RNOSTOP ), 						// Lights Formation Brightnes Up
+								 D(800),																				//   loop 8x
+								 EXEC( "StopAutoRepeat(2);" ));															//   stop loop
 						
 	// Exterior Lighting - Covert
-	extlight_covert = CHAIN( DOWN+L_CTL, D(10), PULSE+'l', D(), UP+L_CTL );												// Exterior Lights Master Switch OFF
-
-
-	// Ground Crew Start-up
-	groundcrewstartup = SEQ( CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F1, D(10000), 	// Radio menu (\), Ground crew, Wheel Chocks, Place 
-									PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F2, D(100), PULSE+F1, D(13000), 	// Radio menu (\), Ground crew, Ground Electric Power, On
-									PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F1, D(13000) ),	// Radio menu (\), Ground crew, Ground Air Supply, Connect
-							 CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F2, D(13000),	// Radio menu (\), Ground crew, Ground Air Supply, Disconnect
-									PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F2, D(100), PULSE+F2, D(13000), 	// Radio menu (\), Ground crew, Ground Electric Power, Off
-									PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F2 ));			// Radio menu (\), Ground crew, Wheel Chocks, Remove
+	extlight_covert 	= CHAIN( DOWN+L_CTL, D(10), PULSE+'l', D(), UP+L_CTL );											// Exterior Lights Master Switch OFF
 
 
 	// Air-to-Air Refuelling
 																														// Master Arm Off
-																														// RIO set WCS Switch - STBY
-																														// Refuel Probe to ALL EXTD or FUS EXTD
-																														// Fuel Dump Switch Off
-																														// Air Source to L ENG
-																														// Wing Sweep to Bomb (?)
 
 	// Speedbrake functions
-	speedbrakes_open  = PULSE+'b'; 																						// speedbrake extend
-
-	speedbrakes_close = CHAIN( D(100), DOWN+L_CTL, D(10), PULSE+'b', D(), UP+L_CTL );									// speedbrake fully retract
+	speedbrakes_open  	= PULSE+'b'; 																					// speedbrake extend
+	speedbrakes_close 	= CHAIN( D(100), DOWN+L_CTL, D(10), PULSE+'b', D(), UP+L_CTL );									// speedbrake fully retract
 
 	
 
