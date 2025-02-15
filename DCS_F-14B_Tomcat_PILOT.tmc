@@ -97,37 +97,6 @@ int dcs_f14_pilot_controls()
 
 
 
-	// Speedbrake Switch
-	// SPDF
-	MapKeyIO(&Throttle, SPDF, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x55], D(), UP+R_SHIFT ),					// I - snap zoom max   (R_SHIFT+KP*)
-								speedbrakes_open );																// O - Open Speed Brakes
-	MapKeyRIO(&Throttle, SPDF, 	PULSE+KPENT,																	// I - snap zoom normal
-								speedbrakes_close );															// O - Close Speed Brakes
-	// SPDB
-	MapKeyIOUMD(&Throttle, SPDB, CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),				// IU - snap zoom min    (R_SHIFT+KP/)
-								speedbrakes_open,																// OU - Open Speed Brakes Momentary
-								EXEC( "if(WHDN_mode) ActKey( KEYON+'w' );" 										// IM - [WHDN] wheel brake
-									  "else ActKey( PULSE+KEYON+USB[0x54] );" ),								//		snap zoom min
-								speedbrakes_open,																// OM - Open Speed Brakes Momentary
-								CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),					// ID - snap zoom min    (R_SHIFT+KP/)
-								speedbrakes_open );																// OD - Open Speed Brakes Momentary
-	MapKeyRIOUMD(&Throttle, SPDB, PULSE+KPENT,																	// IU - snap zoom normal
-								speedbrakes_close,																// OU - Close Speed Brakes
-								EXEC( "if(WHDN_mode) ActKey( 'w' );"											// IM - [WHDN] release 'w'
-									  "else ActKey( PULSE+KEYON+KPENT );" ),									//		snap zoom normal
-								speedbrakes_close,																// OM - Close Speed Brakes
-								PULSE+KPENT,																	// ID - snap zoom normal
-								speedbrakes_close );															// OU - Close Speed Brakes
-
-								
-	// China Hat
-	// CHF
-	MapKeyIO(&Throttle, CHF, 	brightness_up, 																	// I - brightness up for reticle/NVG
-							 	CHAIN( L_ALT+R_SHIFT, D(10), '-' )); 											// O - HUD Trim Dec
-	// CHB
-	MapKeyIO(&Throttle, CHB, 	brightness_down,																// I - brightness down for reticle/NVG
-							 	CHAIN( L_ALT+R_SHIFT, D(10), '=' )); 											// O - HUD Trim Inc
-
 	// Pinky Switch (exterior lighting)
 	// PSF
 	MapKeyIO(&Throttle, PSF, 	CHAIN( extlight_posdim, D(), 													// I - extlight_posdim
@@ -157,38 +126,16 @@ int dcs_f14_pilot_controls()
 	// FLAPD	
 	MapKey(&Throttle, FLAPD,  	PULSE+'f');																		// Flap Switch - DOWN
 
+	
 	// Engine Operation
 	// EOLIGN
 	MapKeyIO(&Throttle, EOLIGN,	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'c', D(), UP+R_SHIFT ),						// I - Crank Left Engine
-								CHAIN( DOWN+R_ALT, D(10), PULSE+HOME, D(), UP+R_ALT ));							// O - Throttle Left - IDLE
-
-	// EOLMOTOR
-	MapKeyIO(&Throttle, EOLMOTOR, 0,																			// I - 
-								groundcrew); 																	// O - Ground Crew Start-up
+								CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));							// O - Throttle Left - IDLE
 
 	// EORIGN
 	MapKeyIO(&Throttle, EORIGN, CHAIN( DOWN+R_CTL, D(10), PULSE+'c', D(), UP+R_CTL ),							// I - Crank Right Engine
 								CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));						// O - Throttle Right - IDLE
 
-	// Engine Override
-	// EFRNORM
-	MapKeyIOUMD(&Throttle, EFRNORM, 0,																			// IU - 
-								0,																				// OU - 
-								CHAIN( 0,																		// IM - // TODO AAR stuff ********
-									   EXEC( "AAR_mode = 0;" 													//		AAR_mode off
-											 "printf(\"AAR_mode = 0\\xa\");" )),								// 
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ),						// OM - Hook Retract
-								0,																				// ID - 
-								0);																				// OD - 
-	// EFROVER
-	MapKeyIOUMD(&Throttle, EFROVER, 0,																			// IU - 
-								0,																				// OU - 
-								CHAIN( 0,																		// IM - // TODO AAR stuff ********
-									   EXEC( "AAR_mode = 1;"													//		AAR_mode on
-											 "printf(\"AAR_mode = 1\\xa\");" )),								// 
-								CHAIN( DOWN+L_CTL, D(10), PULSE+'h', D(), UP+L_CTL ),							// OM - Hook Extend
-								0,																				// ID - 
-								0);																				// OD - 
 
 	// SC
 	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - [short] re-centre IR tracker
