@@ -4,7 +4,7 @@
 
 
 
-// -------------------- INCLUDE -----------------------------------------------
+// ------------------------- INCLUDE --------------------------------
 
 include "target.tmh"
 include "DCS_F-14B_Tomcat_PILOT.tmc"						// all PILOT controls
@@ -16,13 +16,10 @@ include "DCS_Fighter_Common.tmc"							// all dcs fighter COMMON controls
 
 
 
-// -------------------- INITIALISE ---------------------------------------------
+// ------------------------- INITIALISE -----------------------------
 
 int autopilot;
-//int extlight_full;			
 int extlight_posdim;	
-//int extlight_formation;		
-//int extlight_covert;		
 
 int steercmdlist, index_stcmd = 0;							// (start with second element after increment, element 0 is first element in list)
 int radarrangelist, index_range = 2;						// (current is middle of five (assumption 100 nm), element 2, element 0 is first element in list)
@@ -104,7 +101,7 @@ define AB 75											// detent position at AB% of full throttle reach (80% for
 
 
 
-// -------------------- MAIN ---------------------------------------------
+// ------------------------------ MAIN F-14B ------------------------------------------------------
 
 int main()
 {
@@ -120,7 +117,7 @@ int main()
 
 	// -------------------- AIRCRAFT FUNCTIONS ----------------------
 
-	// -------------------- LISTS -------------------------
+	// ------------------------- LISTS ------------------------------
 	// List items are defined in DCS_F-14B_Tomcat_macros.ttm
 	
 	
@@ -172,7 +169,7 @@ int main()
 	
 	
 
-	// -------------------- FUNCTIONS ---------------------------------------------
+	// ------------------------- FUNCTIONS --------------------------
 					
 	// Autopilot function
 	autopilot 	= SEQ( CHAIN( EXEC( "autopilot_mode();" ), D(200),														// Set autopilot mode
@@ -392,7 +389,7 @@ int main()
 	//dcs_fighter_common_mfd();							// load dcs MFD controls
 														// before aircraft controls, to allow for overwriting of common controls when necessary
 
-	// -------------------- INITIAL MODE VALUES ---------------------------------
+	// ------------------ INITIAL MODE VALUES -----------------------
 
 	printf("LTRN_mode = %i\xa", LTRN_mode);												// write to output window
 
@@ -417,14 +414,14 @@ int main()
 								
 
 
-}	// end main()	================================================================
+}	// =====  end main()  =========================================================================
 
 
 
 
 
 
-// -------------------- AUTOPILOT MODE ---------------------------------------------
+// ------------------------- AUTOPILOT MODE -------------------------
 
 int autopilot_mode()
 {
@@ -435,7 +432,7 @@ int autopilot_mode()
 
 
 
-// -------------------- TCS MENU ---------------------------------------------
+// ------------------------- TCS MENU -------------------------------
 
 //int checktcsmenu()
 //{
@@ -449,7 +446,7 @@ int autopilot_mode()
 
 
 
-// -------------------- AFTERBURNER DETENT ------------------------------------------
+// -------------------- AFTERBURNER DETENT --------------------------
 
 int afterburnerdetent(int x)
 {
@@ -464,7 +461,7 @@ int afterburnerdetent(int x)
 }
 
 
-// -------------------- EVENTHANDLE -------------------------------------------------
+// -------------------- EVENTHANDLE ---------------------------------
 
 int EventHandle(int type, alias o, int x)
 {
