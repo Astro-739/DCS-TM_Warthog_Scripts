@@ -91,7 +91,7 @@ int dcs_f14_jester_controls()
 								CHAIN( JSTR_nav_wp1,															// OM - JSTR_nav_wp1
 									   EXEC( "index_stpt_aa = 0;" )),											//		Set steerpoint index to match wp1 (first element is 0)
 								0,																				// ID - 
-								0 );																			// OD - 
+								JSTR_jammer_onoff );															// OD - 
 	// MSL
 	MapKeyIOUMD(&Throttle, MSL, 0, 																				// IU - 
 								TEMPO( JSTR_ground_ac_stbl,														// OU - Radar - Ground/Aircraft Stabilize
