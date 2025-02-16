@@ -1,6 +1,7 @@
 // DCS Fighter Common Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.24.618
-// version 2.0, Jan 2025
+// version 2.1, Feb 2025
+//
 //
 // All common functions across DCS modules:
 // - Gun Trigger first/second detent
@@ -8,6 +9,7 @@
 // - Aircraft trim
 // - Aircraft roll/pitch axes
 // - Eject
+// - Master caution button
 // - Afterburner detent
 // - Canopy
 // - Landing gear
@@ -485,6 +487,11 @@ int dcs_fighter_common_controls()
 								PULSE+DX36 );																	// O - APU off
 	// APUOFF
 	MapKey(&Throttle, APUOFF, 	0 );																			//
+
+
+	// LDGH
+	MapKeyIO(&Throttle, LDGH, 	0, 																				// I - 
+								CHAIN( DOWN+L_ALT, D(10), PULSE+'m', D(), UP+L_ALT ));							// O - Master Caution Button
 
 
 	// Engine Override Left (Front/Back seat, manual pitch override)
