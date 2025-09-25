@@ -1,6 +1,6 @@
 // IL-2 generic profile by Astro
-// TARGET version 3.0.24.618
-// version 2, Aug 2024
+// TARGET version 3.0.25.127
+// version 3, Sep 2025
 
 
 include "target.tmh"
@@ -10,7 +10,7 @@ int main()
 	Configure(&HCougar, MODE_EXCLUDED);
 	Configure(&Joystick, MODE_EXCLUDED);                    // Warthog Joystick
 	Configure(&JoystickF18, MODE_EXCLUDED);
-	//Configure(&Throttle, MODE_EXCLUDED);                  // Warthog Throttle
+	//Configure(&Throttle, MODE_EXCLUDED);                  // Warthog Throttle included
 	Configure(&A320Pilot, MODE_EXCLUDED);
 	Configure(&A320Copilot, MODE_EXCLUDED);
 	Configure(&TCAQuadrant12, MODE_EXCLUDED);
@@ -22,17 +22,29 @@ int main()
 	Configure(&TCASidestickXCopilot, MODE_EXCLUDED);
 	Configure(&ViperTQS, MODE_EXCLUDED);
 	Configure(&ViperBBox, MODE_EXCLUDED);
-	//Configure(&AVA_F16, MODE_EXCLUDED);					// AVA F16
+	//Configure(&AVA_F16, MODE_EXCLUDED);					// AVA F16 included
+    Configure(&AVA_F16L, MODE_EXCLUDED);
     Configure(&AVA_F18, MODE_EXCLUDED);
+    Configure(&AVA_F18L, MODE_EXCLUDED);
+    Configure(&AVA_SolR, MODE_EXCLUDED);
+    Configure(&AVA_SolRL, MODE_EXCLUDED);
 	Configure(&FarmStickRight, MODE_EXCLUDED);
 	Configure(&FarmStickLeft, MODE_EXCLUDED);
+	Configure(&FarmStickXboxRight, MODE_EXCLUDED);
+	Configure(&FarmStickXboxLeft, MODE_EXCLUDED);
 	Configure(&T16000, MODE_EXCLUDED);
 	Configure(&T16000L, MODE_EXCLUDED);
 	Configure(&LMFD, MODE_EXCLUDED);						// Left MFD
 	Configure(&RMFD, MODE_EXCLUDED);						// Right MFD
 	Configure(&TFRPRudder, MODE_EXCLUDED);
-	Configure(&TWCSThrottle, MODE_EXCLUDED);
 	Configure(&TFRPHARudder, MODE_EXCLUDED);
+	Configure(&TWCSThrottle, MODE_EXCLUDED);
+	Configure(&Sol_F16, MODE_EXCLUDED);
+	Configure(&Sol_F16L, MODE_EXCLUDED);
+	Configure(&Sol_F18, MODE_EXCLUDED);
+	Configure(&Sol_F18L, MODE_EXCLUDED);
+	Configure(&Sol_SolR, MODE_EXCLUDED);
+	Configure(&Sol_SolRL, MODE_EXCLUDED);
 	
 	if(Init(&EventHandle)) return 1;
 	
@@ -113,39 +125,31 @@ int main()
 
 	// Display Management Switch
 	// H3U
-	MapKeyIOUMD(&AVA_F16, H3U, CHAIN( DOWN+R_ALT, D(10), PULSE+'1', D(), UP+R_ALT), 					// IU - gunners fire at will
-								CHAIN( DOWN+L_ALT, D(10), PULSE+'7', D(), UP+L_ALT), 					// OU - patrol for air enemies
-								CHAIN( DOWN+R_ALT, D(10), PULSE+'1', D(), UP+R_ALT), 					// IM - gunners fire at will
-								CHAIN( DOWN+L_ALT, D(10), PULSE+'3', D(), UP+L_ALT), 					// OM - return to our mission
-								CHAIN( DOWN+R_ALT, D(10), PULSE+'1', D(), UP+R_ALT), 					// ID - gunners fire at will
-								CHAIN( DOWN+L_ALT, D(10), PULSE+'8', D(), UP+L_ALT));					// OD - patrol for ground enemies
+	MapKeyIO(&AVA_F16, H3U, 	CHAIN( R_ALT, D(10), '=' ),							 					// I - increase mixture
+								CHAIN( R_SHIFT, D(10), '=' )); 											// O - increase RPM
 	// H3R
-	MapKeyIOUMD(&AVA_F16, H3R, CHAIN( DOWN+R_ALT, D(10), PULSE+'9', D(), UP+R_ALT),  					// IU - gunners attack long range
-							    CHAIN( DOWN+L_ALT, D(10), PULSE+'4', D(), UP+L_ALT),					// OU - do like me
-								CHAIN( DOWN+R_ALT, D(10), PULSE+'9', D(), UP+R_ALT),					// IM - gunners attack long range
-								CHAIN( DOWN+L_CTL, D(10), PULSE+'8', D(), UP+L_CTL),					// OM - formation right
-								CHAIN( DOWN+R_ALT, D(10), PULSE+'9', D(), UP+R_ALT),					// ID - gunners attack long range
-								CHAIN( DOWN+L_ALT, D(10), PULSE+'4', D(), UP+L_ALT));					// OD - do like me
+	MapKeyIO(&AVA_F16, H3R, 	0,													 					// I - 
+								0 );																	// O - 
 	// H3D
-	MapKeyIO(&AVA_F16, H3D, 	CHAIN( DOWN+R_ALT, D(10), PULSE+'6', D(), UP+R_ALT), 					// I - gunners attack ground targets
-								CHAIN( DOWN+L_ALT, D(10), PULSE+'0', D(), UP+L_ALT)); 					// O - return to base
+	MapKeyIO(&AVA_F16, H3D, 	CHAIN( R_ALT, D(10), '-' ),							 					// I - decrease mixture
+								CHAIN( R_SHIFT, D(10), '-' )); 											// O - decrease RPM
 	// H3L
-	MapKeyIO(&AVA_F16, H3L, 	CHAIN( DOWN+R_ALT, D(10), PULSE+'8', D(), UP+R_ALT), 					// I - gunners attack normal range
-								CHAIN( DOWN+L_CTL, D(10), PULSE+'7', D(), UP+L_CTL)); 					// O - formation left
+	MapKeyIO(&AVA_F16, H3L, 	0,													 					// I - 
+								0 );																	// O - 
 
  	// Countermeasure Management Switch
 	// H4U
-	MapKeyIO(&AVA_F16, H4U, 	CHAIN( L_ALT, D(10), '='), 												// I - open outlet cowl shutters
-								CHAIN( R_SHIFT, D(10), '=')); 											// O - increase RPM
+	MapKeyIO(&AVA_F16, H4U, 	CHAIN( R_WIN, D(10), '=' ), 											// I - open oil radiator
+								CHAIN( R_CTL, D(10), '=' ));											// O - open water radiator / inlet cowl
 	// H4R
-	MapKeyIO(&AVA_F16, H4R, 	CHAIN( R_CTL, D(10), '='), 												// I - open water radiator / inlet cowl
-								CHAIN( R_WIN, D(10), '=')); 											// O - open oil radiator
+	MapKeyIO(&AVA_F16, H4R, 	0, 																		// I - 
+								CHAIN( L_ALT, D(10), '=' ));											// O - open outlet cowl shutters
 	// H4D
-	MapKeyIO(&AVA_F16, H4D, 	CHAIN( L_ALT, D(10), '-'), 												// I - close outlet cowl shutters
-								CHAIN( R_SHIFT, D(10), '-')); 											// O - decrease RPM
+	MapKeyIO(&AVA_F16, H4D, 	CHAIN( R_WIN, D(10), '-' ), 											// I - close oil radiator
+								CHAIN( R_CTL, D(10), '-' )); 											// O - close water radiator / inlet cowl
 	// H4L
-	MapKeyIO(&AVA_F16, H4L, 	CHAIN( R_CTL, D(10), '-'), 												// I - close water radiator / inlet cowl
-								CHAIN( R_WIN, D(10), '-')); 											// O - close oil radiator
+	MapKeyIO(&AVA_F16, H4L, 	0, 																		// I - 
+								CHAIN( L_ALT, D(10), '-' )); 											// I - close outlet cowl shutters
 	// H4P
 	MapKeyIO(&AVA_F16, H4P, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(70), UP+L_SHIFT), 				// I - engine supercharger gear
 								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'b', D(70), UP+L_SHIFT)); 			// O - engine boost
@@ -226,7 +230,7 @@ int main()
 
 	// LTB
 	MapKeyIO(&Throttle, LTB, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'e', D(), UP+L_CTL ),	 				// I - eject
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'b', D(), UP+L_SHIFT )); 				// O - engine boost
+								0 ); 																	// O - 
 
 	// LDGH
 	MapKeyIOUMD(&Throttle, LDGH, 0, 																	// IU - 
