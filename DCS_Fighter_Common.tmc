@@ -16,6 +16,7 @@
 // - Speedbrakes
 // - Re-centre IR tracker
 // - Discord game overlay
+// - Tacview Bookmark
 // - Carrier Mode
 // - Left/Right throttles (incl off/idle)
 // - Radar cursor axes
@@ -501,7 +502,7 @@ int dcs_fighter_common_controls()
 
 
 	// LDGH
-	MapKeyIO(&Throttle, LDGH, 	0, 																				// I - 
+	MapKeyIO(&Throttle, LDGH, 	CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT ), 							// I - Tacview Bookmark
 								CHAIN( DOWN+L_ALT, D(10), PULSE+'m', D(), UP+L_ALT ));							// O - Master Caution Button
 
 
