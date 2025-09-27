@@ -1,6 +1,6 @@
 // DCS Fighter Common Thrustmaster Warthog/AVA/MFD Script by Astro
-// TARGET version 3.0.24.618
-// version 2.1, Feb 2025
+// TARGET version 3.0.25.127
+// version 3.0, Sep 2025
 //
 //
 // All common functions across DCS modules:
@@ -138,7 +138,7 @@ int dcs_fighter_common_configuration()
 	Configure(&HCougar, MODE_EXCLUDED);
 	Configure(&Joystick, MODE_EXCLUDED);                    // Warthog Joystick
 	Configure(&JoystickF18, MODE_EXCLUDED);
-	//Configure(&Throttle, MODE_EXCLUDED);                  // Warthog Throttle
+	//Configure(&Throttle, MODE_EXCLUDED);                  // Warthog Throttle included
 	Configure(&A320Pilot, MODE_EXCLUDED);
 	Configure(&A320Copilot, MODE_EXCLUDED);
 	Configure(&TCAQuadrant12, MODE_EXCLUDED);
@@ -150,17 +150,29 @@ int dcs_fighter_common_configuration()
 	Configure(&TCASidestickXCopilot, MODE_EXCLUDED);
 	Configure(&ViperTQS, MODE_EXCLUDED);
 	Configure(&ViperBBox, MODE_EXCLUDED);
-	//Configure(&AVA_F16, MODE_EXCLUDED);					// AVA F16
+	//Configure(&AVA_F16, MODE_EXCLUDED);					// AVA F16 included
+    Configure(&AVA_F16L, MODE_EXCLUDED);
     Configure(&AVA_F18, MODE_EXCLUDED);
+    Configure(&AVA_F18L, MODE_EXCLUDED);
+    Configure(&AVA_SolR, MODE_EXCLUDED);
+    Configure(&AVA_SolRL, MODE_EXCLUDED);
 	Configure(&FarmStickRight, MODE_EXCLUDED);
 	Configure(&FarmStickLeft, MODE_EXCLUDED);
+	Configure(&FarmStickXboxRight, MODE_EXCLUDED);
+	Configure(&FarmStickXboxLeft, MODE_EXCLUDED);
 	Configure(&T16000, MODE_EXCLUDED);
 	Configure(&T16000L, MODE_EXCLUDED);
-	//Configure(&LMFD, MODE_EXCLUDED);						// Left MFD
+	//Configure(&LMFD, MODE_EXCLUDED);						// Left MFD included
 	Configure(&RMFD, MODE_EXCLUDED);						// Right MFD
 	Configure(&TFRPRudder, MODE_EXCLUDED);
-	Configure(&TWCSThrottle, MODE_EXCLUDED);
 	Configure(&TFRPHARudder, MODE_EXCLUDED);
+	Configure(&TWCSThrottle, MODE_EXCLUDED);
+	Configure(&Sol_F16, MODE_EXCLUDED);
+	Configure(&Sol_F16L, MODE_EXCLUDED);
+	Configure(&Sol_F18, MODE_EXCLUDED);
+	Configure(&Sol_F18L, MODE_EXCLUDED);
+	Configure(&Sol_SolR, MODE_EXCLUDED);
+	Configure(&Sol_SolRL, MODE_EXCLUDED);
 	
 	if(Init(&EventHandle)) return 1;
 	
