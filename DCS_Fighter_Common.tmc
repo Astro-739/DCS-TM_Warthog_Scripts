@@ -14,6 +14,7 @@
 // - Canopy
 // - Landing gear
 // - Speedbrakes
+// - DTC
 // - Re-centre IR tracker
 // - Discord game overlay
 // - Tacview Bookmark
@@ -501,9 +502,10 @@ int dcs_fighter_common_controls()
 	MapKey(&Throttle, APUOFF, 	0 );																			//
 
 
-	// LDGH
+	// LDGH (Master Caution, DTC, Tacview bookmark)
 	MapKeyIO(&Throttle, LDGH, 	CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT ), 							// I - Tacview Bookmark
-								CHAIN( DOWN+L_ALT, D(10), PULSE+'m', D(), UP+L_ALT ));							// O - Master Caution Button
+								TEMPO( CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'k', D(), UP+R_CTL+R_SHIFT ),	// O - [short] Open DTC
+									   CHAIN( DOWN+L_ALT, D(10), PULSE+'m', D(), UP+L_ALT ), 500 ));			//	   [long]  Master Caution Button
 
 
 	// Engine Override Left (Front/Back seat, manual pitch override)
