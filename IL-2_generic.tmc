@@ -280,7 +280,7 @@ int main()
 	MapKey(&Throttle, APDIS,	0);																		//
 	// APPAT
 	MapKeyIO(&Throttle, APPAT, 	CHAIN( DOWN+L_ALT, D(10), PULSE+'c', D(), UP+L_ALT), 					// I - radio receiver channel allies/axis
-								CHAIN( DOWN+L_ALT, D(10), PULSE+'a', D(), UP+L_ALT)); 					// O - altitude reference pressure ISA/local
+								0 ); 																	// O - 
 	// APALT
 	MapKeyUMD(&Throttle, APALT, 0, 																		// U - 
 								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'g', D(), UP+L_SHIFT),				// M - tail wheel lock/unlock
