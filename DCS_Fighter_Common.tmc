@@ -478,7 +478,8 @@ int dcs_fighter_common_controls()
 
 	// SC (IR head tracking)
 	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - re-centre IR tracker
-									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'`', D(), UP+L_SHIFT ),				//     [long] discord game overlay
+									   //CHAIN( DOWN+L_SHIFT, D(10), PULSE+'`', D(), UP+L_SHIFT ),				//     [long] discord game overlay
+									   PULSE+KP5,																//	   [long] re-centre VR
 									   500),
 								0 );																			// O - 
 
