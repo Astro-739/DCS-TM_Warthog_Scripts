@@ -129,7 +129,7 @@ char afterburnerdetent_lifted = 0;						// 0 - detent prevents throttle from goi
 char CAR_mode = 0;										// CarrierOps mode
 char WHDN_mode = 1;										// Wheels Down mode (assumption start on ground)
 char AAR_mode = 0;										// Air-to-Air Refuelling mode
-
+char VR_mode = 0;										// VR zoom controls mode
 
 
 
@@ -317,7 +317,7 @@ int dcs_fighter_common_controls()
 	printf("AAR_mode = %i\xa", AAR_mode);																		// print initial AAR_mode
 	printf("CAR_mode = %i\xa", CAR_mode);																		// print initial CAR_mode
 	printf("WHDN_mode = %i\xa", WHDN_mode);																		// print initial WHDN_mode
-
+	printf("VR_mode = %i\xa", VR_mode);																			// print initial VR_mode
 
 
 	// ------------------------ FLIGHT STICK ------------------------
@@ -436,25 +436,38 @@ int dcs_fighter_common_controls()
 
 	// Speedbrake Switch
 	// SPDF
-	MapKeyIO(&Throttle, SPDF, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x55], D(), UP+R_SHIFT ),					// I - snap zoom max   (R_SHIFT+KP*)
+	MapKeyIO(&Throttle, SPDF, 	EXEC( "if(VR_mode) ActKey( KEYON+DX16 );"										// I - [VR] VR zoom max
+									  "else ActKey( PULSE+KEYON+R_SHIFT+USB[0x55] );" ),						//	   snap zoom max   (R_SHIFT+KP*)
 								speedbrakes_open );																// O - Open Speed Brakes
-	MapKeyRIO(&Throttle, SPDF, 	PULSE+KPENT,																	// I - snap zoom normal
+	MapKeyRIO(&Throttle, SPDF, 	EXEC( "if(VR_mode) ActKey( DX16 );"												// I - [VR] release DX16 (return to normal zoom)
+									  "else ActKey( PULSE+KEYON+KPENT );" ),									//	   snap zoom normal
 								speedbrakes_close );															// O - Close Speed Brakes
+
+
 	// SPDB
-	MapKeyIOUMD(&Throttle, SPDB, CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),				// IU - snap zoom min    (R_SHIFT+KP/)
-								speedbrakes_open,																// OU - Open Speed Brakes Momentary
-								EXEC( "if(WHDN_mode) ActKey( KEYON+DX12 );" 									// IM - [WHDN] wheel brake 
-									  "else ActKey( PULSE+KEYON+USB[0x54] );" ),								//		snap zoom min
-								speedbrakes_open,																// OM - Open Speed Brakes Momentary
-								CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),					// ID - snap zoom min    (R_SHIFT+KP/)
-								speedbrakes_open );																// OD - Open Speed Brakes Momentary
-	MapKeyRIOUMD(&Throttle, SPDB, PULSE+KPENT,																	// IU - snap zoom normal
-								speedbrakes_close,																// OU - Close Speed Brakes
-								EXEC( "if(WHDN_mode) ActKey( DX12 );"											// IM - [WHDN] release DX12
-									  "else ActKey( PULSE+KEYON+KPENT );" ),									//		snap zoom normal
-								speedbrakes_close,																// OM - Close Speed Brakes
-								PULSE+KPENT,																	// ID - snap zoom normal
-								speedbrakes_close );															// OU - Close Speed Brakes
+//	MapKeyIOUMD(&Throttle, SPDB, CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),				// IU - snap zoom min    (R_SHIFT+KP/)
+//								speedbrakes_open,																// OU - Open Speed Brakes Momentary
+//								EXEC( "if(WHDN_mode) ActKey( KEYON+DX12 );" 									// IM - [WHDN] wheel brake 
+//									  "else ActKey( PULSE+KEYON+USB[0x54] );" ),								//		snap zoom min
+//								speedbrakes_open,																// OM - Open Speed Brakes Momentary
+//								CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),					// ID - snap zoom min    (R_SHIFT+KP/)
+//								speedbrakes_open );																// OD - Open Speed Brakes Momentary
+//	MapKeyRIOUMD(&Throttle, SPDB, PULSE+KPENT,																	// IU - snap zoom normal
+//								speedbrakes_close,																// OU - Close Speed Brakes
+//								EXEC( "if(WHDN_mode) ActKey( DX12 );"											// IM - [WHDN] release DX12
+//									  "else ActKey( PULSE+KEYON+KPENT );" ),									//		snap zoom normal
+//								speedbrakes_close,																// OM - Close Speed Brakes
+//								PULSE+KPENT,																	// ID - snap zoom normal
+//								speedbrakes_close );															// OU - Close Speed Brakes
+
+
+
+	// SPDB  NEW
+	MapKeyIO(&Throttle, SPDB, EXEC( "if(WHDN_mode) ActKey( KEYON+DX12 );" ),									// I - [WHDN] wheel brake 
+							  speedbrakes_open );																// O - Open Speed Brakes Momentary
+	MapKeyRIO(&Throttle, SPDB, EXEC( "if(WHDN_mode) ActKey( DX12 );" ),											// I - [WHDN] release DX12
+							   speedbrakes_close );																// O - Close Speed Brakes
+
 
 	// China Hat
 	// CHF
@@ -476,10 +489,9 @@ int dcs_fighter_common_controls()
 	MapKeyR(&Throttle, PSB, 	extlight_position );															// Exterior Lights Position
 
 
-	// SC (IR head tracking)
-	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - re-centre IR tracker
-									   //CHAIN( DOWN+L_SHIFT, D(10), PULSE+'`', D(), UP+L_SHIFT ),				//     [long] discord game overlay
-									   PULSE+KP5,																//	   [long] re-centre VR
+	// SC (IR/VR re-centre)
+	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - re-centre IR tracker / VR helmet
+									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'`', D(), UP+L_SHIFT ),				//     [long] discord game overlay
 									   500),
 								0 );																			// O - 
 
@@ -503,18 +515,19 @@ int dcs_fighter_common_controls()
 	MapKey(&Throttle, APUOFF, 	0 );																			//
 
 
-	// LDGH (Master Caution, DTC, Tacview bookmark)
-	MapKeyIO(&Throttle, LDGH, 	CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT ), 							// I - Tacview Bookmark
-								TEMPO( CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'k', D(), UP+R_CTL+R_SHIFT ),	// O - [short] Open DTC
-									   CHAIN( DOWN+L_ALT, D(10), PULSE+'m', D(), UP+L_ALT ), 500 ));			//	   [long]  Master Caution Button
-
+	// LDGH (Master Caution, DTC, VR_mode, Tacview bookmark)
+	MapKeyIO(&Throttle, LDGH, 	EXEC( "VR_mode = !VR_mode;"																// I - switch VR mode on/off
+									  "printf(\"VR_mode = %i\\xa\", VR_mode);" ),										// 	   print state to output window
+								//CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT ) 									// I - Tacview Bookmark
+								TEMPO( CHAIN( DOWN+L_ALT, D(10), PULSE+'m', D(), UP+L_ALT ), 							// O - [short] Master Caution Button
+									   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'k', D(), UP+R_CTL+R_SHIFT ), 500 ));	//	   [long]  Open DTC
 
 	// Engine Override Left (Front/Back seat, manual pitch override)
 	// EFLNORM	
-	MapKey(&Throttle, EFLNORM, 	0 );																			// 
+	MapKey(&Throttle, EFLNORM, 	0 );																					// 
 	// EFLOVER
-	MapKey(&Throttle, EFLOVER,  0 );																			// 
-	MapKeyR(&Throttle, EFLOVER, 0 );																			// 
+	MapKey(&Throttle, EFLOVER,  0 );																					// 
+	MapKeyR(&Throttle, EFLOVER, 0 );																					// 
 
 	// Engine Override Right (Hook & Drag Chute)
 	// EFRNORM
