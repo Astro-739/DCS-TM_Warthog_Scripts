@@ -142,20 +142,24 @@ int main()
 									  "else ActKey ( DX7 );" ));												// 	   Release DX7
 	// H2D
 	MapKeyIO(&AVA_F16, H2D, 	CHAIN( R_CTL, D(10), DARROW ),													// I - TMS down
-							 	DX9 );																			// O - TrackIR zoom out
+							 	EXEC( "if (VR_mode) ActKey ( PULSE+KEYON+L_ALT+'c' );"							// O - VR toggle mouse pointer
+									  "else ActKey ( KEYON+DX9 );" ));											// 	   TrackIR zoom out
+	MapKeyRIO(&AVA_F16, H2D, 	0,																				// I - 
+							 	EXEC( "if (VR_mode) ActKey ( 0 );"												// O - 
+									  "else ActKey ( DX9 );" ));												// 	   Release DX9
 	// H2R							
 	MapKeyIO(&AVA_F16, H2R, 	CHAIN( R_CTL, D(10), RARROW ),													// I - TMS right
-							 	EXEC( "if (VR_mode) ActKey ( PULSE+KEYON+DX18 );"								// O - VR Right mouse click
+							 	EXEC( "if (VR_mode) ActKey ( KEYON+DX18 );"										// O - VR Right mouse click
 									  "else ActKey ( KEYON+DX8 );" ));											// 	   TrackIR snap view right MFD (LWIN+KP6)
 	MapKeyRIO(&AVA_F16, H2R, 	0,																				// I - 
-							 	EXEC( "if (VR_mode) ActKey ( 0 );"												// O - 
+							 	EXEC( "if (VR_mode) ActKey ( DX18 );"											// O - Release DX18
 									  "else ActKey ( DX8 );" ));												// 	   Release DX8
 	// H2L
 	MapKeyIO(&AVA_F16, H2L, 	CHAIN( R_CTL, D(10), LARROW ),													// I - TMS left
-							 	EXEC( "if (VR_mode) ActKey ( PULSE+KEYON+DX17 );"								// O - VR Left mouse click
+							 	EXEC( "if (VR_mode) ActKey ( KEYON+DX17 );"										// O - VR Left mouse click
 									  "else ActKey ( KEYON+DX10 );" ));											// 	   TrackIR snap view left MFD (LWIN+KP4)
 	MapKeyRIO(&AVA_F16, H2L, 	0,																				// I - 
-							 	EXEC( "if (VR_mode) ActKey ( 0 );"												// O - 
+							 	EXEC( "if (VR_mode) ActKey ( DX17 );"											// O - Release DX17
 									  "else ActKey ( DX10 );" ));												// 	   Release DX10
 
 
