@@ -85,7 +85,8 @@ int main()
 	
 	override = EXEC( "if(!override_dog) ActKey( PULSE+KEYON+L_CTL+'3' );"										// DOGFIGHT/Missile Override Switch - DOGFIGHT
 					 "if(override_dog) ActKey( PULSE+KEYON+L_CTL+'4' );"										// DOGFIGHT/Missile Override Switch - MISSILE OVERRIDE
-					 "override_dog = !override_dog;" );
+					 "override_dog = !override_dog;" 															// switch override_dog
+					 "printf(\"override_dogfight = %i\\xa\", override_dog);" );									// print state to output window
 
 
 
@@ -133,17 +134,29 @@ int main()
 
 	// Target Management Switch
 	// H2U
-	MapKeyIO(&AVA_F16, H2U, 	CHAIN( R_CTL, D(10), UARROW ),													// I - TMS up (KP*)
-							 	DX7 );			 																// O - zoom in 
+	MapKeyIO(&AVA_F16, H2U, 	CHAIN( R_CTL, D(10), UARROW ),													// I - TMS up
+							 	EXEC( "if (VR_mode) ActKey ( KEYON+DX15 );"										// O - VR zoom
+									  "else ActKey ( KEYON+DX7 );" ));											//     TrackIR zoom in
+	MapKeyRIO(&AVA_F16, H2U, 	0,																				// I - 
+							 	EXEC( "if (VR_mode) ActKey ( DX15 );"											// O - Release DX15
+									  "else ActKey ( DX7 );" ));												// 	   Release DX7
 	// H2D
-	MapKeyIO(&AVA_F16, H2D, 	CHAIN( R_CTL, D(10), DARROW ),													// I - TMS down  (KP\)
-							 	DX9 );																			// O - zoom out
+	MapKeyIO(&AVA_F16, H2D, 	CHAIN( R_CTL, D(10), DARROW ),													// I - TMS down
+							 	DX9 );																			// O - TrackIR zoom out
 	// H2R							
 	MapKeyIO(&AVA_F16, H2R, 	CHAIN( R_CTL, D(10), RARROW ),													// I - TMS right
-							 	DX8 );						 													// O - snap view right MFD (LWIN+KP6)
+							 	EXEC( "if (VR_mode) ActKey ( PULSE+KEYON+DX18 );"								// O - VR Right mouse click
+									  "else ActKey ( KEYON+DX8 );" ));											// 	   TrackIR snap view right MFD (LWIN+KP6)
+	MapKeyRIO(&AVA_F16, H2R, 	0,																				// I - 
+							 	EXEC( "if (VR_mode) ActKey ( 0 );"												// O - 
+									  "else ActKey ( DX8 );" ));												// 	   Release DX8
 	// H2L
 	MapKeyIO(&AVA_F16, H2L, 	CHAIN( R_CTL, D(10), LARROW ),													// I - TMS left
-							 	DX10 ); 																		// O - snap view left MFD (LWIN+KP4)
+							 	EXEC( "if (VR_mode) ActKey ( PULSE+KEYON+DX17 );"								// O - VR Left mouse click
+									  "else ActKey ( KEYON+DX10 );" ));											// 	   TrackIR snap view left MFD (LWIN+KP4)
+	MapKeyRIO(&AVA_F16, H2L, 	0,																				// I - 
+							 	EXEC( "if (VR_mode) ActKey ( 0 );"												// O - 
+									  "else ActKey ( DX10 );" ));												// 	   Release DX10
 
 
  	// Countermeasure Management Switch
@@ -315,9 +328,11 @@ int main()
 								CHAIN( PULSE+'1', D(100),														// O - A-A mode on
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED1) )); 							// 	   LED1 ON for U layer
 	MapKeyRIO(&Throttle, BSF, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'0', D(), UP+L_CTL,								// I - DOGFIGHT/Missile Override Switch - CENTER
-									   EXEC( "override_dog = 0;" ), D(100) ),									//	   reset override status
+									   EXEC( "override_dog = 0;" 												//	   reset override status
+									         "printf(\"override_dogfight = %i\\xa\", override_dog);"), D(100)),	//     print state to output window
 								CHAIN( DOWN+L_CTL, D(10), PULSE+'0', D(), UP+L_CTL,								// O - DOGFIGHT/Missile Override Switch - CENTER
-									   EXEC( "override_dog = 0;" ),	D(),										//	   in case override was started when in A-A mode
+									   EXEC( "override_dog = 0;"												//	   Reset, in case override was started when in A-A mode
+									         "printf(\"override_dogfight = %i\\xa\", override_dog);"), D(),		//     print state to output window
 									   PULSE+'1', D(100),														// 	   A-A mode off
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED1) )); 							//     LED1 OFF for U layer
 	
@@ -354,6 +369,50 @@ int main()
 
 
 }	// =====  end main()  =========================================================================
+
+
+//TEST
+
+// ------------------------ TMS for VR ------------------------------
+
+int TMSforVR()
+{
+	// Target Management Switch
+	// H2U
+	MapKeyIO(&AVA_F16, H2U, 	CHAIN( R_CTL, D(10), UARROW ),													// I - TMS up
+							 	DX15 );			 																// O - VR zoom
+	// H2D
+	MapKeyIO(&AVA_F16, H2D, 	CHAIN( R_CTL, D(10), DARROW ),													// I - TMS down
+							 	0 );																			// O - TBD
+	// H2R							
+	MapKeyIO(&AVA_F16, H2R, 	CHAIN( R_CTL, D(10), RARROW ),													// I - TMS right
+							 	DX18 );								 											// O - Right mouse click
+	// H2L
+	MapKeyIO(&AVA_F16, H2L, 	CHAIN( R_CTL, D(10), LARROW ),													// I - TMS left
+							 	DX17 ); 																		// O - Left mouse click
+}
+
+
+// --------------------- TMS for TrackIR ----------------------------
+
+int TMSforTrackIR()
+{
+	// Target Management Switch
+	// H2U
+	MapKeyIO(&AVA_F16, H2U, 	CHAIN( R_CTL, D(10), UARROW ),													// I - TMS up
+							 	DX7 );			 																// O - zoom in (KP*) 
+	// H2D
+	MapKeyIO(&AVA_F16, H2D, 	CHAIN( R_CTL, D(10), DARROW ),													// I - TMS down
+							 	DX9 );																			// O - zoom out (KP\)
+	// H2R							
+	MapKeyIO(&AVA_F16, H2R, 	CHAIN( R_CTL, D(10), RARROW ),													// I - TMS right
+							 	DX8 );								 											// O - snap view right MFD (LWIN+KP6)
+	// H2L
+	MapKeyIO(&AVA_F16, H2L, 	CHAIN( R_CTL, D(10), LARROW ),													// I - TMS left
+							 	DX10 ); 																		// O - snap view left MFD (LWIN+KP4)
+}
+
+
 
 
 // -------------------- AFTERBURNER DETENT --------------------------

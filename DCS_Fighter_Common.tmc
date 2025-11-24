@@ -129,7 +129,7 @@ char afterburnerdetent_lifted = 0;						// 0 - detent prevents throttle from goi
 char CAR_mode = 0;										// CarrierOps mode
 char WHDN_mode = 1;										// Wheels Down mode (assumption start on ground)
 char AAR_mode = 0;										// Air-to-Air Refuelling mode
-char VR_mode = 0;										// VR zoom controls mode
+char VR_mode = 1;										// VR zoom controls mode
 
 
 
@@ -515,12 +515,8 @@ int dcs_fighter_common_controls()
 	MapKey(&Throttle, APUOFF, 	0 );																			//
 
 
-	// LDGH (Master Caution, DTC, VR_mode, Tacview bookmark)
-	MapKeyIO(&Throttle, LDGH, 	EXEC( "VR_mode = !VR_mode;"																// I - switch VR mode on/off
-									  "printf(\"VR_mode = %i\\xa\", VR_mode);" ),										// 	   print state to output window
-								//CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT ) 									// I - Tacview Bookmark
-								TEMPO( CHAIN( DOWN+L_ALT, D(10), PULSE+'m', D(), UP+L_ALT ), 							// O - [short] Master Caution Button
-									   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'k', D(), UP+R_CTL+R_SHIFT ), 500 ));	//	   [long]  Open DTC
+	// LDGH (Master Caution, DTC, VR_mode, Tacview bookmark)	// defined in Common_Switch section
+
 
 	// Engine Override Left (Front/Back seat, manual pitch override)
 	// EFLNORM	
@@ -686,10 +682,16 @@ int dcs_fighter_common_switch()
 									   enigmacw_ewpicturetoggle, 500 ));										//	   Enigma CW - EW Picture Toggle
 
 
-									   
-	// LDGH (Master Caution)
-	MapKeyIO(&Throttle, LDGH,   0, 																				// I - 
-								CHAIN( DOWN+L_ALT, D(10), PULSE+'m', D(), UP+L_ALT ));							// O - Master Caution Button
+
+	// LDGH (Master Caution, DTC, VR_mode, Tacview bookmark)
+	MapKeyIO(&Throttle, LDGH, 	EXEC( "VR_mode = !VR_mode;"																// I - switch VR mode on/off
+									  "printf(\"VR_mode = %i\\xa\", VR_mode);" ),										// 	   print state to output window
+								//CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT ) 									// I - Tacview Bookmark
+								TEMPO( CHAIN( DOWN+L_ALT, D(10), PULSE+'m', D(), UP+L_ALT ), 							// O - [short] Master Caution Button
+									   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'k', D(), UP+R_CTL+R_SHIFT ), 500 ));	//	   [long]  Open DTC
+
+
+
 
 
 
