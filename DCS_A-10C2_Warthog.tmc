@@ -1,6 +1,6 @@
 // DCS A-10C2 Warthog Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.24.618
-// version 2.0, Jan 2025
+// version 2.2, Nov 2025
 
 
 include "target.tmh"
@@ -110,12 +110,6 @@ int main()
 	// -----------------------------	
 
 
-
-	// Weapon Release Button  ---  moved to Common
-	// S2
-//	MapKeyIO(&AVA_F16, S2,  	CHAIN( L_CTL, D(10), 'w' ), 													// I - Jettison Weapons
-//								DX2);																			// O - Weapon Release
-
 	// Expand FOV Button - S3
 	MapKeyUMD(&AVA_F16, S3,  	0,																				// U - [always use A-A]
 							    PULSE+'m',															 			// M - [always use NAV]
@@ -123,6 +117,38 @@ int main()
 
 
 	// Target Management Switch
+	// H2U
+	MapKeyIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX15 );"										// I - VR zoom
+									  "else ActKey ( KEYON+DX7 );" ),											//     TrackIR zoom in
+								CHAIN( L_CTL, D(10), UARROW ));													// O - TMS up
+	MapKeyRIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( DX15 );"											// I - Release DX15
+									  "else ActKey ( DX7 );" ),													// 	   Release DX7
+								0 );																			// O - 
+	// H2D
+	MapKeyIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( PULSE+KEYON+L_ALT+'c' );"							// I - VR toggle mouse pointer
+									  "else ActKey ( KEYON+DX9 );" ),											// 	   TrackIR zoom out
+								CHAIN( L_CTL, D(10), DARROW ));													// O - TMS down
+	MapKeyRIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( 0 );"												// I - 
+									  "else ActKey ( DX9 );" ),													// 	   Release DX9
+								0 );																			// O - 
+	// H2R							
+	MapKeyIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX18 );"										// I - VR Right mouse click
+									  "else ActKey ( KEYON+DX8 );" ),											// 	   TrackIR snap view right MFD (LWIN+KP6)
+								CHAIN( L_CTL, D(10), RARROW ));													// O - TMS right
+	MapKeyRIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( DX18 );"											// I - Release DX18
+									  "else ActKey ( DX8 );" ),													// 	   Release DX8
+								0 );																			// O - 
+	// H2L
+	MapKeyIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX17 );"										// I - VR Left mouse click
+									  "else ActKey ( KEYON+DX10 );" ),											// 	   TrackIR snap view left MFD (LWIN+KP4)
+								CHAIN( L_CTL, D(10), LARROW ));													// O - TMS left
+	MapKeyRIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( DX17 );"											// I - Release DX17
+									  "else ActKey ( DX10 );" ),												// 	   Release DX10
+								0 );																			// O - 
+
+
+/*
+	// Target Management Switch  -----  OLD
 	// H2U
 	MapKeyIO(&AVA_F16, H2U, 	CHAIN( L_CTL, D(10), UARROW ),													// I - TMS up
 							 	DX7 );		 																	// O - zoom in  (KP*)
@@ -135,22 +161,7 @@ int main()
 	// H2L
 	MapKeyIO(&AVA_F16, H2L, 	CHAIN( L_CTL, D(10), LARROW ),													// I - TMS left
 							 	DX10 ); 																		// O - snap view left MFD (LWIN+KP4)
-
-	// Display Management Switch - moved to Common  //TODO test
-	// H3U
-//	MapKeyIO(&AVA_F16, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),				// I - kneeboard on/off
-//									   nightvision, 500 ),														//	   [long] Night Vision Goggles
-//								'u' );																			// O - Coolie Switch Up
-	// H3D
-//	MapKeyIO(&AVA_F16, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),					// I - kneeboard current position mark point
-//									   flashlight, 500 ),														//	   [long] Flashlight on/off
-//								'j' );																			// O - Coolie Switch Down
-	// H3R
-//	MapKeyIO(&AVA_F16, H3R, 	PULSE+']', 																		// I - kneeboard next page
-//								'k' );																			// O - Coolie Switch Right
-	// H3L
-//	MapKeyIO(&AVA_F16, H3L, 	PULSE+'[', 																		// I - kneeboard previous page
-//								'h' );																			// O - Coolie Switch Left
+*/
 
 
  	// Countermeasure Management Switch
@@ -281,7 +292,7 @@ int main()
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ));							// 	   LED5 ON for MANUAL
 
 	// SC
-	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - [short] re-centre IR tracker
+	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - re-centre IR tracker / VR helmet
 									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'`', D(), UP+L_SHIFT ),				//     [long] discord game overlay
 									   500 ),
 								'v' );																			// O - China Hat Fwd
