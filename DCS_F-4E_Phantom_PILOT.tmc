@@ -1,6 +1,6 @@
 // PILOT file for DCS_F-4E_Phantom.tmc  by Astro
-// TARGET version 3.0.24.618
-// version 1.3, Aug 2024
+// TARGET version 3.0.25.127
+// version 2.2, Nov 2025
 
 
 
@@ -143,6 +143,7 @@ int dcs_f4e_pilot_controls()
 								0 );																			// O - 
 								
 								//DOWN+R_SHIFT+L_CTL, D(10), PULSE+'f', D(), UP+R_SHIFT+L_CTL, D(200),		// I - Slats Override Switch - Norm															// O - 
+	
 	// FLAPD	
 	MapKey(&Throttle, FLAPD,  	CHAIN( D(300), DOWN+L_CTL+L_ALT, D(10), PULSE+'f', D(), UP+L_CTL+L_ALT ));		// Flaps/Slats Switch - Out&Down
 
@@ -163,33 +164,10 @@ int dcs_f4e_pilot_controls()
 
 	// Engine Override
 	// EFL in Phantom main script
-	// EFRNORM  - moved to Common  // TODO check
-//	MapKeyIOUMD(&Throttle, EFRNORM, 0,																			// IU - 
-//								CHAIN( 0,																		// OU - // TODO AAR stuff ********
-//									   EXEC( "AAR_mode = 0;" 													//		AAR_mode off
-//											 "printf(\"AAR_mode = 0\\xa\");" )),								// 
-//								0,																				// IM - 
-//								0,																				// OM - 
-//								0,																				// ID - 
-//								0);																				// OD - 
-	// EFROVER
-//	MapKeyIOUMD(&Throttle, EFROVER, 0,																			// IU - 
-//								CHAIN( 0,																		// OU - // TODO AAR stuff ********
-//									   EXEC( "AAR_mode = 1;"													//		AAR_mode on
-//											 "printf(\"AAR_mode = 1\\xa\");" )),								// 
-//								PULSE+'p',																		// IM - Drag-Parachute - Deploy
-//								CHAIN( DOWN+L_CTL+L_WIN, D(10), PULSE+'h', D(), UP+L_CTL+L_WIN ),				// OM - Arresting Hook Control Handle - Out
-//								0,																				// ID - 
-//								0);																				// OD - 
-//	MapKeyRIOUMD(&Throttle, EFROVER, 0,																			// IU - 
-//								0,																				// OU -
-//								CHAIN( DOWN+R_CTL, D(10), PULSE+'p', D(), UP+R_CTL ),							// IM - Release Drag-Parachute
-//								CHAIN( DOWN+L_SHIFT+L_WIN, D(10), PULSE+'h', D(), UP+L_SHIFT+L_WIN ),			// OM - Arresting Hook Control Handle - In
-//								0,																				// ID - 
-//								0);																				// OD - 
+
 
 	// SC
-	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - [short] re-centre IR tracker
+	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - re-centre IR tracker / VR helmet
 									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'`', D(), UP+L_SHIFT ),				//     [long] discord game overlay
 									   500),
 								0 );																			// O - 
@@ -254,6 +232,41 @@ int dcs_f4e_pilot_controls_switch()
 
 	// Target Management Switch
 	// H2U
+	MapKeyIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX15 );"												// I - VR zoom
+									  "else ActKey ( KEYON+DX7 );" ),													//     TrackIR zoom in (KP*)
+								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT, D(200),							// O - Gun/Missile Pinky Switch - Radar
+									   DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ));								//	   HUD Mode - A/A
+	MapKeyRIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( DX15 );"													// I - Release DX15
+									  "else ActKey ( DX7 );" ),															// 	   Release DX7
+								0 );																					// O - 
+	// H2D
+	MapKeyIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( PULSE+KEYON+L_ALT+'c' );"									// I - VR toggle mouse pointer
+									  "else ActKey ( KEYON+DX9 );" ),													// 	   TrackIR zoom out (KP\)
+								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'w', D(), UP+L_SHIFT, D(200),							// O - Gun/Missile Pinky Switch - Gun
+									   DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT ));									// 	   HUD Mode - Cage
+	MapKeyRIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( 0 );"														// I - 
+									  "else ActKey ( DX9 );" ),															// 	   Release DX9
+								0 );																					// O - 
+	// H2R							
+	MapKeyIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX18 );"												// I - VR Right mouse click
+									  "else ActKey ( KEYON+DX8 );" ),													// 	   TrackIR snap view right MFD (LWIN+KP6)
+								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT, D(200),							// O - Gun/Missile Pinky Switch - Heat
+									   DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ));								//	   HUD Mode - A/A
+	MapKeyRIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( DX18 );"													// I - Release DX18
+									  "else ActKey ( DX8 );" ),															// 	   Release DX8
+								0 );																					// O - 
+	// H2L
+	MapKeyIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX17 );"												// I - VR Left mouse click
+									  "else ActKey ( KEYON+DX10 );" ),													// 	   TrackIR snap view left MFD (LWIN+KP4)
+								0 );																					// O - 
+	MapKeyRIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( DX17 );"													// I - Release DX17
+									  "else ActKey ( DX10 );" ),														// 	   Release DX10
+								0 );																					// O - 
+
+
+/*
+	// Target Management Switch  ---------  OLD
+	// H2U
 	MapKeyIO(&AVA_F16, H2U, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT, D(200),							// I - Gun/Missile Pinky Switch - Radar
 									   DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ),								//	   HUD Mode - A/A
 								DX7 );																					// O - zoom in  (KP*)
@@ -271,7 +284,7 @@ int dcs_f4e_pilot_controls_switch()
 								L_WIN, D(10), KP2 ));																	//     snap view instruments   // TODO switch to DX10
 	MapKeyRIO(&AVA_F16, H2L, 	0,																						// I - 
 								CHAIN( D(200), DOWN+R_CTL, D(10), PULSE+BSP, D(), UP+R_CTL ));							// O - place stick
-
+*/
 
 	// Display Management Switch
 	// H3U
