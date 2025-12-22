@@ -489,10 +489,9 @@ int dcs_fighter_common_controls()
 	MapKeyR(&Throttle, PSB, 	extlight_position );															// Exterior Lights Position
 
 
-	// SC (IR/VR re-centre)
+	// SC (IR/VR re-centre, Discord mute)
 	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - re-centre IR tracker / VR helmet
-									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'`', D(), UP+L_SHIFT ),				//     [long] discord game overlay
-									   500),
+									   PULSE+DX21, 500 ),														//     [long] discord mute toggle
 								0 );																			// O - 
 
 	// APUON (APU & Air Refuel)

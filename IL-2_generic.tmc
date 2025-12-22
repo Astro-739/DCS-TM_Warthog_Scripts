@@ -354,13 +354,12 @@ int main()
 								0, 																		// IM - 
 								CHAIN( L_SHIFT, D(10), 'z'), 											// OM - level autopilot: left turn
 								CHAIN( DOWN+L_WIN, D(10), PULSE+'s', D(), UP+L_WIN), 					// ID - bomb safety switch
-								0);																		// OD - 
+								0 );																	// OD - 
 
 	// SC
-	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),			// I short - re-centre IR tracker
-									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'`', D(), UP+L_SHIFT ),		// I long - discord game overlay
-									   500 ),
-								0);																		// O - 
+	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),						// I short - re-centre IR tracker
+									   PULSE+DX21, 500 ),															// I long - toggle discord mute
+								0 );																				// O - 
 
 	// APUON
 	MapKey(&Throttle, APUON, EXEC("MapAxis(&Throttle, THR_FC, DX_XROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);"));			// switch THR_FC to RPM control
