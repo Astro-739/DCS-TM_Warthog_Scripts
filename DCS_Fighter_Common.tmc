@@ -673,7 +673,7 @@ int dcs_fighter_common_switch()
 											 "else ActKey( PULSE+KEYON+awacs_requestpicture );" ), 500 ),		//		[long] AWACS Request Picture
 								DX30,																			// OM - M_MSL
 								TEMPO( flight_radaroffon,														// ID - Flight - Radar Off/On
-									   awacs_requestpicture, 500 ),													// 		[long] AWACS Request Picture
+									   awacs_requestpicture, 500 ),												// 		[long] AWACS Request Picture
 								DX30 );																			// OD - D_MSL
 	// MSP 
 	MapKeyIO(&Throttle, MSP, 	PULSE+F12,																		// I - F12 exit menu
@@ -683,10 +683,10 @@ int dcs_fighter_common_switch()
 
 
 	// LDGH (Master Caution, DTC, VR_mode, Tacview bookmark)
-	MapKeyIO(&Throttle, LDGH, 	EXEC( "VR_mode = !VR_mode;"																// I - switch VR mode on/off
-									  "printf(\"VR_mode = %i\\xa\", VR_mode);" ),										// 	   print state to output window
-								//CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT ) 									// I - Tacview Bookmark
-								TEMPO( CHAIN( DOWN+L_ALT, D(10), PULSE+'m', D(), UP+L_ALT ), 							// O - [short] Master Caution Button
+	MapKeyIO(&Throttle, LDGH, 	TEMPO( CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT ),							// I - Tacview Bookmark
+									   EXEC( "VR_mode = !VR_mode;"														//     [long] switch VR mode on/off
+									   "printf(\"VR_mode = %i\\xa\", VR_mode);" ), 500 ),								// 	          print state to output window
+								TEMPO( CHAIN( DOWN+L_ALT, D(10), PULSE+'m', D(), UP+L_ALT ), 							// O - Master Caution Button
 									   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'k', D(), UP+R_CTL+R_SHIFT ), 500 ));	//	   [long]  Open DTC
 
 
