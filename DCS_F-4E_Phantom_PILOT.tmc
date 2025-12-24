@@ -103,7 +103,7 @@ int dcs_f4e_pilot_controls()
 
 
 								
-	// China Hat
+	// China Hat (overwrite of common)   -- TODO use DX13/14 and move to common
 	// CHF
 	MapKeyIO(&Throttle, CHF, 	brightness_up, 																	// I - brightness up for reticle/NVG
 							 	CHAIN( L_ALT+R_SHIFT, D(10), '=' )); 											// O - Reticle Depression - [Dec]

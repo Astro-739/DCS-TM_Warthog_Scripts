@@ -243,7 +243,7 @@ int main()
 									CHAIN( L_CTL, D(10), KP0 ), 500 ));											//	   [long] ICP Priority Function Button - 0 (M-SEL)
 									   
 
-	// China Hat
+	// China Hat (overwrite of common)
 	// CHF
 	MapKeyIO(&Throttle, CHF, 	brightness_up, 																	// I - brightness up for goggle/HMCS
 							 	REXEC( 20, 200, "ActKey( PULSE+KEYON+DX13 );" ));								// O - ANT ELEV Knob - CW/up    (REXEC to slow down repeat press)

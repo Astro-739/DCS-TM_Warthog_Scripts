@@ -256,7 +256,7 @@ int main()
 								DEL );																			// O - DMS left
 
 						
-	// China Hat			// TODO to common
+	// China Hat			// TODO to common, use DX13 and DX14
 	// CHF
 	MapKeyIO(&Throttle, CHF, 	brightness_up, 																	// I - brightness up for goggle/HMCS
 							 	'v' );																			// O - China Hat Fwd
