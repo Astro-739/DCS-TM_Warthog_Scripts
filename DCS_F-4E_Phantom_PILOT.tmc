@@ -141,11 +141,10 @@ int dcs_f4e_pilot_controls()
 								CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));							// O - Flaps/Slats Switch - Out
 	MapKeyRIO(&Throttle, FLAPM,	CHAIN( DOWN+R_CTL, D(10), PULSE+'f', D(), UP+R_CTL ), 							// I - Slats Override Switch Cover - Close
 								0 );																			// O - 
-								
-								//DOWN+R_SHIFT+L_CTL, D(10), PULSE+'f', D(), UP+R_SHIFT+L_CTL, D(200),		// I - Slats Override Switch - Norm															// O - 
-	
+								//DOWN+R_SHIFT+L_CTL, D(10), PULSE+'f', D(), UP+R_SHIFT+L_CTL, D(200),			// I - Slats Override Switch - Norm															// O - 
 	// FLAPD	
 	MapKey(&Throttle, FLAPD,  	CHAIN( D(300), DOWN+L_CTL+L_ALT, D(10), PULSE+'f', D(), UP+L_CTL+L_ALT ));		// Flaps/Slats Switch - Out&Down
+
 
 	// Engine Operation
 	// EOLIGN
@@ -166,11 +165,13 @@ int dcs_f4e_pilot_controls()
 	// EFL in Phantom main script
 
 
-	// SC
+/*
+	// SC --  OLD
 	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - re-centre IR tracker / VR helmet
 									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'`', D(), UP+L_SHIFT ),				//     [long] discord game overlay
 									   500),
 								0 );																			// O - 
+*/
 
 
 	// U LAYER - [O] Air-to-Air Mode
