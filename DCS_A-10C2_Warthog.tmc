@@ -291,10 +291,9 @@ int main()
 									CHAIN( PULSE+DX22, D(),															// O - Flight control - MANUAL REVERSION    ********* FIX DX in DCS
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ));							// 	   LED5 ON for MANUAL
 
-	// SC
+	// SC (overwrite of common)
 	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - re-centre IR tracker / VR helmet
-									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'`', D(), UP+L_SHIFT ),				//     [long] discord game overlay
-									   500 ),
+									   PULSE+DX21, 500 ),														//     [long] discord mute toggle
 								'v' );																			// O - China Hat Fwd
 
 	// U LAYER - Air-to-Air Mode
