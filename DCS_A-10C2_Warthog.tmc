@@ -215,7 +215,7 @@ int main()
 	MapKeyIO(&Throttle, APENG, 	0,																				// I - 
 								'a' );																			// O - LAAP Engage/Disengage
 	// APDIS
-	MapKey(&Throttle, APDIS, 	0); 																			// 
+	MapKey(&Throttle, APDIS, 	0 ); 																			// 
 	// APPAT
 	MapKey(&Throttle, APPAT, 	PULSE+'2' );											 						// LAAP Path Hold
 	// APAH
@@ -231,14 +231,14 @@ int main()
 									CHAIN( DOWN+R_SHIFT, D(10), PULSE+'e', D(), UP+R_SHIFT ),					// IM - EAC Arm
 									CHAIN( DOWN+L_CTL, D(10), PULSE+'g', D(), UP+L_CTL ), 						// OM - gear up 
 									0,																			// ID - 
-									0);																			// OD -
+									0 );																		// OD -
 	// EACOFF
 	MapKeyIOUMD(&Throttle, EACOFF, 	0, 																			// IU -
 									0,																			// OU - 
 									0,																			// IM - 
 									CHAIN( DOWN+L_SHIFT, D(10), PULSE+'g', D(), UP+L_SHIFT ), 					// OM - gear down
 									0,																			// ID - 
-									0);																			// OD -
+									0 );																		// OD -
 
 	
 	// Coolie Switch
@@ -255,7 +255,7 @@ int main()
 	MapKeyIO(&Throttle, CSL, 	0,							 													// I - 
 								DEL );																			// O - DMS left
 
-						
+/* TO COMMON -- TEST						
 	// China Hat			// TODO to common, use DX13 and DX14
 	// CHF
 	MapKeyIO(&Throttle, CHF, 	brightness_up, 																	// I - brightness up for goggle/HMCS
@@ -263,7 +263,7 @@ int main()
 	// CHB
 	MapKeyIO(&Throttle, CHB, 	brightness_down,																// I - brightness down for goggle/HMCS
 							 	'c' );																			// O - China Hat Aft
-
+*/
 
 	// Left Throttle Button
 	MapKeyIO(&Throttle, LTB, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'e', D(), UP+L_CTL ), 								// I - EJECT

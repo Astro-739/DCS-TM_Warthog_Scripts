@@ -277,15 +277,15 @@ int dcs_fighter_common_functions()
 
 	// Night Vision function
 	nightvision = SEQ( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(), UP+R_SHIFT, D(),										// Night vision goggles (NVG) on
-							  EXEC( "nightvision_on = 1;") ),
+							  EXEC( "nightvision_on = 1;" )),
 					   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(), UP+R_SHIFT, D(),										// Night vision goggles (NVG) off
-							  EXEC( "nightvision_on = 0;") ));
+							  EXEC( "nightvision_on = 0;" )));
 
 	// Flashlight function
 	flashlight = SEQ( CHAIN( DOWN+L_ALT, D(10), PULSE+'l', D(), UP+L_ALT, D(),											// Flashlight on
-							 EXEC( "flashlight_on = 1;") ),
+							 EXEC( "flashlight_on = 1;" )),
 					  CHAIN( DOWN+L_ALT, D(10), PULSE+'l', D(), UP+L_ALT, D(),											// Flashlight off
-							 EXEC( "flashlight_on = 0;") ));
+							 EXEC( "flashlight_on = 0;" )));
 
 	// Brightness function
 	brightness_up 	= REXEC( 100, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_CTL+R_SHIFT+'h' );"		 			// NVG brightness up
@@ -329,14 +329,14 @@ int dcs_fighter_common_controls()
 							  	0,  																			// IM - 
 							  	0,  																			// OM - 
 							  	0,  																			// ID - 
-							  	DX1); 																			// OD - Trigger First Detent
+							  	DX1 ); 																			// OD - Trigger First Detent
 	// TG2
 	MapKeyIOUMD(&AVA_F16, TG2, 	SPC,																			// IU - Fire Weapon (GIB)
 								DX6, 																			// OU - Trigger Second Detent
 								0, 																				// IM - 
 								0, 																				// OM - 
 								SPC, 																			// ID - Fire Weapon (GIB)
-								DX6);																			// OD - Trigger Second Detent
+								DX6 );																			// OD - Trigger Second Detent
 
 	// Nosewheel Steering Button
 	// S1
@@ -346,7 +346,7 @@ int dcs_fighter_common_controls()
 	// Weapon Release Button
 	// S2
 	MapKeyIO(&AVA_F16, S2,  	CHAIN( L_SHIFT, D(10), 'e' ), 													// I - EMER STORES JETTISON Button
-								DX2);																			// O - Weapon Release
+								DX2 );																			// O - Weapon Release
 
 	// Trim Switch
 	// H1U
