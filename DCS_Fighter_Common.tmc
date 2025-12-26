@@ -62,8 +62,9 @@ int awacs_vectortanker;
 int awacs_requestpicture;
 int awacs_declare;
 
-int uhf_callradiomenu;
-int vhf_callradiomenu;
+int uhf_radiomenu;
+int vhf_radiomenu;
+int radiomenu;
 
 int	cv_requestlaunch;
 int	cv_inbound;
@@ -244,9 +245,10 @@ int dcs_fighter_common_functions()
 	cv_salute					= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'u', D(), UP+L_SHIFT ); 							// Salute  // TODO new command in DCS - deck crew stuff
 	cv_calltheball				= CHAIN( DOWN+L_WIN, D(10), PULSE+'x', D(), UP+L_WIN ); 								// Call the Ball
 	
-	uhf_callradiomenu			= CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x31], D(), UP+R_ALT );							// Transmit Switch - UHF (call radio menu)
-	vhf_callradiomenu			= CHAIN( DOWN+R_CTL, D(10), PULSE+USB[0x31], D(), UP+R_CTL );							// Transmit Switch - VHF (call radio menu)
-	
+	uhf_radiomenu				= CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x31], D(), UP+R_ALT );							// Transmit Switch - UHF (radio menu)
+	vhf_radiomenu				= CHAIN( DOWN+R_CTL, D(10), PULSE+USB[0x31], D(), UP+R_CTL );							// Transmit Switch - VHF (radio menu)
+	radiomenu					= PULSE+USB[0x31];																		// Transmit Switch - radio menu
+
 
     // Start-up Sequence (can be specified per airplane)
 	startup 	= CHAIN( R_SHIFT, D(10), 's' ); 																		// Battery / MAIN PWR Switch
@@ -676,9 +678,8 @@ int dcs_fighter_common_switch()
 									   awacs_requestpicture, 500 ),												// 		[long] AWACS Request Picture
 								DX30 );																			// OD - D_MSL
 	// MSP 
-	MapKeyIO(&Throttle, MSP, 	PULSE+F12,																		// I - F12 exit menu
-								TEMPO( enigmacw_bogeydope, 														// O - Enigma CW - EW Bogey Dope
-									   enigmacw_ewpicturetoggle, 500 ));										//	   Enigma CW - EW Picture Toggle
+	MapKeyIO(&Throttle, MSP, 	PULSE+F12,																		// I - F12 exit radio menu
+								radiomenu );			 														// O - Radio menu
 
 
 
