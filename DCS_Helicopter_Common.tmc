@@ -1,0 +1,750 @@
+// DCS Helicopter Common Thrustmaster Warthog/AVA/MFD Script by Astro
+// TARGET version 3.0.25.127
+// version 1.0, Dec 2025
+//
+//
+// All common functions across DCS Helicopter modules:
+// - Gun Trigger first/second detent
+// - F10 map
+// - Aircraft trim
+// - Aircraft roll/pitch axes
+// - Eject
+// - Master caution button
+// - Canopy
+// - Landing gear
+// - Speedbrakes
+// - DTC
+// - Re-centre IR tracker
+// - Discord game overlay
+// - Tacview Bookmark
+// - Carrier Mode
+// - Left/Right throttles (incl off/idle)
+// - Radar cursor axes
+// - Throttle FC axis
+// - Radio commands
+// - External views
+// - Night Vision Goggles function
+// - Flashlight function
+// - Brightness function (NVG, flashlight, other)
+// - Start-up
+// - Ground Crew
+
+
+
+
+// ------------------------ INITIALISE ------------------------------
+
+int flight_engagebandits;
+int flight_coverme;
+int flight_pincerright;
+int flight_attackgroundtargets;
+int flight_attackairdefences;
+int flight_attackmytarget;
+int flight_completemissionrejoin;
+int flight_rejoinformation;
+int flight_rtb;
+int flight_gotoroute;
+int flight_gototanker;
+int flight_radaroffon;
+int flight_fingerfour;
+int flight_spreadfour;
+int flight_trail;
+int flight_lineabreast;
+int flight_echelonright;
+int flight_echelonleft;
+int flight_opencloseformation;
+
+int awacs_bogeydope;
+int awacs_vectorhomeairbase;
+int awacs_vectorbullseye;
+int awacs_vectortanker;
+int awacs_requestpicture;
+int awacs_declare;
+
+int uhf_radiomenu;
+int vhf_radiomenu;
+int radiomenu;
+
+int	cv_requestlaunch;
+int	cv_inbound;
+int	cv_salute;
+int	cv_calltheball;
+
+int jtac_checkin15;				// F4, F1   //TODO 
+int jtac_checkin30;				// F4, F2
+int jtac_followoncomms;			// F1
+int jtac_readytocopy;			// F1
+int jtac_readytocopyremarks;	// F1
+int jtac_readback;				// F1
+int jtac_attackcomplete;		// F1
+int jtac_checkout;				// F2 soms F7
+
+int ground_rearmrefuel;
+int ground_removewheelchocks;
+int groundcrew;
+
+int atc_requeststartup;
+int atc_requesttaxitakeoff;
+int atc_inbound;
+int atc_requestlanding;
+
+int tanker_inbound;
+int tanker_precontact;
+
+int startup;
+int dragchute_deploy;
+int dragchute_release;
+
+int speedbrakes_open;
+int speedbrakes_close;
+
+int extlight_full;
+int extlight_formation;
+int extlight_position;
+int extlight_covert;
+int extlight_flashsteady;
+
+int pilotbody;
+int helmetvisor;
+int sunglasses;
+int mirrors;
+
+int nightvision;				
+char nightvision_on = 0;		
+
+int flashlight;				
+char flashlight_on = 0;		
+
+int brightness_up;	
+int brightness_down;	
+
+char CAR_mode = 0;										// CarrierOps mode
+char WHDN_mode = 1;										// Wheels Down mode (assumption start on ground)
+char AAR_mode = 0;										// Air-to-Air Refuelling mode
+char VR_mode = 1;										// VR zoom controls mode
+
+
+
+// -------------------- HELICOPTER COMMON CONFIGURATION -------------------------------------------
+
+int dcs_helicopter_common_configuration()
+{
+	Configure(&HCougar, MODE_EXCLUDED);
+	Configure(&Joystick, MODE_EXCLUDED);                    // Warthog Joystick
+	Configure(&JoystickF18, MODE_EXCLUDED);
+	//Configure(&Throttle, MODE_EXCLUDED);                  // Warthog Throttle included
+	Configure(&A320Pilot, MODE_EXCLUDED);
+	Configure(&A320Copilot, MODE_EXCLUDED);
+	Configure(&TCAQuadrant12, MODE_EXCLUDED);
+	Configure(&TCAQuadrant34, MODE_EXCLUDED);
+	Configure(&TCAYokeBoeing, MODE_EXCLUDED);
+	Configure(&TCAQBoeing12, MODE_EXCLUDED);
+	Configure(&TCAQBoeing34, MODE_EXCLUDED);
+	Configure(&TCASidestickXPilot, MODE_EXCLUDED);
+	Configure(&TCASidestickXCopilot, MODE_EXCLUDED);
+	Configure(&ViperTQS, MODE_EXCLUDED);
+	Configure(&ViperBBox, MODE_EXCLUDED);
+	//Configure(&AVA_F16, MODE_EXCLUDED);					// AVA F16 included
+    Configure(&AVA_F16L, MODE_EXCLUDED);
+    Configure(&AVA_F18, MODE_EXCLUDED);
+    Configure(&AVA_F18L, MODE_EXCLUDED);
+    Configure(&AVA_SolR, MODE_EXCLUDED);
+    Configure(&AVA_SolRL, MODE_EXCLUDED);
+	Configure(&FarmStickRight, MODE_EXCLUDED);
+	Configure(&FarmStickLeft, MODE_EXCLUDED);
+	Configure(&FarmStickXboxRight, MODE_EXCLUDED);
+	Configure(&FarmStickXboxLeft, MODE_EXCLUDED);
+	Configure(&T16000, MODE_EXCLUDED);
+	Configure(&T16000L, MODE_EXCLUDED);
+	//Configure(&LMFD, MODE_EXCLUDED);						// Left MFD included
+	Configure(&RMFD, MODE_EXCLUDED);						// Right MFD
+	Configure(&TFRPRudder, MODE_EXCLUDED);
+	Configure(&TFRPHARudder, MODE_EXCLUDED);
+	Configure(&TWCSThrottle, MODE_EXCLUDED);
+	Configure(&Sol_F16, MODE_EXCLUDED);
+	Configure(&Sol_F16L, MODE_EXCLUDED);
+	Configure(&Sol_F18, MODE_EXCLUDED);
+	Configure(&Sol_F18L, MODE_EXCLUDED);
+	Configure(&Sol_SolR, MODE_EXCLUDED);
+	Configure(&Sol_SolRL, MODE_EXCLUDED);
+	
+	if(Init(&EventHandle)) return 1;
+	
+	SetKBRate(40, 50);																							// (a < b) a = pulse duration, b = delay duration
+	SetKBLayout(KB_ENG);
+	
+	// --------------------- IOUMD Buttons --------------------------
+	
+	SetShiftButton(&AVA_F16, S4, &Throttle, BSF, BSB, 0);
+
+}	// =====  end dcs_helicopter_common_configuration()  ==========================================
+
+
+
+// -------------------- HELICOPTER COMMON FUNCTIONS -----------------------------------------------
+
+int dcs_helicopter_common_functions()
+{
+	// AI Flight Comms
+	flight_engagebandits 		= CHAIN( DOWN+L_WIN, D(10), PULSE+'b', D(), UP+L_WIN );									// Flight - Engage Bandits
+	flight_coverme				= CHAIN( DOWN+L_WIN, D(10), PULSE+'w', D(), UP+L_WIN );									// Flight - Cover Me
+	flight_pincerright			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F2, D(200), PULSE+F1 ); 		// Radio menu (\), Flight, Go Pincer, Right
+	flight_attackgroundtargets 	= CHAIN( DOWN+L_WIN, D(10), PULSE+'g', D(), UP+L_WIN );									// Flight - Attack ground targets
+	flight_attackairdefences 	= CHAIN( DOWN+L_WIN, D(10), PULSE+'d', D(), UP+L_WIN );									// Flight - Attack air defenses
+	flight_attackmytarget		= CHAIN( DOWN+L_WIN, D(10), PULSE+'q', D(), UP+L_WIN );									// Flight - Attack My Target
+	flight_completemissionrejoin= CHAIN( DOWN+L_WIN, D(10), PULSE+'r', D(), UP+L_WIN );									// Flight - Complete mission and rejoin
+	flight_rejoinformation		= CHAIN( DOWN+L_WIN, D(10), PULSE+'y', D(), UP+L_WIN );									// Flight - Rejoin Formation
+	flight_rtb					= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F3, D(200), PULSE+F1 ); 		// Radio menu (\), Flight, Go To, RTB
+	flight_gotoroute			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F3, D(200), PULSE+F2 ); 		// Radio menu (\), Flight, Go To, Route
+	flight_gototanker			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F3, D(200), PULSE+F3 ); 		// Radio menu (\), Flight, Go To, Tanker
+	flight_radaroffon			= SEQ( CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F8, D(200), PULSE+F2 ), 	// Radio menu (\), Flight, Radar, Radar Off
+									   CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F8, D(200), PULSE+F1 )); // Radio menu (\), Flight, Radar, Radar On
+	flight_fingerfour			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F5, D(200), PULSE+F6 ); 		// Radio menu (\), Flight, Formation, Finger Four
+	flight_spreadfour			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F5, D(200), PULSE+F7 ); 		// Radio menu (\), Flight, Formation, Spread Four
+	flight_trail				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F5, D(200), PULSE+F2 ); 		// Radio menu (\), Flight, Formation, Trail
+	flight_lineabreast			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F5, D(200), PULSE+F1 ); 		// Radio menu (\), Flight, Formation, Line Abreast
+	flight_echelonright			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F5, D(200), PULSE+F4 ); 		// Radio menu (\), Flight, Formation, Echelon Right
+	flight_echelonleft			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F5, D(200), PULSE+F5 ); 		// Radio menu (\), Flight, Formation, Echelon Left
+	flight_opencloseformation	= SEQ( CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F5, D(200), PULSE+F8 ), 	// Radio menu (\), Flight, Formation, Open Formation
+									   CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F5, D(200), PULSE+F9 ));	// Radio menu (\), Flight, Formation, Close Formation
+									   
+	awacs_bogeydope				= CHAIN( DOWN+L_WIN, D(10), PULSE+'o', D(), UP+L_WIN ); 								// Request AWACS Bogey Dope
+	awacs_vectorhomeairbase		= CHAIN( DOWN+L_WIN, D(10), PULSE+'u', D(), UP+L_WIN ); 								// Request AWACS Vector to Home Airbase
+	awacs_vectorbullseye		= CHAIN( PULSE+USB[0x31], D(200), PULSE+F7, D(200), PULSE+F1 ); 						// Radio menu (\), AWACS, Vector to Bullseye
+	awacs_vectortanker			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F7, D(200), PULSE+F3 ); 						// Radio menu (\), AWACS, Vector to Tanker
+	awacs_requestpicture		= CHAIN( PULSE+USB[0x31], D(200), PULSE+F7, D(200), PULSE+F5 ); 						// Radio menu (\), AWACS, Request Picture
+	awacs_declare				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F7, D(200), PULSE+F6 ); 						// Radio menu (\), AWACS, Declare
+
+	jtac_checkin15				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F4, D(200), PULSE+F1 ); 						// Radio menu (\), JTAC, Check in for 15
+	jtac_followoncomms			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 ); 											// Radio menu (\), JTAC, Follow-on Comms
+	jtac_checkout				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F2 ); 											// Radio menu (\), JTAC, Check Out
+
+	ground_rearmrefuel			= CHAIN( DOWN+L_ALT, D(10), PULSE+USB[0x34], D(), UP+L_ALT );        			  		// Rearming and Refueling Window   (L_ALT+')
+	ground_removewheelchocks	= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F5, D(200), PULSE+F2 );		// Radio menu (\), Prev, GroundCrew, Wheel Chocks, Remove
+
+	atc_requeststartup			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F3 );		// Radio menu (\), ATC, Airfield, Request start-up
+	atc_requesttaxitakeoff		= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 );		// Radio menu (\), Prev, ATC, Airfield, Request taxi/take-off
+	atc_inbound					= CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ); 		// Radio menu (\), ATC, Airfield, Inbound
+	atc_requestlanding			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 );				 							// Request landing short menu
+	
+	tanker_inbound				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F6, D(200), PULSE+F1, D(10000), PULSE+F12 ); 		// Radio menu (\), Tanker menu, inbound, 3s delay, Exit
+	tanker_precontact			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(10000), PULSE+F12 ); 						// Radio menu (\), Ready Pre-Contact (menu shortcut), 3s delay, Radio menu (\)
+
+	cv_requestlaunch			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F3, D(200), PULSE+F2 ); 		// TODO Radio menu (\), xxxxxxx
+	cv_inbound					= SEQ( CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ), 	// Radio menu (\), ATC, CV, Inbound
+									   CHAIN( PULSE+USB[0x31], D(200), PULSE+F2 )); 									// Radio menu (\), See you at 10 (menu shortcut)
+	cv_salute					= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'u', D(), UP+L_SHIFT ); 							// Salute  // TODO new command in DCS - deck crew stuff
+	cv_calltheball				= CHAIN( DOWN+L_WIN, D(10), PULSE+'x', D(), UP+L_WIN ); 								// Call the Ball
+	
+	uhf_radiomenu				= CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x31], D(), UP+R_ALT );							// Transmit Switch - UHF (radio menu)
+	vhf_radiomenu				= CHAIN( DOWN+R_CTL, D(10), PULSE+USB[0x31], D(), UP+R_CTL );							// Transmit Switch - VHF (radio menu)
+	radiomenu					= PULSE+USB[0x31];																		// Transmit Switch - radio menu
+
+
+    // Start-up Sequence (can be specified per airplane)
+	startup 	= CHAIN( R_SHIFT, D(10), 's' ); 																		// Battery / MAIN PWR Switch
+
+	// Ground Crew Sequence (can be specified per airplane)
+	groundcrew  = 0;																									// Ground Crew defined per aircraft when needed
+
+	// Drag Chute (can be specified per airplane)
+	dragchute_deploy	= 0;																							// Drag Chute defined per aircraft when needed
+	dragchute_release	= 0;
+
+	// Speedbrakes (can be specified per airplane)
+	speedbrakes_open	= DX32;																							// Open speedbrakes
+	speedbrakes_close	= CHAIN( D(100), PULSE+DX31 );																	// Close speedbrakes
+
+	// Exterior Lights (can be specified per airplane)
+	extlight_full 		= 0;
+	extlight_position 	= 0;
+	extlight_formation 	= 0;
+	extlight_covert 	= 0;
+	extlight_flashsteady = 0;
+
+	// Cockpit Visuals
+	pilotbody   = CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT );												// Pilot Body toggle
+	helmetvisor = CHAIN( DOWN+L_CTL, D(10), PULSE+'v', D(), UP+L_CTL );													// Helmet visor toggle
+    sunglasses  = CHAIN( DOWN+L_SHIFT, D(10), PULSE+'v', D(), UP+L_SHIFT ); 		  									// Sunglasses toggle
+	mirrors     = CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'m', D(), UP+L_SHIFT+R_SHIFT ); 							// Toggle Mirrors
+
+	// Night Vision function
+	nightvision = SEQ( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(), UP+R_SHIFT, D(),										// Night vision goggles (NVG) on
+							  EXEC( "nightvision_on = 1;" )),
+					   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(), UP+R_SHIFT, D(),										// Night vision goggles (NVG) off
+							  EXEC( "nightvision_on = 0;" )));
+
+	// Flashlight function
+	flashlight = SEQ( CHAIN( DOWN+L_ALT, D(10), PULSE+'l', D(), UP+L_ALT, D(),											// Flashlight on
+							 EXEC( "flashlight_on = 1;" )),
+					  CHAIN( DOWN+L_ALT, D(10), PULSE+'l', D(), UP+L_ALT, D(),											// Flashlight off
+							 EXEC( "flashlight_on = 0;" )));
+
+	// Brightness function
+	brightness_up 	= REXEC( 100, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_CTL+R_SHIFT+'h' );"		 			// NVG brightness up
+									   "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+'.' );"				// Flashlight brightness up
+									   "else ActKey( PULSE+KEYON+DX37 );" );											// HUD/HMCS/Reticle brightness up
+	brightness_down = REXEC( 101, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_ALT+R_SHIFT+'h' );"					// NVG brightness down
+									   "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+',' );"				// Flashlight brightness down
+									   "else ActKey( PULSE+KEYON+DX38 );" );											// HUD/HMCS/Reticle brightness down
+																														// FLIR brightness
+							  
+
+
+}	// =====  end dcs_helicopter_common_functions()  ==============================================
+
+
+
+// -------------------- HELICOPTER COMMON CONTROLS ------------------------------------------------
+
+int dcs_helicopter_common_controls()
+{
+
+	// ---------------------- INITIAL VALUES ------------------------
+
+	printf("\xa--- Initial Mode Values ---\xa");																// 
+	printf("AAR_mode = %i\xa", AAR_mode);																		// print initial AAR_mode
+	printf("CAR_mode = %i\xa", CAR_mode);																		// print initial CAR_mode
+	printf("WHDN_mode = %i\xa", WHDN_mode);																		// print initial WHDN_mode
+	printf("VR_mode = %i\xa", VR_mode);																			// print initial VR_mode
+
+
+	// ------------------------ FLIGHT STICK ------------------------
+
+	// Camera/Gun Trigger
+	// TG1
+	MapKeyIOUMD(&AVA_F16, TG1, 	0,	 																			// IU - 
+								DX1, 																			// OU - Trigger First Detent
+							  	0,  																			// IM - 
+							  	0,  																			// OM - 
+							  	0,  																			// ID - 
+							  	DX1 ); 																			// OD - Trigger First Detent
+	// TG2
+	MapKeyIOUMD(&AVA_F16, TG2, 	SPC,																			// IU - Fire Weapon (GIB)
+								DX6, 																			// OU - Trigger Second Detent
+								0, 																				// IM - 
+								0, 																				// OM - 
+								SPC, 																			// ID - Fire Weapon (GIB)
+								DX6 );																			// OD - Trigger Second Detent
+
+	// Nosewheel Steering Button
+	// S1
+	MapKeyIO(&AVA_F16, S1,  	SEQ( PULSE+F10, PULSE+F1 ),														// I - map
+							 	DX3 ); 																			// O - Nosewheel Steering Button
+
+	// Weapon Release Button
+	// S2
+	MapKeyIO(&AVA_F16, S2,  	CHAIN( L_SHIFT, D(10), 'e' ), 													// I - EMER STORES JETTISON Button
+								DX2 );																			// O - Weapon Release
+
+	// Trim Switch
+	// H1U
+	MapKeyIO(&AVA_F16, H1U, 	TEMPO( mirrors, 																// I - Toggle Mirrors
+						 	 		   helmetvisor, 500 ),   													// 	   [long] Helmet Visor toggle
+								CHAIN( R_CTL, D(10), ';' )); 													// O - trim nose down
+	// H1D
+	MapKeyIO(&AVA_F16, H1D, 	TEMPO( PULSE+F1, 																// I - F1 cockpit view
+									   pilotbody, 500 ),														//	   [long] Pilot Body toggle
+							 	CHAIN( R_CTL, D(10), '.' )); 													// O - trim nose up
+	// H1R
+	MapKeyIO(&AVA_F16, H1R, 	TEMPO( PULSE+F2, 																// I - F2 outside view
+									   sunglasses, 500 ),														//     [long] Sunglasses toggle
+							 	CHAIN( R_CTL, D(10), '/' )); 													// O - trim right wing down
+	// H1L	
+	MapKeyIO(&AVA_F16, H1L, 	TEMPO( PULSE+F6, 																// I - F6 weapon view
+									   CHAIN( DOWN+L_CTL, D(10), PULSE+F6, D(), UP+L_CTL ), 500 ),				//     [long] F6 weapon to target view
+							 	CHAIN( R_CTL, D(10), ',' )); 													// O - trim left wing down
+
+
+	// Display Management Switch
+	// H3U
+	MapKeyIO(&AVA_F16, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
+									   nightvision, 500 ),																// 	   [long] Night Vision Goggles toggle
+								CHAIN( R_ALT, D(10), ';' ));															// O - DMS fwd
+	// H3D
+	MapKeyIO(&AVA_F16, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
+									   flashlight, 500 ),																//	   [long] Flashlight on/off
+								CHAIN( R_ALT, D(10), '.' ));															// O - DMS aft
+	// H3R
+	MapKeyIO(&AVA_F16, H3R, 	TEMPO( PULSE+']', 																		// I - kneeboard next page
+									   CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+']', D(), UP+R_SHIFT+L_SHIFT ), 500 ),	//	   [long] Kneeboard Next Shortcut
+								CHAIN( R_ALT, D(10), '/' ));															// O - DMS right
+	// H3L
+	MapKeyIO(&AVA_F16, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
+									   CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'[', D(), UP+R_SHIFT+L_SHIFT ), 500 ),	//	   [long] Kneeboard Previous Shortcut
+								CHAIN( R_ALT, D(10), ',' ));															// O - DMS left
+
+
+	// JOYX
+	MapAxis(&AVA_F16, JOYX, DX_X_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
+	SetSCurve(&AVA_F16, JOYX, 0, 0, 0, 0, 0);
+	// JOYY
+	MapAxis(&AVA_F16, JOYY, DX_Y_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
+	SetSCurve(&AVA_F16, JOYY, 0, 0, 0, 0, 0);
+	// Rotate Axes
+	RotateDXAxis(DX_X_AXIS, DX_Y_AXIS, -5);																		// rotate axes 5 deg
+	
+	
+	
+ 
+	// ------------------------ THROTTLE ----------------------------
+
+
+	// Left Throttle Button
+	MapKeyIO(&Throttle, LTB, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'e', D(), UP+L_CTL ), 							// I - EJECT
+								0 );                                        									// O - 
+
+	// Canopy
+	// RDRNRM
+	MapKeyUMD(&Throttle, RDRNRM, 0, 																			// U - 
+								DX11,																			// M - Canopy - OPEN/CLOSE (always return switch to RDRDIS)
+								0 );																			// D -  
+	// RDRDIS
+	MapKeyUMD(&Throttle, RDRDIS, 0,																				// U -  
+								0,																				// M - 
+								0 );																			// D -  
+
+	// Landing Gear
+	// EACON
+	MapKeyUMD(&Throttle, EACON,	0, 																				// U - 
+								CHAIN( DOWN+L_CTL, D(10), PULSE+'g', D(), UP+L_CTL, 							// M - gear up 
+									   EXEC( "WHDN_mode = 0;"													//	   WHDN_mode off
+											 "printf(\"WHDN_mode = 0\\xa\");" )),								//
+								0 );																			// D -
+	// EACOFF
+	MapKeyUMD(&Throttle, EACOFF, 0, 																			// U -
+								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'g', D(), UP+L_SHIFT, 						// M - gear down
+									   EXEC( "WHDN_mode = 1;"													//	   WHDN_mode on
+											 "printf(\"WHDN_mode = 1\\xa\");" )),								//
+								0 );																			// D -
+
+	// Speedbrake Switch
+	// SPDF
+	MapKeyIO(&Throttle, SPDF, 	EXEC( "if(VR_mode) ActKey( KEYON+DX16 );"										// I - [VR] VR zoom max
+									  "else ActKey( PULSE+KEYON+R_SHIFT+USB[0x55] );" ),						//	   snap zoom max   (R_SHIFT+KP*)
+								speedbrakes_open );																// O - Open Speed Brakes
+	MapKeyRIO(&Throttle, SPDF, 	EXEC( "if(VR_mode) ActKey( DX16 );"												// I - [VR] release DX16 (return to normal zoom)
+									  "else ActKey( PULSE+KEYON+KPENT );" ),									//	   snap zoom normal
+								speedbrakes_close );															// O - Close Speed Brakes
+
+
+	// SPDB  NEW
+	MapKeyIO(&Throttle, SPDB, EXEC( "if(WHDN_mode) ActKey( KEYON+DX12 );" ),									// I - [WHDN] wheel brake 
+							  speedbrakes_open );																// O - Open Speed Brakes Momentary
+	MapKeyRIO(&Throttle, SPDB, EXEC( "if(WHDN_mode) ActKey( DX12 );" ),											// I - [WHDN] release DX12
+							   speedbrakes_close );																// O - Close Speed Brakes
+
+
+	// China Hat
+	// CHF
+	MapKeyIO(&Throttle, CHF, 	brightness_up, 																	// I - brightness up (HUD/HMCS/Reticle - Flashlight - NVG)
+							 	DX13 ); 																		// O - Radar Elevation Antenna Control - CW/Up
+	// CHB
+	MapKeyIO(&Throttle, CHB, 	brightness_down,																// I - brightness down (HUD/HMCS/Reticle - Flashlight - NVG)
+							 	DX14 ); 																		// O - Radar Elevation Antenna Control - CCW/Down
+
+
+	// Pinky Switch (exterior lighting)
+	// PSF
+	MapKeyIO(&Throttle, PSF, 	extlight_flashsteady, 															// I - Exterior lights flash/steady toggle
+								extlight_full );	 															// O - Exterior Lights Full
+	MapKeyRIO(&Throttle, PSF, 	0,																				// I - 
+								extlight_position );															// O - Exterior Lights Position
+	// PSB
+	MapKey(&Throttle, PSB, 		extlight_covert );			 													// Exterior Lights Covert
+	MapKeyR(&Throttle, PSB, 	extlight_position );															// Exterior Lights Position
+
+
+	// SC (IR/VR re-centre, Discord mute)
+	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - re-centre IR tracker / VR helmet
+									   PULSE+DX21, 500 ),														//     [long] discord mute toggle
+								0 );																			// O - 
+
+	// APUON (APU & Air Refuel)
+	MapKeyIO(&Throttle, APUON, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'f', D(), UP+R_SHIFT,	D(), 					// I - AIR REFUEL Switch - OPEN
+									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5), D(),						// 		LED5 ON for Aerial Refuelling
+									   EXEC( "AAR_mode = 1;"													//		AAR_mode on
+										     "WHDN_mode = 0;"													//		check WHDN_mode = 0, otherwise conflicts //TODO test
+											 "printf(\"AAR_mode = 1\\xa\");" )),								// 		print state to output window
+								PULSE+DX35 );																	// O - APU on
+	MapKeyRIO(&Throttle, APUON, CHAIN( DOWN+R_CTL, D(10), PULSE+'f', D(), UP+R_CTL, D(),						// I - AIR REFUEL Switch - CLOSE
+									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5), D(),						// 		LED5 OFF for Aerial Refuelling
+									   EXEC( "AAR_mode = 0;" 													//		AAR_mode off
+										 	 "printf(\"AAR_mode = 0\\xa\");" )),								// 		print state to output window
+								PULSE+DX36 );																	// O - APU off
+	// APUOFF
+	MapKey(&Throttle, APUOFF, 	0 );																			//
+
+
+	// LDGH (Master Caution, DTC, VR_mode, Tacview bookmark)	// defined in Common_Switch section
+
+
+	// Engine Override Left (Front/Back seat, manual pitch override)
+	// EFLNORM	
+	MapKey(&Throttle, EFLNORM, 	0 );																					// 
+	// EFLOVER
+	MapKey(&Throttle, EFLOVER,  0 );																					// 
+	MapKeyR(&Throttle, EFLOVER, 0 );																					// 
+
+	// Engine Override Right (Hook & Drag Chute)
+	// EFRNORM
+	MapKeyIO(&Throttle, EFRNORM, 		0, 																				// I - 
+										0 );																			// O - 
+	// EFROVER
+	MapKeyIOUMD(&Throttle, EFROVER, 	0,																				// IU - 
+										0,																				// OU - 
+										dragchute_deploy,																// IM - Drag Chute deploy
+										CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'h', D(), UP+L_CTL+L_SHIFT ),			// OM - HOOK Switch - DOWN
+										0,																				// ID - 
+										0 );																			// OD - 
+	MapKeyRIOUMD(&Throttle, EFROVER, 	0,																				// IU -
+										0,																				// OU - 
+										dragchute_release,																// IM - Drag Chute release
+										CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'h', D(), UP+L_CTL+L_ALT ),				// OM - HOOK Switch - UP
+										0,																				// ID - 
+										0 );																			// OD - 
+
+	// Engine Operation (Engine idle, start-up sequence, groundcrew)
+	// EOLIGN
+	MapKeyIO(&Throttle, EOLIGN,		startup,																	// I - Start-up sequence
+									CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));					// O - Left Throttle - IDLE
+	// EOLNORM
+	MapKey(&Throttle, EOLNORM, 		0 );																		//
+	// EOLMOTOR
+	MapKeyIO(&Throttle, EOLMOTOR, 	0,																			// I - 
+									groundcrew ); 																// O - Groundcrew steps
+
+	// EORIGN
+	MapKeyIO(&Throttle, EORIGN,		0,																			// I - 
+									CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));					// O - Right Throttle - IDLE
+	// EORNORM
+	MapKey(&Throttle, EORNORM, 		0 );																		// 
+	// EORMOTOR
+	MapKeyIO(&Throttle, EORMOTOR, 	0,																			// I - 
+									0 );                                                                        // O -
+	MapKeyRIO(&Throttle, EORMOTOR, 	0,																			// I - 
+									0 );                                 										// O - 
+
+
+	// Engine idle/off
+	// IDLELON
+	MapKey(&Throttle, IDLELON, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+END, D(), UP+L_SHIFT ));						// Throttle Left - OFF
+	MapKeyR(&Throttle, IDLELON, CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));						// Throttle Left - IDLE
+	// IDLERON
+	MapKey(&Throttle, IDLERON, 	CHAIN( D(100), DOWN+R_SHIFT, D(10), PULSE+END, D(), UP+R_SHIFT ));				// Throttle Right - OFF
+	MapKeyR(&Throttle, IDLERON, CHAIN( D(100), DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));				// Throttle Right - IDLE
+
+
+	// THR_LEFT
+	MapAxis(&Throttle, THR_LEFT, DX_ZROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);				        				// Collective (inverted)
+	SetSCurve(&Throttle, THR_LEFT, 0, 0, 0, 0, 0);
+	// THR_RIGHT
+	MapAxis(&Throttle, THR_RIGHT, DX_Z_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
+	SetSCurve(&Throttle, THR_RIGHT, 0, 0, 0, 0, 0);
+	// THR_FC
+	MapAxis(&Throttle, THR_FC, DX_SLIDER_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);                                      // engine RPM
+	SetSCurve(&Throttle, THR_FC, 0, 0, 0, 0, 0);
+	// SCX
+	MapAxis(&Throttle, SCX, DX_XROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);											// RDR CURSOR Switch - X axis
+	SetSCurve(&Throttle, SCX, 0, 0, 0, 0, 0);
+	// SCY
+	MapAxis(&Throttle, SCY, DX_YROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);											// RDR CURSOR Switch - Y axis
+	SetSCurve(&Throttle, SCY, 0, 0, 0, 0, 0);
+
+
+
+	// --------- also load SWITCH part of COMMON controls -----------
+	
+	dcs_helicopter_common_switch();																				// controls to be switched back after JESTER use
+
+
+}	// =====  end dcs_helicopter_common_controls()	 ==============================================
+
+
+
+
+// ------------- COMMON SWITCH CONTROLS to be switched back after JESTER use ----------------------
+
+int dcs_helicopter_common_switch()
+{
+	
+	// MIC Switch (Transmit Switch)
+	// MSU
+	MapKeyIOUMD(&Throttle, MSU, TEMPO( flight_engagebandits, 													// IU - Flight - Engage Bandits
+									   flight_pincerright, 500 ),												// 		[long] Flight - Pincer Right
+								DX27,																			// OU - Transmit Switch - Radio 1 (VOIP)
+								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_requestlaunch );" 			// IM - [CAR]  Request Catapult Launch
+											 "else if(WHDN_mode) ActKey( PULSE+KEYON+atc_requeststartup );" 	//		[WHDN] Request Engine Start
+											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"						//		[AAR]  -
+											 "else ActKey( PULSE+KEYON+flight_rejoinformation );" ),			//		Flight - Rejoin Formation
+									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 							// 		[long] [CAR]  -
+											 "else if(WHDN_mode) ActKey( PULSE+KEYON+0 );"						//		[long] [WHDN] -
+											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"						//		[long] [AAR]  -
+											 "else ActKey( PULSE+KEYON+flight_opencloseformation );" ), 500 ),	//		[long] Flight - Open/Close Formation
+								DX27,																			// OM - Transmit Switch - Radio 1 (VOIP)
+								TEMPO( flight_attackgroundtargets,												// ID - Flight - Attack ground targets
+									   flight_attackairdefences, 500 ),											//		[long] Flight - Attack air defences
+								DX27 );																			// OD - Transmit Switch - Radio 1 (VOIP)
+	// MSD
+	MapKeyIOUMD(&Throttle, MSD, TEMPO( flight_completemissionrejoin,											// IU - Flight - Complete mission and rejoin
+									   flight_coverme, 500 ),													// 		[long] Flight - Cover Me
+								DX29,																			// OU - Transmit Switch - Radio 2 (VOIP)
+								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_inbound );" 					// IM - [CAR] CV Inbound / See you at 10
+											 "else if(WHDN_mode) ActKey( PULSE+KEYON+atc_requestlanding );" 	//		[WHDN] Request Landing
+											 "else if(AAR_mode) ActKey( PULSE+KEYON+tanker_inbound );"			//		[AAR]  Tanker Inbound
+											 "else ActKey( PULSE+KEYON+atc_inbound );" ),						//		ATC - Inbound
+									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 							// 		[long] [CAR]  -
+											 "else if(WHDN_mode) ActKey( PULSE+KEYON+0 );" 						//		[long] [WHDN] -
+											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"						//		[long] [AAR]  -
+											 "else ActKey( PULSE+KEYON+flight_rtb);" ), 500 ),					//		[long] Flight - RTB
+								DX29,																			// OM - Transmit Switch - Radio 2 (VOIP)
+								TEMPO( flight_completemissionrejoin,											// ID - Flight - Complete mission and rejoin
+									   0, 500 ),																//		[long] Flight - 
+								DX29 );																			// OD - Transmit Switch - Radio 2 (VOIP)
+	// MSR
+	MapKeyIOUMD(&Throttle, MSR, TEMPO( flight_spreadfour, 														// IU - Flight - Formation Spread Four
+									   flight_lineabreast, 500 ),												// 		[long] Flight - Formation Line Abreast
+								DX28,																			// OU - U_MSR
+								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_salute );" 					// IM - [CAR] CV Salute
+											 "else if(WHDN_mode) ActKey( PULSE+KEYON+atc_requesttaxitakeoff );" 	//	[WHDN] Request taxi, take-off (short menu)
+											 "else if(AAR_mode) ActKey( PULSE+KEYON+tanker_precontact );"		//		[AAR]  Tanker "Ready for precontact" radio call
+											 "else ActKey( PULSE+KEYON+flight_fingerfour );" ),					//		Flight - Finger Four
+									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 							// 		[long] [CAR]  -
+											 "else if(WHDN_mode) ActKey( PULSE+KEYON+0 );" 						//		[long] [WHDN] -
+											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"						//		[long] [AAR]  -
+											 "else ActKey( PULSE+KEYON+flight_echelonright );" ), 500 ),		//		[long] Flight - Formation Echelon Right
+								DX28,																			// OM - M_MSR
+								//TEMPO( jtac_followoncomms,													// ID - JTAC - Follow-on Comms (readback, etc)
+								//	   jtac_checkin15, 500 ),													// 		[long] JTAC - Check in for 15 minutes
+								TEMPO( flight_trail,															// ID - Flight - Formation Trail
+									   flight_lineabreast, 500 ),												// 		[long] Flight - Formation Line Abreast
+								DX28 );																			// OD - D_MSR
+	// MSL
+	MapKeyIOUMD(&Throttle, MSL, TEMPO( awacs_declare,								 							// IU - AWACS Declare
+									   awacs_requestpicture, 500 ),												// 		[long] AWACS Request Picture
+								DX30,																			// OU - U_MSL
+								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_calltheball );" 				// IM - [CAR]  Call the Ball
+											 "else if(WHDN_mode) ActKey( PULSE+KEYON+ground_rearmrefuel );" 	//		[WHDN] Rearming and Refueling Window   (L_ALT+')
+											 "else if(AAR_mode) ActKey( PULSE+KEYON+awacs_bogeydope );"			//		[AAR]  Request AWACS Bogey Dope
+											 "else ActKey( PULSE+KEYON+awacs_declare );" ),						//		AWACS Declare
+									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 							// 		[long] [CAR]  -
+											 "else if(WHDN_mode) ActKey( PULSE+KEYON+0 );" 						//		[long] [WHDN] -
+											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"						//		[long] [AAR]  -
+											 "else ActKey( PULSE+KEYON+awacs_requestpicture );" ), 500 ),		//		[long] AWACS Request Picture
+								DX30,																			// OM - M_MSL
+								TEMPO( flight_radaroffon,														// ID - Flight - Radar Off/On
+									   awacs_requestpicture, 500 ),												// 		[long] AWACS Request Picture
+								DX30 );																			// OD - D_MSL
+	// MSP 
+	MapKeyIO(&Throttle, MSP, 	PULSE+F12,																		// I - F12 exit radio menu
+								radiomenu );			 														// O - Radio menu
+
+
+
+	// LDGH (Master Caution, DTC, VR_mode, Tacview bookmark)
+	MapKeyIO(&Throttle, LDGH, 	TEMPO( CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT ),							// I - Tacview Bookmark
+									   EXEC( "VR_mode = !VR_mode;"														//     [long] switch VR mode on/off
+									   "printf(\"VR_mode = %i\\xa\", VR_mode);" ), 500 ),								// 	          print state to output window
+								TEMPO( CHAIN( DOWN+L_ALT, D(10), PULSE+'m', D(), UP+L_ALT ), 							// O - Master Caution Button
+									   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'k', D(), UP+R_CTL+R_SHIFT ), 500 ));	//	   [long]  Open DTC
+
+
+
+
+
+
+}	// end dcs_helicopter_common_switch()	=======================================================
+
+
+
+// -------------------- LEFT MFD controls ---------------------------------------------------------
+
+int dcs_helicopter_common_mfd()
+{
+
+	MapKeyIO(&LMFD, OSB01, 		CHAIN( R_WIN+R_SHIFT, D(10), '1' ), 											// I - Right MFD OSB 01
+								CHAIN( R_WIN+L_SHIFT, D(10), '1' ));											// O - Left MFD OSB 01
+
+	MapKeyIO(&LMFD, OSB02, 		CHAIN( R_WIN+R_SHIFT, D(10), '2' ), 											// I - Right MFD OSB 02
+								CHAIN( R_WIN+L_SHIFT, D(10), '2' ));											// O - Left MFD OSB 02
+
+	MapKeyIO(&LMFD, OSB03, 		CHAIN( R_WIN+R_SHIFT, D(10), '3' ), 											// I - Right MFD OSB 03
+								CHAIN( R_WIN+L_SHIFT, D(10), '3' ));											// O - Left MFD OSB 03
+
+	MapKeyIO(&LMFD, OSB04, 		CHAIN( R_WIN+R_SHIFT, D(10), '4' ), 											// I - Right MFD OSB 04
+								CHAIN( R_WIN+L_SHIFT, D(10), '4' ));											// O - Left MFD OSB 04
+
+	MapKeyIO(&LMFD, OSB05, 		CHAIN( R_WIN+R_SHIFT, D(10), '5' ), 											// I - Right MFD OSB 05
+								CHAIN( R_WIN+L_SHIFT, D(10), '5' ));											// O - Left MFD OSB 05
+
+	MapKeyIO(&LMFD, OSB06, 		CHAIN( R_WIN+R_SHIFT, D(10), '6' ), 											// I - Right MFD OSB 06
+								CHAIN( R_WIN+L_SHIFT, D(10), '6' ));											// O - Left MFD OSB 06
+
+	MapKeyIO(&LMFD, OSB07, 		CHAIN( R_WIN+R_SHIFT, D(10), '7' ), 											// I - Right MFD OSB 07
+								CHAIN( R_WIN+L_SHIFT, D(10), '7' ));											// O - Left MFD OSB 07
+
+	MapKeyIO(&LMFD, OSB08, 		CHAIN( R_WIN+R_SHIFT, D(10), '8' ), 											// I - Right MFD OSB 08
+								CHAIN( R_WIN+L_SHIFT, D(10), '8' ));											// O - Left MFD OSB 08
+
+	MapKeyIO(&LMFD, OSB09, 		CHAIN( R_WIN+R_SHIFT, D(10), '9' ), 											// I - Right MFD OSB 09
+								CHAIN( R_WIN+L_SHIFT, D(10), '9' ));											// O - Left MFD OSB 09
+
+	MapKeyIO(&LMFD, OSB10, 		CHAIN( R_WIN+R_SHIFT, D(10), '0' ), 											// I - Right MFD OSB 10
+								CHAIN( R_WIN+L_SHIFT, D(10), '0' ));											// O - Left MFD OSB 10
+
+	MapKeyIO(&LMFD, OSB11, 		CHAIN( R_WIN+R_CTL, D(10), '1' ),												// I - Right MFD OSB 11
+								CHAIN( R_WIN+L_CTL, D(10), '1' ));												// O - Left MFD OSB 11
+
+	MapKeyIO(&LMFD, OSB12, 		CHAIN( R_WIN+R_CTL, D(10), '2' ), 												// I - Right MFD OSB 12
+								CHAIN( R_WIN+L_CTL, D(10), '2' ));												// O - Left MFD OSB 12
+
+	MapKeyIO(&LMFD, OSB13, 		CHAIN( R_WIN+R_CTL, D(10), '3' ), 												// I - Right MFD OSB 13
+								CHAIN( R_WIN+L_CTL, D(10), '3' ));												// O - Left MFD OSB 13
+
+	MapKeyIO(&LMFD, OSB14, 		CHAIN( R_WIN+R_CTL, D(10), '4' ), 												// I - Right MFD OSB 14
+								CHAIN( R_WIN+L_CTL, D(10), '4' ));												// O - Left MFD OSB 14
+
+	MapKeyIO(&LMFD, OSB15, 		CHAIN( R_WIN+R_CTL, D(10), '5' ), 												// I - Right MFD OSB 15
+								CHAIN( R_WIN+L_CTL, D(10), '5' ));												// O - Left MFD OSB 15
+
+	MapKeyIO(&LMFD, OSB16, 		CHAIN( R_WIN+R_CTL, D(10), '6' ), 												// I - Right MFD OSB 16
+								CHAIN( R_WIN+L_CTL, D(10), '6' ));												// O - Left MFD OSB 16
+
+	MapKeyIO(&LMFD, OSB17, 		CHAIN( R_WIN+R_CTL, D(10), '7' ), 												// I - Right MFD OSB 17
+								CHAIN( R_WIN+L_CTL, D(10), '7' ));												// O - Left MFD OSB 17
+
+	MapKeyIO(&LMFD, OSB18, 		CHAIN( R_WIN+R_CTL, D(10), '8' ), 												// I - Right MFD OSB 18
+								CHAIN( R_WIN+L_CTL, D(10), '8' ));												// O - Left MFD OSB 18
+
+	MapKeyIO(&LMFD, OSB19, 		CHAIN( R_WIN+R_CTL, D(10), '9' ), 												// I - Right MFD OSB 19
+								CHAIN( R_WIN+L_CTL, D(10), '9' ));												// O - Left MFD OSB 19
+
+	MapKeyIO(&LMFD, OSB20, 		CHAIN( R_WIN+R_CTL, D(10), '0' ), 												// I - Right MFD OSB 20
+								CHAIN( R_WIN+L_CTL, D(10), '0' ));												// O - Left MFD OSB 20
+
+	MapKeyIO(&LMFD, SYMU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'o' ), 											// I - Right MFD SYM Up
+								CHAIN( R_WIN+L_SHIFT, D(10), 'o' ));											// O - Left MFD SYM Up
+
+	MapKeyIO(&LMFD, SYMD, 		CHAIN( R_WIN+R_SHIFT, D(10), 'k' ), 											// I - Right MFD SYM Down
+								CHAIN( R_WIN+L_SHIFT, D(10), 'k' ));											// O - Left MFD SYM Down
+
+	MapKeyIO(&LMFD, CONU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'i' ), 											// I - Right MFD CON Up
+								CHAIN( R_WIN+L_SHIFT, D(10), 'i' ));											// O - Left MFD CON Up
+
+	MapKeyIO(&LMFD, COND, 		CHAIN( R_WIN+R_SHIFT, D(10), 'j' ), 											// I - Right MFD CON Down
+								CHAIN( R_WIN+L_SHIFT, D(10), 'j' ));											// O - Left MFD CON Down
+
+	MapKeyIO(&LMFD, BRTU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'u' ), 											// I - Right MFD BRT Up
+								CHAIN( R_WIN+L_SHIFT, D(10), 'u' ));											// O - Left MFD BRT Up
+
+	MapKeyIO(&LMFD, BRTD, 		CHAIN( R_WIN+R_SHIFT, D(10), 'h' ), 											// I - Right MFD BRT Down
+								CHAIN( R_WIN+L_SHIFT, D(10), 'h' ));											// O - Left MFD BRT Down
+
+	MapKeyIO(&LMFD, GAINU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'y' ), 											// I - Right MFD GAIN Up
+								CHAIN( R_WIN+L_SHIFT, D(10), 'y' ));											// O - Left MFD GAIN Up
+
+	MapKeyIO(&LMFD, GAIND, 		CHAIN( R_WIN+R_SHIFT, D(10), 'g' ), 											// I - Right MFD GAIN Down
+								CHAIN( R_WIN+L_SHIFT, D(10), 'g' ));											// O - Left MFD GAIN Down
+
+
+}	// =====  end dcs_helicopter_common_mfd()  ====================================================

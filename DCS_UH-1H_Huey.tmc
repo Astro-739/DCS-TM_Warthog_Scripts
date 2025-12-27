@@ -1,40 +1,40 @@
-// DCS Huey script for Thustmaster Warthog by Astro
+// DCS UH-1H Huey Thrustmaster Warthog/AVA/MFD Script by Astro
+// TARGET version 3.0.25.127
+// version 2.0, Dec 2025
+
 
 include "target.tmh"
+include "DCS_Helicopter_Common.tmc"
 include "DCS_UH-1H_Huey_macros.ttm"
 
 
+// -------------------------- INITIALISE ----------------------------
+
 //int autopilot;																						// initialise autopilot funtion
-int nightvision;																						// initialise nightvision funtion
-int brightness_up;																						// initialise brightness_up funtion
-int brightness_down;																					// initialise brightness_down funtion
+//int nightvision;																						// initialise nightvision funtion
+//int brightness_up;																						// initialise brightness_up funtion
+//int brightness_down;																					// initialise brightness_down funtion
 int intercommodelist, index;																			// intercom modes list & index
 
-char nightvision_on;																					// intialise nightvision_on boolean
+//char nightvision_on;																					// intialise nightvision_on boolean
+
+
+// -------------------------- MAIN UH-1H ----------------------------------------------------------
 
 int main()
 {
-	Configure(&HCougar, MODE_EXCLUDED);
-	Configure(&JoystickF18, MODE_EXCLUDED);
-	Configure(&A320Pilot, MODE_EXCLUDED);
-	Configure(&A320Copilot, MODE_EXCLUDED);
-	Configure(&TCAQuadrant12, MODE_EXCLUDED);
-	Configure(&TCAQuadrant34, MODE_EXCLUDED);
-	Configure(&T16000, MODE_EXCLUDED);
-	Configure(&T16000L, MODE_EXCLUDED);
-	Configure(&LMFD, MODE_EXCLUDED);
-	Configure(&RMFD, MODE_EXCLUDED);
-	Configure(&TFRPRudder, MODE_EXCLUDED);
-	Configure(&TWCSThrottle, MODE_EXCLUDED);
-	Configure(&TFRPHARudder, MODE_EXCLUDED);
-
-	if(Init(&EventHandle)) return 1;
-
-	SetKBRate(32, 50);																					// (a,b) a = pulse duration, b = delay duration
-	SetKBLayout(KB_ENG);
+	// -------------------- COMMON CONFIGURATION --------------------
+					
+	dcs_helicopter_common_configuration();					// load dcs COMMON config
 	
+
+	// -------------------- COMMON FUNCTIONS ------------------------
+					
+	dcs_helicopter_common_functions();						// load dcs COMMON functions
+
+
+	// -------------------- HELICOPTER FUNCTIONS --------------------
 	
-	// -------------------- LISTS --------------------
 	
 	// Intercom mode select
 	intercommodelist = SEQ( Intercom_Mode_PVT,
@@ -44,38 +44,42 @@ int main()
 							Intercom_Mode_3,
 							Intercom_Mode_4 );
 	
-	
-	// -------------------- FUNCTIONS --------------------
-
-	// Night Vision function
-	nightvision_on = 0;
-	nightvision = SEQ( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(40), UP+R_SHIFT, D(),					// night vision goggles on
-							  EXEC( "nightvision_on = 1;") ),
-					   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(40), UP+R_SHIFT, D(),					// night vision goggles off
-							  EXEC( "nightvision_on = 0;") ));
-							  
-	brightness_up = EXEC( "if(nightvision_on) ActKey( PULSE+KEYON+R_CTL+R_SHIFT+'h' );" );				// goggle brightness up
-	brightness_down = EXEC( "if(nightvision_on) ActKey( PULSE+KEYON+L_ALT+'h' );" );					// goggle brightness down
 
 
+	// -------------------- COMMON CONTROLS -------------------------
+					
+	dcs_helicopter_common_controls();						// load dcs COMMON controls
+	dcs_helicopter_common_mfd();							// load dcs MFD controls
+															// before helicopter controls, to allow for overwriting of common controls when necessary
 
-	// ---- IO shift button ----
-	SetShiftButton(&Joystick, S4, &Throttle, BSF, BSB, 0);
 
+	// -------------------- HELICOPTER CONTROLS ---------------------
+
+	// ---------------------- FLIGHT STICK --------------------------
+
+	// --DCS_Helicopter_Common---------
+	// TG - Camera/Gun Trigger
+	// S1 - Nosewheel Steering Button
+	// S2 - Weapon Release Button
+	// H1 - Trim Switch
+	// H3 - Display Management Switch
+	// JOYX
+	// JOYY
+	// -----------------------------
 
 
 	// -------------------- FLIGHT STICK --------------------
 
 	// Trigger Switch
 	// TG1
-	MapKeyIOUMD(&Joystick, TG1, 0, 																		// IU - 
+	MapKeyIOUMD(&AVA_F16, TG1, 0, 																		// IU - 
 								CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x31], D(40), UP+R_ALT ),			// OU - Pilot's radio trigger RADIO (call radio menu) (R_ALT+\)
 							  	CHAIN( DOWN+L_ALT, D(10), PULSE+USB[0x34], D(40), UP+L_ALT ), 			// IM - Rearming and Refueling Window  (L_ALT+')
 							  	CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x31], D(40), UP+R_ALT ),  			// OM - Pilot's radio trigger RADIO (call radio menu) (R_ALT+\)
 							  	0,  																	// ID - 
 							  	CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x31], D(40), UP+R_ALT )); 			// OD - Pilot's radio trigger RADIO (call radio menu) (R_ALT+\)
 	// TG2
-	MapKeyIOUMD(&Joystick, TG2, 0,																		// IU - 
+	MapKeyIOUMD(&AVA_F16, TG2, 0,																		// IU - 
 								0, 																		// OU - 
 								0, 																		// IM - 
 								0, 																		// OM - 
@@ -84,12 +88,12 @@ int main()
 
 	// Master Mode Button
 	// S1
-	MapKeyIO(&Joystick, S1,  	SEQ( PULSE+F10, PULSE+F1 ), 											// I - map
+	MapKeyIO(&AVA_F16, S1,  	SEQ( PULSE+F10, PULSE+F1 ), 											// I - map
 								SEQ( PULSE+'2', PULSE+'3', PULSE+'4', PULSE+'1' )); 					// O - switch combat post  (from pilot, to co-pilot, left gunner, right gunner, pilot)
 
 	// Weapon Release Button
 	// S2
-	MapKeyIOUMD(&Joystick, S2,	CHAIN( R_ALT, D(10), SPC ), 											// IU - Copilot weapon release
+	MapKeyIOUMD(&AVA_F16, S2,	CHAIN( R_ALT, D(10), SPC ), 											// IU - Copilot weapon release
 							    SPC,																	// OU - Pilot weapon release/Machinegun fire
 								0, 																		// IM - 
 								0, 																		// OM - 
@@ -98,7 +102,7 @@ int main()
 
 	// ???
 	// S3
-	MapKeyIOUMD(&Joystick, S3,  0, 																		// IU -
+	MapKeyIOUMD(&AVA_F16, S3,  0, 																		// IU -
 							    0,																		// OU - 
 							    0, 																		// IM -
 							    CHAIN( DOWN+L_WIN, D(10), PULSE+'a', D(40), UP+L_WIN ),					// OM - auto pilot on/off
@@ -107,16 +111,16 @@ int main()
 
 	// Trim Switch
 	// H1U
-	MapKeyIO(&Joystick, H1U, 	CHAIN( DOWN+L_CTL, D(10), PULSE+F4, D(40), UP+L_CTL ), 					// I - F4 Chase view
+	MapKeyIO(&AVA_F16, H1U, 	CHAIN( DOWN+L_CTL, D(10), PULSE+F4, D(40), UP+L_CTL ), 					// I - F4 Chase view
 						 	 	PULSE+'t');												 				// O - Pilot Trimmer
 	// H1R
-	MapKeyIO(&Joystick, H1R, 	PULSE+F2, 																// I - F2 outside view
+	MapKeyIO(&AVA_F16, H1R, 	PULSE+F2, 																// I - F2 outside view
 							 	0); 																	// O - 
 	// H1D
-	MapKeyIO(&Joystick, H1D, 	PULSE+F1, 																// I - F1 cockpit view
+	MapKeyIO(&AVA_F16, H1D, 	PULSE+F1, 																// I - F1 cockpit view
 							 	CHAIN( DOWN+L_CTL, D(10), PULSE+'t', D(40), UP+L_CTL )); 				// O - Trimmer Reset
 	// H1L	
-	MapKeyIOUMD(&Joystick, H1L, CHAIN( DOWN+L_CTL, D(10), PULSE+F6, D(40), UP+L_CTL ),					// IU - F6 Weapon to target view
+	MapKeyIOUMD(&AVA_F16, H1L, CHAIN( DOWN+L_CTL, D(10), PULSE+F6, D(40), UP+L_CTL ),					// IU - F6 Weapon to target view
 								0,																		// OU - 
 								0, 																		// IM - 
 								0, 																		// OM - 
@@ -125,21 +129,39 @@ int main()
 
 	// Target Management Switch
 	// H2U
-	MapKeyIO(&Joystick, H2U, 	0,		 																// I - 
-							 	USB[0x55]);																// O - zoom in
-	// H2R							
-	MapKeyIO(&Joystick, H2R, 	0, 																		// I - 
-							 	CHAIN( L_WIN, D(10), KP4 ));											// O - snap view
+	MapKeyIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX15 );"										// I - VR zoom
+									  "else ActKey ( KEYON+DX7 );" ),											//     TrackIR zoom in (KP*)
+								0 );																			// O - 
+	MapKeyRIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( DX15 );"											// I - Release DX15
+									  "else ActKey ( DX7 );" ),													// 	   Release DX7
+								0 );																			// O - 
 	// H2D
-	MapKeyIO(&Joystick, H2D, 	0,																		// I - 
-							 	USB[0x54]);																// O - zoom out
+	MapKeyIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( PULSE+KEYON+L_ALT+'c' );"							// I - VR toggle mouse pointer
+									  "else ActKey ( KEYON+DX9 );" ),											// 	   TrackIR zoom out (KP\)
+								0 );																			// O - 
+	MapKeyRIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( 0 );"												// I - 
+									  "else ActKey ( DX9 );" ),													// 	   Release DX9
+								0 );																			// O - 
+	// H2R							
+	MapKeyIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX18 );"										// I - VR Right mouse click
+									  "else ActKey ( KEYON+DX8 );" ),											// 	   TrackIR snap view right MFD (LWIN+KP6)
+								0 );																			// O - 
+	MapKeyRIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( DX18 );"											// I - Release DX18
+									  "else ActKey ( DX8 );" ),													// 	   Release DX8
+								0 );																			// O - 
 	// H2L
-	MapKeyIO(&Joystick, H2L, 	0, 																		// I - 
-							 	KP0);																	// O - snap view instruments
+	MapKeyIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX17 );"										// I - VR Left mouse click
+									  "else ActKey ( KEYON+DX10 );" ),											// 	   TrackIR snap view left MFD (LWIN+KP4)
+								0 );																			// O - 
+	MapKeyRIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( DX17 );"											// I - Release DX17
+									  "else ActKey ( DX10 );" ),												// 	   Release DX10
+								0 );																			// O - 
+
+
 
 	// Display Management Switch
 	// H3U
-	MapKeyIOUMD(&Joystick, H3U, 0,																		// IU - AI Panel Show/Hide
+	MapKeyIOUMD(&AVA_F16, H3U, 0,																		// IU - AI Panel Show/Hide
 								CHAIN( DOWN+L_WIN, D(10), PULSE+'h', D(40), UP+L_WIN ),					// OU - AI Panel Show/Hide 
 								CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(40), UP+R_SHIFT ),				// IM - kneeboard on/off
 								TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+ENT, D(40), UP+R_CTL ),			// OM - [short] Show controls indicator
@@ -149,14 +171,14 @@ int main()
 									 CHAIN( DOWN+R_ALT, D(10), PULSE+';', D(40), UP+R_ALT )),
 								'8');																	// OD - Search light Extend
 	// H3R
-	MapKeyIOUMD(&Joystick, H3R, CHAIN( DOWN+L_SHIFT, D(10), PULSE+'4', D(40), UP+L_SHIFT ),				// IU - AI Right Burst Switch
+	MapKeyIOUMD(&AVA_F16, H3R, CHAIN( DOWN+L_SHIFT, D(10), PULSE+'4', D(40), UP+L_SHIFT ),				// IU - AI Right Burst Switch
 								CHAIN( DOWN+L_CTL, D(10), PULSE+'4', D(40), UP+L_CTL ),					// OU - AI Right ROE Iterate
 								PULSE+']', 																// IM - kneeboard next page
 								0,																		// OM - DMS right
 								0,																		// ID - 
 								'0');																	// OD - Search light Right
 	// H3D
-	MapKeyIOUMD(&Joystick, H3D, CHAIN( DOWN+L_SHIFT, D(10), PULSE+'2', D(40), UP+L_SHIFT ),				// IU - AI Operator Burst Switch
+	MapKeyIOUMD(&AVA_F16, H3D, CHAIN( DOWN+L_SHIFT, D(10), PULSE+'2', D(40), UP+L_SHIFT ),				// IU - AI Operator Burst Switch
 								CHAIN( DOWN+L_CTL, D(10), PULSE+'2', D(40), UP+L_CTL ),					// OU - AI Operator ROE Iterate
 								CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(40), UP+R_CTL ),					// IM - kneeboard current position mark point
 								TEMPO( 0, 																// OM - DMS down short
@@ -164,7 +186,7 @@ int main()
 								0,																		// ID - 
 								'7');																	// OD - Search light Retract
 	// H3L
-	MapKeyIOUMD(&Joystick, H3L, CHAIN( DOWN+L_SHIFT, D(10), PULSE+'3', D(40), UP+L_SHIFT ),				// IU - AI Left Burst Switch
+	MapKeyIOUMD(&AVA_F16, H3L, CHAIN( DOWN+L_SHIFT, D(10), PULSE+'3', D(40), UP+L_SHIFT ),				// IU - AI Left Burst Switch
 								CHAIN( DOWN+L_CTL, D(10), PULSE+'3', D(40), UP+L_CTL ),					// OU - AI Left ROE Iterate
 								PULSE+'[', 																// IM - kneeboard previous page
 								0,																		// OM - DMS left
@@ -173,29 +195,21 @@ int main()
 
  	// Countermeasure Management Switch
 	// H4U
-	MapKeyIO(&Joystick, H4U, 	0,														 				// I - 
+	MapKeyIO(&AVA_F16, H4U, 	0,														 				// I - 
 							 	CHAIN( DOWN+L_CTL, D(10), PULSE+'c', D(40), UP+L_CTL ));				// O - Flare Dispense Button
 	// H4R
-	MapKeyIO(&Joystick, H4R, 	0, 																		// I - 
+	MapKeyIO(&AVA_F16, H4R, 	0, 																		// I - 
 			  				 	0);																		// O - 
 	// H4D
-	MapKeyIO(&Joystick, H4D, 	0, 																		// I -
+	MapKeyIO(&AVA_F16, H4D, 	0, 																		// I -
 							 	0); 																	// O - 
 	// H4L
-	MapKeyIO(&Joystick, H4L, 	0, 																		// I - 
+	MapKeyIO(&AVA_F16, H4L, 	0, 																		// I - 
 							 	0); 																	// O - 
 	// H4P
-	MapKeyIO(&Joystick, H4P, 	CHAIN( DOWN+R_SHIFT+R_CTL, D(10), PULSE+'m', D(40), UP+R_SHIFT+R_CTL ), // I - discord mute
+	MapKeyIO(&AVA_F16, H4P, 	CHAIN( DOWN+R_SHIFT+R_CTL, D(10), PULSE+'m', D(40), UP+R_SHIFT+R_CTL ), // I - discord mute
 							 	DX19 ); 																// O - srs ptt (in combination with Discord ptm) 
 
-	// JOYX
-	MapAxis(&Joystick, JOYX, DX_X_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
-	SetSCurve(&Joystick, JOYX, 0, 0, 0, 0, 0);
-	// JOYY
-	MapAxis(&Joystick, JOYY, DX_Y_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
-	SetSCurve(&Joystick, JOYY, 0, 0, 0, 0, 0);
-	// Rotate Axes
-	RotateDXAxis(DX_X_AXIS, DX_Y_AXIS, 5);																// rotate axes 5 deg
 
 	
 
@@ -406,15 +420,7 @@ int main()
 	MapKeyR(&Throttle, BSB, 	CHAIN( DOWN+R_WIN, D(10), PULSE+';', D(40), UP+R_WIN, 					// stow search light
 									   D(), LED(&Throttle, LED_ONOFF, LED_CURRENT-LED3) )); 			// LED3 OFF for D layer
 
-	// THR_LEFT
-	MapAxis(&Throttle, THR_LEFT, DX_ZROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);								// Collective (inverted)
-	SetSCurve(&Throttle, THR_LEFT, 0, 0, 0, 0, 0);
-	// THR_RIGHT
-	MapAxis(&Throttle, THR_RIGHT, DX_Z_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);								// engine 2 n/a for Huey
-	SetSCurve(&Throttle, THR_RIGHT, 0, 0, 0, 0, 0);
-	// THR_FC
-	MapAxis(&Throttle, THR_FC, DX_SLIDER_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);								// engine RPM
-	SetSCurve(&Throttle, THR_FC, 0, 0, 0, 0, 0);
+
 	// SCX not mapped
 	// SCY
 	MapAxis(&Throttle, SCY, DX_YROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
