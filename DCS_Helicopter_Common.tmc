@@ -337,24 +337,25 @@ int dcs_helicopter_common_controls()
 	MapKeyIO(&AVA_F16, S2,  	CHAIN( L_SHIFT, D(10), 'e' ), 													// I - EMER STORES JETTISON Button
 								DX2 );																			// O - Weapon Release
 
-/*	// Trim Switch
+								
+	// Trim Switch
 	// H1U
 	MapKeyIO(&AVA_F16, H1U, 	TEMPO( mirrors, 																// I - Toggle Mirrors
 						 	 		   helmetvisor, 500 ),   													// 	   [long] Helmet Visor toggle
-								CHAIN( R_CTL, D(10), ';' )); 													// O - trim nose down
+								CHAIN( DOWN+R_CTL, D(10), PULSE+ENT, D(), UP+R_CTL ));							// O - Show controls indicator
 	// H1D
 	MapKeyIO(&AVA_F16, H1D, 	TEMPO( PULSE+F1, 																// I - F1 cockpit view
 									   pilotbody, 500 ),														//	   [long] Pilot Body toggle
-							 	CHAIN( R_CTL, D(10), '.' )); 													// O - trim nose up
+							 	CHAIN( DOWN+R_CTL+R_WIN, D(10), PULSE+ENT, D(), UP+R_CTL+R_WIN )); 				// O - Show crew indicator
 	// H1R
 	MapKeyIO(&AVA_F16, H1R, 	TEMPO( PULSE+F2, 																// I - F2 outside view
 									   sunglasses, 500 ),														//     [long] Sunglasses toggle
-							 	CHAIN( R_CTL, D(10), '/' )); 													// O - trim right wing down
+							 	CHAIN( DOWN+L_WIN, D(10), PULSE+'h', D(), UP+L_WIN )); 							// O - AI Panel Show/Hide
 	// H1L	
 	MapKeyIO(&AVA_F16, H1L, 	TEMPO( PULSE+F6, 																// I - F6 weapon view
 									   CHAIN( DOWN+L_CTL, D(10), PULSE+F6, D(), UP+L_CTL ), 500 ),				//     [long] F6 weapon to target view
-							 	CHAIN( R_CTL, D(10), ',' )); 													// O - trim left wing down
-*/
+							 	0 ); 																			// O - 
+
 
 	// Display Management Switch
 	// H3U

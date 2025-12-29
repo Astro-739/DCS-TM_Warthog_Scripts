@@ -10,13 +10,8 @@ include "DCS_UH-1H_Huey_macros.ttm"
 
 // -------------------------- INITIALISE ----------------------------
 
-//int autopilot;																						// initialise autopilot funtion
-//int nightvision;																						// initialise nightvision funtion
-//int brightness_up;																						// initialise brightness_up funtion
-//int brightness_down;																					// initialise brightness_down funtion
 int intercommodelist, index;																			// intercom modes list & index
 
-//char nightvision_on;																					// intialise nightvision_on boolean
 
 
 // -------------------------- MAIN UH-1H ----------------------------------------------------------
@@ -110,25 +105,6 @@ int main()
 							    0);																		// OD - 
 
 
-	// Trim Switch
-	// H1U
-	MapKeyIO(&AVA_F16, H1U, 	TEMPO( mirrors, 																// I - Toggle Mirrors
-						 	 		   helmetvisor, 500 ),   													// 	   [long] Helmet Visor toggle
-								PULSE+'t' );											 						// O - Pilot Trimmer
-	// H1D
-	MapKeyIO(&AVA_F16, H1D, 	TEMPO( PULSE+F1, 																// I - F1 cockpit view
-									   pilotbody, 500 ),														//	   [long] Pilot Body toggle
-							 	CHAIN( DOWN+L_CTL, D(10), PULSE+'t', D(), UP+L_CTL )); 							// O - Trimmer Reset
-	// H1R
-	MapKeyIO(&AVA_F16, H1R, 	TEMPO( PULSE+F2, 																// I - F2 outside view
-									   sunglasses, 500 ),														//     [long] Sunglasses toggle
-							 	0 ); 																			// O - 
-	// H1L	
-	MapKeyIO(&AVA_F16, H1L, 	TEMPO( PULSE+F6, 																// I - F6 weapon view
-									   CHAIN( DOWN+L_CTL, D(10), PULSE+F6, D(), UP+L_CTL ), 500 ),				//     [long] F6 weapon to target view
-							 	0 ); 																			// O - 
-
-
 	// Target Management Switch
 	// H2U
 	MapKeyIOUMD(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX15 );"										// IU - VR zoom
@@ -196,13 +172,6 @@ int main()
 								SEQ( CHAIN( DOWN+R_CTL, D(10), PULSE+';', D(40), UP+R_CTL ),			// ID - Search light on/off
 									 CHAIN( DOWN+R_ALT, D(10), PULSE+';', D(40), UP+R_ALT )),
 								'8' );																	// OD - Search light Extend
-	// H3R
-	MapKeyIOUMD(&AVA_F16, H3R, CHAIN( DOWN+L_SHIFT, D(10), PULSE+'4', D(40), UP+L_SHIFT ),				// IU - AI Right Burst Switch
-								CHAIN( DOWN+L_CTL, D(10), PULSE+'4', D(40), UP+L_CTL ),					// OU - AI Right ROE Iterate
-								PULSE+']', 																// IM - kneeboard next page
-								0,																		// OM - DMS right
-								0,																		// ID - 
-								'0' );																	// OD - Search light Right
 	// H3D
 	MapKeyIOUMD(&AVA_F16, H3D, CHAIN( DOWN+L_SHIFT, D(10), PULSE+'2', D(40), UP+L_SHIFT ),				// IU - AI Operator Burst Switch
 								CHAIN( DOWN+L_CTL, D(10), PULSE+'2', D(40), UP+L_CTL ),					// OU - AI Operator ROE Iterate
@@ -211,6 +180,13 @@ int main()
 									   0, 500 ),														// OM - DMS down long
 								0,																		// ID - 
 								'7' );																	// OD - Search light Retract
+	// H3R
+	MapKeyIOUMD(&AVA_F16, H3R, CHAIN( DOWN+L_SHIFT, D(10), PULSE+'4', D(40), UP+L_SHIFT ),				// IU - AI Right Burst Switch
+								CHAIN( DOWN+L_CTL, D(10), PULSE+'4', D(40), UP+L_CTL ),					// OU - AI Right ROE Iterate
+								PULSE+']', 																// IM - kneeboard next page
+								0,																		// OM - DMS right
+								0,																		// ID - 
+								'0' );																	// OD - Search light Right
 	// H3L
 	MapKeyIOUMD(&AVA_F16, H3L, CHAIN( DOWN+L_SHIFT, D(10), PULSE+'3', D(40), UP+L_SHIFT ),				// IU - AI Left Burst Switch
 								CHAIN( DOWN+L_CTL, D(10), PULSE+'3', D(40), UP+L_CTL ),					// OU - AI Left ROE Iterate
@@ -219,16 +195,17 @@ int main()
 								0,																		// ID - 
 								'9' );																	// OD - Search light Left
 
+
  	// Countermeasure Management Switch
 	// H4U
 	MapKeyIO(&AVA_F16, H4U, 	0,														 				// I - 
-							 	0 );																	// O - 
+							 	PULSE+'t' );											 				// O - Pilot Trimmer
+	// H4D
+	MapKeyIO(&AVA_F16, H4D, 	0, 																		// I -
+							 	CHAIN( DOWN+L_CTL, D(10), PULSE+'t', D(), UP+L_CTL )); 					// O - Trimmer Reset
 	// H4R
 	MapKeyIO(&AVA_F16, H4R, 	0, 																		// I - 
 			  				 	0 );																	// O - 
-	// H4D
-	MapKeyIO(&AVA_F16, H4D, 	0, 																		// I -
-							 	0 ); 																	// O - 
 	// H4L
 	MapKeyIO(&AVA_F16, H4L, 	0, 																		// I - 
 							 	0 ); 																	// O - 
@@ -313,7 +290,7 @@ int main()
 	// Flap Switch
 	// FLAPU
 	MapKeyIO(&Throttle, FLAPU,  0,																		// I - 
-							    CHAIN( 0,																// O - search light?  goggles?
+							    CHAIN( 0,																// O - 
 									   D(), LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ));				// O - LED5 on
 	MapKeyRIO(&Throttle, FLAPU, 0,																		// I - 
 								CHAIN( 0, 																// O - 
