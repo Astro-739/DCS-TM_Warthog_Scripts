@@ -337,7 +337,7 @@ int dcs_helicopter_common_controls()
 	MapKeyIO(&AVA_F16, S2,  	CHAIN( L_SHIFT, D(10), 'e' ), 													// I - EMER STORES JETTISON Button
 								DX2 );																			// O - Weapon Release
 
-	// Trim Switch
+/*	// Trim Switch
 	// H1U
 	MapKeyIO(&AVA_F16, H1U, 	TEMPO( mirrors, 																// I - Toggle Mirrors
 						 	 		   helmetvisor, 500 ),   													// 	   [long] Helmet Visor toggle
@@ -354,7 +354,7 @@ int dcs_helicopter_common_controls()
 	MapKeyIO(&AVA_F16, H1L, 	TEMPO( PULSE+F6, 																// I - F6 weapon view
 									   CHAIN( DOWN+L_CTL, D(10), PULSE+F6, D(), UP+L_CTL ), 500 ),				//     [long] F6 weapon to target view
 							 	CHAIN( R_CTL, D(10), ',' )); 													// O - trim left wing down
-
+*/
 
 	// Display Management Switch
 	// H3U
