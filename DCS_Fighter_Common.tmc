@@ -498,16 +498,12 @@ int dcs_fighter_common_controls()
 
 	// APUON (APU & Air Refuel)
 	MapKeyIO(&Throttle, APUON, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'f', D(), UP+R_SHIFT,	D(), 					// I - AIR REFUEL Switch - OPEN
-									   //EXEC( "SetSCurve(&AVA_F16, JOYX, 0, 0, 0, 0, -1);"						//	    set joyX curves for aerial refuelling
-									   // 	 "SetSCurve(&AVA_F16, JOYY, 0, 0, 0, 0, -1);" ), D(), 				// 	  	set joyY curves for aerial refuelling
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5), D(),						// 		LED5 ON for Aerial Refuelling
 									   EXEC( "AAR_mode = 1;"													//		AAR_mode on
 										     "WHDN_mode = 0;"													//		check WHDN_mode = 0, otherwise conflicts //TODO test
 											 "printf(\"AAR_mode = 1\\xa\");" )),								// 		print state to output window
 								PULSE+DX35 );																	// O - APU on
 	MapKeyRIO(&Throttle, APUON, CHAIN( DOWN+R_CTL, D(10), PULSE+'f', D(), UP+R_CTL, D(),						// I - AIR REFUEL Switch - CLOSE
-									   //EXEC( "SetSCurve(&AVA_F16, JOYX, 0, 0, 0, 0, 0);"						//		set joyX curves back to normal
-									   //	 "SetSCurve(&AVA_F16, JOYY, 0, 0, 0, 0, 0);" ), D(), 				//		set joyY curves back to normal
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5), D(),						// 		LED5 OFF for Aerial Refuelling
 									   EXEC( "AAR_mode = 0;" 													//		AAR_mode off
 										 	 "printf(\"AAR_mode = 0\\xa\");" )),								// 		print state to output window

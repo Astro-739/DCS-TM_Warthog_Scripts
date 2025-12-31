@@ -234,7 +234,7 @@ int dcs_f4e_pilot_controls_switch()
 	// Target Management Switch
 	// H2U
 	MapKeyIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX15 );"												// I - VR zoom
-									  "else ActKey ( KEYON+DX7 );" ),													//     TrackIR zoom in (KP*)
+									  "else ActKey ( KEYON+DX7 );" ),													//     TrackIR zoom in slow (KP*)
 								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT, D(200),							// O - Gun/Missile Pinky Switch - Radar
 									   DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ));								//	   HUD Mode - A/A
 	MapKeyRIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( DX15 );"													// I - Release DX15
@@ -242,7 +242,7 @@ int dcs_f4e_pilot_controls_switch()
 								0 );																					// O - 
 	// H2D
 	MapKeyIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( PULSE+KEYON+L_ALT+'c' );"									// I - VR toggle mouse pointer
-									  "else ActKey ( KEYON+DX9 );" ),													// 	   TrackIR zoom out (KP\)
+									  "else ActKey ( KEYON+DX9 );" ),													// 	   TrackIR zoom out slow (KP\)
 								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'w', D(), UP+L_SHIFT, D(200),							// O - Gun/Missile Pinky Switch - Gun
 									   DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT ));									// 	   HUD Mode - Cage
 	MapKeyRIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( 0 );"														// I - 

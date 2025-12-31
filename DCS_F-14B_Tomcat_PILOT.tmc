@@ -1,6 +1,6 @@
 // PILOT file for DCS_F-14B_Tomcat.tmc  by Astro
-// TARGET version 3.0.24.618
-// version 2.0, Feb 2025
+// TARGET version 3.0.25.127
+// version 2.1, Dec 2025
 
 
 
@@ -138,9 +138,8 @@ int dcs_f14_pilot_controls()
 
 
 	// SC
-	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - [short] re-centre IR tracker
-									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'`', D(), UP+L_SHIFT ),				//     [long] discord game overlay
-									   500),
+	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - re-centre IR tracker / VR helmet
+									   PULSE+DX21, 500 ),														//     [long] discord mute toggle
 								CHAIN( L_SHIFT+L_CTL, D(10), 't' ));											// O - PLM button
 
 
@@ -217,6 +216,39 @@ int dcs_f14_pilot_controls_switch()
 
 	// Target Management Switch
 	// H2U
+	MapKeyIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX15 );"												// I - VR zoom
+									  "else ActKey ( KEYON+DX7 );" ),													//     TrackIR zoom in slow (KP*)
+								CHAIN( DOWN+R_SHIFT, D(10), PULSE+'w', D(), UP+R_SHIFT ));								// O - Weapon Selector up
+	MapKeyRIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( DX15 );"													// I - Release DX15
+									  "else ActKey ( DX7 );" ),															// 	   Release DX7
+								0 );																					// O - 
+	// H2D
+	MapKeyIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( PULSE+KEYON+L_ALT+'c' );"									// I - VR toggle mouse pointer
+									  "else ActKey ( KEYON+DX9 );" ),													// 	   TrackIR zoom out slow (KP\)
+								CHAIN( DOWN+R_CTL, D(10), PULSE+'w', D(), UP+R_CTL )); 									// O - Weapon Selector down
+	MapKeyRIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( 0 );"														// I - 
+									  "else ActKey ( DX9 );" ),															// 	   Release DX9
+								0 );																					// O - 
+	// H2R							
+	MapKeyIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX18 );"												// I - VR Right mouse click
+									  "else ActKey ( KEYON+DX8 );" ),													// 	   TrackIR snap view right (LWIN+KP6)
+								CHAIN( DOWN+R_ALT, D(10), PULSE+'w', D(), UP+R_ALT )); 									// O - Weapon Selector press
+	MapKeyRIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( DX18 );"													// I - Release DX18
+									  "else ActKey ( DX8 );" ),															// 	   Release DX8
+								0 );																					// O - 
+	// H2L
+	MapKeyIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX17 );"												// I - VR Left mouse click
+									  "else ActKey ( KEYON+DX10 );" ),													// 	   TrackIR snap view left (LWIN+KP4)
+								0 );																					// O - 
+	MapKeyRIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( DX17 );"													// I - Release DX17
+									  "else ActKey ( DX10 );" ),														// 	   Release DX10
+								0 );																					// O - 
+
+
+
+/*
+	// Target Management Switch  ----  OLD
+	// H2U
 	MapKeyIO(&AVA_F16, H2U, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'w', D(), UP+R_SHIFT ),								// I - Weapon Selector up
 								USB[0x55] );																			// O - zoom in  (KP*)
 	// H2D
@@ -231,6 +263,8 @@ int dcs_f14_pilot_controls_switch()
 								L_WIN, D(10), KP4 ));																	//     snap view instruments
 	MapKeyRIO(&AVA_F16, H2L, 	0,																						// I - 
 								CHAIN( D(200), DOWN+R_CTL, D(10), PULSE+BSP, D(), UP+R_CTL ));							// O - place stick
+*/
+
 
 
 	// Display Management Switch
