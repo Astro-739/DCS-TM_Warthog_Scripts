@@ -283,7 +283,7 @@ int main()
 									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
-	JSTR_rwr_ai				= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
+	JSTR_rwr_ai				= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 													// AI - Airborne Interceptor
 									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL );
@@ -335,13 +335,15 @@ int main()
 									 DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL );
 	JSTR_lntrn_prevtgt		= CHAIN( PULSE+'a', D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL );
-	// A-G Weapons
-	JSTR_agwpn_comptgt		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
+	// A-G Weapons (4 A-G Weapons / 2 Bomb Delivery Mode)
+	JSTR_agwpn_comptgt		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 											// 1 CMP/TGT
 									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200),
+									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200) );
+	JSTR_agwpn_comppilot	= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 											// 2 CMP/PLT
+									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200),
 									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200) );
-	JSTR_agwpn_comppilot	= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200) );							//   also 2????????????????????????
 	// Start-up
 	JSTR_startup			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );
 	JSTR_loudclear			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
