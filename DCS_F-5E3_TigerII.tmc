@@ -31,6 +31,12 @@ int main()
 
 	// -------------------- AIRCRAFT FUNCTIONS ----------------------
 					
+	// Target Management Switch / Armament Selector (overwrites common)
+	TMS_up = PULSE+ENT;																							// AN/APQ-159 Radar ACQ Button
+	TMS_down = 0;
+	TMS_right = 0;
+	TMS_left = 0;
+
 	// Exterior Lighting - Full
 	extlight_full = CHAIN( DOWN+R_ALT+R_CTL, D(10), DOWN+'i', D(1000), UP+'i', D(), UP+R_ALT+R_CTL, D(),		// Exterior Lights Nav Knob - CW/Increase
 						   DOWN+R_ALT+R_CTL, D(10), DOWN+'o', D(1000), UP+'o', D(), UP+R_ALT+R_CTL, D(),		// Exterior Lights Formation Knob - CW/Increase
@@ -104,7 +110,7 @@ int main()
 							    0,														 						// ID - 
 							    0);																				// OD - 
 
-
+/*
 	// Target Management Switch
 	// H2U
 	MapKeyIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX15 );"										// I - VR zoom
@@ -134,7 +140,7 @@ int main()
 	MapKeyRIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( DX17 );"											// I - Release DX17
 									  "else ActKey ( DX10 );" ),												// 	   Release DX10
 								0 );																			// O - 
-
+*/
 
 	// Display Management Switch
 	// H3U

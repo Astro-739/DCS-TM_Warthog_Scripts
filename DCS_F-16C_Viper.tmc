@@ -42,6 +42,14 @@ int main()
 				   CHAIN( R_SHIFT, D(10), 's' ), 											// MAIN PWR Switch - MAIN PWR
 				   CHAIN( R_CTL, D(10), 's' )); 											// JFS Switch - START 1
 
+
+	// Target Management Switch / Armament Selector (overwrites common)
+	TMS_up = CHAIN( R_CTL, D(10), UARROW );													// TMS up
+	TMS_down = CHAIN( R_CTL, D(10), DARROW );												// TMS down
+	TMS_right = CHAIN( R_CTL, D(10), RARROW );												// TMS right
+	TMS_left = CHAIN( R_CTL, D(10), LARROW );												// TMS left
+
+
 	// Autopilot function
 	autopilot_ALThold = CHAIN( DOWN+L_CTL+L_SHIFT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_SHIFT,		// Autopilot PITCH Switch - ALT HOLD  (extra 100ms needed by DCS)
 							   EXEC( "autopilot_mode = 1;" ));
@@ -130,38 +138,6 @@ int main()
 	MapKeyUMD(&AVA_F16, S3,     override,																		// U - dogfight then missile override
 							    autopilot,															 			// M - autopilot on/off (Autopilot PITCH Switch - ALT HOLD)
 							    0);																				// D - 
-
-
-
-	// Target Management Switch
-	// H2U
-	MapKeyIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX15 );"										// I - VR zoom
-									  "else ActKey ( KEYON+DX7 );" ),											//     TrackIR zoom in (KP*)
-								CHAIN( R_CTL, D(10), UARROW ));													// O - TMS up
-	MapKeyRIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( DX15 );"											// I - Release DX15
-									  "else ActKey ( DX7 );" ),													// 	   Release DX7
-								0 );																			// O - 
-	// H2D
-	MapKeyIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( PULSE+KEYON+L_ALT+'c' );"							// I - VR toggle mouse pointer
-									  "else ActKey ( KEYON+DX9 );" ),											// 	   TrackIR zoom out (KP\)
-								CHAIN( R_CTL, D(10), DARROW ));													// O - TMS down
-	MapKeyRIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( 0 );"												// I - 
-									  "else ActKey ( DX9 );" ),													// 	   Release DX9
-								0 );																			// O - 
-	// H2R							
-	MapKeyIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX18 );"										// I - VR Right mouse click
-									  "else ActKey ( KEYON+DX8 );" ),											// 	   TrackIR snap view right MFD (LWIN+KP6)
-								CHAIN( R_CTL, D(10), RARROW ));													// O - TMS right
-	MapKeyRIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( DX18 );"											// I - Release DX18
-									  "else ActKey ( DX8 );" ),													// 	   Release DX8
-								0 );																			// O - 
-	// H2L
-	MapKeyIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX17 );"										// I - VR Left mouse click
-									  "else ActKey ( KEYON+DX10 );" ),											// 	   TrackIR snap view left MFD (LWIN+KP4)
-								CHAIN( R_CTL, D(10), LARROW ));													// O - TMS left
-	MapKeyRIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( DX17 );"											// I - Release DX17
-									  "else ActKey ( DX10 );" ),												// 	   Release DX10
-								0 );																			// O - 
 
 
  	// Countermeasure Management Switch
