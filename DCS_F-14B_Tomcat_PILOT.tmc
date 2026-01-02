@@ -207,7 +207,7 @@ int dcs_f14_pilot_controls()
 int dcs_f14_pilot_controls_switch()
 {
 
-
+/*
 	// Target Management Switch
 	// H2U
 	MapKeyIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX15 );"												// I - VR zoom
@@ -240,7 +240,7 @@ int dcs_f14_pilot_controls_switch()
 
 
 
-/*
+
 	// Target Management Switch  ----  OLD
 	// H2U
 	MapKeyIO(&AVA_F16, H2U, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'w', D(), UP+R_SHIFT ),								// I - Weapon Selector up

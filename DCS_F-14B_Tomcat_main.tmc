@@ -184,6 +184,12 @@ int main()
 							  PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F2, D(100), PULSE+F2, D(13000), 			// Radio menu (\), Ground crew, Ground Electric Power, Off
 							  PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F2 ));					// Radio menu (\), Ground crew, Wheel Chocks, Remove
 
+	// Target Management Switch / Armament Selector (overwrites common)
+	TMS_up = CHAIN( DOWN+R_SHIFT, D(10), PULSE+'w', D(), UP+R_SHIFT );													// Weapon Selector up
+	TMS_down = CHAIN( DOWN+R_CTL, D(10), PULSE+'w', D(), UP+R_CTL ); 													// Weapon Selector down
+	TMS_right = CHAIN( DOWN+R_ALT, D(10), PULSE+'w', D(), UP+R_ALT ); 													// Weapon Selector press
+	TMS_left = 0;
+
 	// Exterior Lighting - Full
 	extlight_full 		= CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'l', D(), UP+L_SHIFT+R_SHIFT, D(100),				// Lights Anti Collision ON
 							     DOWN+L_CTL+R_SHIFT, D(10), PULSE+'l', D(), UP+L_CTL+R_SHIFT, D(100),					// Lights Position Wing BRT

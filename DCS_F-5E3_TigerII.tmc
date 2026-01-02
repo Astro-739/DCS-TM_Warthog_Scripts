@@ -9,12 +9,8 @@ include "DCS_Fighter_Common.tmc"
 
 // -------------------------- INITIALISE ----------------------------
 
-//int extlight_full;				
 int extlight_fulltoform;		
 int extlight_covtoform;			
-//int extlight_covert;			
-
-int groundcrewstartup;
 
 define AB 77											// detent position at AB% of full throttle reach
 
@@ -52,18 +48,23 @@ int main()
 							 DOWN+L_CTL, D(10), PULSE+'l', D(), UP+L_CTL );										// Exterior Lights Beacon Switch - OFF
 
 	// Ground Crew Start-up
-	groundcrewstartup = SEQ( CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F1, D(8000), 	// Radio menu (\), Ground crew, Wheel Chocks, Place 
-							   		PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F1, D(10000),	// Radio menu (\), Ground crew, Ground Air Supply, Connect
-							   		PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F3 ), 			// Radio menu (\), Ground crew, Ground Air Supply, Apply
-							 CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F3, D(25000),	// Radio menu (\), Ground crew, Ground Air Supply, Apply
-							   		PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F2, D(15000),	// Radio menu (\), Ground crew, Ground Air Supply, Disconnect
-							   		PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F2 ));			// Radio menu (\), Ground crew, Wheel Chocks, Remove
+	groundcrew = SEQ( CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F1, D(8000), 	// Radio menu (\), Ground crew, Wheel Chocks, Place 
+			 		   		 PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F1, D(10000),	// Radio menu (\), Ground crew, Ground Air Supply, Connect
+							 PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F3 ), 			// Radio menu (\), Ground crew, Ground Air Supply, Apply
+					  CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F3, D(25000),	// Radio menu (\), Ground crew, Ground Air Supply, Apply
+							 PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F2, D(15000),	// Radio menu (\), Ground crew, Ground Air Supply, Disconnect
+							 PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F2 ));			// Radio menu (\), Ground crew, Wheel Chocks, Remove
 
 
 	// Speedbrake functions
 	speedbrakes_open  = CHAIN( DOWN+L_SHIFT, D(10), PULSE+'b', D(), UP+L_SHIFT ); 								// speedbrake extend
 
 	speedbrakes_close = CHAIN( D(100), DOWN+L_CTL, D(10), PULSE+'b', D(), UP+L_CTL );							// speedbrake fully retract
+
+
+	// Drag Chute function (defined in Common)
+	dragchute_deploy	= PULSE+'p';																			// Deploy Drag-Parachute
+	dragchute_release	= CHAIN( PULSE+'p', D(100), DOWN+'p', D(500), UP+'p', PULSE+'p' );						// Release Drag-Parachute
 
 
 
@@ -133,23 +134,6 @@ int main()
 	MapKeyRIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( DX17 );"											// I - Release DX17
 									  "else ActKey ( DX10 );" ),												// 	   Release DX10
 								0 );																			// O - 
-
-
-/*
-	// Target Management Switch   ---   OLD
-	// H2U
-	MapKeyIO(&AVA_F16, H2U, 	PULSE+ENT,																		// I - AN/APQ-159 Radar ACQ Button
-							 	DX7 );			 																// O - zoom in  (KP*) 
-	// H2D
-	MapKeyIO(&AVA_F16, H2D, 	0,																				// I -
-							 	DX9 );																			// O - zoom out  (KP\)
-	// H2R							
-	MapKeyIO(&AVA_F16, H2R, 	0,																				// I -
-							 	DX8 ); 																			// O - snap view right 
-	// H2L
-	MapKeyIO(&AVA_F16, H2L, 	0,																				// I -
-							 	DX10 ); 																		// O - snap view left 
-*/
 
 
 	// Display Management Switch
@@ -262,37 +246,6 @@ int main()
 								0);																				// OD - 
 
 
-	// Speedbrake Switch   // TODO TEST
-	// SPDF
-//	MapKeyIO(&Throttle, SPDF, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x55], D(), UP+R_SHIFT ),					// I - snap zoom max   (R_SHIFT+KP*)
-//								speedbrakes_open );																// O - Open Speed Brakes
-//	MapKeyRIO(&Throttle, SPDF, 	PULSE+KPENT,																	// I - snap zoom normal
-//								speedbrakes_close );															// O - Close Speed Brakes
-	// SPDB
-//	MapKeyIOUMD(&Throttle, SPDB, CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),				// IU - snap zoom min    (R_SHIFT+KP/)
-//								speedbrakes_open,																// OU - Open Speed Brakes Momentary
-//								EXEC( "if(WHDN_mode) ActKey( KEYON+'w' );" 										// IM - [WHDN] wheel brake
-//									  "else ActKey( PULSE+KEYON+USB[0x54] );" ),								//		snap zoom min
-//								speedbrakes_open,																// OM - Open Speed Brakes Momentary
-//								CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),					// ID - snap zoom min    (R_SHIFT+KP/)
-//								speedbrakes_open );																// OD - Open Speed Brakes Momentary
-//	MapKeyRIOUMD(&Throttle, SPDB, PULSE+KPENT,																	// IU - snap zoom normal
-//								speedbrakes_close,																// OU - Close Speed Brakes
-//								EXEC( "if(WHDN_mode) ActKey( 'w' );"											// IM - [WHDN] release 'w'
-//									  "else ActKey( PULSE+KEYON+KPENT );" ),									//		snap zoom normal
-//								speedbrakes_close,																// OM - Close Speed Brakes
-//								PULSE+KPENT,																	// ID - snap zoom normal
-//								speedbrakes_close );															// OU - Close Speed Brakes
-
-								
-	// China Hat
-	// CHF
-	//MapKeyIO(&Throttle, CHF, 	brightness_up, 																	// I - brightness up for reticle/NVG
-	//						 	DX13 ); 																		// O - AN/APQ-159 Radar Elevation Antenna Tilt Control - CW/Up
-	// CHB
-	//MapKeyIO(&Throttle, CHB, 	brightness_down,																// I - brightness down for reticle/NVG
-	//						 	DX14 ); 																		// O - AN/APQ-159 Radar Elevation Antenna Tilt Control - CCW/Down
-
 	// Pinky Switch (exterior lighting)
 	// PSF
 	MapKeyIO(&Throttle, PSF, 	CHAIN( 0, D(), 																	// I - 
@@ -333,9 +286,11 @@ int main()
 								SEQ( CHAIN( L_CTL+L_SHIFT, D(10), 'c' ),										// O - Left Engine Start Button
 									 CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT )));				//	   Throttle Left - IDLE
 
-	// EOLMOTOR
+/*
+	// EOLMOTOR     TODO to common
 	MapKeyIO(&Throttle, EOLMOTOR, 0,																			// I - 
 								groundcrewstartup); 															// O - Ground Crew Start-up
+*/
 
 	// EORIGN
 	MapKeyIO(&Throttle, EORIGN, 0,																				// I - 
@@ -349,7 +304,9 @@ int main()
 	// EFLOVER
 	MapKeyIO(&Throttle, EFLOVER, 	DX22,																		// I - Aileron Limiter (Hold to turn off)
 									0 );																		// O - (Back seat)
-	// EFRNORM
+
+/*
+// EFRNORM
 	MapKeyIOUMD(&Throttle, EFRNORM, 0,																			// IU - 
 								0,																				// OU - 
 								// TODO *** put this in mapkey release
@@ -364,7 +321,7 @@ int main()
 								CHAIN( DOWN+'h', D(100), UP+'h' ),												// OM - Deploy Tail Hook
 								0,																				// ID - 
 								0 );																			// OD - 
-
+*/
 
 	// U LAYER - Air-to-Air Mode
 	// BSF - LED1 ON/OFF
