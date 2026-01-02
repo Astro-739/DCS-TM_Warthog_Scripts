@@ -1,6 +1,6 @@
 // DCS F-5E3 Tiger II Thrustmaster Warthog/AVA/MFD Script by Astro
-// TARGET version 3.0.24.618
-// version 2.0, Jan 2025
+// TARGET version 3.0.25.127
+// version 2.1, Jan 2026
 
 
 include "target.tmh"
@@ -15,9 +15,6 @@ int extlight_covtoform;
 //int extlight_covert;			
 
 int groundcrewstartup;
-
-//int speedbrakes_open;
-//int speedbrakes_close;
 
 define AB 77											// detent position at AB% of full throttle reach
 
@@ -94,15 +91,9 @@ int main()
 
 	// Weapon Release Button
 	// S2
-	MapKeyIOUMD(&AVA_F16, S2,  	SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),										// IU - Emergency All Jettison Button Cover - OPEN
-									 CHAIN( L_SHIFT, D(10), 'e' )),												//		Emergency All Jettison Button
-							    DX2,																			// OU - weapon release
-								SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),										// IM - Emergency All Jettison Button Cover - OPEN
-									 CHAIN( L_SHIFT, D(10), 'e' )),												//		Emergency All Jettison Button
-							    0,																			 	// OM - 
-							    SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),										// ID - Emergency All Jettison Button Cover - OPEN
-									 CHAIN( L_SHIFT, D(10), 'e' )),												//		Emergency All Jettison Button
-							    DX2 );																			// OD - weapon release
+	MapKeyIO(&AVA_F16, S2,  	SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),										// I - Emergency All Jettison Button Cover - OPEN
+									 CHAIN( L_SHIFT, D(10), 'e' )),												//	   Emergency All Jettison Button
+							    DX2 );																			// O - weapon release
 
 	// Expand FOV Button - S3
 	MapKeyIOUMD(&AVA_F16, S3,  	0, 																				// IU -
@@ -112,7 +103,40 @@ int main()
 							    0,														 						// ID - 
 							    0);																				// OD - 
 
+
 	// Target Management Switch
+	// H2U
+	MapKeyIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX15 );"										// I - VR zoom
+									  "else ActKey ( KEYON+DX7 );" ),											//     TrackIR zoom in (KP*)
+								PULSE+ENT );																	// O - AN/APQ-159 Radar ACQ Button
+	MapKeyRIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( DX15 );"											// I - Release DX15
+									  "else ActKey ( DX7 );" ),													// 	   Release DX7
+								0 );																			// O - 
+	// H2D
+	MapKeyIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( PULSE+KEYON+L_ALT+'c' );"							// I - VR toggle mouse pointer
+									  "else ActKey ( KEYON+DX9 );" ),											// 	   TrackIR zoom out (KP\)
+								0 );																			// O - 
+	MapKeyRIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( 0 );"												// I - 
+									  "else ActKey ( DX9 );" ),													// 	   Release DX9
+								0 );																			// O - 
+	// H2R							
+	MapKeyIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX18 );"										// I - VR Right mouse click
+									  "else ActKey ( KEYON+DX8 );" ),											// 	   TrackIR snap view right (LWIN+KP6)
+								0 );																			// O - 
+	MapKeyRIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( DX18 );"											// I - Release DX18
+									  "else ActKey ( DX8 );" ),													// 	   Release DX8
+								0 );																			// O - 
+	// H2L
+	MapKeyIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX17 );"										// I - VR Left mouse click
+									  "else ActKey ( KEYON+DX10 );" ),											// 	   TrackIR snap view left (LWIN+KP4)
+								0 );																			// O - 
+	MapKeyRIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( DX17 );"											// I - Release DX17
+									  "else ActKey ( DX10 );" ),												// 	   Release DX10
+								0 );																			// O - 
+
+
+/*
+	// Target Management Switch   ---   OLD
 	// H2U
 	MapKeyIO(&AVA_F16, H2U, 	PULSE+ENT,																		// I - AN/APQ-159 Radar ACQ Button
 							 	DX7 );			 																// O - zoom in  (KP*) 
@@ -125,6 +149,8 @@ int main()
 	// H2L
 	MapKeyIO(&AVA_F16, H2L, 	0,																				// I -
 							 	DX10 ); 																		// O - snap view left 
+*/
+
 
 	// Display Management Switch
 	// H3U
@@ -151,10 +177,10 @@ int main()
 	MapKeyIO(&AVA_F16, H4D, 	0, 																				// I -
 							 	PULSE+'6' ); 																	// O - Dogfight/Resume Search Switch - AFT (DG)
 	// H4R
-	MapKeyIO(&AVA_F16, H4R, 	0, 																				// I - PROGRAM Knob - CW
+	MapKeyIO(&AVA_F16, H4R, 	0, 																				// I - 
 			  				 	PULSE+'r' );																	// O - Dogfight/Resume Search Switch - CENTER-PRESS (RESUME SEARCH)
 	// H4L
-	MapKeyIO(&AVA_F16, H4L, 	0, 																				// I - PROGRAM Knob - CCW
+	MapKeyIO(&AVA_F16, H4L, 	0, 																				// I - 
 							 	0 ); 																			// O - 
 	// H4P
 	MapKeyIO(&AVA_F16, H4P, 	0, 																				// I - 
