@@ -34,12 +34,8 @@ int dcs_f4e_pilot_controls()
 
 	// Weapon Release Button
 	// S2
-	MapKeyIOUMD(&AVA_F16, S2,  	jettison_stores,																		// IU - Jettison Stores
-							    DX2,																					// OU - weapon release
-								jettison_stores,																		// IM - Jettison Stores
-							    0,																					 	// OM - 
-							    jettison_stores,																		// ID - Jettison Stores
-							    DX2 );																					// OD - weapon release
+	MapKeyIO(&AVA_F16, S2,  	jettison_stores,																		// I - Jettison Stores
+							    DX2 );																					// O - weapon release
 
 
  	// Countermeasure Management Switch
@@ -230,8 +226,8 @@ int dcs_f4e_pilot_controls()
 int dcs_f4e_pilot_controls_switch()
 {
 
-
-	// Target Management Switch
+/*
+	// Target Management Switch  --------------  To COMMON
 	// H2U
 	MapKeyIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX15 );"												// I - VR zoom
 									  "else ActKey ( KEYON+DX7 );" ),													//     TrackIR zoom in slow (KP*)
@@ -263,7 +259,7 @@ int dcs_f4e_pilot_controls_switch()
 	MapKeyRIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( DX17 );"													// I - Release DX17
 									  "else ActKey ( DX10 );" ),														// 	   Release DX10
 								0 );																					// O - 
-
+*/
 
 /*
 	// Target Management Switch  ---------  OLD

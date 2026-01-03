@@ -136,6 +136,16 @@ int main()
 
 	// -------------------- AIRCRAFT FUNCTIONS ----------------------
 					
+	// Target Management Switch / Armament Selector (overwrites common)
+	TMS_up 		= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT, D(200),				// Gun/Missile Pinky Switch - Radar
+						 DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT );						// HUD Mode - A/A
+	TMS_down 	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'w', D(), UP+L_SHIFT, D(200),				// Gun/Missile Pinky Switch - Gun
+					  	 DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT );							// HUD Mode - Cage
+	TMS_right 	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT, D(200),				// Gun/Missile Pinky Switch - Heat
+						 DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT );						// HUD Mode - A/A
+	TMS_left 	= 0;																			// 
+
+
 	// Autopilot function
 	autopilot = SEQ( CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'a', D(), UP+L_ALT+L_SHIFT, D(200),						// Autopilot on
 							EXEC( "autopilot_mode();" )),																// Set autopilot mode
