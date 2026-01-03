@@ -295,11 +295,11 @@ int dcs_f4e_pilot_controls_switch()
 								CHAIN( 0 ));																			// O - 
 	// H3R
 	MapKeyIO(&AVA_F16, H3R, 	TEMPO( PULSE+']', 																		// I - kneeboard next page
-									   CHAIN( 0 ), 500 ),   															// 	   [long] 
+									   CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+']', D(), UP+R_SHIFT+L_SHIFT ), 500 ),	//	   [long] Kneeboard Next Shortcut
 								CHAIN( R_ALT, D(10), '2' ));															// O - RWR Search Button
 	// H3L
 	MapKeyIO(&AVA_F16, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
-									   CHAIN( 0 ), 500 ),																//	   [long] 
+									   CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'[', D(), UP+R_SHIFT+L_SHIFT ), 500 ),	//	   [long] Kneeboard Previous Shortcut
 								CHAIN( R_ALT, D(10), '5' ));															// O - RWR Target Separation Button
 
 
