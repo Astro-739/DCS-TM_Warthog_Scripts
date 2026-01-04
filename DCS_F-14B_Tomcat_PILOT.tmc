@@ -17,6 +17,7 @@ int dcs_f14_pilot_controls()
 	// S2 - Weapon Release Button
 	// S1 - Nosewheel Steering Button
 	// H1 - Trim Switch
+	// H2 - Target Management Switch
 	// JOYX
 	// JOYY
 	// -------------------------------

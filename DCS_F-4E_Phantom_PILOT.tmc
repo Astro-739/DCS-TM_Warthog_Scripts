@@ -15,7 +15,7 @@ int dcs_f4e_pilot_controls()
 	// TG - Gun Trigger
 	// S1 - Nosewheel Steering Button
 	// H1 - Trim Switch
-	// TMS - Target Management Switch (in specific control section at end of file)
+	// H2 - Target Management Switch
 	// DMS - Display Management Switch (in specific control section at end of file)
 	// JOYX
 	// JOYY

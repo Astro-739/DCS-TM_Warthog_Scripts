@@ -90,6 +90,7 @@ int main()
 	// TG - Camera/Gun Trigger
 	// S1 - Nosewheel Steering Button
 	// H1 - Trim Switch
+	// H2 - Target Management Switch
 	// JOYX
 	// JOYY
 	// -----------------------------	

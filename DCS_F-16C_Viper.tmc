@@ -44,10 +44,17 @@ int main()
 
 
 	// Target Management Switch / Armament Selector (overwrites common)
-	TMS_up = CHAIN( R_CTL, D(10), UARROW );													// TMS up
-	TMS_down = CHAIN( R_CTL, D(10), DARROW );												// TMS down
-	TMS_right = CHAIN( R_CTL, D(10), RARROW );												// TMS right
-	TMS_left = CHAIN( R_CTL, D(10), LARROW );												// TMS left
+	TMS_fwd 	= CHAIN( R_CTL, D(10), UARROW );												// TMS fwd
+	TMS_aft 	= CHAIN( R_CTL, D(10), DARROW );												// TMS aft
+	TMS_right 	= CHAIN( R_CTL, D(10), RARROW );												// TMS right
+	TMS_left 	= CHAIN( R_CTL, D(10), LARROW );												// TMS left
+
+
+	// Display Management Switch (overwrites common)
+	DMS_fwd 	= CHAIN( R_ALT, D(10), ';' );													// DMS fwd
+	DMS_aft 	= CHAIN( R_ALT, D(10), '.' );													// DMS aft
+	DMS_right 	= CHAIN( R_ALT, D(10), '/' );													// DMS right
+	DMS_left 	= CHAIN( R_ALT, D(10), ',' );													// DMS left
 
 
 	// Autopilot function
@@ -116,6 +123,7 @@ int main()
 	// S1 - Nosewheel Steering Button
 	// S2 - Weapon Release Button
 	// H1 - Trim Switch
+	// H2 - Target Management Switch
 	// H3 - Display Management Switch
 	// JOYX
 	// JOYY
