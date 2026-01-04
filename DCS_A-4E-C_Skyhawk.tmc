@@ -104,7 +104,6 @@ int main()
 
 	// Speedbrake functions
 	speedbrakes_open  = CHAIN( D(100), DOWN+L_SHIFT, D(10), PULSE+'b', D(), UP+L_SHIFT );								// speedbrake extend
-
 	speedbrakes_close = CHAIN( D(100), DOWN+L_CTL, D(10), PULSE+'b', D(), UP+L_CTL );									// speedbrake fully retract
 
 

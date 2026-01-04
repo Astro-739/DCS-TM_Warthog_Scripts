@@ -1,6 +1,6 @@
 // DCS Fighter Common Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.25.127
-// version 3.1, Nov 2025
+// version 3.2, Jan 2026
 //
 //
 // All common functions across DCS modules:
@@ -267,10 +267,10 @@ int dcs_fighter_common_functions()
 	groundcrew  = 0;																									// Ground Crew defined per aircraft when needed
 
 	// Target Management Switch / Armament Selector (can be specified per airplane)
-	TMS_up = 0;
-	TMS_down = 0;
-	TMS_right = 0;
-	TMS_left = 0;
+	TMS_fwd 	= 0;
+	TMS_aft 	= 0;
+	TMS_right 	= 0;
+	TMS_left 	= 0;
 
 	// Drag Chute (can be specified per airplane)
 	dragchute_deploy	= 0;																							// Drag Chute defined per aircraft when needed

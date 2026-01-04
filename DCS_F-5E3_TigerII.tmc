@@ -1,6 +1,6 @@
 // DCS F-5E3 Tiger II Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.25.127
-// version 2.1, Jan 2026
+// version 2.2, Jan 2026
 
 
 include "target.tmh"
@@ -43,7 +43,6 @@ int main()
 	DMS_right 	= CHAIN( R_ALT, D(10), 'y' );																	// RWR Indicator Control T Button
 	DMS_left 	= CHAIN( R_ALT, D(10), 'i' );																	// RWR Indicator Control UNKNOWN SHIP Button
 
-
 	// Exterior Lighting - Full
 	extlight_full = CHAIN( DOWN+R_ALT+R_CTL, D(10), DOWN+'i', D(1000), UP+'i', D(), UP+R_ALT+R_CTL, D(),		// Exterior Lights Nav Knob - CW/Increase
 						   DOWN+R_ALT+R_CTL, D(10), DOWN+'o', D(1000), UP+'o', D(), UP+R_ALT+R_CTL, D(),		// Exterior Lights Formation Knob - CW/Increase
@@ -71,7 +70,6 @@ int main()
 
 	// Speedbrake functions
 	speedbrakes_open  = CHAIN( DOWN+L_SHIFT, D(10), PULSE+'b', D(), UP+L_SHIFT ); 								// speedbrake extend
-
 	speedbrakes_close = CHAIN( D(100), DOWN+L_CTL, D(10), PULSE+'b', D(), UP+L_CTL );							// speedbrake fully retract
 
 

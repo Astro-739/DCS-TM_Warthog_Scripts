@@ -36,12 +36,6 @@ int main()
 
 
 	// -------------------- AIRCRAFT FUNCTIONS ----------------------
-	
-	// Start-up Sequence (overwrites common)
-	startup = SEQ( CHAIN( L_ALT, D(10), 's' ), 												// MAIN PWR Switch - BATT
-				   CHAIN( R_SHIFT, D(10), 's' ), 											// MAIN PWR Switch - MAIN PWR
-				   CHAIN( R_CTL, D(10), 's' )); 											// JFS Switch - START 1
-
 
 	// Target Management Switch / Armament Selector (overwrites common)
 	TMS_fwd 	= CHAIN( R_CTL, D(10), UARROW );												// TMS fwd
@@ -55,6 +49,12 @@ int main()
 	DMS_aft 	= CHAIN( R_ALT, D(10), '.' );													// DMS aft
 	DMS_right 	= CHAIN( R_ALT, D(10), '/' );													// DMS right
 	DMS_left 	= CHAIN( R_ALT, D(10), ',' );													// DMS left
+
+	
+	// Start-up Sequence (overwrites common)
+	startup = SEQ( CHAIN( L_ALT, D(10), 's' ), 													// MAIN PWR Switch - BATT
+				   CHAIN( R_SHIFT, D(10), 's' ), 												// MAIN PWR Switch - MAIN PWR
+				   CHAIN( R_CTL, D(10), 's' )); 												// JFS Switch - START 1
 
 
 	// Autopilot function
