@@ -303,7 +303,6 @@ int dcs_f4e_pilot_controls_switch()
 								CHAIN( R_ALT, D(10), '5' ));															// O - RWR Target Separation Button
 
 
-
 	// Coolie Switch
 	// CSU
 	MapKeyIOUMD(&Throttle, CSU, CHAIN( L_SHIFT, D(10), '-'),										 					// IU - Aural Tone Volume - [Dec]
