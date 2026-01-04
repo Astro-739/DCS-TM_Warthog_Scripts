@@ -1,6 +1,6 @@
 // DCS A-4E-C Thrustmaster Warthog/AVA/MFD Script by Astro
-// TARGET version 3.0.24.618
-// version 2.0, Jan 2025
+// TARGET version 3.0.25.127
+// version 2.1, Jan 2026
 
 
 include "target.tmh"
@@ -43,6 +43,13 @@ int main()
 
 
 	// -------------------- AIRCRAFT FUNCTIONS ----------------------
+
+	// Target Management Switch / Armament Selector (overwrites common)
+	TMS_up = PULSE+'8';																									// Weapon Function Selector Switch - CW
+	TMS_down = PULSE+'7';																								// Weapon Function Selector Switch - CCW
+	TMS_right = 0;																										// 
+	TMS_left = CHAIN( DOWN+L_SHIFT, D(10), PULSE+'9', D(), UP+L_SHIFT );												// Guns Charging Switch - READY
+
 
 	// Autopilot function
 	autopilot = SEQ( CHAIN( EXEC( "autopilot_mode();" ), D(200),														// Set autopilot mode
@@ -129,22 +136,18 @@ int main()
 
 	// Weapon Release Button
 	// S2
-	MapKeyIOUMD(&AVA_F16, S2,  SEQ( CHAIN( L_ALT+L_SHIFT, D(10), '6' ),										// IU - Emergency Release Selector - AL
-									 CHAIN( L_CTL, D(10), 'j' )),												//		Emergency Stores Release Handle
-							    CHAIN( L_ALT, D(10), SPC ),														// OU - weapon release
-								SEQ( CHAIN( L_ALT+L_SHIFT, D(10), '6' ),										// IM - Emergency Release Selector - AL
-									 CHAIN( L_CTL, D(10), 'j' )),												//		Emergency Stores Release Handle
-							    0,																			 	// OM - 
-							    SEQ( CHAIN( L_ALT+L_SHIFT, D(10), '6' ),										// ID - Emergency Release Selector - AL
-									 CHAIN( L_CTL, D(10), 'j' )),												//		Emergency Stores Release Handle
-							    CHAIN( L_ALT, D(10), SPC ));													// OD - weapon release
+	MapKeyIO(&AVA_F16, S2,  SEQ( CHAIN( L_ALT+L_SHIFT, D(10), '6' ),											// I - Emergency Release Selector - AL
+								 CHAIN( L_CTL, D(10), 'j' )),													//	   Emergency Stores Release Handle
+							CHAIN( L_ALT, D(10), SPC ));														// O - weapon release
+
 
 	// Expand FOV Button - S3
 	MapKey(&AVA_F16, S3,  		0 );																			// 
 	MapKeyR(&AVA_F16, S3,  		0 );																			// 
 
 
-	// Target Management Switch
+/*	
+	// Target Management Switch   ---------   To COMMON
 	// H2U
 	MapKeyIO(&AVA_F16, H2U, 	PULSE+'8',																		// I - Weapon Function Selector Switch - CW
 							 	USB[0x55] );	 																// O - zoom in 
@@ -159,6 +162,7 @@ int main()
 								CHAIN( PULSE+BSP, D(), L_WIN, D(10), KP4 ));									// O - remove stick, snap view instruments
 	MapKeyRIO(&AVA_F16, H2L, 	0,																				// I - 
 								CHAIN( D(200), PULSE+BSP ));													// O - place stick
+*/
 
 
 	// Display Management Switch
