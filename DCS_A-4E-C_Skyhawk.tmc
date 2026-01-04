@@ -41,10 +41,18 @@ int main()
 	// -------------------- AIRCRAFT FUNCTIONS ----------------------
 
 	// Target Management Switch / Armament Selector (overwrites common)
-	TMS_up = PULSE+'8';																									// Weapon Function Selector Switch - CW
-	TMS_down = PULSE+'7';																								// Weapon Function Selector Switch - CCW
-	TMS_right = 0;																										// 
-	TMS_left = CHAIN( DOWN+L_SHIFT, D(10), PULSE+'9', D(), UP+L_SHIFT );												// Guns Charging Switch - READY
+	TMS_fwd 	= PULSE+'8';																							// Weapon Function Selector Switch - CW
+	TMS_aft 	= PULSE+'7';																							// Weapon Function Selector Switch - CCW
+	TMS_right 	= 0;																									// 
+	TMS_left 	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'9', D(), UP+L_SHIFT );												// Guns Charging Switch - READY
+
+
+	// Display Management Switch (overwrites common)
+	DMS_fwd 	= SEQ( CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_SHIFT ),						// DSCG Screen Mode - Radar/TV
+					   CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_ALT ));							//
+	DMS_aft 	= 0 ;																									// 
+	DMS_right 	= CHAIN( R_ALT, D(10), '2' );																			// RWR Search Button
+	DMS_left 	= CHAIN( R_ALT, D(10), '5' );																			// RWR Target Separation Button
 
 
 	// Autopilot function
@@ -125,6 +133,7 @@ int main()
 	// S1 - Nosewheel Steering Button
 	// H1 - Trim Switch
 	// H2 - Target Management Switch
+	// H3 - Display Management Switch
 	// JOYX
 	// JOYY
 	// -----------------------------	
@@ -142,8 +151,8 @@ int main()
 	MapKey(&AVA_F16, S3,  		0 );																			// 
 	MapKeyR(&AVA_F16, S3,  		0 );																			// 
 
-
-	// Display Management Switch
+/*
+	// Display Management Switch  ---------- To Common
 	// H3U
 	MapKeyIO(&AVA_F16, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
 									   nightvision, 500 ),																// 	   [long] Night Vision Goggles toggle
@@ -161,7 +170,7 @@ int main()
 	MapKeyIO(&AVA_F16, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
 									   CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'[', D(), UP+R_SHIFT+L_SHIFT ), 500 ),	//	   [long] Kneeboard Previous Shortcut
 								CHAIN( R_ALT, D(10), '5' ));															// O - RWR Target Separation Button
-
+*/
 
  	// Countermeasure Management Switch
 	// H4U	

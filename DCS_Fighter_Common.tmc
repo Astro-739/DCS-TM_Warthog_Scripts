@@ -99,8 +99,8 @@ int dragchute_release;
 int speedbrakes_open;
 int speedbrakes_close;
 
-int TMS_up;
-int TMS_down;
+int TMS_fwd;
+int TMS_aft;
 int TMS_right;
 int TMS_left;
 
@@ -615,14 +615,14 @@ int dcs_fighter_common_switch()
 	// H2U
 	MapKeyIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX15 );"												// I - VR zoom
 									  "else ActKey ( KEYON+DX7 );" ),													//     TrackIR zoom in slow (KP*)
-								TMS_up );																				// O - TMS up
+								TMS_fwd );																				// O - TMS fwd
 	MapKeyRIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( DX15 );"													// I - Release DX15
 									  "else ActKey ( DX7 );" ),															// 	   Release DX7
 								0 );																					// O - 
 	// H2D
 	MapKeyIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( PULSE+KEYON+L_ALT+'c' );"									// I - VR toggle mouse pointer
 									  "else ActKey ( KEYON+DX9 );" ),													// 	   TrackIR zoom out slow (KP\)
-								TMS_down ); 																			// O - TMS down
+								TMS_aft ); 																				// O - TMS aft
 	MapKeyRIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( 0 );"														// I - 
 									  "else ActKey ( DX9 );" ),															// 	   Release DX9
 								0 );																					// O - 

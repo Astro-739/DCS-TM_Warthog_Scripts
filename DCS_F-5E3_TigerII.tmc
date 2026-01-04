@@ -32,10 +32,17 @@ int main()
 	// -------------------- AIRCRAFT FUNCTIONS ----------------------
 					
 	// Target Management Switch / Armament Selector (overwrites common)
-	TMS_up = PULSE+ENT;																							// AN/APQ-159 Radar ACQ Button
-	TMS_down = 0;
-	TMS_right = 0;
-	TMS_left = 0;
+	TMS_fwd 	= PULSE+ENT;																					// AN/APQ-159 Radar ACQ Button
+	TMS_aft 	= 0;
+	TMS_right 	= 0;
+	TMS_left 	= 0;
+
+	// Display Management Switch (overwrites common)
+	DMS_fwd 	= CHAIN( R_ALT, D(10), '7' );																	// RWR Indicator Control SEARCH Button
+	DMS_aft 	= CHAIN( R_ALT, D(10), '6' );																	// RWR Indicator Control MODE Button
+	DMS_right 	= CHAIN( R_ALT, D(10), 'y' );																	// RWR Indicator Control T Button
+	DMS_left 	= CHAIN( R_ALT, D(10), 'i' );																	// RWR Indicator Control UNKNOWN SHIP Button
+
 
 	// Exterior Lighting - Full
 	extlight_full = CHAIN( DOWN+R_ALT+R_CTL, D(10), DOWN+'i', D(1000), UP+'i', D(), UP+R_ALT+R_CTL, D(),		// Exterior Lights Nav Knob - CW/Increase
@@ -91,6 +98,7 @@ int main()
 	// S1 - Nosewheel Steering Button
 	// H1 - Trim Switch
 	// H2 - Target Management Switch
+	// H3 - Display Management Switch
 	// JOYX
 	// JOYY
 	// -----------------------------	
@@ -111,7 +119,7 @@ int main()
 							    0,														 						// ID - 
 							    0);																				// OD - 
 
-
+/*
 	// Display Management Switch
 	// H3U
 	MapKeyIO(&AVA_F16, H3U, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),								// I - kneeboard on/off
@@ -128,7 +136,7 @@ int main()
 	MapKeyIO(&AVA_F16, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
 									   CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'[', D(), UP+R_SHIFT+L_SHIFT ), 500 ),	//	   [long] Kneeboard Previous Shortcut
 								CHAIN( R_ALT, D(10), 'i' ));															// O - RWR Indicator Control UNKNOWN SHIP Button
-
+*/
 								
  	// Countermeasure Management Switch
 	// H4U	
