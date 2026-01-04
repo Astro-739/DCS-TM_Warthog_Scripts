@@ -129,9 +129,6 @@ char flashlight_on = 0;
 int brightness_up;	
 int brightness_down;	
 
-int enigmacw_bogeydope;
-int enigmacw_ewpicturetoggle;
-
 char afterburnerdetent_present = 0;						// 0 - no detent present, 
 														// 1 - detent present, at mil power
 char afterburnerdetent_lifted = 0;						// 0 - detent prevents throttle from going into afterburner, 
@@ -272,6 +269,12 @@ int dcs_fighter_common_functions()
 	TMS_right 	= 0;
 	TMS_left 	= 0;
 
+	// Display Management Switch (can be specified per airplane)
+	DMS_fwd 	= 0;
+	DMS_aft 	= 0;
+	DMS_right 	= 0;
+	DMS_left 	= 0;
+
 	// Drag Chute (can be specified per airplane)
 	dragchute_deploy	= 0;																							// Drag Chute defined per aircraft when needed
 	dragchute_release	= 0;
@@ -314,11 +317,6 @@ int dcs_fighter_common_functions()
 									   "else ActKey( PULSE+KEYON+DX38 );" );											// HUD/HMCS/Reticle brightness down
 																														// FLIR brightness
 							  
-	// Enigma CW Server function
-	enigmacw_bogeydope 			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F1, D(200), PULSE+F1 ); 		// Radio menu (\), Other, EW, Bogey Dope
-	enigmacw_ewpicturetoggle 	= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F1, D(200), PULSE+F5 ); 		// Radio menu (\), Other, EW, EW Picture Toggle
-
-
 
 }	// =====  end dcs_fighter_common_functions()  =================================================
 
