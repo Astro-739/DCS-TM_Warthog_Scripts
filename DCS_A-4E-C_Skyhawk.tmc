@@ -17,9 +17,6 @@ int ap_alt;
 
 int extlight_posdim;	
 
-//int speedbrakes_open;
-//int speedbrakes_close;
-
 
 define AB 100											// detent position at AB% of full throttle reach
 
@@ -50,49 +47,49 @@ int main()
 	// Display Management Switch (overwrites common)
 	DMS_fwd 	= SEQ( CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_SHIFT ),						// DSCG Screen Mode - Radar/TV
 					   CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_ALT ));							//
-	DMS_aft 	= 0 ;																									// 
+	DMS_aft 	= 0;																									// 
 	DMS_right 	= CHAIN( R_ALT, D(10), '2' );																			// RWR Search Button
 	DMS_left 	= CHAIN( R_ALT, D(10), '5' );																			// RWR Target Separation Button
 
 
 	// Autopilot function
-	autopilot = SEQ( CHAIN( EXEC( "autopilot_mode();" ), D(200),														// Set autopilot mode
-							PULSE+'a' ),																				// Autopilot on - AFCS Engage Switch - ENGAGE/OFF
-					 PULSE+'a' );																						// Autopilot off - AFCS Engage Switch - ENGAGE/OFF
+	autopilot 	= SEQ( CHAIN( EXEC( "autopilot_mode();" ), D(200),														// Set autopilot mode
+							  PULSE+'a' ),																				// Autopilot on - AFCS Engage Switch - ENGAGE/OFF
+					   PULSE+'a' );																						// Autopilot off - AFCS Engage Switch - ENGAGE/OFF
 	
-	ap_alt = 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT, D(200),											// AFCS Altitude Switch - ALT
-					   DOWN+R_SHIFT+L_CTL, D(10), PULSE+'z', D(), UP+R_SHIFT+L_CTL );									// AFCS Heading Select Switch - OFF
-	ap_althdg = CHAIN( DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT, D(200),											// AFCS Altitude Switch - ALT
-					   DOWN+R_SHIFT+L_CTL, D(10), PULSE+'a', D(), UP+R_SHIFT+L_CTL );									// AFCS Heading Select Switch - HDG SEL
-	ap_path = 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'z', D(), UP+R_SHIFT, D(200),											// AFCS Altitude Switch - OFF
-					   DOWN+R_SHIFT+L_CTL, D(10), PULSE+'z', D(), UP+R_SHIFT+L_CTL );									// AFCS Heading Select Switch - OFF
+	ap_alt 		= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT, D(200),										// AFCS Altitude Switch - ALT
+					   	 DOWN+R_SHIFT+L_CTL, D(10), PULSE+'z', D(), UP+R_SHIFT+L_CTL );									// AFCS Heading Select Switch - OFF
+	ap_althdg 	= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT, D(200),										// AFCS Altitude Switch - ALT
+					   	 DOWN+R_SHIFT+L_CTL, D(10), PULSE+'a', D(), UP+R_SHIFT+L_CTL );									// AFCS Heading Select Switch - HDG SEL
+	ap_path 	= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'z', D(), UP+R_SHIFT, D(200),										// AFCS Altitude Switch - OFF
+					   	 DOWN+R_SHIFT+L_CTL, D(10), PULSE+'z', D(), UP+R_SHIFT+L_CTL );									// AFCS Heading Select Switch - OFF
 
 
 	// Exterior Lighting
-	extlight_full = CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+R_SHIFT,	D(100),							// Anti-Collision Light Switch - ON
-						   DOWN+R_CTL+L_SHIFT, D(10), PULSE+'l', D(), UP+R_CTL+L_SHIFT, D(100),							// Fuselage Light Switch - BRIGHT
-						   DOWN+L_ALT+L_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+L_SHIFT, D(100),							// Navigation Lights Switch - BRIGHT
-						   DOWN+R_ALT+R_SHIFT, D(10), PULSE+'l', D(), UP+R_ALT+R_SHIFT,	D(100),							// Tail Light Switch - BRIGHT
-						   DOWN+L_SHIFT, D(10), PULSE+'l', D(), UP+L_SHIFT );											// Master Exterior Lights Switch - ON
+	extlight_full 		= CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+R_SHIFT,	D(100),					// Anti-Collision Light Switch - ON
+						   		 DOWN+R_CTL+L_SHIFT, D(10), PULSE+'l', D(), UP+R_CTL+L_SHIFT, D(100),					// Fuselage Light Switch - BRIGHT
+						   		 DOWN+L_ALT+L_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+L_SHIFT, D(100),					// Navigation Lights Switch - BRIGHT
+						   		 DOWN+R_ALT+R_SHIFT, D(10), PULSE+'l', D(), UP+R_ALT+R_SHIFT,	D(100),					// Tail Light Switch - BRIGHT
+						   		 DOWN+L_SHIFT, D(10), PULSE+'l', D(), UP+L_SHIFT );										// Master Exterior Lights Switch - ON
 						   
 	// TODO *********
-	extlight_posdim = CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'l', D(), UP+L_SHIFT+R_CTL, D(100),						// Lights Anti Collision OFF
-							 DOWN+L_CTL+L_ALT, D(10), PULSE+'l', D(), UP+L_CTL+L_ALT, D(100),							// Lights Position Wing DIM
-							 DOWN+L_ALT+L_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+L_SHIFT, D(100),						// Lights Position Tail DIM
-							 PULSE+'l', D(100),																			// Exterior Lights Master Switch ON
-							 REXEC( 1, 100, "ActKey( PULSE+KEYON+R_CTL+'l' );", RNOSTOP ), 								// Lights Formation Brightnes Down
-							 D(800),																					//   loop 8x
-							 EXEC( "StopAutoRepeat(1);" ));																//   stop loop
+	extlight_posdim 	= CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'l', D(), UP+L_SHIFT+R_CTL, D(100),					// Lights Anti Collision OFF
+							 	 DOWN+L_CTL+L_ALT, D(10), PULSE+'l', D(), UP+L_CTL+L_ALT, D(100),						// Lights Position Wing DIM
+							 	 DOWN+L_ALT+L_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+L_SHIFT, D(100),					// Lights Position Tail DIM
+							 	 PULSE+'l', D(100),																		// Exterior Lights Master Switch ON
+							 	 REXEC( 1, 100, "ActKey( PULSE+KEYON+R_CTL+'l' );", RNOSTOP ), 							// Lights Formation Brightnes Down
+							 	 D(800),																				//   loop 8x
+							  	 EXEC( "StopAutoRepeat(1);" ));															//   stop loop
 						   
-	extlight_formation = CHAIN( DOWN+L_ALT+R_CTL, D(10), PULSE+'l', D(), UP+L_ALT+R_CTL, D(100),						// Anti-Collision Light Switch - OFF
-								DOWN+R_CTL+L_CTL, D(10), PULSE+'l', D(), UP+R_CTL+L_CTL, D(100),						// Fuselage Light Switch - OFF
-								DOWN+L_ALT+L_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+L_SHIFT, D(100),					// Navigation Lights Switch - BRIGHT
-								DOWN+R_ALT+R_SHIFT, D(10), PULSE+'l', D(), UP+R_ALT+R_SHIFT, D(100),					// Tail Light Switch - BRIGHT
-								DOWN+L_SHIFT, D(10), PULSE+'l', D(), UP+L_SHIFT );										// Master Exterior Lights Switch - ON
+	extlight_formation 	= CHAIN( DOWN+L_ALT+R_CTL, D(10), PULSE+'l', D(), UP+L_ALT+R_CTL, D(100),						// Anti-Collision Light Switch - OFF
+								 DOWN+R_CTL+L_CTL, D(10), PULSE+'l', D(), UP+R_CTL+L_CTL, D(100),						// Fuselage Light Switch - OFF
+								 DOWN+L_ALT+L_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+L_SHIFT, D(100),					// Navigation Lights Switch - BRIGHT
+								 DOWN+R_ALT+R_SHIFT, D(10), PULSE+'l', D(), UP+R_ALT+R_SHIFT, D(100),					// Tail Light Switch - BRIGHT
+								 DOWN+L_SHIFT, D(10), PULSE+'l', D(), UP+L_SHIFT );										// Master Exterior Lights Switch - ON
 
 	extlight_flashsteady = CHAIN( DOWN+L_SHIFT+L_WIN, D(10), PULSE+'l', D(), UP+L_SHIFT+L_WIN );						// Lighting Flash/Steady Switch - FLSH/STDY
 
-	extlight_covert = CHAIN( DOWN+L_CTL, D(10), PULSE+'l', D(), UP+L_CTL );												// Master Exterior Lights Switch - OFF
+	extlight_covert 	= CHAIN( DOWN+L_CTL, D(10), PULSE+'l', D(), UP+L_CTL );											// Master Exterior Lights Switch - OFF
 
 
 	// Ground Crew Start-up
@@ -141,14 +138,14 @@ int main()
 
 	// Weapon Release Button
 	// S2
-	MapKeyIO(&AVA_F16, S2,  SEQ( CHAIN( L_ALT+L_SHIFT, D(10), '6' ),											// I - Emergency Release Selector - AL
-								 CHAIN( L_CTL, D(10), 'j' )),													//	   Emergency Stores Release Handle
-							CHAIN( L_ALT, D(10), SPC ));														// O - weapon release
+	MapKeyIO(&AVA_F16, S2,  	SEQ( CHAIN( L_ALT+L_SHIFT, D(10), '6' ),												// I - Emergency Release Selector - AL
+								 	 CHAIN( L_CTL, D(10), 'j' )),														//	   Emergency Stores Release Handle
+								CHAIN( L_ALT, D(10), SPC ));															// O - weapon release
 
 
 	// Expand FOV Button - S3
-	MapKey(&AVA_F16, S3,  		0 );																			// 
-	MapKeyR(&AVA_F16, S3,  		0 );																			// 
+	MapKey(&AVA_F16, S3,  		0 );																					// 
+	MapKeyR(&AVA_F16, S3,  		0 );																					// 
 
 /*
 	// Display Management Switch  ---------- To Common

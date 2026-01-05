@@ -447,31 +447,11 @@ int dcs_fighter_common_controls()
 	MapKeyRIO(&Throttle, SPDF, 	EXEC( "if(VR_mode) ActKey( DX16 );"												// I - [VR] release DX16 (return to normal zoom)
 									  "else ActKey( PULSE+KEYON+KPENT );" ),									//	   snap zoom normal
 								speedbrakes_close );															// O - Close Speed Brakes
-
-
 	// SPDB
-//	MapKeyIOUMD(&Throttle, SPDB, CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),				// IU - snap zoom min    (R_SHIFT+KP/)
-//								speedbrakes_open,																// OU - Open Speed Brakes Momentary
-//								EXEC( "if(WHDN_mode) ActKey( KEYON+DX12 );" 									// IM - [WHDN] wheel brake 
-//									  "else ActKey( PULSE+KEYON+USB[0x54] );" ),								//		snap zoom min
-//								speedbrakes_open,																// OM - Open Speed Brakes Momentary
-//								CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x54], D(), UP+R_SHIFT ),					// ID - snap zoom min    (R_SHIFT+KP/)
-//								speedbrakes_open );																// OD - Open Speed Brakes Momentary
-//	MapKeyRIOUMD(&Throttle, SPDB, PULSE+KPENT,																	// IU - snap zoom normal
-//								speedbrakes_close,																// OU - Close Speed Brakes
-//								EXEC( "if(WHDN_mode) ActKey( DX12 );"											// IM - [WHDN] release DX12
-//									  "else ActKey( PULSE+KEYON+KPENT );" ),									//		snap zoom normal
-//								speedbrakes_close,																// OM - Close Speed Brakes
-//								PULSE+KPENT,																	// ID - snap zoom normal
-//								speedbrakes_close );															// OU - Close Speed Brakes
-
-
-
-	// SPDB  NEW
-	MapKeyIO(&Throttle, SPDB, EXEC( "if(WHDN_mode) ActKey( KEYON+DX12 );" ),									// I - [WHDN] wheel brake 
-							  speedbrakes_open );																// O - Open Speed Brakes Momentary
-	MapKeyRIO(&Throttle, SPDB, EXEC( "if(WHDN_mode) ActKey( DX12 );" ),											// I - [WHDN] release DX12
-							   speedbrakes_close );																// O - Close Speed Brakes
+	MapKeyIO(&Throttle, SPDB, 	EXEC( "if(WHDN_mode) ActKey( KEYON+DX12 );" ),									// I - [WHDN] wheel brake 
+							  	speedbrakes_open );																// O - Open Speed Brakes Momentary
+	MapKeyRIO(&Throttle, SPDB, 	EXEC( "if(WHDN_mode) ActKey( DX12 );" ),										// I - [WHDN] release DX12
+							   	speedbrakes_close );															// O - Close Speed Brakes
 
 
 	// China Hat
@@ -545,35 +525,35 @@ int dcs_fighter_common_controls()
 
 	// Engine Operation (Engine idle, start-up sequence, groundcrew, afterburner detent)
 	// EOLIGN
-	MapKeyIO(&Throttle, EOLIGN,		startup,																	// I - Start-up sequence
-									CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));					// O - Left Throttle - IDLE
+	MapKeyIO(&Throttle, EOLIGN,		startup,																		// I - Start-up sequence
+									CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));						// O - Left Throttle - IDLE
 	// EOLNORM
-	MapKey(&Throttle, EOLNORM, 		0 );																		//
+	MapKey(&Throttle, EOLNORM, 		0 );																			//
 	// EOLMOTOR
-	MapKeyIO(&Throttle, EOLMOTOR, 	0,																			// I - 
-									groundcrew ); 																// O - Groundcrew steps
+	MapKeyIO(&Throttle, EOLMOTOR, 	0,																				// I - 
+									groundcrew ); 																	// O - Groundcrew steps
 
 	// EORIGN
-	MapKeyIO(&Throttle, EORIGN,		0,																			// I - 
-									CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));					// O - Right Throttle - IDLE
+	MapKeyIO(&Throttle, EORIGN,		0,																				// I - 
+									CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));						// O - Right Throttle - IDLE
 	// EORNORM
-	MapKey(&Throttle, EORNORM, 		0 );																		// 
+	MapKey(&Throttle, EORNORM, 		0 );																			// 
 	// EORMOTOR
-	MapKeyIO(&Throttle, EORMOTOR, 	0,																			// I - 
-									EXEC( "afterburnerdetent_present = 1;" 										// O - Engage afterburner detent
+	MapKeyIO(&Throttle, EORMOTOR, 	0,																				// I - 
+									EXEC( "afterburnerdetent_present = 1;" 											// O - Engage afterburner detent
 										  "afterburnerdetent(1);" ));
-	MapKeyRIO(&Throttle, EORMOTOR, 	0,																			// I - 
-									EXEC( "afterburnerdetent_present = 0;" 										// O - Disengage afterburner detent
+	MapKeyRIO(&Throttle, EORMOTOR, 	0,																				// I - 
+									EXEC( "afterburnerdetent_present = 0;" 											// O - Disengage afterburner detent
 										  "afterburnerdetent(0);" ));
 
 
 	// Engine idle/off
 	// IDLELON
-	MapKey(&Throttle, IDLELON, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+END, D(), UP+L_SHIFT ));						// Throttle Left - OFF
-	MapKeyR(&Throttle, IDLELON, CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));						// Throttle Left - IDLE
+	MapKey(&Throttle, IDLELON, 		CHAIN( DOWN+L_SHIFT, D(10), PULSE+END, D(), UP+L_SHIFT ));						// Throttle Left - OFF
+	MapKeyR(&Throttle, IDLELON, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));						// Throttle Left - IDLE
 	// IDLERON
-	MapKey(&Throttle, IDLERON, 	CHAIN( D(100), DOWN+R_SHIFT, D(10), PULSE+END, D(), UP+R_SHIFT ));				// Throttle Right - OFF
-	MapKeyR(&Throttle, IDLERON, CHAIN( D(100), DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));				// Throttle Right - IDLE
+	MapKey(&Throttle, IDLERON, 		CHAIN( D(100), DOWN+R_SHIFT, D(10), PULSE+END, D(), UP+R_SHIFT ));				// Throttle Right - OFF
+	MapKeyR(&Throttle, IDLERON, 	CHAIN( D(100), DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));				// Throttle Right - IDLE
 
 
 	// THR_LEFT
@@ -734,10 +714,10 @@ int dcs_fighter_common_switch()
 
 	// LDGH (Master Caution, DTC, VR_mode, Tacview bookmark)
 	MapKeyIO(&Throttle, LDGH, 	TEMPO( CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT ),							// I - Tacview Bookmark
-									   EXEC( "VR_mode = !VR_mode;"														//     [long] switch VR mode on/off
+									   EXEC( "VR_mode = !VR_mode;"														//     [long] Switch VR mode on/off
 									   "printf(\"VR_mode = %i\\xa\", VR_mode);" ), 500 ),								// 	          print state to output window
 								TEMPO( CHAIN( DOWN+L_ALT, D(10), PULSE+'m', D(), UP+L_ALT ), 							// O - Master Caution Button
-									   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'k', D(), UP+R_CTL+R_SHIFT ), 500 ));	//	   [long]  Open DTC
+									   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'k', D(), UP+R_CTL+R_SHIFT ), 500 ));	//	   [long] Open DTC
 
 
 

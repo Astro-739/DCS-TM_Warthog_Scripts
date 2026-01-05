@@ -25,10 +25,10 @@ int dcs_f14_pilot_controls()
 
 	// JSTR layer
 	// Expand FOV Button - S3
-	MapKey(&AVA_F16, S3,  	EXEC( "if(LTRN_mode) dcs_f14_jester_lantirn_controls();"		// Switch to JESTER LANTIRN controls (LTRN_mode ON)
-								  "else dcs_f14_jester_controls();" ));						// Switch to JESTER controls (LTRN_mode OFF)
-	MapKeyR(&AVA_F16, S3,  	EXEC( "dcs_fighter_common_switch();" 							// Switch back to COMMON,
-								  "dcs_f14_pilot_controls_switch();" ));					//   and PILOT controls
+	MapKey(&AVA_F16, S3,  		EXEC( "if(LTRN_mode) dcs_f14_jester_lantirn_controls();"								// Switch to JESTER LANTIRN controls (LTRN_mode ON)
+								  	  "else dcs_f14_jester_controls();" ));												// Switch to JESTER controls (LTRN_mode OFF)
+	MapKeyR(&AVA_F16, S3,  		EXEC( "dcs_fighter_common_switch();" 													// Switch back to COMMON,
+								  	  "dcs_f14_pilot_controls_switch();" ));											//   and PILOT controls
 
 
  	// Countermeasure Management Switch

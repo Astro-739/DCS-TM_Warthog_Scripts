@@ -13,10 +13,10 @@ int autopilot_ALThold;
 int autopilot_ATThold;
 int autopilot_off;
 int autopilot;
-char autopilot_mode;
+char autopilot_mode = 0;
 
 int override;	
-char override_dog;		
+char override_dog = 0;		
 
 define AB 75											// detent position at AB% of full throttle reach
 
@@ -58,19 +58,15 @@ int main()
 
 
 	// Autopilot function
-	autopilot_ALThold = CHAIN( DOWN+L_CTL+L_SHIFT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_SHIFT,		// Autopilot PITCH Switch - ALT HOLD  (extra 100ms needed by DCS)
-							   EXEC( "autopilot_mode = 1;" ));
+	autopilot_ALThold 	= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_SHIFT,		// Autopilot PITCH Switch - ALT HOLD  (extra 100ms needed by DCS)
+							     EXEC( "autopilot_mode = 1;" ));
+	autopilot_ATThold 	= CHAIN( DOWN+L_CTL+L_ALT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_ALT,			// Autopilot PITCH Switch - ATT HOLD  (extra 100ms needed by DCS)
+							   	 EXEC( "autopilot_mode = 1;" ));
+	autopilot_off 		= CHAIN( DOWN+L_CTL, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL, 						// Autopilot PITCH Switch - A/P OFF   (extra 100ms needed by DCS)
+						   		 EXEC( "autopilot_mode = 0;" ));
 	
-	autopilot_ATThold = CHAIN( DOWN+L_CTL+L_ALT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_ALT,			// Autopilot PITCH Switch - ATT HOLD  (extra 100ms needed by DCS)
-							   EXEC( "autopilot_mode = 1;" ));
-	
-	autopilot_off = CHAIN( DOWN+L_CTL, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL, 							// Autopilot PITCH Switch - A/P OFF   (extra 100ms needed by DCS)
-						   EXEC( "autopilot_mode = 0;" ));
-	
-	autopilot_mode = 0;
-
-	autopilot = EXEC( "if(!autopilot_mode) ActKey( PULSE+KEYON+autopilot_ALThold );"
-					  "if(autopilot_mode) ActKey( PULSE+KEYON+autopilot_off );"	);
+	autopilot 			= EXEC( "if(!autopilot_mode) ActKey( PULSE+KEYON+autopilot_ALThold );"
+					  			"if(autopilot_mode) ActKey( PULSE+KEYON+autopilot_off );"	);
 
 
 	// External Lights
@@ -82,7 +78,7 @@ int main()
 								 DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'l', D(), UP+R_SHIFT+L_SHIFT, D(100),		// WING/TAIL Switch - BRT
 								 DOWN+R_CTL+L_CTL, D(10), PULSE+'l', D(), UP+R_CTL+L_CTL, D(),					// FUSELAGE Switch - OFF
 								 LED(&Throttle, LED_ONOFF, LED_CURRENT+LED4) );									// LED4 ON
-	extlight_formation  = 0;
+	extlight_formation  = 0;																					// 
 	extlight_covert		= CHAIN( DOWN+L_CTL, D(10), PULSE+'l', D(), UP+L_CTL, D(100), 							// MASTER Switch - ALL covert
 								 DOWN+R_SHIFT+L_CTL, D(10), PULSE+'l', D(), UP+R_SHIFT+L_CTL, D(100),			// WING/TAIL Switch - OFF
 								 DOWN+R_CTL+L_CTL, D(10), PULSE+'l', D(), UP+R_CTL+L_CTL, D(),					// FUSELAGE Switch - OFF
@@ -96,8 +92,6 @@ int main()
 
 
 	// A-A override function
-	override_dog = 0;
-	
 	override = EXEC( "if(!override_dog) ActKey( PULSE+KEYON+L_CTL+'3' );"										// DOGFIGHT/Missile Override Switch - DOGFIGHT
 					 "if(override_dog) ActKey( PULSE+KEYON+L_CTL+'4' );"										// DOGFIGHT/Missile Override Switch - MISSILE OVERRIDE
 					 "override_dog = !override_dog;" 															// switch override_dog
@@ -239,11 +233,11 @@ int main()
 
 	// Flaps Switch (RF Switch)
 	// FLAPU
-	MapKey(&Throttle, FLAPU,  		PULSE+'r');																		// RF Switch - NORM
+	MapKey(&Throttle, FLAPU,  	PULSE+'r');																		// RF Switch - NORM
 	// FLAPM
-	MapKey(&Throttle, FLAPM, 		CHAIN( DOWN+L_CTL, D(10), PULSE+'r', D(), UP+L_CTL ));							// RF Switch - QUIET
+	MapKey(&Throttle, FLAPM, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'r', D(), UP+L_CTL ));							// RF Switch - QUIET
 	// FLAPD
-	MapKey(&Throttle, FLAPD,  		CHAIN( DOWN+R_CTL, D(10), PULSE+'r', D(), UP+R_CTL ));							// RF Switch - SILENT
+	MapKey(&Throttle, FLAPD,  	CHAIN( DOWN+R_CTL, D(10), PULSE+'r', D(), UP+R_CTL ));							// RF Switch - SILENT
 
 
 	// Canopy

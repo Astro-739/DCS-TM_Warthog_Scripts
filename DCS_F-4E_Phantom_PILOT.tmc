@@ -24,10 +24,10 @@ int dcs_f4e_pilot_controls()
 
 	// JSTR layer
 	// Expand FOV Button - S3
-	MapKey(&AVA_F16, S3,  		EXEC( "if(LTRN_mode) dcs_f4e_jester_lantirn_controls();"	// Switch to JESTER LANTIRN controls (LTRN_mode ON)
-									  "else dcs_f4e_jester_controls();" ));					// Switch to JESTER controls (LTRN_mode OFF)
-	MapKeyR(&AVA_F16, S3,  		EXEC( "dcs_fighter_common_switch();" 						// Switch back to COMMON,
-									  "dcs_f4e_pilot_controls_switch();" ));				//   and PILOT controls
+	MapKey(&AVA_F16, S3,  		EXEC( "if(LTRN_mode) dcs_f4e_jester_lantirn_controls();"								// Switch to JESTER LANTIRN controls (LTRN_mode ON)
+									  "else dcs_f4e_jester_controls();" ));												// Switch to JESTER controls (LTRN_mode OFF)
+	MapKeyR(&AVA_F16, S3,  		EXEC( "dcs_fighter_common_switch();" 													// Switch back to COMMON,
+									  "dcs_f4e_pilot_controls_switch();" ));											//   and PILOT controls
 
 	// -------------------------------
 
@@ -159,15 +159,6 @@ int dcs_f4e_pilot_controls()
 
 	// Engine Override
 	// EFL in Phantom main script
-
-
-/*
-	// SC --  OLD
-	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - re-centre IR tracker / VR helmet
-									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'`', D(), UP+L_SHIFT ),				//     [long] discord game overlay
-									   500),
-								0 );																			// O - 
-*/
 
 
 	// U LAYER - [O] Air-to-Air Mode

@@ -43,21 +43,20 @@ int main()
 	DMS_right 	= CHAIN( R_ALT, D(10), 'y' );																	// RWR Indicator Control T Button
 	DMS_left 	= CHAIN( R_ALT, D(10), 'i' );																	// RWR Indicator Control UNKNOWN SHIP Button
 
+
 	// Exterior Lighting - Full
-	extlight_full = CHAIN( DOWN+R_ALT+R_CTL, D(10), DOWN+'i', D(1000), UP+'i', D(), UP+R_ALT+R_CTL, D(),		// Exterior Lights Nav Knob - CW/Increase
-						   DOWN+R_ALT+R_CTL, D(10), DOWN+'o', D(1000), UP+'o', D(), UP+R_ALT+R_CTL, D(),		// Exterior Lights Formation Knob - CW/Increase
-						   DOWN+L_SHIFT, D(10), PULSE+'l', D(), UP+L_SHIFT );									// Exterior Lights Beacon Switch - ON
-						
+	extlight_full 		= CHAIN( DOWN+R_ALT+R_CTL, D(10), DOWN+'i', D(1000), UP+'i', D(), UP+R_ALT+R_CTL, D(),	// Exterior Lights Nav Knob - CW/Increase
+						   		 DOWN+R_ALT+R_CTL, D(10), DOWN+'o', D(1000), UP+'o', D(), UP+R_ALT+R_CTL, D(),	// Exterior Lights Formation Knob - CW/Increase
+						   		 DOWN+L_SHIFT, D(10), PULSE+'l', D(), UP+L_SHIFT );								// Exterior Lights Beacon Switch - ON
 	// Exterior Lighting - Formation
 	extlight_fulltoform = CHAIN( DOWN+R_ALT+R_CTL, D(10), DOWN+'k', D(1000), UP+'k', D(), UP+R_ALT+R_CTL, D(),	// Exterior Lights Nav Knob - CCW/Decrease
 								 DOWN+L_CTL, D(10), PULSE+'l', D(), UP+L_CTL );									// Exterior Lights Beacon Switch - OFF
-						
-	extlight_covtoform = CHAIN( DOWN+R_ALT+R_CTL, D(10), DOWN+'o', D(1000), UP+'o', D(), UP+R_ALT+R_CTL );		// Exterior Lights Formation Knob - CW/Increase
-						
+	extlight_covtoform 	= CHAIN( DOWN+R_ALT+R_CTL, D(10), DOWN+'o', D(1000), UP+'o', D(), UP+R_ALT+R_CTL );		// Exterior Lights Formation Knob - CW/Increase
 	// Exterior Lighting - Covert
-	extlight_covert = CHAIN( DOWN+R_ALT+R_CTL, D(10), DOWN+'l', D(1000), UP+'l', D(), UP+R_ALT+R_CTL, D(),		// Exterior Lights Formation Knob - CCW/Decrease
-							 DOWN+R_ALT+R_CTL, D(10), DOWN+'k', D(200), UP+'k', D(), UP+R_ALT+R_CTL, D(),		// Exterior Lights Nav Knob - CCW/Decrease
-							 DOWN+L_CTL, D(10), PULSE+'l', D(), UP+L_CTL );										// Exterior Lights Beacon Switch - OFF
+	extlight_covert 	= CHAIN( DOWN+R_ALT+R_CTL, D(10), DOWN+'l', D(1000), UP+'l', D(), UP+R_ALT+R_CTL, D(),	// Exterior Lights Formation Knob - CCW/Decrease
+							 	 DOWN+R_ALT+R_CTL, D(10), DOWN+'k', D(200), UP+'k', D(), UP+R_ALT+R_CTL, D(),	// Exterior Lights Nav Knob - CCW/Decrease
+							 	 DOWN+L_CTL, D(10), PULSE+'l', D(), UP+L_CTL );									// Exterior Lights Beacon Switch - OFF
+
 
 	// Ground Crew Start-up
 	groundcrew = SEQ( CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F1, D(8000), 	// Radio menu (\), Ground crew, Wheel Chocks, Place 

@@ -176,6 +176,7 @@ int main()
 							  DOWN+L_ALT+L_SHIFT, D(10), PULSE+'p', D(), UP+L_ALT+L_SHIFT ),							// Autopilot on
 					   CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'p', D(), UP+L_ALT+L_CTL ));								// Autopilot off
 	
+
 	// Ground Crew Start-up
 	groundcrew	= SEQ( CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F1, D(10000), 			// Radio menu (\), Ground crew, Wheel Chocks, Place 
 							  PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F2, D(100), PULSE+F1, D(13000), 			// Radio menu (\), Ground crew, Ground Electric Power, On
@@ -184,11 +185,13 @@ int main()
 							  PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F2, D(100), PULSE+F2, D(13000), 			// Radio menu (\), Ground crew, Ground Electric Power, Off
 							  PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F2 ));					// Radio menu (\), Ground crew, Wheel Chocks, Remove
 
+
 	// Target Management Switch / Armament Selector (overwrites common)
 	TMS_fwd 	= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'w', D(), UP+R_SHIFT );												// Weapon Selector up
 	TMS_aft 	= CHAIN( DOWN+R_CTL, D(10), PULSE+'w', D(), UP+R_CTL ); 												// Weapon Selector down
 	TMS_right 	= CHAIN( DOWN+R_ALT, D(10), PULSE+'w', D(), UP+R_ALT ); 												// Weapon Selector press
 	TMS_left 	= 0;
+
 
 	// Exterior Lighting - Full
 	extlight_full 		= CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'l', D(), UP+L_SHIFT+R_SHIFT, D(100),				// Lights Anti Collision ON
@@ -198,7 +201,6 @@ int main()
 						   		 REXEC( 0, 100, "ActKey( PULSE+KEYON+R_CTL+'l' );", RNOSTOP ), 							// Lights Formation Brightnes Down
 						   		 D(800),																				// loop 8x
 						   		 EXEC( "StopAutoRepeat(0);" ));															// stop loop
-						   
 	// Exterior Lighting - Position Dim
 	extlight_posdim 	= CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'l', D(), UP+L_SHIFT+R_CTL, D(100),					// Lights Anti Collision OFF
 							 	 DOWN+L_CTL+L_ALT, D(10), PULSE+'l', D(), UP+L_CTL+L_ALT, D(100),						// Lights Position Wing DIM
@@ -207,7 +209,6 @@ int main()
 								 REXEC( 1, 100, "ActKey( PULSE+KEYON+R_CTL+'l' );", RNOSTOP ), 							// Lights Formation Brightnes Down
 								 D(800),																				//   loop 8x
 								 EXEC( "StopAutoRepeat(1);" ));															//   stop loop
-						   
 	// Exterior Lighting - Formation
 	extlight_formation 	= CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'l', D(), UP+L_SHIFT+R_CTL, D(100),					// Lights Anti Collision OFF
 								 DOWN+L_CTL+R_CTL, D(10), PULSE+'l', D(), UP+L_CTL+R_CTL, D(100),						// Lights Position Wing OFF
@@ -216,7 +217,6 @@ int main()
 								 REXEC( 2, 100, "ActKey( PULSE+KEYON+R_SHIFT+'l' );", RNOSTOP ), 						// Lights Formation Brightnes Up
 								 D(800),																				//   loop 8x
 								 EXEC( "StopAutoRepeat(2);" ));															//   stop loop
-						
 	// Exterior Lighting - Covert
 	extlight_covert 	= CHAIN( DOWN+L_CTL, D(10), PULSE+'l', D(), UP+L_CTL );											// Exterior Lights Master Switch OFF
 
