@@ -33,15 +33,22 @@ int main()
 					
 	// Target Management Switch / Armament Selector (overwrites common)
 	TMS_fwd 	= PULSE+ENT;																					// AN/APQ-159 Radar ACQ Button
-	TMS_aft 	= 0;
-	TMS_right 	= 0;
-	TMS_left 	= 0;
+	TMS_aft 	= 0;																							//
+	TMS_right 	= 0;																							//
+	TMS_left 	= 0;																							//
 
 	// Display Management Switch (overwrites common)
 	DMS_fwd 	= CHAIN( R_ALT, D(10), '7' );																	// RWR Indicator Control SEARCH Button
 	DMS_aft 	= CHAIN( R_ALT, D(10), '6' );																	// RWR Indicator Control MODE Button
 	DMS_right 	= CHAIN( R_ALT, D(10), 'y' );																	// RWR Indicator Control T Button
 	DMS_left 	= CHAIN( R_ALT, D(10), 'i' );																	// RWR Indicator Control UNKNOWN SHIP Button
+
+	// Start-up Sequence (overwrites common)
+	startup 	= SEQ( CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'b', D(), UP+R_CTL+R_SHIFT ),					// Battery Switch - BATT/OFF
+					   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'h', D(), UP+R_CTL+R_SHIFT, D(),					// Left Generator Switch - Up
+							  DOWN+R_CTL+R_SHIFT, D(10), PULSE+'j', D(), UP+R_CTL+R_SHIFT),						// Right Generator Switch - Up
+					   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'y', D(), UP+R_CTL+R_SHIFT, D(),					// Left Boost Pump Switch - ON/OFF
+							  DOWN+R_CTL+R_SHIFT, D(10), PULSE+'i', D(), UP+R_CTL+R_SHIFT));					// Right Boost Pump Switch - ON/OFF
 
 
 	// Exterior Lighting - Full
@@ -260,14 +267,9 @@ int main()
 
 	// Engine Operation
 	// EOLIGN
-	MapKeyIO(&Throttle, EOLIGN,	SEQ( CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'b', D(), UP+R_CTL+R_SHIFT ),		// I - Battery Switch - BATT/OFF
-									 CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'h', D(), UP+R_CTL+R_SHIFT, D(),	//     Left Generator Switch - Up
-											DOWN+R_CTL+R_SHIFT, D(10), PULSE+'j', D(), UP+R_CTL+R_SHIFT),		//     Right Generator Switch - Up
-									 CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'y', D(), UP+R_CTL+R_SHIFT, D(),	//     Left Boost Pump Switch - ON/OFF
-											DOWN+R_CTL+R_SHIFT, D(10), PULSE+'i', D(), UP+R_CTL+R_SHIFT)),		//     Right Boost Pump Switch - ON/OFF
+	MapKeyIO(&Throttle, EOLIGN,	startup,																		// I - Startup sequence
 								SEQ( CHAIN( L_CTL+L_SHIFT, D(10), 'c' ),										// O - Left Engine Start Button
 									 CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT )));				//	   Throttle Left - IDLE
-
 
 	// EORIGN
 	MapKeyIO(&Throttle, EORIGN, 0,																				// I - 

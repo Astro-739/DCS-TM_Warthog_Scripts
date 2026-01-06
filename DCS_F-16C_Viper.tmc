@@ -1,6 +1,6 @@
 // DCS F-16C Viper Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.25.127
-// version 2.3, Dec 2025
+// version 2.3, Jan 2026
 
 
 include "target.tmh"
@@ -205,20 +205,20 @@ int main()
 
 	// Coolie Switch
 	// CSU
-	MapKeyIO(&Throttle, CSU, CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x56], D(), UP+L_CTL ),						// I - ICP DED Increment/Decrement Switch - Decrement   (L_CTL+NUM-)
-							 TEMPO( CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'v', D(), UP+R_CTL+R_SHIFT ),		// O - FUEL QTY SEL Knob - CW
-								    CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'c', D(), UP+R_CTL+R_SHIFT ), 		//	   [long] FUEL QTY SEL Knob - NORM
-									500 ));																		//
+	MapKeyIO(&Throttle, CSU, 	CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x56], D(), UP+L_CTL ),						// I - ICP DED Increment/Decrement Switch - Decrement   (L_CTL+NUM-)
+							 	TEMPO( CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'v', D(), UP+R_CTL+R_SHIFT ),	// O - FUEL QTY SEL Knob - CW
+								       CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'c', D(), UP+R_CTL+R_SHIFT ), 	//	   [long] FUEL QTY SEL Knob - NORM
+									   500 ));																	//
 	// CSD
-	MapKeyIO(&Throttle, CSD, CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x57], D(), UP+L_CTL ),						// I - ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
-							 DX24 );																			// O - ENABLE Switch - Depress
+	MapKeyIO(&Throttle, CSD, 	CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x57], D(), UP+L_CTL ),						// I - ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
+							 	DX24 );																			// O - ENABLE Switch - Depress
 	// CSR
-	MapKeyIO(&Throttle, CSR, CHAIN( L_CTL, D(10), RARROW ), 													// I - ICP Data Control Switch - SEQ (dobber sequence)
-							 DX23 );																			// O - UNCAGE Switch
+	MapKeyIO(&Throttle, CSR, 	CHAIN( L_CTL, D(10), RARROW ), 													// I - ICP Data Control Switch - SEQ (dobber sequence)
+							 	DX23 );																			// O - UNCAGE Switch
 	// CSL
-	MapKeyIO(&Throttle, CSL, CHAIN( L_CTL, D(10), LARROW ), 													// I - ICP Data Control Switch - RET (dobber return)
-							 TEMPO( CHAIN( L_CTL, D(10), KP7 ),													// O - ICP Priority Function Button - 7 (MARK)
-									CHAIN( L_CTL, D(10), KP0 ), 500 ));											//	   [long] ICP Priority Function Button - 0 (M-SEL)
+	MapKeyIO(&Throttle, CSL, 	CHAIN( L_CTL, D(10), LARROW ), 													// I - ICP Data Control Switch - RET (dobber return)
+							 	TEMPO( CHAIN( L_CTL, D(10), KP7 ),												// O - ICP Priority Function Button - 7 (MARK)
+									   CHAIN( L_CTL, D(10), KP0 ), 500 ));										//	   [long] ICP Priority Function Button - 0 (M-SEL)
 									   
 
 	// China Hat (overwrite of common)

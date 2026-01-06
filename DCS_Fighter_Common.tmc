@@ -205,7 +205,8 @@ int dcs_fighter_common_functions()
 	flight_engagebandits 		= CHAIN( DOWN+L_WIN, D(10), PULSE+'b', D(), UP+L_WIN );									// Flight - Engage Bandits
 	flight_coverme				= CHAIN( DOWN+L_WIN, D(10), PULSE+'w', D(), UP+L_WIN );									// Flight - Cover Me
 	flight_pincerright			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F2, D(200), PULSE+F1 ); 		// Radio menu (\), Flight, Go Pincer, Right
-	flight_attackgroundtargets 	= CHAIN( DOWN+L_WIN, D(10), PULSE+'g', D(), UP+L_WIN );									// Flight - Attack ground targets
+	//flight_attackgroundtargets 	= CHAIN( DOWN+L_WIN, D(10), PULSE+'g', D(), UP+L_WIN );									// Flight - Attack ground targets
+	flight_attackgroundtargets	= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F1, D(200), PULSE+F5 ); 		// Radio menu (\), Flight, Engage, Attack ground targets
 	flight_attackairdefences 	= CHAIN( DOWN+L_WIN, D(10), PULSE+'d', D(), UP+L_WIN );									// Flight - Attack air defenses
 	flight_attackmytarget		= CHAIN( DOWN+L_WIN, D(10), PULSE+'q', D(), UP+L_WIN );									// Flight - Attack My Target
 	flight_completemissionrejoin= CHAIN( DOWN+L_WIN, D(10), PULSE+'r', D(), UP+L_WIN );									// Flight - Complete mission and rejoin
