@@ -34,7 +34,14 @@ int main()
 	
 
 	// -------------------- AIRCRAFT FUNCTIONS ----------------------
+
+	// Target Management Switch / Armament Selector (overwrites common)
+	TMS_fwd 	= CHAIN( L_CTL, D(10), UARROW );												// TMS fwd
+	TMS_aft 	= CHAIN( L_CTL, D(10), DARROW );												// TMS aft
+	TMS_right 	= CHAIN( L_CTL, D(10), RARROW );												// TMS right
+	TMS_left 	= CHAIN( L_CTL, D(10), LARROW );												// TMS left
 	
+
 	// Start-up Sequence (in Common)
 	startup = SEQ( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'s', D(), UP+R_SHIFT ), 					// Battery power
 				   CHAIN( DOWN+L_ALT, D(10), PULSE+'s', D(), UP+L_ALT ), 						// Inverter STBY
@@ -115,7 +122,7 @@ int main()
 							    PULSE+'m',															 			// M - [always use NAV]
 							    mastermodecontrolbutton);														// D - Master Mode Control Button
 
-
+/*  -------------  TO COMMON
 	// Target Management Switch
 	// H2U
 	MapKeyIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX15 );"										// I - VR zoom

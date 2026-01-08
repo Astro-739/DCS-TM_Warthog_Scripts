@@ -44,11 +44,11 @@ int main()
 	DMS_left 	= CHAIN( R_ALT, D(10), 'i' );																	// RWR Indicator Control UNKNOWN SHIP Button
 
 	// Start-up Sequence (overwrites common)
-	startup 	= SEQ( CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'b', D(), UP+R_CTL+R_SHIFT ),					// Battery Switch - BATT/OFF
-					   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'h', D(), UP+R_CTL+R_SHIFT, D(),					// Left Generator Switch - Up
-							  DOWN+R_CTL+R_SHIFT, D(10), PULSE+'j', D(), UP+R_CTL+R_SHIFT),						// Right Generator Switch - Up
-					   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'y', D(), UP+R_CTL+R_SHIFT, D(),					// Left Boost Pump Switch - ON/OFF
-							  DOWN+R_CTL+R_SHIFT, D(10), PULSE+'i', D(), UP+R_CTL+R_SHIFT));					// Right Boost Pump Switch - ON/OFF
+	startup = SEQ( CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'b', D(), UP+R_CTL+R_SHIFT ),						// Battery Switch - BATT/OFF
+				   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'h', D(), UP+R_CTL+R_SHIFT, D(),						// Left Generator Switch - Up
+						  DOWN+R_CTL+R_SHIFT, D(10), PULSE+'j', D(), UP+R_CTL+R_SHIFT),							// Right Generator Switch - Up
+				   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'y', D(), UP+R_CTL+R_SHIFT, D(),						// Left Boost Pump Switch - ON/OFF
+						  DOWN+R_CTL+R_SHIFT, D(10), PULSE+'i', D(), UP+R_CTL+R_SHIFT));						// Right Boost Pump Switch - ON/OFF
 
 
 	// Exterior Lighting - Full
