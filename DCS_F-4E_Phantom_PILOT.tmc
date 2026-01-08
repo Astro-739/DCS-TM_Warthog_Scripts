@@ -1,6 +1,6 @@
 // PILOT file for DCS_F-4E_Phantom.tmc  by Astro
 // TARGET version 3.0.25.127
-// version 2.2, Nov 2025
+// version 2.2, Jan 2026
 
 
 
@@ -137,7 +137,7 @@ int dcs_f4e_pilot_controls()
 								CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));							// O - Flaps/Slats Switch - Out
 	MapKeyRIO(&Throttle, FLAPM,	CHAIN( DOWN+R_CTL, D(10), PULSE+'f', D(), UP+R_CTL ), 							// I - Slats Override Switch Cover - Close
 								0 );																			// O - 
-								//DOWN+R_SHIFT+L_CTL, D(10), PULSE+'f', D(), UP+R_SHIFT+L_CTL, D(200),			// I - Slats Override Switch - Norm															// O - 
+								//DOWN+R_SHIFT+L_CTL, D(10), PULSE+'f', D(), UP+R_SHIFT+L_CTL, D(200),			// I - Slats Override Switch - Norm
 	// FLAPD	
 	MapKey(&Throttle, FLAPD,  	CHAIN( D(300), DOWN+L_CTL+L_ALT, D(10), PULSE+'f', D(), UP+L_CTL+L_ALT ));		// Flaps/Slats Switch - Out&Down
 
@@ -148,9 +148,9 @@ int dcs_f4e_pilot_controls()
 								CHAIN( DX33, D(300),															// O - Left Engine Ignition
 									   DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));						// 	   Throttle Left - IDLE
 
-	// EOLMOTOR
-	MapKeyIO(&Throttle, EOLMOTOR, 0,																			// I - 
-								groundcrewstartup); 															// O - Ground Crew Start-up
+	// EOLMOTOR  -------- To Common
+	//MapKeyIO(&Throttle, EOLMOTOR, 0,																			// I - 
+	//							groundcrewstartup); 															// O - Ground Crew Start-up
 
 	// EORIGN
 	MapKeyIO(&Throttle, EORIGN, 0,																				// I - 
