@@ -50,6 +50,10 @@ int main()
 				   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'y', D(), UP+R_CTL+R_SHIFT, D(),						// Left Boost Pump Switch - ON/OFF
 						  DOWN+R_CTL+R_SHIFT, D(10), PULSE+'i', D(), UP+R_CTL+R_SHIFT));						// Right Boost Pump Switch - ON/OFF
 
+	// Emergency Stores Jettison (overwrites common)
+	emergency_stores_jettison = SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),										// Emergency All Jettison Button Cover - OPEN
+									 CHAIN( L_SHIFT, D(10), 'e' ));												// Emergency All Jettison Button
+
 
 	// Exterior Lighting - Full
 	extlight_full 		= CHAIN( DOWN+R_ALT+R_CTL, D(10), DOWN+'i', D(1000), UP+'i', D(), UP+R_ALT+R_CTL, D(),	// Exterior Lights Nav Knob - CW/Increase
@@ -108,12 +112,13 @@ int main()
 	// -----------------------------	
 
 
-
+/* ---------  TO COMMON
 	// Weapon Release Button
 	// S2
 	MapKeyIO(&AVA_F16, S2,  	SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),										// I - Emergency All Jettison Button Cover - OPEN
 									 CHAIN( L_SHIFT, D(10), 'e' )),												//	   Emergency All Jettison Button
 							    DX2 );																			// O - weapon release
+*/
 
 	// Expand FOV Button - S3
 	MapKeyIOUMD(&AVA_F16, S3,  	0, 																				// IU -

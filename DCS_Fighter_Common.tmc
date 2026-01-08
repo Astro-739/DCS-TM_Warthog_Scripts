@@ -99,6 +99,8 @@ int dragchute_release;
 int speedbrakes_open;
 int speedbrakes_close;
 
+int emergency_stores_jettison;
+
 int TMS_fwd;
 int TMS_aft;
 int TMS_right;
@@ -276,6 +278,9 @@ int dcs_fighter_common_functions()
 	DMS_right 	= 0;
 	DMS_left 	= 0;
 
+	// Emergency Stores Jettison (can be specified per airplane)
+	emergency_stores_jettison = CHAIN( L_SHIFT, D(10), 'e' );															// EMERGENCY STORES JETTISON Button
+
 	// Drag Chute (can be specified per airplane)
 	dragchute_deploy	= 0;																							// Drag Chute defined per aircraft when needed
 	dragchute_release	= 0;
@@ -362,7 +367,7 @@ int dcs_fighter_common_controls()
 
 	// Weapon Release Button
 	// S2
-	MapKeyIO(&AVA_F16, S2,  	CHAIN( L_SHIFT, D(10), 'e' ), 													// I - EMERGENCY STORES JETTISON Button
+	MapKeyIO(&AVA_F16, S2,  	emergency_stores_jettison, 														// I - EMERGENCY STORES JETTISON
 								DX2 );																			// O - Weapon Release
 
 
