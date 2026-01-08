@@ -26,7 +26,7 @@ int extlight_posdim;
 //int speedbrakes_open;
 //int speedbrakes_close;
 int groundcrewstartup;
-int jettison_stores;
+//int jettison_stores;
 
 int steercmdlist, index_stcmd = 0;							// (start with second element after increment, element 0 is first element in list)
 int missilecwlist, index_mslcw = 0;							// (start in off position, element 0 is first element in list)
@@ -200,11 +200,17 @@ int main()
 	speedbrakes_open  	= PULSE+'b'; 																					// speedbrake extend
 	speedbrakes_close 	= CHAIN( D(100), DOWN+L_CTL, D(10), PULSE+'b', D(), UP+L_CTL );									// speedbrake fully retract
 
-	
+/*	
 	// Jettison Stores function
 	jettison_stores 	= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'j', D(), UP+L_CTL+L_SHIFT, D(300),					// Jettison Selector - Stores
 							 	 DOWN+L_CTL, D(10), DOWN+'j', D(700), UP+'j', D(), UP+L_CTL, D(300),					// Jettison Stores
 							 	 DOWN+L_CTL+L_ALT, D(10), PULSE+'j', D(), UP+L_CTL+L_ALT );								// Jettison Selector - Off
+*/
+	// Emergency Stores Jettison (overwrites common)
+	emergency_stores_jettison = CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'j', D(), UP+L_CTL+L_SHIFT, D(300),				// Jettison Selector - Stores
+							 		   DOWN+L_CTL, D(10), DOWN+'j', D(700), UP+'j', D(), UP+L_CTL, D(300),				// Jettison Stores
+							 		   DOWN+L_CTL+L_ALT, D(10), PULSE+'j', D(), UP+L_CTL+L_ALT );						// Jettison Selector - Off
+
 
 
 

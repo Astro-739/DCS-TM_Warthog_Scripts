@@ -31,12 +31,12 @@ int dcs_f4e_pilot_controls()
 
 	// -------------------------------
 
-
+/* --------------  TO COMMON
 	// Weapon Release Button
 	// S2
 	MapKeyIO(&AVA_F16, S2,  	jettison_stores,																		// I - Jettison Stores
 							    DX2 );																					// O - weapon release
-
+*/
 
  	// Countermeasure Management Switch
 	// H4U	
