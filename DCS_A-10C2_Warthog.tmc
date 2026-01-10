@@ -36,35 +36,35 @@ int main()
 	// -------------------- AIRCRAFT FUNCTIONS ----------------------
 
 	// Target Management Switch / Armament Selector (overwrites common)
-	TMS_fwd 	= CHAIN( L_CTL, D(10), UARROW );												// TMS fwd
-	TMS_aft 	= CHAIN( L_CTL, D(10), DARROW );												// TMS aft
-	TMS_right 	= CHAIN( L_CTL, D(10), RARROW );												// TMS right
-	TMS_left 	= CHAIN( L_CTL, D(10), LARROW );												// TMS left
+	TMS_fwd 	= CHAIN( L_CTL, D(10), UARROW );																// TMS fwd
+	TMS_aft 	= CHAIN( L_CTL, D(10), DARROW );																// TMS aft
+	TMS_right 	= CHAIN( L_CTL, D(10), RARROW );																// TMS right
+	TMS_left 	= CHAIN( L_CTL, D(10), LARROW );																// TMS left
 	
 
-	// Start-up Sequence (in Common)
-	startup = SEQ( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'s', D(), UP+R_SHIFT ), 					// Battery power
-				   CHAIN( DOWN+L_ALT, D(10), PULSE+'s', D(), UP+L_ALT ), 						// Inverter STBY
-				   CHAIN( DOWN+R_CTL, D(10), PULSE+'s', D(), UP+R_CTL )); 						// APU generator power
+	// Start-up Sequence (overwrites common)
+	startup = SEQ( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'s', D(), UP+R_SHIFT ), 									// Battery power
+				   CHAIN( DOWN+L_ALT, D(10), PULSE+'s', D(), UP+L_ALT ), 										// Inverter STBY
+				   CHAIN( DOWN+R_CTL, D(10), PULSE+'s', D(), UP+R_CTL )); 										// APU generator power
 
-	// Gound Crew (in Common)
+	// Gound Crew (overwrites common)
 	groundcrew = CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F5, D(200), PULSE+F2 );		// Radio menu (\), Prev, GroundCrew, Wheel Chocks, Remove
 
 	// Master Modes function
-	mastermode = 0;																			// mastermode 0,1,2,3		NAV, GUN, CCIP, CCRP
+	mastermode = 0;																								// mastermode 0,1,2,3		NAV, GUN, CCIP, CCRP
 	deferdelay = 0;
 	
 	mastermodecontrolbutton = CHAIN( PULSE+'m',
-									 EXEC( "mastermode = (mastermode+1)%4;" ));				// keeps track of current mastermode (assumes start in NAV)
+									 EXEC( "mastermode = (mastermode+1)%4;" ));									// keeps track of current mastermode (assumes start in NAV)
 							   
-	mastermode_aa = CHAIN( DOWN+'m', D(1000), UP+'m' );										// master mode A-A
+	mastermode_aa 			= CHAIN( DOWN+'m', D(1000), UP+'m' );												// master mode A-A
 	
-	mastermode_nav = EXEC( "while (mastermode != 0)  {"										// return to master mode NAV
-							 "DeferCall( deferdelay, &ActKey, PULSE+KEYON+'m' );"			// delayed pulse to give a/c time to switch mode
-							 "mastermode = (mastermode+1)%4;"								// walk through all modes (until NAV)
-							 "deferdelay = deferdelay + 100;"								// delay is absolute, so needs to be increased for every while loop
-							 //"printf(\" mastermode %i \\xa\", mastermode);"				// print current mastermode in output window
-						   "}" );
+	mastermode_nav 			= EXEC( "while (mastermode != 0)  {"												// return to master mode NAV
+									  "DeferCall( deferdelay, &ActKey, PULSE+KEYON+'m' );"						// delayed pulse to give a/c time to switch mode
+									  "mastermode = (mastermode+1)%4;"											// walk through all modes (until NAV)
+							 		  "deferdelay = deferdelay + 100;"											// delay is absolute, so needs to be increased for every while loop
+							 		  //"printf(\" mastermode %i \\xa\", mastermode);"							// print current mastermode in output window
+						   			"}" );
 
 
 	// Exterior Lighting
@@ -85,7 +85,7 @@ int main()
 							 	 LED(&Throttle, LED_ONOFF, LED_CURRENT-LED4) ); 										// LED4 OFF	
 
 
-	// Speedbrake functions (overwrite Common)
+	// Speedbrake functions (overwrites common)
 	speedbrakes_open  = CHAIN( EXEC( "StopAutoRepeat(6);" ), D(), 												// stop repeat in case speedbrakes are still closing
 							   DX32 );																			// press DX32 to open (Speed Brake Switch Aft)
 
@@ -273,30 +273,30 @@ int main()
 */
 
 	// Left Throttle Button
-	MapKeyIO(&Throttle, LTB, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'e', D(), UP+L_CTL ), 								// I - EJECT
-								'q' );																				// O - Left Throttle Button
+	MapKeyIO(&Throttle, LTB, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'e', D(), UP+L_CTL ), 							// I - EJECT
+								'q' );																			// O - Left Throttle Button
 								
 
 	// Flaps Switch 
 	// FLAPU
-	MapKey(&Throttle, FLAPU,  		CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ));						// Flaps Up
-	MapKeyR(&Throttle, FLAPU,  		CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));							// Flaps Down (to middle)	
+	MapKey(&Throttle, FLAPU,  		CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ));					// Flaps Up
+	MapKeyR(&Throttle, FLAPU,  		CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));						// Flaps Down (to middle)	
 	// FLAPM
-	MapKey(&Throttle, FLAPM, 		0 );																			// 
+	MapKey(&Throttle, FLAPM, 		0 );																		// 
 	// FLAPD
-	MapKey(&Throttle, FLAPD,  		CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));							// Flaps Down (to full)
-	MapKeyR(&Throttle, FLAPD,  		CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ));						// Flaps Up (to middle)
+	MapKey(&Throttle, FLAPD,  		CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));						// Flaps Down (to full)
+	MapKeyR(&Throttle, FLAPD,  		CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ));					// Flaps Up (to middle)
 
 
 	// Engine Override Left
 	// EFLNORM
-	MapKeyIO(&Throttle, EFLNORM, 	0,																				// I - 
-									CHAIN( PULSE+DX22, D(), 														// O - Flight control - NORMAL  ********* FIX DX in DCS
-										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ));							// 	   LED5 OFF for NORMAL
+	MapKeyIO(&Throttle, EFLNORM, 	0,																			// I - 
+									CHAIN( PULSE+DX22, D(), 													// O - Flight control - NORMAL  ********* FIX DX in DCS
+										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ));						// 	   LED5 OFF for NORMAL
 	// EFLOVER
-	MapKeyIO(&Throttle, EFLOVER, 	0,																				// I - 
-									CHAIN( PULSE+DX22, D(),															// O - Flight control - MANUAL REVERSION    ********* FIX DX in DCS
-										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ));							// 	   LED5 ON for MANUAL
+	MapKeyIO(&Throttle, EFLOVER, 	0,																			// I - 
+									CHAIN( PULSE+DX22, D(),														// O - Flight control - MANUAL REVERSION    ********* FIX DX in DCS
+										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ));						// 	   LED5 ON for MANUAL
 
 	// SC (overwrite of common)
 	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - re-centre IR tracker / VR helmet

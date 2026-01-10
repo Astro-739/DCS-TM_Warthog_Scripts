@@ -112,14 +112,6 @@ int main()
 	// -----------------------------	
 
 
-/* ---------  TO COMMON
-	// Weapon Release Button
-	// S2
-	MapKeyIO(&AVA_F16, S2,  	SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),										// I - Emergency All Jettison Button Cover - OPEN
-									 CHAIN( L_SHIFT, D(10), 'e' )),												//	   Emergency All Jettison Button
-							    DX2 );																			// O - weapon release
-*/
-
 	// Expand FOV Button - S3
 	MapKeyIOUMD(&AVA_F16, S3,  	0, 																				// IU -
 							    0,																				// OU - 
@@ -128,24 +120,6 @@ int main()
 							    0,														 						// ID - 
 							    0);																				// OD - 
 
-/*
-	// Display Management Switch
-	// H3U
-	MapKeyIO(&AVA_F16, H3U, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),								// I - kneeboard on/off
-								CHAIN( R_ALT, D(10), '7' ));															// O - RWR Indicator Control SEARCH Button
-	// H3D
-	MapKeyIO(&AVA_F16, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
-									   flashlight, 500 ),																//	   [long] Flashlight on/off
-								CHAIN( R_ALT, D(10), '6' ));															// O - RWR Indicator Control MODE Button
-	// H3R
-	MapKeyIO(&AVA_F16, H3R, 	TEMPO( PULSE+']', 																		// I - kneeboard next page
-									   CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+']', D(), UP+R_SHIFT+L_SHIFT ), 500 ),	//	   [long] Kneeboard Next Shortcut
-								CHAIN( R_ALT, D(10), 'y' ));															// O - RWR Indicator Control T Button
-	// H3L
-	MapKeyIO(&AVA_F16, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
-									   CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'[', D(), UP+R_SHIFT+L_SHIFT ), 500 ),	//	   [long] Kneeboard Previous Shortcut
-								CHAIN( R_ALT, D(10), 'i' ));															// O - RWR Indicator Control UNKNOWN SHIP Button
-*/
 								
  	// Countermeasure Management Switch
 	// H4U	
@@ -216,28 +190,28 @@ int main()
 								0, 																				// IM - 
 								PULSE+'-', 																		// OM - AN/APQ-159 Radar Range Selector - CCW/Decrease
 								0, 																				// ID - 
-								0);																				// OD - 
+								0 );																			// OD - 
 	// CSD
 	MapKeyIOUMD(&Throttle, CSD, CHAIN( L_CTL+L_SHIFT, D(10), '=' ), 											// IU - Missile Volume Knob - CW/Increase
 								PULSE+'=',																		// OU - AN/APQ-159 Radar Range Selector - CW/Increase
 								0, 																				// IM - 
 								PULSE+'=',																		// OM - AN/APQ-159 Radar Range Selector - CW/Increase
 								0, 																				// ID - 
-								0);																				// OD - 
+								0 );																			// OD - 
 	// CSR
-	MapKeyIOUMD(&Throttle, CSR, CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'7', D(), UP+L_CTL+L_SHIFT ),		 	// IU - Armament Position Selector Switch (RIGHT WINGTIP) - ON/OFF
+	MapKeyIOUMD(&Throttle, CSR, CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'6', D(), UP+R_WIN+L_SHIFT ),		 	// IU - Armament Position Selector Switch (RIGHT WINGTIP) - ON/OFF
 							 	DX23,																			// OU - Missile Uncage Switch
 								0, 																				// IM - 
 								0,																				// OM - 
 								0, 																				// ID - 
-								0);																				// OD - 
+								0 );																			// OD - 
 	// CSL
-	MapKeyIOUMD(&Throttle, CSL, CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'1', D(), UP+L_CTL+L_SHIFT ),			// IU - Armament Position Selector Switch (LEFT WINGTIP) - ON/OFF
+	MapKeyIOUMD(&Throttle, CSL, CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'0', D(), UP+R_WIN+L_CTL ),				// IU - Armament Position Selector Switch (LEFT WINGTIP) - ON/OFF
 								CHAIN( L_SHIFT, D(10), 'c' ),													// OU - AN/ASG-31 Sight Cage Switch
 								0, 																				// IM - 
 								CHAIN( L_SHIFT, D(10), 'c' ),													// OM - AN/ASG-31 Sight Cage Switch
 								0, 																				// ID - 
-								0);																				// OD - 
+								0 );																			// OD - 
 
 
 	// Pinky Switch (exterior lighting)
@@ -289,23 +263,6 @@ int main()
 	MapKeyIO(&Throttle, EFLOVER, 	DX22,																		// I - Aileron Limiter (Hold to turn off)
 									0 );																		// O - (Back seat)
 
-/*
-// EFRNORM
-	MapKeyIOUMD(&Throttle, EFRNORM, 0,																			// IU - 
-								0,																				// OU - 
-								// TODO *** put this in mapkey release
-								CHAIN( PULSE+'p', D(100), DOWN+'p', D(500), UP+'p', PULSE+'p' ),				// IM - Cut Drag Chute
-								0,																				// OM - (Raise tail hook)
-								0,																				// ID - 
-								0 );																			// OD - 
-	// EFROVER
-	MapKeyIOUMD(&Throttle, EFROVER, 0,																			// IU - 
-								0,																				// OU - 
-								PULSE+'p',																		// IM - Deploy Drag Chute
-								CHAIN( DOWN+'h', D(100), UP+'h' ),												// OM - Deploy Tail Hook
-								0,																				// ID - 
-								0 );																			// OD - 
-*/
 
 	// U LAYER - Air-to-Air Mode
 	// BSF - LED1 ON/OFF
@@ -325,6 +282,18 @@ int main()
 	// BSB - LED3 ON/OFF
 	MapKey(&Throttle, BSB, 		CHAIN( 0, LED(&Throttle, LED_ONOFF, LED_CURRENT+LED3) )); 						// A-G mode on, LED3 ON for D layer
 	MapKeyR(&Throttle, BSB, 	CHAIN( 0, LED(&Throttle, LED_ONOFF, LED_CURRENT-LED3) )); 						// A-G mode off, LED3 OFF for D layer
+
+
+
+// ----------------------------- MFD --------------------------------
+
+	// Left MFD GAIN
+	MapKeyIO(&LMFD, GAINU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'y' ), 											// I - Right MFD GAIN Up
+								CHAIN( L_CTL+L_SHIFT, D(10), '=' ));											// O - Missile Volume Knob - CW/Increase
+
+	MapKeyIO(&LMFD, GAIND, 		CHAIN( R_WIN+R_SHIFT, D(10), 'g' ), 											// I - Right MFD GAIN Down
+								CHAIN( L_CTL+L_SHIFT, D(10), '-' ));											// O - Missile Volume Knob - CCW/Decrease
+
 
 
 

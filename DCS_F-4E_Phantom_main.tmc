@@ -173,7 +173,7 @@ int main()
 								 CHAIN( DOWN+R_WIN+R_CTL, D(10), PULSE+'l', D(), UP+R_WIN+R_CTL ));						// Light Flasher Mode - Steady
 
 
-	// Ground Crew Start-up
+	// Ground Crew Start-up (overwrites common)
 	groundcrew = SEQ( CHAIN( DOWN+R_CTL, D(10), PULSE+'1', D(), UP+R_CTL, D(5000), 									 	// Crew Chief Command: Wheel Chocks > Place
 							 DOWN+R_CTL, D(10), PULSE+'3', D(), UP+R_CTL ),												// Crew Chief Command: External Power > Connect
 					  CHAIN( DOWN+R_CTL, D(10), PULSE+'0', D(), UP+R_CTL, D(7000), 										// Crew Chief Command: Comms Check
