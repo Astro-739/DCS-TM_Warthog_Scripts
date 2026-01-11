@@ -5,6 +5,8 @@
 
 
 
+
+
 // ---------------------------------- F-14B PILOT CONTROLS ----------------------------------------
 
 int dcs_f14_pilot_controls()
@@ -31,7 +33,25 @@ int dcs_f14_pilot_controls()
 								  	  "dcs_f14_pilot_controls_switch();" ));											//   and PILOT controls
 
 
- 	// Countermeasure Management Switch
+	// Target Management Switch / Armament Selector (overwrites common)
+	TMS_fwd 	= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'w', D(), UP+R_SHIFT );												// Weapon Selector up
+	TMS_aft 	= CHAIN( DOWN+R_CTL, D(10), PULSE+'w', D(), UP+R_CTL ); 												// Weapon Selector down
+	TMS_right 	= CHAIN( DOWN+R_ALT, D(10), PULSE+'w', D(), UP+R_ALT ); 												// Weapon Selector press
+	TMS_left 	= 0;																									// 
+
+	
+	// Display Management Switch (overwrites common)
+	DMS_fwd 	= CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'v', D(), UP+L_ALT+R_SHIFT );									// VDI Mode Toggle
+	DMS_aft 	= CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'h', D(), UP+L_ALT+R_SHIFT );									// HSD Mode Toggle
+	DMS_right 	= TEMPO( EXEC( "index_stcmd = (index_stcmd+1)%5;"														// Steer CMD next
+							   "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ),									// 		
+						 CHAIN( DOWN+L_SHIFT, D(10), PULSE+'7', D(), UP+L_SHIFT ), 500 );								// long] Display mode next
+	DMS_left 	= TEMPO( EXEC( "index_stcmd = (index_stcmd+4)%5;"														// Steer CMD previous
+							   "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ),									// 		
+						 CHAIN( DOWN+L_SHIFT, D(10), PULSE+'6', D(), UP+L_SHIFT ), 500 );								// [long] Display mode previous
+
+
+	// Countermeasure Management Switch
 	// H4U	
 	MapKeyIO(&AVA_F16, H4U, 	CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'t', D(), UP+R_SHIFT+L_SHIFT ),				// I - Target designate up / VSL HI
 							 	CHAIN( L_SHIFT, D(10), 'd' ));															// O - DLC Thumbwheel Forward
