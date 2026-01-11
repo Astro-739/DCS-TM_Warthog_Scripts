@@ -320,9 +320,9 @@ int main()
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED3) )); 							//     LED3 OFF for D layer
 
 
-// ----------------------------- MFD --------------------------------
+	// ---------------------------- MFD -----------------------------
 
-	// Backup on MFD for MAN RNG Knob
+	// Backup on Left MFD for MAN RNG Knob
 	MapKeyIO(&LMFD, SYMU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'o' ), 											// I - Right MFD SYM Up
 								CHAIN( R_WIN+R_CTL, D(10), 'o' ));												// O - MAN RNG Knob - CW
 

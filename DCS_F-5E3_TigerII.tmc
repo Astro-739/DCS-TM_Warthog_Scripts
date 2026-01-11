@@ -285,7 +285,7 @@ int main()
 
 
 
-// ----------------------------- MFD --------------------------------
+	// --------------------------- MFD ------------------------------
 
 	// Left MFD GAIN
 	MapKeyIO(&LMFD, GAINU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'y' ), 											// I - Right MFD GAIN Up
