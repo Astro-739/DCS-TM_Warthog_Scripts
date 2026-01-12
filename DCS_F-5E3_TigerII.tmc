@@ -296,7 +296,12 @@ int main()
 
 	MapKeyIO(&LMFD, GAIND, 		CHAIN( R_WIN+R_SHIFT, D(10), 'g' ), 											// I - Right MFD GAIN Down
 								CHAIN( L_CTL+L_SHIFT, D(10), '-' ));											// O - Missile Volume Knob - CCW/Decrease
+	// Left MFD SYM
+	MapKeyIO(&LMFD, SYMU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'o' ), 											// I - Right MFD SYM Up
+								CHAIN( L_CTL+L_SHIFT, D(10), 's' ));											// O - Select Jettison Switch - Up
 
+	MapKeyIO(&LMFD, SYMD, 		CHAIN( R_WIN+R_SHIFT, D(10), 'k' ), 											// I - Right MFD SYM Down
+								CHAIN( L_CTL+L_SHIFT, D(10), 'f' ));											// O - Select Jettison Switch - Down
 
 
 
