@@ -101,12 +101,9 @@ int main()
 
 
 	// Expand FOV Button - S3
-	MapKeyIOUMD(&AVA_F16, S3,  	0, 																				// IU -
-							    0,																				// OU - 
-							    0, 																				// IM -
-							    0,													 							// OM - 
-							    0,														 						// ID - 
-							    0);																				// OD - 
+	MapKeyUMD(&AVA_F16, S3,  	DX22,																			// U - Aileron Limiter (Hold to turn off)
+							    0,													 							// M - 
+							    0 );																			// D - 
 
 
 	// Target Management Switch / Armament Selector (overwrites common)
@@ -283,7 +280,7 @@ int main()
 	// BSB - LED3 ON/OFF
 	MapKey(&Throttle, BSB, 		CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'b', D(), UP+L_SHIFT+R_SHIFT, D(),	// A-G mode on, External Stores Selector - BOMB
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED3) )); 							// LED3 ON for D layer
-	MapKeyR(&Throttle, BSB, 	CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'b', D(), UP+L_SHIFT+R_SHIFT, D(),	// A-G mode off, External Stores Selector - SAFE
+	MapKeyR(&Throttle, BSB, 	CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT+R_SHIFT, D(),	// A-G mode off, External Stores Selector - SAFE
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED3) )); 							// LED3 OFF for D layer
 
 
