@@ -195,11 +195,6 @@ int main()
 	dragchute_deploy	= PULSE+'p';																					// Deploy Drag-Parachute
 	dragchute_release	= CHAIN( DOWN+R_CTL, D(10), PULSE+'p', D(), UP+R_CTL );											// Release Drag-Parachute
 
-
-	// Speedbrake functions
-	speedbrakes_open  	= PULSE+'b'; 																					// speedbrake extend
-	speedbrakes_close 	= CHAIN( D(100), DOWN+L_CTL, D(10), PULSE+'b', D(), UP+L_CTL );									// speedbrake fully retract
-
 /*	
 	// Jettison Stores function
 	jettison_stores 	= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'j', D(), UP+L_CTL+L_SHIFT, D(300),					// Jettison Selector - Stores

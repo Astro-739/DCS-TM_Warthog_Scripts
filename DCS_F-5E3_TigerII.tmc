@@ -30,7 +30,20 @@ int main()
 
 
 	// -------------------- AIRCRAFT FUNCTIONS ----------------------
-					
+
+	// Target Management Switch / Armament Selector (overwrites common)
+	TMS_fwd 	= PULSE+ENT;																					// AN/APQ-159 Radar ACQ Button
+	TMS_aft 	= 0;																							//
+	TMS_right 	= 0;																							//
+	TMS_left 	= 0;																							//
+
+	// Display Management Switch (overwrites common)
+	DMS_fwd 	= CHAIN( R_ALT, D(10), '7' );																	// RWR Indicator Control SEARCH Button
+	DMS_aft 	= CHAIN( R_ALT, D(10), '6' );																	// RWR Indicator Control MODE Button
+	DMS_right 	= CHAIN( R_ALT, D(10), 'y' );																	// RWR Indicator Control T Button
+	DMS_left 	= CHAIN( R_ALT, D(10), 'i' );																	// RWR Indicator Control UNKNOWN SHIP Button
+
+	
 	// Start-up Sequence (overwrites common)
 	startup = SEQ( CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'b', D(), UP+R_CTL+R_SHIFT ),						// Battery Switch - BATT/OFF
 				   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'h', D(), UP+R_CTL+R_SHIFT, D(),						// Left Generator Switch - Up
@@ -104,19 +117,6 @@ int main()
 	MapKeyUMD(&AVA_F16, S3,  	DX22,																			// U - Aileron Limiter (Hold to turn off)
 							    0,													 							// M - 
 							    0 );																			// D - 
-
-
-	// Target Management Switch / Armament Selector (overwrites common)
-	TMS_fwd 	= PULSE+ENT;																					// AN/APQ-159 Radar ACQ Button
-	TMS_aft 	= 0;																							//
-	TMS_right 	= 0;																							//
-	TMS_left 	= 0;																							//
-
-	// Display Management Switch (overwrites common)
-	DMS_fwd 	= CHAIN( R_ALT, D(10), '7' );																	// RWR Indicator Control SEARCH Button
-	DMS_aft 	= CHAIN( R_ALT, D(10), '6' );																	// RWR Indicator Control MODE Button
-	DMS_right 	= CHAIN( R_ALT, D(10), 'y' );																	// RWR Indicator Control T Button
-	DMS_left 	= CHAIN( R_ALT, D(10), 'i' );																	// RWR Indicator Control UNKNOWN SHIP Button
 
 
  	// Countermeasure Management Switch
