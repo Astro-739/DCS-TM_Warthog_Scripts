@@ -501,7 +501,12 @@ int dcs_fighter_common_controls()
 	MapKey(&Throttle, APUOFF, 	0 );																			//
 
 
-	// LDGH (in JESTER switch section)
+	// LDGH (Master Caution, DTC, VR_mode, Tacview bookmark)
+	MapKeyIO(&Throttle, LDGH, 	TEMPO( CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT ),							// I - Tacview Bookmark
+									   EXEC( "VR_mode = !VR_mode;"														//     [long] Switch VR mode on/off
+									   "printf(\"VR_mode = %i\\xa\", VR_mode);" ), 500 ),								// 	          print state to output window
+								TEMPO( CHAIN( DOWN+L_ALT, D(10), DOWN+'m', D(300), UP+'m', D(10), UP+L_ALT ), 			// O - Master Caution Button
+									   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'k', D(), UP+R_CTL+R_SHIFT ), 500 ));	//	   [long] Open DTC
 
 
 	// Engine Override Left (Front/Back seat, manual pitch override)
@@ -717,20 +722,8 @@ int dcs_fighter_common_switch()
 								radiomenu );			 																// O - Radio menu
 
 
-
-	// LDGH (Master Caution, DTC, VR_mode, Tacview bookmark)
-	MapKeyIO(&Throttle, LDGH, 	TEMPO( CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT ),							// I - Tacview Bookmark
-									   EXEC( "VR_mode = !VR_mode;"														//     [long] Switch VR mode on/off
-									   "printf(\"VR_mode = %i\\xa\", VR_mode);" ), 500 ),								// 	          print state to output window
-								TEMPO( CHAIN( DOWN+L_ALT, D(10), DOWN+'m', D(300), UP+'m', D(10), UP+L_ALT ), 			// O - Master Caution Button
-									   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'k', D(), UP+R_CTL+R_SHIFT ), 500 ));	//	   [long] Open DTC
-
-
-
-
-
-
 }	// end dcs_fighter_common_switch()	===========================================================
+
 
 
 

@@ -147,11 +147,6 @@ int dcs_f4e_pilot_controls()
 	MapKeyIO(&Throttle, EOLIGN,	0,																				// I - 
 								CHAIN( DX33, D(300),															// O - Left Engine Ignition
 									   DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));						// 	   Throttle Left - IDLE
-
-	// EOLMOTOR  -------- To Common
-	//MapKeyIO(&Throttle, EOLMOTOR, 0,																			// I - 
-	//							groundcrewstartup); 															// O - Ground Crew Start-up
-
 	// EORIGN
 	MapKeyIO(&Throttle, EORIGN, 0,																				// I - 
 								CHAIN( DX34, D(300), 															// O - Right Engine Ignition
