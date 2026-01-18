@@ -98,7 +98,7 @@ int dcs_f4e_pilot_controls()
 	MapKey(&Throttle, APALT, 	CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'h', D(), UP+L_ALT+L_CTL ));					// ALT Hold - Disengage
 
 
-								
+/*								
 	// China Hat (overwrite of common)   -- TODO use DX13/14 and move to common
 	// CHF
 	MapKeyIO(&Throttle, CHF, 	brightness_up, 																	// I - brightness up for reticle/NVG
@@ -106,6 +106,7 @@ int dcs_f4e_pilot_controls()
 	// CHB
 	MapKeyIO(&Throttle, CHB, 	brightness_down,																// I - brightness down for reticle/NVG
 							 	CHAIN( L_ALT+R_SHIFT, D(10), '-' )); 											// O - Reticle Depression - [Inc]
+*/
 
 	// Pinky Switch (exterior lighting)
 	// PSF
@@ -212,63 +213,6 @@ int dcs_f4e_pilot_controls()
 int dcs_f4e_pilot_controls_switch()
 {
 
-/*
-	// Target Management Switch  --------------  To COMMON
-	// H2U
-	MapKeyIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX15 );"												// I - VR zoom
-									  "else ActKey ( KEYON+DX7 );" ),													//     TrackIR zoom in slow (KP*)
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT, D(200),							// O - Gun/Missile Pinky Switch - Radar
-									   DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ));								//	   HUD Mode - A/A
-	MapKeyRIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( DX15 );"													// I - Release DX15
-									  "else ActKey ( DX7 );" ),															// 	   Release DX7
-								0 );																					// O - 
-	// H2D
-	MapKeyIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( PULSE+KEYON+L_ALT+'c' );"									// I - VR toggle mouse pointer
-									  "else ActKey ( KEYON+DX9 );" ),													// 	   TrackIR zoom out slow (KP\)
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'w', D(), UP+L_SHIFT, D(200),							// O - Gun/Missile Pinky Switch - Gun
-									   DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT ));									// 	   HUD Mode - Cage
-	MapKeyRIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( 0 );"														// I - 
-									  "else ActKey ( DX9 );" ),															// 	   Release DX9
-								0 );																					// O - 
-	// H2R							
-	MapKeyIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX18 );"												// I - VR Right mouse click
-									  "else ActKey ( KEYON+DX8 );" ),													// 	   TrackIR snap view right MFD (LWIN+KP6)
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT, D(200),							// O - Gun/Missile Pinky Switch - Heat
-									   DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ));								//	   HUD Mode - A/A
-	MapKeyRIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( DX18 );"													// I - Release DX18
-									  "else ActKey ( DX8 );" ),															// 	   Release DX8
-								0 );																					// O - 
-	// H2L
-	MapKeyIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX17 );"												// I - VR Left mouse click
-									  "else ActKey ( KEYON+DX10 );" ),													// 	   TrackIR snap view left MFD (LWIN+KP4)
-								0 );																					// O - 
-	MapKeyRIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( DX17 );"													// I - Release DX17
-									  "else ActKey ( DX10 );" ),														// 	   Release DX10
-								0 );																					// O - 
-*/
-
-/*
-	// Target Management Switch  ---------  OLD
-	// H2U
-	MapKeyIO(&AVA_F16, H2U, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT, D(200),							// I - Gun/Missile Pinky Switch - Radar
-									   DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ),								//	   HUD Mode - A/A
-								DX7 );																					// O - zoom in  (KP*)
-	// H2D
-	MapKeyIO(&AVA_F16, H2D, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'w', D(), UP+L_SHIFT, D(200),							// I - Gun/Missile Pinky Switch - Gun
-									   DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT ),									// 	   HUD Mode - Cage
-								DX9 );																					// O - zoom out  (KP\)
-	// H2R							
-	MapKeyIO(&AVA_F16, H2R, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT, D(200),							// I - Gun/Missile Pinky Switch - Heat
-									   DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT ),								//	   HUD Mode - A/A
-								CHAIN( L_WIN, D(10), KP6 ));															// O - snap view radar   // TODO switch to DX8
-	// H2L
-	MapKeyIO(&AVA_F16, H2L, 	0,																						// I -
-								CHAIN( DOWN+R_SHIFT, D(10), PULSE+BSP, D(), UP+R_SHIFT, D(),							// O - remove stick
-								L_WIN, D(10), KP2 ));																	//     snap view instruments   // TODO switch to DX10
-	MapKeyRIO(&AVA_F16, H2L, 	0,																						// I - 
-								CHAIN( D(200), DOWN+R_CTL, D(10), PULSE+BSP, D(), UP+R_CTL ));							// O - place stick
-*/
-
 	// Display Management Switch
 	// H3U
 	MapKeyIO(&AVA_F16, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
@@ -297,9 +241,9 @@ int dcs_f4e_pilot_controls_switch()
      	 							  	"ActKey( KEYON+PULSE+X(missilecwlist, index_mslcw) );"							//
 										"}" ),																			//
 								0,																	  					// IM - 
-								0,																	 					// OM - 
+								DX40,																 					// OM - Reticle Depression - [Dec]
 								CHAIN( L_SHIFT, D(10), '-'),										 					// ID - Aural Tone Volume - [Dec]
-								0 ); 																					// OD - 
+								DX40 ); 																				// OD - Reticle Depression - [Dec]
 	// CSD
 	MapKeyIOUMD(&Throttle, CSD, CHAIN( L_SHIFT, D(10), '='),										 					// IU - Aural Tone Volume - [Inc]
 								EXEC( "if (index_mslcw < 2) {"															// OU - Radar-Missile CW - [Up]
@@ -307,9 +251,9 @@ int dcs_f4e_pilot_controls_switch()
      	 							  	"ActKey( KEYON+PULSE+X(missilecwlist, index_mslcw) );"							//
 										"}" ),																			//
 								0,																	  					// IM - 
-								0,																	 					// OM - 
+								DX39,																 					// OM - Reticle Depression - [Inc]
 								CHAIN( L_SHIFT, D(10), '='),										 					// ID - Aural Tone Volume - [Inc]
-								0 );																 					// OD - 
+								DX39 );																 					// OD - Reticle Depression - [Inc]
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, 0,																						// IU - 
 								DX23,			// TODO check refuel													// OU - Air Refuel Release Button (ARR) - missile uncage

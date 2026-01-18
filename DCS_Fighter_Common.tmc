@@ -485,6 +485,7 @@ int dcs_fighter_common_controls()
 									   PULSE+DX21, 500 ),														//     [long] discord mute toggle
 								0 );																			// O - 
 
+								
 	// APUON (APU & Air Refuel)
 	MapKeyIO(&Throttle, APUON, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'f', D(), UP+R_SHIFT,	D(), 					// I - AIR REFUEL Switch - OPEN
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5), D(),						// 		LED5 ON for Aerial Refuelling

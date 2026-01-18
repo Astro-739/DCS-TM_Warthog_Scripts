@@ -186,16 +186,16 @@ int main()
 	MapKeyIOUMD(&Throttle, CSU, CHAIN( L_CTL+L_SHIFT, D(10), '-' ), 											// IU - Missile Volume Knob - CCW/Decrease
 								PULSE+'-', 																		// OU - AN/APQ-159 Radar Range Selector - CCW/Decrease
 								0, 																				// IM - 
-								PULSE+'-', 																		// OM - AN/APQ-159 Radar Range Selector - CCW/Decrease
+								DX40, 																			// OM - AN/ASG-31 Sight Reticle Depression Knob - CCW/Decrease
 								0, 																				// ID - 
-								0 );																			// OD - 
+								DX40 );																			// OD - AN/ASG-31 Sight Reticle Depression Knob - CCW/Decrease
 	// CSD
 	MapKeyIOUMD(&Throttle, CSD, CHAIN( L_CTL+L_SHIFT, D(10), '=' ), 											// IU - Missile Volume Knob - CW/Increase
 								PULSE+'=',																		// OU - AN/APQ-159 Radar Range Selector - CW/Increase
 								0, 																				// IM - 
-								PULSE+'=',																		// OM - AN/APQ-159 Radar Range Selector - CW/Increase
+								DX39,																			// OM - AN/ASG-31 Sight Reticle Depression Knob - CW/Increase
 								0, 																				// ID - 
-								0 );																			// OD - 
+								DX39 );																			// OD - AN/ASG-31 Sight Reticle Depression Knob - CW/Increase
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'6', D(), UP+R_WIN+L_SHIFT ),		 	// IU - Armament Position Selector Switch (RIGHT WINGTIP) - ON/OFF
 							 	DX23,																			// OU - Missile Uncage Switch
