@@ -145,6 +145,13 @@ int main()
 						 DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT );												// HUD Mode - A/A
 	TMS_left 	= 0;																									// 
 
+	// Display Management Switch (overwrites common)
+	DMS_fwd 	= SEQ( CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_SHIFT ),						// DSCG Screen Mode - Radar/TV
+					   CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_ALT ));							//     
+	DMS_aft 	= 0;																									// DMS aft
+	DMS_right 	= CHAIN( R_ALT, D(10), '2' );																			// RWR Search Button
+	DMS_left 	= CHAIN( R_ALT, D(10), '5' );																			// RWR Target Separation Button
+
 
 	// Autopilot function
 	autopilot = SEQ( CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'a', D(), UP+L_ALT+L_SHIFT, D(200),						// Autopilot on
