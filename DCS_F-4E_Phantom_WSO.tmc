@@ -26,58 +26,7 @@ int dcs_f4e_wso_controls()
 	MapKey(&AVA_F16, S3,  		0 );													// Switch off
 	MapKeyR(&AVA_F16, S3,  		0 ); 													// Switch off 
 
-
-	// Weapon Release Button
-	// S2
-	// Same as PILOT
-
-	// Target Management Switch
-	// H2U
-	MapKeyIO(&AVA_F16, H2U, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT ),								// I - Gun/Missile Pinky Switch - Radar
-								USB[0x55] );																			// O - zoom in  (KP*)
-	MapKeyRIO(&AVA_F16, H2U, 	0,																						// I -
-								0 );																					// O -
-	// H2D
-	MapKeyIO(&AVA_F16, H2D, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'w', D(), UP+L_SHIFT ), 								// I - Gun/Missile Pinky Switch - Gun
-								USB[0x54] );																			// O - zoom out  (KP\)
-	MapKeyRIO(&AVA_F16, H2D, 	0,																						// I -
-								0 );																					// O -
-	// H2R							
-	MapKeyIO(&AVA_F16, H2R, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT ), 								// I - Gun/Missile Pinky Switch - Heat
-								CHAIN( L_WIN, D(10), KP6 ));															// O - snap view radar
-	MapKeyRIO(&AVA_F16, H2R, 	0,																						// I -
-								0 );																					// O -
-	// H2L
-	MapKeyIO(&AVA_F16, H2L, 	CHAIN( DOWN+L_CTL, D(10), DOWN+'i', D(300), UP+L_CTL+'i' ),								// I - Antenna Hand Control Challenge Button
-								CHAIN( DOWN+R_SHIFT, D(10), PULSE+BSP, D(), UP+R_SHIFT, D(),							// O - remove stick
-								L_WIN, D(10), KP2 ));																	//     snap view instruments
-	MapKeyRIO(&AVA_F16, H2L, 	0,																						// I - 
-								CHAIN( D(200), DOWN+R_CTL, D(10), PULSE+BSP, D(), UP+R_CTL ));							// O - place stick
-
-
-	// Display Management Switch
-	// H3U
-	MapKeyIO(&AVA_F16, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
-									   nightvision, 500 ),																// 	   [long] Night Vision Goggles toggle
-								TEMPO( CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+']', D(), UP+L_ALT+R_SHIFT ),			// O - Radar Range - [CW]
-									   CHAIN( DOWN+L_CTL, D(10), PULSE+'v', D(), UP+L_CTL ), 500 ));					// 	   [long] Helmet Visor toggle
-	// H3D
-	MapKeyIO(&AVA_F16, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
-									   flashlight, 500 ),																//	   [long] Flashlight on/off	
-								CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'[', D(), UP+L_ALT+R_SHIFT ));					// O - Radar Range - [CCW]
-	// H3R
-	MapKeyIO(&AVA_F16, H3R, 	TEMPO( PULSE+']', 																		// I - kneeboard next page
-									   CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'.', D(), UP+L_ALT+L_SHIFT ), 500 ),   	// 	   [long] Radar Display Mode - [CW]
-								TEMPO( CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+']', D(), UP+L_ALT+L_SHIFT ),			// O - Target Aspect - [CW]
-									   CHAIN( R_ALT, D(10), '2' ), 500 ));												//	   [long] RWR Search Button
-	// H3L
-	MapKeyIO(&AVA_F16, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
-									   CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+',', D(), UP+L_ALT+L_SHIFT ), 500 ),		//	   [long] Radar Display Mode - [CCW]
-								TEMPO( CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'[', D(), UP+L_ALT+L_SHIFT ),			// O - Target Aspect - [CW]
-									   CHAIN( R_ALT, D(10), '5' ), 500 ));												//	   [long] RWR Target Separation Button
-
-
-
+	
  	// Countermeasure Management Switch
 	// H4U	
 	MapKeyIO(&AVA_F16, H4U, 	0,																						// I - 
@@ -117,16 +66,6 @@ int dcs_f4e_wso_controls()
 	// SCY
 	// -----------------------------
 
-
-
-								
-	// China Hat
-	// CHF
-	MapKeyIO(&Throttle, CHF, 	brightness_up, 																	// I - brightness up for reticle/NVG
-							 	'=' ); 																			// O - Antenna Elevation - Up
-	// CHB
-	MapKeyIO(&Throttle, CHB, 	brightness_down,																// I - brightness down for reticle/NVG
-							 	'-' ); 																			// O - Antenna Elevation - Down
 
 	// Pinky Switch (exterior lighting)
 	// PSF
@@ -180,14 +119,6 @@ int dcs_f4e_wso_controls()
 								CHAIN( DOWN+'c', D(200), UP+'c' ));														// OD - Cage Button
 
 
-	// LDGH
-	MapKeyIOUMD(&Throttle, LDGH, 0, 																			// IU - 
-								CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x38], D(), UP+R_ALT ),						// OU - Master Caution Button
-								0, 																				// IM - 
-								CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x38], D(), UP+R_ALT ),						// OM - Master Caution Button
-								0, 																				// ID - 
-								CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x38], D(), UP+R_ALT ));					// OD - Master Caution Button
-
 	// Flaps Switch
 	// FLAPU
 	MapKey(&Throttle, FLAPU,  	0 );																			// 
@@ -196,28 +127,7 @@ int dcs_f4e_wso_controls()
 	// FLAPD	
 	MapKey(&Throttle, FLAPD,  	0 );																			// 
 
-	// Engine Operation
-	// EOLIGN
-	MapKeyIO(&Throttle, EOLIGN,	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'c', D(), UP+R_SHIFT ),						// I - Crank Left Engine
-								CHAIN( DOWN+R_ALT, D(10), PULSE+HOME, D(), UP+R_ALT ));							// O - Throttle Left - IDLE
-
-	// EOLMOTOR
-	MapKeyIO(&Throttle, EOLMOTOR, 0,																			// I - 
-								groundcrewstartup); 															// O - Ground Crew Start-up
-
-	// EORIGN
-	MapKeyIO(&Throttle, EORIGN, CHAIN( DOWN+R_CTL, D(10), PULSE+'c', D(), UP+R_CTL ),							// I - Crank Right Engine
-								CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));						// O - Throttle Right - IDLE
-
-	// Engine Override
-	// EFL in Phantom main script
-	// EFRNORM
-	MapKey(&Throttle, EFRNORM, 0 );																				// 
-	// EFROVER
-	MapKey(&Throttle, EFROVER, 0 );																				// air refuelling maybe here
-
-
-
+/*  FOR NOW DO NOT ADJUST LAYERS
 	// U LAYER - [O] Air-to-Air Mode
 	//			 [I] ACM Mode
 	// BSF - LED1 ON/OFF
@@ -261,7 +171,7 @@ int dcs_f4e_wso_controls()
 											 "printf(\"LTRN_mode = 0\\xa\");" ),										// 
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED3) ));									// 	   A-G mode off, LED3 OFF for D layer
 
-
+*/
 
 
 
