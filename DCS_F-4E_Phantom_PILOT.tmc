@@ -212,26 +212,6 @@ int dcs_f4e_pilot_controls()
 
 int dcs_f4e_pilot_controls_switch()
 {
-/*
-	// Display Management Switch
-	// H3U
-	MapKeyIO(&AVA_F16, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
-									   nightvision, 500 ),																// 	   [long] Night Vision Goggles toggle
-								SEQ( CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_SHIFT ),			// O - DSCG Screen Mode - Radar/TV
-									 CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_ALT )));			//     
-	// H3D
-	MapKeyIO(&AVA_F16, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
-									   flashlight, 500 ),																//	   [long] Flashlight on/off	
-								CHAIN( 0 ));																			// O - 
-	// H3R
-	MapKeyIO(&AVA_F16, H3R, 	TEMPO( PULSE+']', 																		// I - kneeboard next page
-									   CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+']', D(), UP+R_SHIFT+L_SHIFT ), 500 ),	//	   [long] Kneeboard Next Shortcut
-								CHAIN( R_ALT, D(10), '2' ));															// O - RWR Search Button
-	// H3L
-	MapKeyIO(&AVA_F16, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
-									   CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'[', D(), UP+R_SHIFT+L_SHIFT ), 500 ),	//	   [long] Kneeboard Previous Shortcut
-								CHAIN( R_ALT, D(10), '5' ));															// O - RWR Target Separation Button
-*/
 
 	// Coolie Switch
 	// CSU
@@ -240,7 +220,7 @@ int dcs_f4e_pilot_controls_switch()
 									  	"index_mslcw = (index_mslcw-1)%3;"												// 
      	 							  	"ActKey( KEYON+PULSE+X(missilecwlist, index_mslcw) );"							//
 										"}" ),																			//
-								0,																	  					// IM - 
+								DX41,																  					// IM - Seat Position - Up
 								DX40,																 					// OM - Reticle Depression - [Dec]
 								CHAIN( L_SHIFT, D(10), '-'),										 					// ID - Aural Tone Volume - [Dec]
 								DX40 ); 																				// OD - Reticle Depression - [Dec]
@@ -250,7 +230,7 @@ int dcs_f4e_pilot_controls_switch()
 									  	"index_mslcw = (index_mslcw+1)%3;"												// 
      	 							  	"ActKey( KEYON+PULSE+X(missilecwlist, index_mslcw) );"							//
 										"}" ),																			//
-								0,																	  					// IM - 
+								DX42,																  					// IM - Seat Position - Down
 								DX39,																 					// OM - Reticle Depression - [Inc]
 								CHAIN( L_SHIFT, D(10), '='),										 					// ID - Aural Tone Volume - [Inc]
 								DX39 );																 					// OD - Reticle Depression - [Inc]
@@ -258,7 +238,7 @@ int dcs_f4e_pilot_controls_switch()
 	MapKeyIOUMD(&Throttle, CSR, 0,																						// IU - 
 								DX23,			// TODO check refuel													// OU - Air Refuel Release Button (ARR) - missile uncage
 								CHAIN( DOWN+R_CTL, D(10), PULSE+'b', D(), UP+R_CTL ),									// IM - Bombing Table - [Toggle]
-								PULSE+'n', 																				// OM - Air Refuel Release Button (ARR)
+								DX23, 																					// OM - Air Refuel Release Button (ARR)
 								CHAIN( DOWN+R_CTL, D(10), PULSE+'b', D(), UP+R_CTL ),									// ID - Bombing Table - [Toggle]
 								0 );																					// OD - 
 	// CSL
