@@ -27,7 +27,8 @@ int dcs_f4e_jester_controls()
 	// H2L
 	MapKey(&AVA_F16, H2L, 		JSTR_rdr_iff ); 																		// Radar > IFF
 	MapKeyR(&AVA_F16, H2L, 		0 );																					// 
-								
+
+	
 	// Display Management Switch
 	// H3U
 	MapKeyIO(&AVA_F16, H3U, 	0,																						// I - 
@@ -76,7 +77,6 @@ int dcs_f4e_jester_controls()
 								0,																				// ID - 
 								TEMPO( 0,																		// OD - JSTR_jammer_active
 									   SEQ( JSTR_jammer_active,	JSTR_jammer_stby ),	500 ));						//      [long] JSTR_jammer_active / JSTR_jammer_stby
-
 	// MSL
 	MapKeyIOUMD(&Throttle, MSL, 0, 																				// IU - 
 								TEMPO( 0,																		// OU - 
@@ -87,12 +87,10 @@ int dcs_f4e_jester_controls()
 								0,																				// ID - 
 								TEMPO( 0,																		// OD - 
 									   JSTR_rdr_offon, 500 ));													//		[long] JSTR_rdr_offon
-
 	// MSP 
 	MapKeyIO(&Throttle, MSP, 	0,																				// I - 
 								JSTR_menu );																	// O - JSTR_menu 
 								
-
 
 
 	// Coolie Switch
@@ -125,11 +123,7 @@ int dcs_f4e_jester_controls()
 								0,																				// ID - 
 								JSTR_menu_left );																// OD - Jester UI Left/CCW
 
-/*
-	// LDGH  ------- not used, removed for simplification
-	MapKey(&Throttle, LDGH,   	TEMPO( JSTR_taperecorder, 															// Jester Command: Systems > AVTR > Standby / Record
-									   CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'5', D(), UP+L_CTL+L_ALT ), 500 ));	// Jester Command: Systems > AVTR > Off
-*/
+
 
 }	// end dcs_f4e_jester_controls()	================================================================
 

@@ -1,6 +1,6 @@
 // DCS F-4E Phantom Thrustmaster Warthog/AVA/MFD Script by Astro
-// TARGET version 3.0.24.618
-// version 2.0, Jan 2025
+// TARGET version 3.0.25.127
+// version 2.1, Jan 2026
 
 
 // --------------------------- INCLUDE ------------------------------
@@ -17,16 +17,7 @@ include "DCS_Fighter_Common.tmc"							// all dcs fighter COMMON controls
 // -------------------------- INITIALISE ----------------------------
 
 int autopilot;
-//int extlight_full;			
 int extlight_posdim;	
-//int extlight_position;
-//int extlight_formation;		
-//int extlight_covert;		
-//int extlight_flashsteady;
-//int speedbrakes_open;
-//int speedbrakes_close;
-//int groundcrewstartup;
-//int jettison_stores;
 
 int steercmdlist, index_stcmd = 0;							// (start with second element after increment, element 0 is first element in list)
 int missilecwlist, index_mslcw = 0;							// (start in off position, element 0 is first element in list)
@@ -293,7 +284,7 @@ int main()
 
 	// -------------------- COMMON CONTROLS -------------------------
 					
-	dcs_fighter_common_controls();						// load dcs COMMON controls
+	dcs_fighter_common_controls();						// load dcs COMMON controls  (move common stuff to pilot controls??)
 	dcs_fighter_common_mfd();							// load dcs MFD controls
 														// before aircraft controls, to allow for overwriting of common controls when necessary
 
@@ -319,7 +310,8 @@ int main()
 	MapKeyIO(&Throttle, EFLNORM, 	CHAIN( 0, D(), 													// I - Emergency Quick Release Lever - Release
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),			// 	   LED5 OFF for MANUAL Override
 									CHAIN( PULSE+'1', D(100),										// O - Switch to PILOT cockpit
-										   EXEC( "dcs_f4e_pilot_controls();" )));					//     load PILOT controls
+										   EXEC( "dcs_fighter_common_switch();"						//	   Switch back to common controls
+												 "dcs_f4e_pilot_controls_switch();" )));			//     and PILOT controls
 	// EFLOVER
 	MapKeyIO(&Throttle, EFLOVER, 	CHAIN( DX22, D(),												// I - Emergency Quick Release Lever - Press
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),			// 	   LED5 ON for MANUAL Override
