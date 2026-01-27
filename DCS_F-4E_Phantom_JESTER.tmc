@@ -26,7 +26,7 @@ int dcs_f4e_jester_controls()
 	MapKey(&AVA_F16, H2R, 		JSTR_context_short );		 															// Scan - Select next contact
 	// H2L
 	MapKey(&AVA_F16, H2L, 		JSTR_rdr_iff ); 																		// Radar > IFF
-	MapKeyR(&AVA_F16, H2L, 	0 );																					// 
+	MapKeyR(&AVA_F16, H2L, 		0 );																					// 
 								
 	// Display Management Switch
 	// H3U
