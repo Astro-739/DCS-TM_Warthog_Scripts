@@ -300,7 +300,7 @@ int main()
 
 	// -------------------- PILOT CONTROLS --------------------------
 	
-	dcs_f4e_pilot_controls();							// PILOT controls (loaded first, for WSO switch after scripted loaded)
+	dcs_f4e_pilot_controls();							// PILOT controls (loaded first, for WSO switch to back seat after script has loaded)
 
 
 	// -------------------- SEAT CONTROLS ---------------------------
@@ -311,12 +311,14 @@ int main()
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),			// 	   LED5 OFF for MANUAL Override
 									CHAIN( PULSE+'1', D(100),										// O - Switch to PILOT cockpit
 										   EXEC( "dcs_fighter_common_switch();"						//	   Switch back to common controls
-												 "dcs_f4e_pilot_controls_switch();" )));			//     and PILOT controls
+												 "dcs_f4e_pilot_controls_switch();"					//     and PILOT controls
+												 "printf(\"PILOT controls\\xa\");" )));				// 	   print state to output window
 	// EFLOVER
 	MapKeyIO(&Throttle, EFLOVER, 	CHAIN( DX22, D(),												// I - Emergency Quick Release Lever - Press
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),			// 	   LED5 ON for MANUAL Override
 									CHAIN( PULSE+'2', D(100),										// O - Switch to WSO cockpit
-										   EXEC( "dcs_f4e_wso_controls();" )));						//     load WSO controls
+										   EXEC( "dcs_f4e_wso_controls();" 							//     load WSO controls
+										   		 "printf(\"WSO controls\\xa\");" )));				// 	   print state to output window
 	MapKeyRIO(&Throttle, EFLOVER, 	0,																// I - 
 									0 );															// O - 
 								
