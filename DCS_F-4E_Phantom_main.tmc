@@ -127,23 +127,6 @@ int main()
 
 	// -------------------- AIRCRAFT FUNCTIONS ----------------------
 					
-	// Target Management Switch / Armament Selector (overwrites common)
-	TMS_fwd 	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT, D(200),										// Gun/Missile Pinky Switch - Radar
-						 DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT );												// HUD Mode - A/A
-	TMS_aft 	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'w', D(), UP+L_SHIFT, D(200),										// Gun/Missile Pinky Switch - Gun
-					  	 DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT );													// HUD Mode - Cage
-	TMS_right 	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT, D(200),										// Gun/Missile Pinky Switch - Heat
-						 DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT );												// HUD Mode - A/A
-	TMS_left 	= 0;																									// 
-
-	// Display Management Switch (overwrites common)
-	DMS_fwd 	= SEQ( CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_SHIFT ),						// DSCG Screen Mode - Radar/TV
-					   CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_ALT ));							//     
-	DMS_aft 	= 0;																									// DMS aft
-	DMS_right 	= CHAIN( R_ALT, D(10), '2' );																			// RWR Search Button
-	DMS_left 	= CHAIN( R_ALT, D(10), '5' );																			// RWR Target Separation Button
-
-
 	// Autopilot function
 	autopilot = SEQ( CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'a', D(), UP+L_ALT+L_SHIFT, D(200),						// Autopilot on
 							EXEC( "autopilot_mode();" )),																// Set autopilot mode
@@ -278,24 +261,9 @@ int main()
 								   JSTR_ins_fine );
 
 	
-	// -------------------- INITIAL MODE VALUES ---------------------
 
-
-
-	// -------------------- COMMON CONTROLS -------------------------
-					
-	dcs_fighter_common_controls();						// load dcs COMMON controls  (move common stuff to pilot controls??)
-	dcs_fighter_common_mfd();							// load dcs MFD controls
-														// before aircraft controls, to allow for overwriting of common controls when necessary
 
 	// -------------------- AIRCRAFT CONTROLS -----------------------
-
-	// ----------------------- LEFT MFD -----------------------------
-
-	MapKeyIO(&LMFD, OSB03, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'3', D(), UP+R_WIN+R_SHIFT ), 					// I - Right MFD OSB 03
-								TEMPO( CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'3', D(), UP+R_WIN+L_SHIFT ),			// O - Left MFD OSB 03
-									   CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'p', D(), UP+R_WIN+L_SHIFT ), 500 ));	//     [long] Left MFD OSB 03 - Arm Gun
-
 
 
 	// -------------------- PILOT CONTROLS --------------------------
@@ -310,8 +278,7 @@ int main()
 	MapKeyIO(&Throttle, EFLNORM, 	CHAIN( 0, D(), 													// I - Emergency Quick Release Lever - Release
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),			// 	   LED5 OFF for MANUAL Override
 									CHAIN( PULSE+'1', D(100),										// O - Switch to PILOT cockpit
-										   EXEC( "dcs_fighter_common_switch();"						//	   Switch back to common controls
-												 "dcs_f4e_pilot_controls_switch();"					//     and PILOT controls
+										   EXEC( "dcs_f4e_pilot_controls_switch();"					//     Switch back to PILOT controls
 												 "printf(\"PILOT controls\\xa\");" )));				// 	   print state to output window
 	// EFLOVER
 	MapKeyIO(&Throttle, EFLOVER, 	CHAIN( DX22, D(),												// I - Emergency Quick Release Lever - Press

@@ -4,12 +4,54 @@
 
 
 
-// -------------------- PILOT CONTROLS -------------------------------------------------
+
+// -------------------- PILOT BUTTON DEFINITIONS --------------------------------------------------
+
+int dcs_f4e_pilot_button_definitions()
+{
+
+	// Target Management Switch / Armament Selector (overwrites common)
+	TMS_fwd 	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT, D(200),										// Gun/Missile Pinky Switch - Radar
+						 DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT );												// HUD Mode - A/A
+	TMS_aft 	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'w', D(), UP+L_SHIFT, D(200),										// Gun/Missile Pinky Switch - Gun
+					  	 DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT );													// HUD Mode - Cage
+	TMS_right 	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT, D(200),										// Gun/Missile Pinky Switch - Heat
+						 DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT );												// HUD Mode - A/A
+	TMS_left 	= 0;																									// 
+
+	// Display Management Switch (overwrites common)
+	DMS_fwd 	= SEQ( CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_SHIFT ),						// DSCG Screen Mode - Radar/TV
+					   CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_ALT ));							//     
+	DMS_aft 	= 0;																									// DMS aft
+	DMS_right 	= CHAIN( R_ALT, D(10), '2' );																			// RWR Search Button
+	DMS_left 	= CHAIN( R_ALT, D(10), '5' );																			// RWR Target Separation Button
+
+}	// end dcs_f4e_pilot_button_definitions()	===================================================
+
+
+
+
+// -------------------- PILOT CONTROLS ------------------------------------------------------------
 
 int dcs_f4e_pilot_controls()
 {
 
-	// -------------------- FLIGHT STICK -------------------------------------------------
+	// -------------------- COMMON CONTROLS -------------------------
+					
+	dcs_f4e_pilot_button_definitions();					// load button definitions used by COMMON
+	dcs_fighter_common_controls();						// load dcs COMMON controls
+	dcs_fighter_common_mfd();							// load dcs MFD controls
+														// before aircraft controls, to allow for overwriting of common controls when necessary
+
+
+	// ----------------------- LEFT MFD -----------------------------
+
+	MapKeyIO(&LMFD, OSB03, 		CHAIN( DOWN+R_WIN+R_SHIFT, D(10), PULSE+'3', D(), UP+R_WIN+R_SHIFT ), 					// I - Right MFD OSB 03
+								TEMPO( CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'3', D(), UP+R_WIN+L_SHIFT ),			// O - Left MFD OSB 03
+									   CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'p', D(), UP+R_WIN+L_SHIFT ), 500 ));	//     [long] Left MFD OSB 03 - Arm Gun
+
+
+	// -------------------- FLIGHT STICK ----------------------------
 
 	// -- DCS_Fighter_Common ---------
 	// TG - Gun Trigger
@@ -52,7 +94,7 @@ int dcs_f4e_pilot_controls()
 	
 	
  
-	// -------------------- THROTTLE -------------------------------------------------
+	// -------------------- THROTTLE --------------------------------
 
 	// --DCS_Fighter_Common---------
 	// Left Throttle Button
@@ -192,7 +234,7 @@ int dcs_f4e_pilot_controls()
 
 
 	
-	// -------------------- Also load SWITCH part of PILOT controls -------------------------------
+	// ----------- Also load SWITCH part of PILOT controls ----------
 	
 	dcs_f4e_pilot_controls_switch();																					// controls to be switched back after JESTER use
 
@@ -202,10 +244,18 @@ int dcs_f4e_pilot_controls()
 
 
 
-// ----------------- PILOT SWITCH CONTROLS to be switched back after JESTER use -----------------------
+// ----------------- PILOT SWITCH CONTROLS to be switched back after JESTER use -------------------
 
 int dcs_f4e_pilot_controls_switch()
 {
+
+	// -------------------- COMMON SWITCH CONTROLS ------------------
+
+	dcs_f4e_pilot_button_definitions();					// load button definitions used by COMMON
+	dcs_fighter_common_switch();						// switch back to common controls
+
+
+	// ------------------ AIRCRAFT SWITCH CONTROLS ------------------
 
 	// Coolie Switch
 	// CSU
@@ -246,4 +296,4 @@ int dcs_f4e_pilot_controls_switch()
 								CHAIN( DOWN+'c', D(200), UP+'c' ));														// OD - Cage Button
 
 
-} 	// end of dcs_f4e_pilot_controls_switch()	=================================================================
+} 	// end of dcs_f4e_pilot_controls_switch()	===================================================
