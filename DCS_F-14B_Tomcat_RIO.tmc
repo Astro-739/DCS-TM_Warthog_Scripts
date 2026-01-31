@@ -1,60 +1,94 @@
 // RIO file for DCS_F-14B_Tomcat.tmc  by Astro
-// TARGET version 3.0.24.618
-// version 2.0, Feb 2025
+// TARGET version 3.0.25.127
+// version 2.1, Jan 2026
 
 // Work in Progress
 // Not much testing done yet on RIO functionality
 
 
 
+// ---------------------- RIO BUTTON DEFINITIONS --------------------------------------------------
+
+int dcs_f14_rio_button_definitions()   		//  TODO UPDATE!!! Nu nog F-4E
+{
+
+	// Target Management Switch / Armament Selector (overwrites common)
+	TMS_fwd 	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT, D(200),										// Gun/Missile Pinky Switch - Radar
+						 DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT );												// HUD Mode - A/A
+	TMS_aft 	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'w', D(), UP+L_SHIFT, D(200),										// Gun/Missile Pinky Switch - Gun
+					  	 DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT );													// HUD Mode - Cage
+	TMS_right 	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT, D(200),										// Gun/Missile Pinky Switch - Heat
+						 DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT );												// HUD Mode - A/A
+	TMS_left 	= 0;																									// 
+
+	// Display Management Switch (overwrites common)
+	DMS_fwd 	= SEQ( CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_SHIFT ),						// DSCG Screen Mode - Radar/TV
+					   CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_ALT ));							//     
+	DMS_aft 	= 0;																									// DMS aft
+	DMS_right 	= CHAIN( R_ALT, D(10), '2' );																			// RWR Search Button
+	DMS_left 	= CHAIN( R_ALT, D(10), '5' );																			// RWR Target Separation Button
+
+}	// end dcs_f14_rio_button_definitions()	=======================================================
+
+
+
+
+
 // ---------------------------------- F-14B RIO CONTROLS ------------------------------------------
 
 int dcs_f14_rio_controls()
+// RIO controls should stay within JESTER switch set (TMS, DMS, CS, MS)
 {
-	
+
+	// -------------------- COMMON SWITCH CONTROLS ------------------
+
+	dcs_f14_rio_button_definitions();					// load button definitions used by COMMON
+	dcs_fighter_common_switch();						// load common switch controls
+
+
 
 	// ---------------------- FLIGHT STICK --------------------------
 
-	// --DCS_Fighter_Common---------
-	// TG - Gun Trigger
-	// S1 - Nosewheel Steering Button
-	// H1 - Trim Switch
-	// JOYX
-	// JOYY
-	// -----------------------------	
-
-
-	// JSTR layer
-	// Expand FOV Button - S3
+/*
+	JSTR layer    ----- HIER MOET NOG WAT MEE  //TODO UPDATE!!
+	Expand FOV Button - S3
 	MapKey(&AVA_F16, S3,  		0 );													// Switch off
 	MapKeyR(&AVA_F16, S3,  		0 ); 													// Switch off 
-
-
+*/
 	
 	
  
 	// ----------------------- THROTTLE -----------------------------
 
-	// --DCS_Fighter_Common---------
-	// Left Throttle Button
-	// MSU/D/R/L/P
-	// EACON/OFF Landing Gear
-	// EOLNORM
-	// EORNORM/MOTOR
-	// SC
-	// LDGH
-	// APUON/OFF
-	// RDRNRM/DIS Canopy
-	// IDLELON/IDLERON
-	// THR_LEFT
-	// THR_RIGHT
-	// THR_FC
-	// SCX
-	// SCY
-	// -----------------------------
-
-
-
+	// Coolie Switch		//TODO UPDATE!!  Nu nog F-4E
+	// CSU
+	MapKeyIOUMD(&Throttle, CSU, CHAIN( L_SHIFT, D(10), '-'),										 					// IU - Aural Tone Volume - [Dec]
+								CHAIN( L_ALT+R_SHIFT, D(10), ',' ),														// OU - Radar Receiver Gain (fine) - [Dec]
+								0,																	  					// IM - 
+								CHAIN( L_ALT+R_SHIFT, D(10), ',' ),									 					// OM - Radar Receiver Gain (fine) - [Dec]
+								CHAIN( L_SHIFT, D(10), '-'),										 					// ID - Aural Tone Volume - [Dec]
+								CHAIN( L_ALT+R_SHIFT, D(10), ',' ));													// OD - Radar Receiver Gain (fine) - [Dec]
+	// CSD
+	MapKeyIOUMD(&Throttle, CSD, CHAIN( L_SHIFT, D(10), '='),										 					// IU - Aural Tone Volume - [Inc]
+								CHAIN( L_ALT+R_SHIFT, D(10), '.' ),														// OU - Radar Receiver Gain (fine) - [Inc]
+								0,																	  					// IM - 
+								CHAIN( L_ALT+R_SHIFT, D(10), '.' ),														// OM - Radar Receiver Gain (fine) - [Inc]
+								CHAIN( L_SHIFT, D(10), '='),										 					// ID - Aural Tone Volume - [Inc]
+								CHAIN( L_ALT+R_SHIFT, D(10), '.' ));													// OD - Radar Receiver Gain (fine) - [Inc]
+	// CSR
+	MapKeyIOUMD(&Throttle, CSR, 0,																						// IU - 
+								'n',																					// OU - Air Refuel Release Button (ARR) - missile uncage
+								CHAIN( DOWN+R_CTL, D(10), PULSE+'b', D(), UP+R_CTL ),									// IM - Bombing Table - [Toggle]
+								PULSE+'n', 																				// OM - Air Refuel Release Button (ARR)
+								CHAIN( DOWN+R_CTL, D(10), PULSE+'b', D(), UP+R_CTL ),									// ID - Bombing Table - [Toggle]
+								0 );																					// OD - 
+	// CSL
+	MapKeyIOUMD(&Throttle, CSL, CHAIN( 0 ),							// IU - HUD Mode – Cage toggle
+								CHAIN( DOWN+'c', D(200), UP+'c' ),														// OU - Cage Button
+								0,																						// IM - 
+								0,																						// OM - 
+								CHAIN( 0 ),								// ID - HUD Mode – Cage toggle
+								CHAIN( DOWN+'c', D(200), UP+'c' ));														// OD - Cage Button
 
 
 

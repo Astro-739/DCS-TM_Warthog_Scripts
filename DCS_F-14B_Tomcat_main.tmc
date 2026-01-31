@@ -1,6 +1,6 @@
 // DCS F-14B Tomcat Thrustmaster Warthog/AVA/MFD Script by Astro
-// TARGET version 3.0.24.618
-// version 2.1, Jan 2026
+// TARGET version 3.0.25.127
+// version 2.2, Jan 2026
 
 
 
@@ -362,7 +362,7 @@ int main()
 
 
 
-	// JSTR functions
+	// ----- JSTR functions ----------- define sequences here, are remembered when switching controls
 	JSTR_rdr_offon			= SEQ( JSTR_rdr_off,										// Radar - Silent/Active
 								   JSTR_rdr_on );
 	JSTR_rdr_range_50_25	= SEQ( JSTR_rdr_range_50,									// Radar - Range 50/25
@@ -384,34 +384,35 @@ int main()
 								   JSTR_nav_wp3 );
 
 	
-	// -------------------- COMMON CONTROLS -------------------------
-					
-	dcs_fighter_common_controls();						// load dcs COMMON controls
-	//dcs_fighter_common_mfd();							// load dcs MFD controls
-														// before aircraft controls, to allow for overwriting of common controls when necessary
+
+	// -------------------- AIRCRAFT CONTROLS -----------------------
+
 
 	// ------------------ INITIAL MODE VALUES -----------------------
 
 	printf("LTRN_mode = %i\xa", LTRN_mode);												// write to output window
 
 
-	// -------------------- AIRCRAFT CONTROLS -----------------------
+	// -------------------- PILOT CONTROLS --------------------------
 
 	dcs_f14_pilot_controls();							// PILOT controls (loaded first, assumimg player starts as pilot)
 
 
+	// -------------------- SEAT CONTROLS ---------------------------
 
 	// Engine Override Left
 	// EFLNORM	
-	MapKeyIO(&Throttle, EFLNORM, 	0,													// I - 
-									CHAIN( PULSE+'1', D(100),							// O - Switch to PILOT cockpit
-										   EXEC( "dcs_f14_pilot_controls();" )));		//     load PILOT controls
+	MapKeyIO(&Throttle, EFLNORM, 	0,															// I - 
+									CHAIN( PULSE+'1', D(100),									// O - Switch to PILOT cockpit
+										   EXEC( "dcs_f14_pilot_controls_switch();" 			//     switch to PILOT controls
+										   		 "printf(\"PILOT controls\\xa\");" )));			// 	   print state to output window
 	// EFLOVER
-	MapKeyIO(&Throttle, EFLOVER, 	0,													// I - 
-									CHAIN( PULSE+'2', D(100),							// O - Switch to RIO cockpit
-										   EXEC( "dcs_f14_rio_controls();" )));			//     load RIO controls
-	MapKeyRIO(&Throttle, EFLOVER, 	0,													// I - 
-									0 );												// O - 
+	MapKeyIO(&Throttle, EFLOVER, 	0,															// I - 
+									CHAIN( PULSE+'2', D(100),									// O - Switch to RIO cockpit
+										   EXEC( "dcs_f14_rio_controls();"						//     load RIO controls
+										   		 "printf(\"RIO controls\\xa\");" )));			// 	   print state to output window
+	MapKeyRIO(&Throttle, EFLOVER, 	0,															// I - 
+									0 );														// O - 
 								
 
 

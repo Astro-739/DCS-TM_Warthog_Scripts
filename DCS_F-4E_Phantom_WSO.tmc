@@ -1,6 +1,6 @@
 // RIO file for DCS_F-4E_Phantom.tmc  by Astro
 // TARGET version 3.0.25.127
-// version 2.0, Jan 2026
+// version 2.1, Jan 2026
 
 
 
@@ -26,7 +26,7 @@ int dcs_f4e_wso_button_definitions()
 	DMS_right 	= CHAIN( R_ALT, D(10), '2' );																			// RWR Search Button
 	DMS_left 	= CHAIN( R_ALT, D(10), '5' );																			// RWR Target Separation Button
 
-}	// end dcs_wso_pilot_button_definitions()	===================================================
+}	// end dcs_f4e_wso_button_definitions()	=======================================================
 
 
 
@@ -47,8 +47,8 @@ int dcs_f4e_wso_controls()
 	// ------------------------ FLIGHT STICK ------------------------
 
 /*
-	// JSTR layer    ----- HIER MOET NOG WAT MEE
-	// Expand FOV Button - S3
+	JSTR layer    ----- HIER MOET NOG WAT MEE //TODO UPDATE!!
+	Expand FOV Button - S3
 	MapKey(&AVA_F16, S3,  		0 );													// Switch off
 	MapKeyR(&AVA_F16, S3,  		0 ); 													// Switch off 
 */

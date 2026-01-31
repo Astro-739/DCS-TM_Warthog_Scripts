@@ -9,6 +9,7 @@
 // ------------------------------ F-14B JESTER CONTROLS -------------------------------------------
 
 int dcs_f14_jester_controls()
+// JESTER controls should stay within JESTER switch set (TMS, DMS, CS, MS)
 {
 
 	// -------------------- FLIGHT STICK ----------------------------

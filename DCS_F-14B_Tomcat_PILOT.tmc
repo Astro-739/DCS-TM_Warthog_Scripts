@@ -1,8 +1,33 @@
 // PILOT file for DCS_F-14B_Tomcat.tmc  by Astro
 // TARGET version 3.0.25.127
-// version 2.1, Jan 2026
+// version 2.2, Jan 2026
 
 
+
+
+
+// -------------------- PILOT BUTTON DEFINITIONS --------------------------------------------------
+
+int dcs_f14_pilot_button_definitions()
+{
+
+	// Target Management Switch / Armament Selector (overwrites common)
+	TMS_fwd 	= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'w', D(), UP+R_SHIFT );												// Weapon Selector up
+	TMS_aft 	= CHAIN( DOWN+R_CTL, D(10), PULSE+'w', D(), UP+R_CTL ); 												// Weapon Selector down
+	TMS_right 	= CHAIN( DOWN+R_ALT, D(10), PULSE+'w', D(), UP+R_ALT ); 												// Weapon Selector press
+	TMS_left 	= 0;																									// 
+
+	// Display Management Switch (overwrites common)
+	DMS_fwd 	= CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'v', D(), UP+L_ALT+R_SHIFT );									// VDI Mode Toggle
+	DMS_aft 	= CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'h', D(), UP+L_ALT+R_SHIFT );									// HSD Mode Toggle
+	DMS_right 	= TEMPO( EXEC( "index_stcmd = (index_stcmd+1)%5;"														// Steer CMD next
+							   "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ),									// 		
+						 CHAIN( DOWN+L_SHIFT, D(10), PULSE+'7', D(), UP+L_SHIFT ), 500 );								// long] Display mode next
+	DMS_left 	= TEMPO( EXEC( "index_stcmd = (index_stcmd+4)%5;"														// Steer CMD previous
+							   "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ),									// 		
+						 CHAIN( DOWN+L_SHIFT, D(10), PULSE+'6', D(), UP+L_SHIFT ), 500 );								// [long] Display mode previous
+
+}	// end dcs_f14_pilot_button_definitions()	===================================================
 
 
 
@@ -11,6 +36,14 @@
 
 int dcs_f14_pilot_controls()
 {
+
+	// -------------------- COMMON CONTROLS -------------------------
+					
+	dcs_f14_pilot_button_definitions();					// load button definitions used by COMMON
+	dcs_fighter_common_controls();						// load dcs COMMON controls
+	dcs_fighter_common_mfd();							// load dcs MFD controls
+														// before aircraft controls, to allow for overwriting of common controls when necessary
+
 
 	// ---------------------- FLIGHT STICK --------------------------
 
@@ -32,23 +65,6 @@ int dcs_f14_pilot_controls()
 	MapKeyR(&AVA_F16, S3,  		EXEC( "dcs_fighter_common_switch();" 													// Switch back to COMMON,
 								  	  "dcs_f14_pilot_controls_switch();" ));											//   and PILOT controls
 
-
-	// Target Management Switch / Armament Selector (overwrites common)
-	TMS_fwd 	= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'w', D(), UP+R_SHIFT );												// Weapon Selector up
-	TMS_aft 	= CHAIN( DOWN+R_CTL, D(10), PULSE+'w', D(), UP+R_CTL ); 												// Weapon Selector down
-	TMS_right 	= CHAIN( DOWN+R_ALT, D(10), PULSE+'w', D(), UP+R_ALT ); 												// Weapon Selector press
-	TMS_left 	= 0;																									// 
-
-	
-	// Display Management Switch (overwrites common)
-	DMS_fwd 	= CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'v', D(), UP+L_ALT+R_SHIFT );									// VDI Mode Toggle
-	DMS_aft 	= CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'h', D(), UP+L_ALT+R_SHIFT );									// HSD Mode Toggle
-	DMS_right 	= TEMPO( EXEC( "index_stcmd = (index_stcmd+1)%5;"														// Steer CMD next
-							   "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ),									// 		
-						 CHAIN( DOWN+L_SHIFT, D(10), PULSE+'7', D(), UP+L_SHIFT ), 500 );								// long] Display mode next
-	DMS_left 	= TEMPO( EXEC( "index_stcmd = (index_stcmd+4)%5;"														// Steer CMD previous
-							   "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ),									// 		
-						 CHAIN( DOWN+L_SHIFT, D(10), PULSE+'6', D(), UP+L_SHIFT ), 500 );								// [long] Display mode previous
 
 
 	// Countermeasure Management Switch
@@ -217,7 +233,6 @@ int dcs_f14_pilot_controls()
 	dcs_f14_pilot_controls_switch();																					// controls to be switched back after JESTER use
 
 
-
 }	// ====  end dcs_f14_pilot_controls()  ========================================================
 
 
@@ -228,38 +243,13 @@ int dcs_f14_pilot_controls()
 int dcs_f14_pilot_controls_switch()
 {
 
-/*
-	// Display Management Switch
-	// H3U
-	MapKeyIO(&AVA_F16, H3U, 	TEMPO( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT ),						// I - kneeboard on/off
-									   nightvision, 500 ),																// 	   [long] Night Vision Goggles toggle
-								CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'v', D(), UP+L_ALT+R_SHIFT ));					// O - VDI Mode Toggle
-	// H3D
-	MapKeyIO(&AVA_F16, H3D, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'k', D(), UP+R_CTL ),							// I - kneeboard current position mark point
-									   flashlight, 500 ),																//	   [long] Flashlight on/off	
-								CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'h', D(), UP+L_ALT+R_SHIFT ));					// O - HSD Mode Toggle
-	// H3R
-	MapKeyIO(&AVA_F16, H3R, 	TEMPO( PULSE+']', 																		// I - kneeboard next page
-									   CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+']', D(), UP+R_SHIFT+L_SHIFT ), 500 ),	//	   [long] Kneeboard Next Shortcut
-								TEMPO( EXEC( "index_stcmd = (index_stcmd+1)%5;"											// O - Steer CMD next
-											 "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ),					// 		
-									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'7', D(), UP+L_SHIFT ),						// 	   [long] Display mode next
-									   500 ));																			//
-	// H3L
-	MapKeyIO(&AVA_F16, H3L, 	TEMPO( PULSE+'[', 																		// I - kneeboard previous page
-									   CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'[', D(), UP+R_SHIFT+L_SHIFT ), 500 ),	//	   [long] Kneeboard Previous Shortcut
-								TEMPO( EXEC( "index_stcmd = (index_stcmd+4)%5;"											// O - Steer CMD previous
-											 "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ),					// 		
-									   CHAIN( DOWN+L_SHIFT, D(10), PULSE+'6', D(), UP+L_SHIFT ),						// 	   [long] Display mode previous
-									   500 ));																			//
-*/
-//								SEQ( CHAIN( DOWN+L_SHIFT, D(10), PULSE+'m', D(), UP+L_SHIFT ),							// IU - Walkman Start
-//									 CHAIN( DOWN+L_SHIFT, D(10), PULSE+'n', D(), UP+L_SHIFT )),							//	    Walkman Stop
-//								CHAIN( DOWN+L_ALT, D(10), PULSE+'n', D(), UP+L_ALT ),									// IU - Walkman Switch Side
-//								CHAIN( DOWN+L_CTL, D(10), PULSE+'m', D(), UP+L_CTL ),									// IU - Walkman Fast Forward
-//								CHAIN( DOWN+L_CTL, D(10), PULSE+'n', D(), UP+L_CTL ),									// IU - Walkman Fast Backward
+	// -------------------- COMMON SWITCH CONTROLS ------------------
+
+	dcs_f14_pilot_button_definitions();					// load button definitions used by COMMON
+	dcs_fighter_common_switch();						// switch back to common controls
 
 
+	// ------------------ AIRCRAFT SWITCH CONTROLS ------------------
 
 	// Coolie Switch
 	// CSU
