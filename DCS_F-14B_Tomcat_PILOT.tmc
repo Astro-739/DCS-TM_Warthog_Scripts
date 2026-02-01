@@ -256,7 +256,7 @@ int dcs_f14_pilot_controls_switch()
 	MapKeyIOUMD(&Throttle, CSU, CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'w', D(), UP+L_CTL+R_SHIFT ), 					// IU - Wing Sweep Auto Mode
 								CHAIN( DOWN+L_CTL, D(10), PULSE+'p', D(), UP+L_CTL ), 									// OU - Missile Mode Toggle (boresight/slave)
 								CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'w', D(), UP+L_CTL+R_SHIFT ), 					// IM - Wing Sweep Auto Mode
-								CHAIN( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+L_CTL+'q' );" )),						// OM - [CAR] Nose strut extend
+								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+L_CTL+'q' );" ),								// OM - [WHDN] Nose strut extend
 								CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'w', D(), UP+L_CTL+R_SHIFT ),					// ID - Wing Sweep Auto Mode
 								JSTR_agwpn_comptgt ); 																	// OD - Set Computer Target Weapons (CCRP)
 	// CSD
@@ -265,21 +265,21 @@ int dcs_f14_pilot_controls_switch()
 									   DOWN+L_SHIFT, D(10), PULSE+'p', D(), UP+L_SHIFT, D(200),							//      Toggle SW Cooling
 									   DOWN+L_WIN, D(10), PULSE+'p', D(), UP+L_WIN ),									//      Toggle Gun Rate
 								CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'w', D(), UP+L_CTL+R_CTL ),	 					// IM - Wing Sweep Bomb Mode
-								CHAIN( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+L_CTL+'a' );" )),						// OM - [CAR] Nose strut kneel
+								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+L_CTL+'a' );" ),								// OM - [WHDN] Nose strut kneel
 								CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'w', D(), UP+L_CTL+R_CTL ),	 					// ID - Wing Sweep Bomb Mode
 								JSTR_agwpn_comppilot );												 					// OD - Set Computer Pilot Weapons (CCIP)
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, CHAIN( L_ALT, D(10), 'w' ),																// IU - Wing Sweep Forward
 								DX23,																					// OU - CAGE-SEAM button
 								CHAIN( L_ALT, D(10), 'w' ),																// IM - Wing Sweep Forward
-								0,																						// OM - 
+								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+L_SHIFT+'5' );" ),								// OM - [WHDN] Display Mode Landing
 								CHAIN( L_ALT, D(10), 'w' ),																// ID - Wing Sweep Forward
 								0 );																					// OD - 
 	// CSL
 	MapKeyIOUMD(&Throttle, CSL, CHAIN( L_SHIFT+R_CTL, D(10), 'w' ),														// IU - Wing Sweep Aft
 								0,																						// OU - 
 								CHAIN( L_SHIFT+R_CTL, D(10), 'w' ),														// IM - Wing Sweep Aft
-								0,																						// OM - 
+								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+R_CTL+L_SHIFT+'p' );" ),						// OM - [WHDN] Parking brake toggle
 								CHAIN( L_SHIFT+R_CTL, D(10), 'w' ),														// ID - Wing Sweep Aft
 								0 );																					// OD - 
 
