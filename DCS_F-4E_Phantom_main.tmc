@@ -128,9 +128,9 @@ int main()
 	// -------------------- AIRCRAFT FUNCTIONS ----------------------
 					
 	// Autopilot function
-	autopilot = SEQ( CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'a', D(), UP+L_ALT+L_SHIFT, D(200),						// Autopilot on
+	autopilot = SEQ( CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'a', D(), UP+L_ALT+L_SHIFT, D(200),						// Autopilot/AFCS on
 							EXEC( "autopilot_mode();" )),																// Set autopilot mode
-					 CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'a', D(), UP+L_ALT+L_CTL ));									// Autopilot off
+					 CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'a', D(), UP+L_ALT+L_CTL ));									// Autopilot/AFCS off
 	
 
 	// Exterior Lighting - Full
@@ -302,9 +302,9 @@ int main()
 
 int autopilot_mode()
 {
-	if (Throttle[APPAT]) ActKey(KEYON+PULSE+L_ALT+L_CTL+'h');							// ALT Hold - Disengage
-	else if (Throttle[APALT]) ActKey(KEYON+PULSE+L_ALT+L_CTL+'h');						// ALT Hold - Disengage
-	else ActKey(KEYON+PULSE+L_ALT+L_SHIFT+'h');											// ALT Hold - Engage
+	if (Throttle[APAH]) ActKey(KEYON+PULSE+L_ALT+L_CTL+'h');							// ALT Hold - Disengage (switch middle)
+	else if (Throttle[APALT]) ActKey(KEYON+PULSE+L_ALT+L_CTL+'h');						// ALT Hold - Disengage (switch down)
+	else ActKey(KEYON+PULSE+L_ALT+L_SHIFT+'h');											// ALT Hold - Engage (switch up)
 }
 
 

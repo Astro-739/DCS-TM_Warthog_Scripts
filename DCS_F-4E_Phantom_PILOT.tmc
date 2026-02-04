@@ -123,13 +123,13 @@ int dcs_f4e_pilot_controls()
 	// Autopilot
 	// APENG	
 	MapKeyIO(&Throttle, APENG, 	0,																					// I - 
-								autopilot );																		// O - Autopilot on/off
+								autopilot );																		// O - Autopilot/AFCS on/off
 	// APDIS
 	MapKey(&Throttle, APDIS, 	0 ); 																				// 
 	// APPAT
-	MapKey(&Throttle, APPAT, 	CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'h', D(), UP+L_ALT+L_CTL ));					// ALT Hold - Disengage
+	MapKey(&Throttle, APPAT, 	CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'h', D(), UP+L_ALT+L_SHIFT ));				// ALT Hold - Engage
 	// APAH
-	MapKey(&Throttle, APAH, 	CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'h', D(), UP+L_ALT+L_SHIFT ));				// ALT Hold - Engage
+	MapKey(&Throttle, APAH, 	CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'h', D(), UP+L_ALT+L_CTL ));					// ALT Hold - Disengage
 	// APALT
 	MapKey(&Throttle, APALT, 	CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'h', D(), UP+L_ALT+L_CTL ));					// ALT Hold - Disengage
 
