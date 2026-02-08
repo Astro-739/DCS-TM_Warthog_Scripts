@@ -51,6 +51,8 @@ int	JSTR_lock_TWS_tgt_3;
 int	JSTR_lock_TWS_tgt_4;
 int	JSTR_rwr_norm;
 int	JSTR_rwr_ai;
+int	JSTR_rwr_aaa;
+int JSTR_rwr_unknown;
 int	JSTR_nav_wp1;
 int	JSTR_nav_wp2;
 int	JSTR_nav_wp3;
@@ -92,6 +94,7 @@ int JSTR_rdr_range_50_25;
 int	JSTR_rdr_range_50_25_auto;
 int JSTR_rdr_offon;
 int JSTR_rwr_ai_norm;
+int JSTR_rwr_unknown_norm;
 int JSTR_WHDN_startup;
 int	JSTR_nav_wp123;
 
@@ -278,7 +281,7 @@ int main()
 									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
 	// RWR
-	JSTR_rwr_norm			= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
+	JSTR_rwr_norm			= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 													// Normal
 									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );
@@ -286,6 +289,14 @@ int main()
 									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL );
+	JSTR_rwr_aaa			= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 													// AAA
+									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );
+	JSTR_rwr_unknown		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 													// Unknown
+									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 
+									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
 	// Navigation
 	JSTR_nav_wp1			= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'1', D(), UP+L_CTL+L_SHIFT );
 	JSTR_nav_wp2			= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'2', D(), UP+L_CTL+L_SHIFT );
@@ -375,6 +386,8 @@ int main()
 	JSTR_toggle_RWS_TWS		= SEQ( JSTR_rdr_mode_RWS,									// Radar - RWS/TWS Mode
 								   JSTR_rdr_mode_TWS );
 	JSTR_rwr_ai_norm		= SEQ( JSTR_rwr_ai,											// RWR - Airborne Interceptor / Normal
+								   JSTR_rwr_norm );
+	JSTR_rwr_unknown_norm	= SEQ( JSTR_rwr_unknown,									// RWR - Unknown / Normal
 								   JSTR_rwr_norm );
 	JSTR_WHDN_startup		= SEQ( JSTR_startup,										// Start-up/Loud&Clear/INS Fine
 								   JSTR_loudclear,

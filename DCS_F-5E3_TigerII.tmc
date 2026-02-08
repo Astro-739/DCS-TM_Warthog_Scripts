@@ -38,11 +38,11 @@ int main()
 	TMS_left 	= 0;																							//
 
 	// Display Management Switch (overwrites common)
-	DMS_fwd 	= CHAIN( R_ALT, D(10), '7' );																	// RWR Indicator Control SEARCH Button
-	DMS_aft 	= CHAIN( R_ALT, D(10), '6' );																	// RWR Indicator Control MODE Button
-	DMS_right 	= CHAIN( R_ALT, D(10), 'y' );																	// RWR Indicator Control T Button
-	DMS_left 	= CHAIN( R_ALT, D(10), 'i' );																	// RWR Indicator Control UNKNOWN SHIP Button
-
+	DMS_fwd 	= 0;																							// 
+	DMS_aft 	= 0;																							// 
+	DMS_right	= CHAIN( R_ALT, D(10), '7' );																	// RWR Indicator Control SEARCH Button
+	DMS_left 	= TEMPO( CHAIN( DOWN+R_ALT, D(10), DOWN+'6', D(200), UP+'6', D(), UP+R_ALT ),					// RWR Indicator Control MODE Button - PRIO/NORM toggle
+						 CHAIN( R_ALT, D(10), 'y' ), 500 );														// RWR Indicator Control T Button - TGT SEPARATE
 	
 	// Start-up Sequence (overwrites common)
 	startup = SEQ( CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'b', D(), UP+R_CTL+R_SHIFT ),						// Battery Switch - BATT/OFF

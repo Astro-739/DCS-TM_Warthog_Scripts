@@ -18,14 +18,16 @@ int dcs_f14_pilot_button_definitions()
 	TMS_left 	= 0;																									// 
 
 	// Display Management Switch (overwrites common)
-	DMS_fwd 	= CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'v', D(), UP+L_ALT+R_SHIFT );									// VDI Mode Toggle
-	DMS_aft 	= CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'h', D(), UP+L_ALT+R_SHIFT );									// HSD Mode Toggle
-	DMS_right 	= TEMPO( EXEC( "index_stcmd = (index_stcmd+1)%5;"														// Steer CMD next
-							   "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ),									// 		
-						 CHAIN( DOWN+L_SHIFT, D(10), PULSE+'7', D(), UP+L_SHIFT ), 500 );								// long] Display mode next
-	DMS_left 	= TEMPO( EXEC( "index_stcmd = (index_stcmd+4)%5;"														// Steer CMD previous
-							   "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ),									// 		
+	DMS_fwd 	= TEMPO( CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'v', D(), UP+L_ALT+R_SHIFT ),							// VDI Mode Toggle
 						 CHAIN( DOWN+L_SHIFT, D(10), PULSE+'6', D(), UP+L_SHIFT ), 500 );								// [long] Display mode previous
+	DMS_aft 	= TEMPO( CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'h', D(), UP+L_ALT+R_SHIFT ),							// HSD Mode Toggle
+						 CHAIN( DOWN+L_SHIFT, D(10), PULSE+'7', D(), UP+L_SHIFT ), 500 );								// [long] Display mode next
+	DMS_right 	= TEMPO( JSTR_rwr_unknown_norm,																			// [JSTR] RWR Unknown/NORM toggle
+						 EXEC( "index_stcmd = (index_stcmd+1)%5;"														// [long] Steer CMD next
+							   "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ), 500 );							// 		
+	DMS_left 	= TEMPO( JSTR_rwr_ai_norm,																				// [JSTR] RWR AI/NORM toggle
+						 EXEC( "index_stcmd = (index_stcmd+4)%5;"														// [long] Steer CMD previous
+							   "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ),	500 );							// 		
 
 }	// end dcs_f14_pilot_button_definitions()	===================================================
 

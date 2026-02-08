@@ -24,7 +24,8 @@ int dcs_f4e_pilot_button_definitions()
 					   CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_ALT ));							//     
 	DMS_aft 	= 0;																									// DMS aft
 	DMS_right 	= CHAIN( R_ALT, D(10), '2' );																			// RWR Search Button
-	DMS_left 	= CHAIN( R_ALT, D(10), '5' );																			// RWR Target Separation Button
+	DMS_left 	= TEMPO( CHAIN( DOWN+R_ALT, D(10), DOWN+'1', D(200), UP+'1', D(), UP+R_ALT ),							// RWR Mode - Norm/Prio toggle
+						 CHAIN( R_ALT, D(10), '5' ), 500 );																// RWR Target Separation Button
 
 }	// end dcs_f4e_pilot_button_definitions()	===================================================
 
