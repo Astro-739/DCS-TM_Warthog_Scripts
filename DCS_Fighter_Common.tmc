@@ -246,7 +246,7 @@ int dcs_fighter_common_functions()
 	atc_inbound					= CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ); 		// Radio menu (\), ATC, Airfield, Inbound
 	atc_requestlanding			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 );				 							// Request landing short menu
 	
-	tanker_inbound				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F6, D(200), PULSE+F1, D(10000), PULSE+F12 ); 		// Radio menu (\), Tanker menu, inbound, 3s delay, Exit
+	tanker_inbound				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F6, D(200), PULSE+F1, D(10000), PULSE+F12 ); 	// Radio menu (\), Tanker menu, inbound, 3s delay, Exit
 	tanker_precontact			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(10000), PULSE+F12 ); 						// Radio menu (\), Ready Pre-Contact (menu shortcut), 3s delay, Radio menu (\)
 
 	cv_requestlaunch			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F3, D(200), PULSE+F2 ); 		// TODO Radio menu (\), xxxxxxx
@@ -503,7 +503,8 @@ int dcs_fighter_common_controls()
 
 
 	// LDGH (Master Caution, DTC, VR_mode, Tacview bookmark)
-	MapKeyIO(&Throttle, LDGH, 	TEMPO( CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT ),							// I - Tacview Bookmark
+	MapKeyIO(&Throttle, LDGH, 	TEMPO( CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'y', D(), UP+L_CTL+L_SHIFT ),			// I - Toggle Chat
+									   //CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT ),							// I - Tacview Bookmark
 									   EXEC( "VR_mode = !VR_mode;"														//     [long] Switch VR mode on/off
 									   "printf(\"VR_mode = %i\\xa\", VR_mode);" ), 500 ),								// 	          print state to output window
 								TEMPO( CHAIN( DOWN+L_ALT, D(10), DOWN+'m', D(300), UP+'m', D(10), UP+L_ALT ), 			// O - Master Caution Button

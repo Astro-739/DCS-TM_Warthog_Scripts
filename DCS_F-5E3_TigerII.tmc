@@ -52,8 +52,11 @@ int main()
 						  DOWN+R_CTL+R_SHIFT, D(10), PULSE+'i', D(), UP+R_CTL+R_SHIFT));						// Right Boost Pump Switch - ON/OFF
 
 	// Emergency Stores Jettison (overwrites common)
-	emergency_stores_jettison = SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),										// Emergency All Jettison Button Cover - OPEN
-									 CHAIN( L_SHIFT, D(10), 'e' ));												// Emergency All Jettison Button
+	emergency_stores_jettison = SEQ( CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'m', D(), UP+R_WIN+L_SHIFT ),		// Jettison Switch - ALL PYLONS
+									 CHAIN( L_SHIFT+L_CTL, D(10), 'd' ),										// Jettison Button
+									 CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'k', D(), UP+R_WIN+L_SHIFT ));		// Jettison Switch - OFF
+	//emergency_stores_jettison = SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),										// Emergency All Jettison Button Cover - OPEN
+	//								 CHAIN( L_SHIFT, D(10), 'e' ));												// Emergency All Jettison Button
 
 
 	// Exterior Lighting - Full

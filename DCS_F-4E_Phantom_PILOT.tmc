@@ -173,7 +173,7 @@ int dcs_f4e_pilot_controls()
 	MapKeyIO(&Throttle, FLAPM, 	CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'f', D(), UP+L_SHIFT+R_CTL, D(200),		// I - Slats Override Switch Cover - Open
 									   DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'f', D(), UP+R_SHIFT+L_SHIFT ),		//	   Slats Override Switch - In
 								CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));							// O - Flaps/Slats Switch - Out
-	MapKeyRIO(&Throttle, FLAPM,	CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'f', D(), UP+L_CTLR_CTL ), 				// I - Slats Override Switch Cover - Close
+	MapKeyRIO(&Throttle, FLAPM,	CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'f', D(), UP+L_CTL+R_CTL ), 				// I - Slats Override Switch Cover - Close
 								0 );																			// O - 
 								//DOWN+R_SHIFT+L_CTL, D(10), PULSE+'f', D(), UP+R_SHIFT+L_CTL, D(200),			// I - Slats Override Switch - Norm
 	// FLAPD	
