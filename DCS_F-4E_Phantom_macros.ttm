@@ -1,33 +1,24 @@
 // Macro file for DCS_F-4E_Phantom.tmc  by Astro
-// version 1.0, May 2024
+// version 2.0, July 2026
 
 
 // Lists
-
-// Steer CMD select
-define	Steer_CMD_TACAN			L_ALT+'1'
-define	Steer_CMD_Destination	L_ALT+'2'
-define	Steer_CMD_AWLPCD		L_ALT+'3'
-define	Steer_CMD_VEC			L_ALT+'4'
-define	Steer_CMD_MAN			L_ALT+'5'
 
 // Radar Missile CW select
 define  Missile_CW_Off          R_SHIFT+'0'
 define  Missile_CW_Stby         R_SHIFT+'1'
 define  Missile_CW_On           R_SHIFT+'2'
 
-// JESTER Radar Range select
-define  JSTR_rdr_range_25n_list     CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'1', D(), UP+L_CTL+L_ALT )
-define  JSTR_rdr_range_25w_list     CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'2', D(), UP+L_CTL+L_ALT )
-define  JSTR_rdr_range_50n_list     CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'3', D(), UP+L_CTL+L_ALT )
-define  JSTR_rdr_range_50w_list     CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'4', D(), UP+L_CTL+L_ALT )
-
+/*
 // JESTER Radar Elevation select
-define	JSTR_rdr_elev_low		CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL )
-define	JSTR_rdr_elev_lowmid	CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL )
-define	JSTR_rdr_elev_middle	CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL )
-define	JSTR_rdr_elev_highmid	CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL )
-define	JSTR_rdr_elev_high		CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL )
-
-
-
+define	JSTR_rdr_elev_7500_lower    CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'1', D(), UP+L_CTL+R_SHIFT )
+define	JSTR_rdr_elev_3500_lower	CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'2', D(), UP+L_CTL+R_SHIFT )
+define	JSTR_rdr_elev_center        CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'0', D(), UP+L_CTL+R_SHIFT )
+define	JSTR_rdr_elev_3500_higher   CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'3', D(), UP+L_CTL+R_SHIFT )
+define	JSTR_rdr_elev_7500_higher   CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'4', D(), UP+L_CTL+R_SHIFT )
+define	JSTR_rdr_elev_0_10k         CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'5', D(), UP+L_CTL+R_SHIFT )
+define	JSTR_rdr_elev_10_20k        CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'6', D(), UP+L_CTL+R_SHIFT )
+define	JSTR_rdr_elev_20_30k        CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'7', D(), UP+L_CTL+R_SHIFT )
+define	JSTR_rdr_elev_30_40k        CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'8', D(), UP+L_CTL+R_SHIFT )
+define	JSTR_rdr_elev_40_50k        CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'9', D(), UP+L_CTL+R_SHIFT )
+*/

@@ -34,19 +34,18 @@ int dcs_f4e_jester_controls()
 	// H3U
 	MapKeyIO(&AVA_F16, H3U, 	0,																						// I - 
 								TEMPO( SEQ( JSTR_rdr_range_50n, JSTR_rdr_range_50w ),									// O - Radar range 50 narrow/wide
-									   EXEC( "index_elev = (index_elev+1)%5;"											//     
-											 "ActKey( KEYON+PULSE+X(radarelevlist, index_elev) );" ), 500 ));			//     [long] Radar elevation step up
+									   JSTR_rdr_elev_10_20k, 500 ));														//     [long] Radar elevation 10 - 20k ft
 	// H3D
 	MapKeyIO(&AVA_F16, H3D, 	0,																						// I - 
 								TEMPO( SEQ( JSTR_rdr_range_25n, JSTR_rdr_range_25w ),									// O - Radar range 25 narrow/wide
-									   EXEC( "index_elev = (index_elev+4)%5;"											//     
-											 "ActKey( KEYON+PULSE+X(radarelevlist, index_elev) );" ), 500 ));			// 	   [long] Radar elevation step down
+									   JSTR_rdr_elev_0_10k, 500 ));														//     [long] Radar elevation 0 - 10k ft
 	// H3R
 	MapKeyIO(&AVA_F16, H3R, 	0, 																						// I - 
 								0 );																					// O - 
 	// H3L
 	MapKeyIO(&AVA_F16, H3L, 	0, 																						// I - 
-								0 );																					// O - 
+								TEMPO( 0,																				// O - 
+									   JSTR_rdr_elev_center, 500 ));													//	   [long] Radar elevation Centre
 
 
 

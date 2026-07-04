@@ -9,7 +9,7 @@ include "target.tmh"
 include "DCS_F-4E_Phantom_PILOT.tmc"						// all PILOT controls
 include "DCS_F-4E_Phantom_WSO.tmc"							// all WSO controls
 include "DCS_F-4E_Phantom_JESTER.tmc"						// all JESTER controls
-include "DCS_F-4E_Phantom_macros.ttm"						// definitions
+//include "DCS_F-4E_Phantom_macros.ttm"						// definitions
 include "DCS_Fighter_Common.tmc"							// all dcs fighter COMMON controls
 
 
@@ -19,9 +19,8 @@ include "DCS_Fighter_Common.tmc"							// all dcs fighter COMMON controls
 int autopilot;
 int extlight_posdim;	
 
-int steercmdlist, index_stcmd = 0;							// (start with second element after increment, element 0 is first element in list)
 int missilecwlist, index_mslcw = 0;							// (start in off position, element 0 is first element in list)
-int radarrangelist, index_range = 2;						// (current is middle of five (assumption 100 nm), element 2, element 0 is first element in list)
+//int radarrangelist, index_range = 2;						// (current is middle of five (assumption 100 nm), element 2, element 0 is first element in list)
 int radarelevlist, index_elev = 2;							// (current is middle of five, element 2, element 0 is first element in list)
 int lantirn_q_stptlist;
 
@@ -38,6 +37,17 @@ int	JSTR_rdr_range_25n;
 int	JSTR_rdr_range_25w;
 int	JSTR_rdr_range_50n;
 int	JSTR_rdr_range_50w;
+
+int	JSTR_rdr_elev_7500_lower;
+int	JSTR_rdr_elev_3500_lower;
+int	JSTR_rdr_elev_center;
+int	JSTR_rdr_elev_3500_higher;
+int	JSTR_rdr_elev_7500_higher;
+int	JSTR_rdr_elev_0_10k;
+int	JSTR_rdr_elev_10_20k;
+int	JSTR_rdr_elev_20_30k;
+int	JSTR_rdr_elev_30_40k;
+int	JSTR_rdr_elev_40_50k;
 
 int JSTR_nav_wp_next;		// a, 4, 1, w
 int	JSTR_nav_wp1;			// a, 4, 1, e, w
@@ -87,37 +97,6 @@ int main()
 	// -------------------- COMMON FUNCTIONS ------------------------
 					
 	dcs_fighter_common_functions();						// load dcs COMMON functions
-
-
-	// --------------------- AIRCRAFT LISTS -------------------------
-
-	// List items are defined in DCS_F-4E_Phantom_macros.ttm
-	
-	
-	// Steer CMD select
-	steercmdlist 	= SEQ( Steer_CMD_TACAN,
-						   Steer_CMD_Destination,
-						   Steer_CMD_AWLPCD,
-						   Steer_CMD_VEC,
-						   Steer_CMD_MAN );
-
-	// Radar Missile CW select
-	missilecwlist 	= SEQ( Missile_CW_Off,
-						   Missile_CW_Stby,
-						   Missile_CW_On );
-
-	// Radar range select
-	radarrangelist 	= SEQ( JSTR_rdr_range_25n_list,
-						   JSTR_rdr_range_25w_list,
-						   JSTR_rdr_range_50n_list,
-						   JSTR_rdr_range_50w_list );
-
-	// Radar elevation select
-	radarelevlist 	= SEQ( JSTR_rdr_elev_low,
-						   JSTR_rdr_elev_lowmid,
-						   JSTR_rdr_elev_middle,
-						   JSTR_rdr_elev_highmid,
-						   JSTR_rdr_elev_high );
 
 
 
@@ -197,6 +176,17 @@ int main()
 	JSTR_rdr_range_25w		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'2', D(), UP+L_CTL+L_ALT );
 	JSTR_rdr_range_50n		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'3', D(), UP+L_CTL+L_ALT );
 	JSTR_rdr_range_50w		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'4', D(), UP+L_CTL+L_ALT );
+	// Radar - Elevation
+	JSTR_rdr_elev_7500_lower	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'1', D(), UP+L_CTL+R_SHIFT );
+	JSTR_rdr_elev_3500_lower	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'2', D(), UP+L_CTL+R_SHIFT );
+	JSTR_rdr_elev_center		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'0', D(), UP+L_CTL+R_SHIFT );
+	JSTR_rdr_elev_3500_higher	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'3', D(), UP+L_CTL+R_SHIFT );
+	JSTR_rdr_elev_7500_higher	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'4', D(), UP+L_CTL+R_SHIFT );
+	JSTR_rdr_elev_0_10k			= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'5', D(), UP+L_CTL+R_SHIFT );
+	JSTR_rdr_elev_10_20k		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'6', D(), UP+L_CTL+R_SHIFT );
+	JSTR_rdr_elev_20_30k		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'7', D(), UP+L_CTL+R_SHIFT );
+	JSTR_rdr_elev_30_40k		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'8', D(), UP+L_CTL+R_SHIFT );
+	JSTR_rdr_elev_40_50k		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'9', D(), UP+L_CTL+R_SHIFT );
 	// Navigation
 	JSTR_nav_wp_next		= CHAIN( PULSE+'a', D(200),
 									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
@@ -244,6 +234,19 @@ int main()
 	JSTR_WHDN_startup		= SEQ( JSTR_startup,										// Start-up/Loud&Clear/INS Fine
 								   JSTR_loudclear,
 								   JSTR_ins_fine );
+
+	// --------------------- AIRCRAFT LISTS -------------------------
+
+	// List items are defined in DCS_F-4E_Phantom_macros.ttm
+	
+
+	// Radar elevation select
+	radarelevlist 	= SEQ( JSTR_rdr_elev_7500_lower,
+						   JSTR_rdr_elev_3500_lower,
+						   JSTR_rdr_elev_center,
+						   JSTR_rdr_elev_3500_higher,
+						   JSTR_rdr_elev_7500_higher );
+
 
 	
 

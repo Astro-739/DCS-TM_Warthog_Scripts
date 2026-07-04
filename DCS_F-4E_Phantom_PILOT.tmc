@@ -11,12 +11,12 @@ int dcs_f4e_pilot_button_definitions()
 {
 
 	// Target Management Switch / Armament Selector (overwrites common)
-	TMS_fwd 	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT, D(200),										// Gun/Missile Pinky Switch - Radar
-						 DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT );												// HUD Mode - A/A
-	TMS_aft 	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'w', D(), UP+L_SHIFT, D(200),										// Gun/Missile Pinky Switch - Gun
-					  	 DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT );													// HUD Mode - Cage
-	TMS_right 	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT, D(200),										// Gun/Missile Pinky Switch - Heat
-						 DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT );												// HUD Mode - A/A
+	TMS_fwd 	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT, D(200) );										// Gun/Missile Pinky Switch - Radar
+						 //DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT );												// HUD Mode - A/A
+	TMS_aft 	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'w', D(), UP+L_SHIFT, D(200) );										// Gun/Missile Pinky Switch - Gun
+					  	 //DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT );													// HUD Mode - Cage
+	TMS_right 	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT, D(200) );										// Gun/Missile Pinky Switch - Heat
+						 //DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT );												// HUD Mode - A/A
 	TMS_left 	= 0;																									// 
 
 	// Display Management Switch (overwrites common)
@@ -261,20 +261,14 @@ int dcs_f4e_pilot_controls_switch()
 	// Coolie Switch
 	// CSU
 	MapKeyIOUMD(&Throttle, CSU, CHAIN( L_SHIFT, D(10), '-'),										 					// IU - Aural Tone Volume - [Dec]
-								EXEC( "if (index_mslcw > 0) {"															// OU - Radar-Missile CW - [Down]
-									  	"index_mslcw = (index_mslcw-1)%3;"												// 
-     	 							  	"ActKey( KEYON+PULSE+X(missilecwlist, index_mslcw) );"							//
-										"}" ),																			//
+								0,																						// OU - 
 								DX41,																  					// IM - Seat Position - Up
 								DX40,																 					// OM - Reticle Depression - [Dec]
 								CHAIN( L_SHIFT, D(10), '-'),										 					// ID - Aural Tone Volume - [Dec]
 								DX40 ); 																				// OD - Reticle Depression - [Dec]
 	// CSD
 	MapKeyIOUMD(&Throttle, CSD, CHAIN( L_SHIFT, D(10), '='),										 					// IU - Aural Tone Volume - [Inc]
-								EXEC( "if (index_mslcw < 2) {"															// OU - Radar-Missile CW - [Up]
-									  	"index_mslcw = (index_mslcw+1)%3;"												// 
-     	 							  	"ActKey( KEYON+PULSE+X(missilecwlist, index_mslcw) );"							//
-										"}" ),																			//
+								0,																						// OU -
 								DX42,																  					// IM - Seat Position - Down
 								DX39,																 					// OM - Reticle Depression - [Inc]
 								CHAIN( L_SHIFT, D(10), '='),										 					// ID - Aural Tone Volume - [Inc]

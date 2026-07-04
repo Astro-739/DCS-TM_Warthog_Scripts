@@ -9,10 +9,13 @@ include "DCS_Fighter_Common.tmc"
 
 // -------------------------- INITIALISE ----------------------------
 
-int extlight_fulltoform;		
-int extlight_covtoform;			
+int extlight_fulltoform;
+int extlight_covtoform;
 
-define AB 77											// detent position at AB% of full throttle reach
+int dogfightmode;
+
+
+define AB 70											// detent position at AB% of full throttle reach
 
 
 // -------------------------- MAIN F-5E -----------------------------------------------------------
@@ -55,8 +58,6 @@ int main()
 	emergency_stores_jettison = SEQ( CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'m', D(), UP+R_WIN+L_SHIFT ),		// Jettison Switch - ALL PYLONS
 									 CHAIN( R_WIN+L_CTL, D(10), '3' ),											// Jettison Button
 									 CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'k', D(), UP+R_WIN+L_SHIFT ));		// Jettison Switch - OFF
-	//emergency_stores_jettison = SEQ( CHAIN( L_SHIFT+L_CTL, D(10), '9' ),										// Emergency All Jettison Button Cover - OPEN
-	//								 CHAIN( L_SHIFT, D(10), 'e' ));												// Emergency All Jettison Button
 
 
 	// Exterior Lighting - Full
@@ -74,24 +75,25 @@ int main()
 
 
 	// Ground Crew Start-up
-	groundcrew = SEQ( CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F1, D(8000), 	// Radio menu (\), Ground crew, Wheel Chocks, Place 
-			 		   		 PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F1, D(10000),	// Radio menu (\), Ground crew, Ground Air Supply, Connect
-							 PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F3 ), 			// Radio menu (\), Ground crew, Ground Air Supply, Apply
-					  CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F3, D(25000),	// Radio menu (\), Ground crew, Ground Air Supply, Apply
-							 PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F2, D(15000),	// Radio menu (\), Ground crew, Ground Air Supply, Disconnect
-							 PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F2 ));			// Radio menu (\), Ground crew, Wheel Chocks, Remove
+	groundcrew = SEQ( CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F1, D(8000), 			// Radio menu (\), Ground crew, Wheel Chocks, Place 
+			 		   		 PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F2, D(100), PULSE+F1 ), 					// Radio menu (\), Ground crew, Ground Electric Power, On
+					  CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F2, D(100), PULSE+F2, D(13000), 			// Radio menu (\), Ground crew, Ground Electric Power, Off
+							 PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F2 ));					// Radio menu (\), Ground crew, Wheel Chocks, Remove
 
 
 	// Speedbrake functions
-	speedbrakes_open  = CHAIN( DOWN+L_SHIFT, D(10), PULSE+'b', D(), UP+L_SHIFT ); 								// speedbrake extend
-	speedbrakes_close = CHAIN( D(100), DOWN+L_CTL, D(10), PULSE+'b', D(), UP+L_CTL );							// speedbrake fully retract
+	speedbrakes_open  = DX32; 																					// speedbrake extend
+	speedbrakes_close = 0;																						// speedbrake fully retract
 
 
 	// Drag Chute function (defined in Common)
 	dragchute_deploy	= PULSE+'p';																			// Deploy Drag-Parachute
-	dragchute_release	= CHAIN( PULSE+'p', D(100), DOWN+'p', D(500), UP+'p', PULSE+'p' );						// Release Drag-Parachute
+	dragchute_release	= CHAIN( DOWN+R_CTL, D(10), PULSE+'p', D(), UP+R_CTL );									// Release Drag-Parachute
 
 
+	// Dogfight Mode
+	dogfightmode =	CHAIN(   0			// Radar Mode Select Knob - CLOSE CMBT
+								);
 
 
 	// -------------------- COMMON CONTROLS -------------------------
@@ -238,11 +240,11 @@ int main()
 
 	// Flaps Switch
 	// FLAPU
-	MapKey(&Throttle, FLAPU,  	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ));						// Flap Switch - UP
+	MapKey(&Throttle, FLAPU,  	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ));						// Flaps Up Pushbutton
 	// FLAPM
-	MapKey(&Throttle, FLAPM, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));							// Flap Switch - FIXED
+	MapKey(&Throttle, FLAPM, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));							// Flaps Down (TAKEOFF) Pushbutton
 	// FLAPD	
-	MapKey(&Throttle, FLAPD,  	PULSE+'f' );																	// Flap Switch - AUTO
+	MapKey(&Throttle, FLAPD,  	CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'f', D(), UP+L_CTL+L_ALT ));				// Flaps Down (LANDING) Pushbutton
 
 
 	// Engine Operation
@@ -261,7 +263,7 @@ int main()
 	MapKeyIO(&Throttle, EFLNORM, 	0,																			// I - 
 									0 );																		// O - (Front seat)
 	// EFLOVER
-	MapKeyIO(&Throttle, EFLOVER, 	DX22,																		// I - Aileron Limiter (Hold to turn off)
+	MapKeyIO(&Throttle, EFLOVER, 	DX22,																		// I - Stick Deflection Limiter Override
 									0 );																		// O - (Back seat)
 
 
