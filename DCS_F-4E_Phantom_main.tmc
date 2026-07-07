@@ -1,6 +1,6 @@
 // DCS F-4E Phantom Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.25.127
-// version 2.1, Jan 2026
+// version 2.2, Jul 2026
 
 
 // --------------------------- INCLUDE ------------------------------
@@ -24,11 +24,8 @@ int missilecwlist, index_mslcw = 0;							// (start in off position, element 0 i
 int radarelevlist, index_elev = 2;							// (current is middle of five, element 2, element 0 is first element in list)
 int lantirn_q_stptlist;
 
-int	JSTR_rdr_off;		// a long, 2, 1, w
-int	JSTR_rdr_on;		// a long, 2, 1, e, w
-
-int	JSTR_rdr_stby;			// a long, 2, 1, e, w
-int	JSTR_rdr_active;		// a long, 2, 1, w
+int	JSTR_rdr_stby;
+int	JSTR_rdr_active;
 int	JSTR_rdr_autofocus_on;		// a long, 2, 1, 2x e, w
 int	JSTR_rdr_autofocus_off;		// a long, 2, 1, 3x e, w
 int	JSTR_rdr_iff;			// a long, 2, 2
@@ -59,8 +56,8 @@ int	JSTR_ins_fine;
 int	JSTR_ins_wpn;
 
 int	JSTR_ins_align;				//	a, 6, 5   start alignment
-int	JSTR_jammer_active;			// a, 5, 5, e, w
-int	JSTR_jammer_stby;			// a, 5, 5, w
+int	JSTR_jammer_transmit;
+int	JSTR_jammer_stby;
 
 int JSTR_taperecorder;
 
@@ -76,7 +73,7 @@ int JSTR_context_double;
 
 char LTRN_mode = 0;
 
-int JSTR_rdr_offon;
+int JSTR_rdr_stbyactive;
 int JSTR_WHDN_startup;
 
 
@@ -168,8 +165,8 @@ int main()
 	// ----- JESTER calls -----
 
 	// Radar
-	JSTR_rdr_off			= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'0', D(), UP+L_CTL+R_CTL );
-	JSTR_rdr_on				= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'1', D(), UP+L_CTL+R_CTL );
+	JSTR_rdr_stby			= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'0', D(), UP+L_CTL+R_CTL );
+	JSTR_rdr_active			= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'1', D(), UP+L_CTL+R_CTL );
 	JSTR_rdr_iff			= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'7', D(), UP+L_CTL+R_CTL );
 	// Radar - Range
 	JSTR_rdr_range_25n		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'1', D(), UP+L_CTL+L_ALT );
@@ -203,15 +200,8 @@ int main()
 	JSTR_ins_fine			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
 	JSTR_ins_wpn			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL );
 	// General
-	JSTR_jammer_active		= CHAIN( PULSE+'a', D(200),
-									 DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL, D(200), 
-									 PULSE+'e', D(200), 
-									 PULSE+'w' );
-	JSTR_jammer_stby		= CHAIN( PULSE+'a', D(200),
-									 DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL, D(200), 
-									 PULSE+'w' );
+	JSTR_jammer_transmit		= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'9', D(), UP+L_CTL+R_CTL );
+	JSTR_jammer_stby		= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'8', D(), UP+L_CTL+R_CTL );
 
 	JSTR_menu				= 'a';
 	JSTR_menu_right			= PULSE+'e';
@@ -229,9 +219,7 @@ int main()
 	JSTR_taperecorder		= SEQ( CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'7', D(), UP+L_CTL+L_ALT ),			// Jester Command: Systems > AVTR > Standby
 								   CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'6', D(), UP+L_CTL+L_ALT ));			// Jester Command: Systems > AVTR > Record
 	
-	JSTR_rdr_offon			= SEQ( JSTR_rdr_off,										// Radar - Silent/Active
-								   JSTR_rdr_on );
-	JSTR_WHDN_startup		= SEQ( JSTR_startup,										// Start-up/Loud&Clear/INS Fine
+	JSTR_WHDN_startup		= SEQ( JSTR_startup,						//TODO				// Start-up/Loud&Clear/INS Fine
 								   JSTR_loudclear,
 								   JSTR_ins_fine );
 

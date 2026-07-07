@@ -1,6 +1,6 @@
 // JESTER file for DCS_F-4E_Phantom.tmc  by Astro
-// TARGET version 3.0.24.618
-// version 1.3, Aug 2024
+// TARGET version 3.0.25.127
+// version 1.4, Jul 2026
 
 
 
@@ -70,23 +70,23 @@ int dcs_f4e_jester_controls()
 								0 );																			// OD - 
 	// MSR
 	MapKeyIOUMD(&Throttle, MSR, 0, 																				// IU - 
-								TEMPO( 0,																		// OU - JSTR_jammer_active
-									   SEQ( JSTR_jammer_active,	JSTR_jammer_stby ),	500 ),						//      [long] JSTR_jammer_active / JSTR_jammer_stby
+								TEMPO( 0,																		// OU - 
+									   SEQ( JSTR_jammer_transmit, JSTR_jammer_stby ), 500 ),					//      [long] JSTR_jammer_transmit / JSTR_jammer_stby
 								0,																				// IM - 
 								JSTR_nav_wp1,																	// OM - JSTR_nav_wp1
 								0,																				// ID - 
-								TEMPO( 0,																		// OD - JSTR_jammer_active
-									   SEQ( JSTR_jammer_active,	JSTR_jammer_stby ),	500 ));						//      [long] JSTR_jammer_active / JSTR_jammer_stby
+								TEMPO( 0,																		// OD - 
+									   SEQ( JSTR_jammer_transmit, JSTR_jammer_stby ), 500 ));					//      [long] JSTR_jammer_transmit / JSTR_jammer_stby
 	// MSL
 	MapKeyIOUMD(&Throttle, MSL, 0, 																				// IU - 
 								TEMPO( 0,																		// OU - 
-									   JSTR_rdr_offon, 500 ),													//		[long] JSTR_rdr_offon
+									   SEQ( JSTR_rdr_stby, JSTR_rdr_active ), 500 ),							//		[long] JSTR_rdr_stby / JSTR_rdr_active
 								0,																				// IM - 
 								TEMPO( 0,																		// OM - 
-									   JSTR_rdr_offon, 500 ),													//		[long] JSTR_rdr_offon
+									   SEQ( JSTR_rdr_stby, JSTR_rdr_active ), 500 ),							//		[long] JSTR_rdr_stby / JSTR_rdr_active
 								0,																				// ID - 
 								TEMPO( 0,																		// OD - 
-									   JSTR_rdr_offon, 500 ));													//		[long] JSTR_rdr_offon
+									   SEQ( JSTR_rdr_stby, JSTR_rdr_active ), 500 ));							//		[long] JSTR_rdr_stby / JSTR_rdr_active
 	// MSP 
 	MapKeyIO(&Throttle, MSP, 	0,																				// I - 
 								JSTR_menu );																	// O - JSTR_menu 
