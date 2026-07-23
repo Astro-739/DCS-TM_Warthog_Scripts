@@ -1,4 +1,4 @@
-// JESTER file for DCS_F-14B_Tomcat.tmc  by Astro
+// JESTER file for DCS_F-14AB_Tomcat.tmc  by Astro
 // TARGET version 3.0.24.618
 // version 2.0, Feb 2025
 
@@ -6,9 +6,9 @@
 
 
 
-// ------------------------------ F-14B JESTER CONTROLS -------------------------------------------
+// ------------------------------ F-14AB JESTER CONTROLS --------------------------------------------
 
-int dcs_f14_jester_controls()
+int dcs_f14ab_jester_controls()
 // JESTER controls should stay within JESTER switch set (TMS, DMS, CS, MS)
 {
 
@@ -160,7 +160,7 @@ int dcs_f14_jester_controls()
 
 
 
-}	// =====  end dcs_f14_jester_controls()  ======================================================
+}	// =====  end dcs_f14ab_jester_controls()  ======================================================
 
 
 
@@ -168,7 +168,7 @@ int dcs_f14_jester_controls()
 
 // ------------------------------ JESTER LANTIRN CONTROLS -----------------------------------------
 
-int dcs_f14_jester_lantirn_controls()
+int dcs_f14ab_jester_lantirn_controls()
 {
 
 	// -------------------- FLIGHT STICK ----------------------------
@@ -279,4 +279,4 @@ int dcs_f14_jester_lantirn_controls()
 
 
 
-}	// =====  end dcs_f14_jester_lantirn_controls()  ==============================================
+}	// =====  end dcs_f14ab_jester_lantirn_controls()  ==============================================

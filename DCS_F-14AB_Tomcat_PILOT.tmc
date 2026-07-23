@@ -1,4 +1,4 @@
-// PILOT file for DCS_F-14B_Tomcat.tmc  by Astro
+// PILOT file for DCS_F-14AB_Tomcat.tmc  by Astro
 // TARGET version 3.0.25.127
 // version 2.2, Jan 2026
 
@@ -8,7 +8,7 @@
 
 // -------------------- PILOT BUTTON DEFINITIONS --------------------------------------------------
 
-int dcs_f14_pilot_button_definitions()
+int dcs_f14ab_pilot_button_definitions()
 {
 
 	// Target Management Switch / Armament Selector (overwrites common)
@@ -29,19 +29,19 @@ int dcs_f14_pilot_button_definitions()
 						 EXEC( "index_stcmd = (index_stcmd+4)%5;"														// [long] Steer CMD previous
 							   "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ),	500 );							// 		
 
-}	// end dcs_f14_pilot_button_definitions()	===================================================
+}	// end dcs_f14ab_pilot_button_definitions()	===================================================
 
 
 
 
-// ---------------------------------- F-14B PILOT CONTROLS ----------------------------------------
+// ---------------------------------- F-14AB PILOT CONTROLS ----------------------------------------
 
-int dcs_f14_pilot_controls()
+int dcs_f14ab_pilot_controls()
 {
 
 	// -------------------- COMMON CONTROLS -------------------------
 					
-	dcs_f14_pilot_button_definitions();					// load button definitions used by COMMON
+	dcs_f14ab_pilot_button_definitions();					// load button definitions used by COMMON
 	dcs_fighter_common_controls();						// load dcs COMMON controls
 	dcs_fighter_common_mfd();							// load dcs MFD controls
 														// before aircraft controls, to allow for overwriting of common controls when necessary
@@ -62,10 +62,10 @@ int dcs_f14_pilot_controls()
 
 	// JSTR layer
 	// Expand FOV Button - S3
-	MapKey(&AVA_F16, S3,  		EXEC( "if(LTRN_mode) dcs_f14_jester_lantirn_controls();"								// Switch to JESTER LANTIRN controls (LTRN_mode ON)
-								  	  "else dcs_f14_jester_controls();" ));												// Switch to JESTER controls (LTRN_mode OFF)
+	MapKey(&AVA_F16, S3,  		EXEC( "if(LTRN_mode) dcs_f14ab_jester_lantirn_controls();"								// Switch to JESTER LANTIRN controls (LTRN_mode ON)
+								  	  "else dcs_f14ab_jester_controls();" ));												// Switch to JESTER controls (LTRN_mode OFF)
 	MapKeyR(&AVA_F16, S3,  		EXEC( "dcs_fighter_common_switch();" 													// Switch back to COMMON,
-								  	  "dcs_f14_pilot_controls_switch();" ));											//   and PILOT controls
+								  	  "dcs_f14ab_pilot_controls_switch();" ));											//   and PILOT controls
 
 
 
@@ -215,7 +215,7 @@ int dcs_f14_pilot_controls()
 									   EXEC( "if(Joystick[S3]) {"														// 	   If JSTR shift is pressed
 											   "LTRN_mode = 1;"															// 	   LTRN_mode ON
 											   "printf(\"LTRN_mode = 1\\xa\");"											// 
-											   "dcs_f14_jester_lantirn_controls();"										//	   Load JESTER LANTIRN controls
+											   "dcs_f14ab_jester_lantirn_controls();"										//	   Load JESTER LANTIRN controls
 											   "}" ),																	//
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED3) )); 									//     A-G mode on, LED3 ON for D layer
 	MapKeyRIO(&Throttle, BSB, 	CHAIN( EXEC( "CAR_mode = 0;"															// I - Set CAR_mode OFF
@@ -232,22 +232,22 @@ int dcs_f14_pilot_controls()
 	
 	// ---------- Also load SWITCH part of PILOT controls -----------
 	
-	dcs_f14_pilot_controls_switch();																					// controls to be switched back after JESTER use
+	dcs_f14ab_pilot_controls_switch();																					// controls to be switched back after JESTER use
 
 
-}	// ====  end dcs_f14_pilot_controls()  ========================================================
+}	// ====  end dcs_f14ab_pilot_controls()  ========================================================
 
 
 
 
 // -----------------  PILOT SWITCH CONTROLS to be switched back after JESTER use ------------------
 
-int dcs_f14_pilot_controls_switch()
+int dcs_f14ab_pilot_controls_switch()
 {
 
 	// -------------------- COMMON SWITCH CONTROLS ------------------
 
-	dcs_f14_pilot_button_definitions();					// load button definitions used by COMMON
+	dcs_f14ab_pilot_button_definitions();					// load button definitions used by COMMON
 	dcs_fighter_common_switch();						// switch back to common controls
 
 
@@ -286,4 +286,4 @@ int dcs_f14_pilot_controls_switch()
 								0 );																					// OD - 
 
 
-} 	// =====  end of dcs_f14_pilot_controls_switch()  =============================================
+} 	// =====  end of dcs_f14ab_pilot_controls_switch()  =============================================

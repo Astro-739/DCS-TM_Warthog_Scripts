@@ -70,7 +70,7 @@ int dcs_f4e_jester_controls()
 								0 );																			// OD - 
 	// MSR
 	MapKeyIOUMD(&Throttle, MSR, 0, 																				// IU - 
-								TEMPO( 0,																		// OU - 
+								TEMPO( CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'0', D(), UP+L_ALT+R_SHIFT ),	// OU - Enter BST
 									   SEQ( JSTR_jammer_transmit, JSTR_jammer_stby ), 500 ),					//      [long] JSTR_jammer_transmit / JSTR_jammer_stby
 								0,																				// IM - 
 								JSTR_nav_wp1,																	// OM - JSTR_nav_wp1

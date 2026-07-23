@@ -1,4 +1,4 @@
-// DCS F-14B Tomcat Thrustmaster Warthog/AVA/MFD Script by Astro
+// DCS F-14AB Tomcat Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.25.127
 // version 2.2, Jan 2026
 
@@ -7,10 +7,10 @@
 // ------------------------- INCLUDE --------------------------------
 
 include "target.tmh"
-include "DCS_F-14B_Tomcat_PILOT.tmc"						// all PILOT controls
-include "DCS_F-14B_Tomcat_RIO.tmc"							// all RIO controls
-include "DCS_F-14B_Tomcat_JESTER.tmc"						// all JESTER controls
-include "DCS_F-14B_Tomcat_macros.ttm"						// definitions
+include "DCS_F-14AB_Tomcat_PILOT.tmc"						// all PILOT controls
+include "DCS_F-14AB_Tomcat_RIO.tmc"							// all RIO controls
+include "DCS_F-14AB_Tomcat_JESTER.tmc"						// all JESTER controls
+include "DCS_F-14AB_Tomcat_macros.ttm"						// definitions
 include "DCS_Fighter_Common.tmc"							// all dcs fighter COMMON controls
 
 
@@ -104,7 +104,7 @@ define AB 75											// detent position at AB% of full throttle reach (80% for
 
 
 
-// ------------------------------ MAIN F-14B ------------------------------------------------------
+// ------------------------------ MAIN F-14AB ------------------------------------------------------
 
 int main()
 {
@@ -121,7 +121,7 @@ int main()
 	// -------------------- AIRCRAFT FUNCTIONS ----------------------
 
 	// ------------------------- LISTS ------------------------------
-	// List items are defined in DCS_F-14B_Tomcat_macros.ttm
+	// List items are defined in DCS_F-14AB_Tomcat_macros.ttm
 	
 	
 	// Steer CMD select
@@ -408,7 +408,7 @@ int main()
 
 	// -------------------- PILOT CONTROLS --------------------------
 
-	dcs_f14_pilot_controls();							// PILOT controls (loaded first, assumimg player starts as pilot)
+	dcs_f14ab_pilot_controls();							// PILOT controls (loaded first, assumimg player starts as pilot)
 
 
 	// -------------------- SEAT CONTROLS ---------------------------
@@ -417,12 +417,12 @@ int main()
 	// EFLNORM	
 	MapKeyIO(&Throttle, EFLNORM, 	0,															// I - 
 									CHAIN( PULSE+'1', D(100),									// O - Switch to PILOT cockpit
-										   EXEC( "dcs_f14_pilot_controls_switch();" 			//     switch to PILOT controls
+										   EXEC( "dcs_f14ab_pilot_controls_switch();" 			//     switch to PILOT controls
 										   		 "printf(\"PILOT controls\\xa\");" )));			// 	   print state to output window
 	// EFLOVER
 	MapKeyIO(&Throttle, EFLOVER, 	0,															// I - 
 									CHAIN( PULSE+'2', D(100),									// O - Switch to RIO cockpit
-										   EXEC( "dcs_f14_rio_controls();"						//     load RIO controls
+										   EXEC( "dcs_f14ab_rio_controls();"						//     load RIO controls
 										   		 "printf(\"RIO controls\\xa\");" )));			// 	   print state to output window
 	MapKeyRIO(&Throttle, EFLOVER, 	0,															// I - 
 									0 );														// O - 
@@ -455,7 +455,7 @@ int autopilot_mode()
 //		ActKey(KEYON+PULSE+JSTR_TCS_menu);												// Turn on TCS menu (when not already on)
 //		tcs_menu_on = 1;
 //		LTRN_mode = 1;																	// LTRN_mode ON
-//		dcs_f14_jester_lantirn_controls();												// Load JESTER LANTIRN controls
+//		dcs_f14ab_jester_lantirn_controls();												// Load JESTER LANTIRN controls
 //	}
 //}
 
