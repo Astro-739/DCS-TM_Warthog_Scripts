@@ -119,8 +119,11 @@ int extlight_flashsteady;
 
 int pilotbody;
 int helmetvisor;
-int sunglasses;
+int charactercustm;
 int mirrors;
+int oxygenmask;
+int visortinteffect;
+char tinteffect_on = 0;
 
 int nightvision;				
 char nightvision_on = 0;		
@@ -297,10 +300,15 @@ int dcs_fighter_common_functions()
 	extlight_flashsteady = 0;
 
 	// Cockpit Visuals
-	pilotbody   = CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT );												// Pilot Body toggle
-	helmetvisor = CHAIN( DOWN+L_CTL, D(10), PULSE+'v', D(), UP+L_CTL );													// Helmet visor toggle
-    sunglasses  = CHAIN( DOWN+L_SHIFT, D(10), PULSE+'v', D(), UP+L_SHIFT ); 		  									// Sunglasses toggle
-	mirrors     = CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'m', D(), UP+L_SHIFT+R_SHIFT ); 							// Toggle Mirrors
+	pilotbody   	= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT );											// Pilot Body toggle
+	//sunglasses  	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'v', D(), UP+L_SHIFT ); 		  								// OLD - Sunglasses toggle
+	charactercustm  = CHAIN( DOWN+L_ALT, D(10), PULSE+';', D(), UP+L_ALT ); 		  									// Character Customisation
+	mirrors     	= CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'m', D(), UP+L_SHIFT+R_SHIFT ); 						// Toggle Mirrors
+	oxygenmask		= 0;																								// Oxygen Mask toggle
+	visortinteffect = CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'v', D(), UP+L_CTL+R_SHIFT );								// Helmet visor tint effect toggle
+	helmetvisor 	= CHAIN( DOWN+L_CTL, D(10), PULSE+'v', D(), UP+L_CTL, D(),											// Helmet visor toggle
+							 EXEC( "if (!tinteffect_on) ActKey( PULSE+KEYON+visortinteffect );" 						// Activate Visor Tint Effect on first visor use
+								   "tinteffect_on = 1;" ));
 
 	// Night Vision function
 	nightvision = SEQ( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(), UP+R_SHIFT, D(),										// Night vision goggles (NVG) on
@@ -378,8 +386,8 @@ int dcs_fighter_common_controls()
 
 	// Trim Switch
 	// H1U
-	MapKeyIO(&AVA_F16, H1U, 	TEMPO( mirrors, 																// I - Toggle Mirrors
-						 	 		   helmetvisor, 500 ),   													// 	   [long] Helmet Visor toggle
+	MapKeyIO(&AVA_F16, H1U, 	TEMPO( helmetvisor, 															// I - Helmet Visor toggle
+						 	 		   mirrors, 500 ),   														// 	   [long] Toggle Mirrors
 								CHAIN( R_CTL, D(10), ';' )); 													// O - trim nose down
 	// H1D
 	MapKeyIO(&AVA_F16, H1D, 	TEMPO( PULSE+F1, 																// I - F1 cockpit view
@@ -387,7 +395,7 @@ int dcs_fighter_common_controls()
 							 	CHAIN( R_CTL, D(10), '.' )); 													// O - trim nose up
 	// H1R
 	MapKeyIO(&AVA_F16, H1R, 	TEMPO( PULSE+F2, 																// I - F2 outside view
-									   sunglasses, 500 ),														//     [long] Sunglasses toggle
+									   charactercustm, 500 ),													//     [long] Character Customisation window
 							 	CHAIN( R_CTL, D(10), '/' )); 													// O - trim right wing down
 	// H1L	
 	MapKeyIO(&AVA_F16, H1L, 	TEMPO( PULSE+F6, 																// I - F6 weapon view

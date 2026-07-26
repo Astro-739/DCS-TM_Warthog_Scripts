@@ -220,11 +220,6 @@ int main()
 	// Air-to-Air Refuelling
 																														// Master Arm Off
 
-	// Speedbrake functions
-	speedbrakes_open  	= PULSE+'b'; 																					// speedbrake extend
-	speedbrakes_close 	= CHAIN( D(100), DOWN+L_CTL, D(10), PULSE+'b', D(), UP+L_CTL );									// speedbrake fully retract
-
-	
 
 	// JESTER calls
 
