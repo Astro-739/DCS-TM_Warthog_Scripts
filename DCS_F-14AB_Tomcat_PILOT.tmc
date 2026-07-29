@@ -1,6 +1,6 @@
 // PILOT file for DCS_F-14AB_Tomcat.tmc  by Astro
 // TARGET version 3.0.25.127
-// version 2.2, Jan 2026
+// version 2.3, Jul 2026
 
 
 
@@ -257,7 +257,7 @@ int dcs_f14ab_pilot_controls_switch()
 	// CSU
 	MapKeyIOUMD(&Throttle, CSU, 0,																						// IU - 
 								CHAIN( DOWN+L_CTL, D(10), PULSE+'p', D(), UP+L_CTL ), 									// OU - Missile Mode Toggle (boresight/slave)
-								DX42,																  					// IM - Seat Adjustment Down
+								seat_down,																  				// IM - Seat Adjustment Down
 								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+L_CTL+'a' );" ),								// OM - [WHDN] Nose strut kneel
 								0,																						// ID - 
 								JSTR_agwpn_comptgt ); 																	// OD - Set Computer Target Weapons (CCRP)
@@ -266,14 +266,14 @@ int dcs_f14ab_pilot_controls_switch()
 								CHAIN( DOWN+L_ALT, D(10), PULSE+'p', D(), UP+L_ALT, D(200),			 					// OU - Toggle Missile Prep
 									   DOWN+L_SHIFT, D(10), PULSE+'p', D(), UP+L_SHIFT, D(200),							//      Toggle SW Cooling
 									   DOWN+L_WIN, D(10), PULSE+'p', D(), UP+L_WIN ),									//      Toggle Gun Rate
-								DX41,																  					// IM - Seat Adjustment Up
+								seat_up,																  				// IM - Seat Adjustment Up
 								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+L_CTL+'q' );" ),								// OM - [WHDN] Nose strut extend
 								CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'w', D(), UP+L_CTL+R_CTL ),	 					// ID - Wing Sweep Bomb Mode
 								JSTR_agwpn_comppilot );												 					// OD - Set Computer Pilot Weapons (CCIP)
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, TEMPO( 0,																				// IU - 
 									   CHAIN( L_SHIFT+R_CTL, D(10), 'w' ), 500 ),										// 		[long] Wing Sweep Aft
-								DX23,																					// OU - CAGE-SEAM button
+								uncage,																					// OU - CAGE-SEAM button
 								TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'b', D(), UP+R_CTL ),							// IM - Bombing Tool
 									   CHAIN( L_SHIFT+R_CTL, D(10), 'w' ), 500 ),										// 		[long] Wing Sweep Aft
 								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+L_SHIFT+R_SHIFT+'e' );" ),						// OM - [WHDN] Ejection Seat Safety - ARMED

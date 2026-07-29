@@ -1,6 +1,6 @@
 // PILOT file for DCS_F-4E_Phantom.tmc  by Astro
 // TARGET version 3.0.25.127
-// version 2.2, Jan 2026
+// version 2.3, Jul 2026
 
 
 
@@ -183,11 +183,11 @@ int dcs_f4e_pilot_controls()
 	// Engine Operation
 	// EOLIGN
 	MapKeyIO(&Throttle, EOLIGN,	0,																				// I - 
-								CHAIN( DX33, D(300),															// O - Left Engine Ignition
+								CHAIN( engine_ignition_left, D(300),											// O - Left Engine Ignition
 									   DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));						// 	   Throttle Left - IDLE
 	// EORIGN
 	MapKeyIO(&Throttle, EORIGN, 0,																				// I - 
-								CHAIN( DX34, D(300), 															// O - Right Engine Ignition
+								CHAIN( engine_ignition_right, D(300), 											// O - Right Engine Ignition
 									   DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));						// 	   Throttle Right - IDLE
 
 	// Engine Override
@@ -262,22 +262,22 @@ int dcs_f4e_pilot_controls_switch()
 	// CSU
 	MapKeyIOUMD(&Throttle, CSU, CHAIN( L_SHIFT, D(10), '-'),										 					// IU - Aural Tone Volume - [Dec]
 								0,																						// OU - 
-								DX41,																  					// IM - Seat Position - Up
-								DX40,																 					// OM - Reticle Depression - [Dec]
+								seat_up,																  				// IM - Seat Position - Up
+								reticle_depr_decr,																		// OM - Reticle Depression - [Dec]
 								CHAIN( L_SHIFT, D(10), '-'),										 					// ID - Aural Tone Volume - [Dec]
-								DX40 ); 																				// OD - Reticle Depression - [Dec]
+								reticle_depr_decr ); 																	// OD - Reticle Depression - [Dec]
 	// CSD
 	MapKeyIOUMD(&Throttle, CSD, CHAIN( L_SHIFT, D(10), '='),										 					// IU - Aural Tone Volume - [Inc]
 								0,																						// OU -
-								DX42,																  					// IM - Seat Position - Down
-								DX39,																 					// OM - Reticle Depression - [Inc]
+								seat_down,																  				// IM - Seat Position - Down
+								reticle_depr_incr,													 					// OM - Reticle Depression - [Inc]
 								CHAIN( L_SHIFT, D(10), '='),										 					// ID - Aural Tone Volume - [Inc]
-								DX39 );																 					// OD - Reticle Depression - [Inc]
+								reticle_depr_incr );												 					// OD - Reticle Depression - [Inc]
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, 0,																						// IU - 
-								DX23,			// TODO check refuel													// OU - Air Refuel Release Button (ARR) - missile uncage
+								uncage,			// TODO check refuel													// OU - Air Refuel Release Button (ARR) - missile uncage
 								CHAIN( DOWN+R_CTL, D(10), PULSE+'b', D(), UP+R_CTL ),									// IM - Bombing Table - [Toggle]
-								DX23, 																					// OM - Air Refuel Release Button (ARR)
+								uncage, 																				// OM - Air Refuel Release Button (ARR)
 								CHAIN( DOWN+R_CTL, D(10), PULSE+'b', D(), UP+R_CTL ),									// ID - Bombing Table - [Toggle]
 								0 );																					// OD - 
 	// CSL

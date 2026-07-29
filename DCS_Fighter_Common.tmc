@@ -1,6 +1,6 @@
 // DCS Fighter Common Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.25.127
-// version 3.2, Jan 2026
+// version 3.3, Jul 2026
 //
 //
 // All common functions across DCS modules:
@@ -111,6 +111,40 @@ int	DMS_aft;
 int	DMS_right;
 int	DMS_left;
 
+int guntrigger_1st;
+int	guntrigger_2nd;
+int weaponrelease;
+int uncage;
+int cm_dispense;
+
+int voip_radio1;
+int voip_radio2;
+int voip_ics;
+
+int nws;
+int canopy_toggle;
+int wheelbrake;
+int engine_ignition_left;
+int engine_ignition_right;
+int apu_on;
+int apu_off;
+int reticle_depr_incr;
+int reticle_depr_decr;
+int seat_up;
+int seat_down;
+int nw_strut_extend;
+int nw_strut_retract;
+
+int zoom_in;
+int zoom_out;
+int snapview_right;
+int snapview_left;
+int vrzoom;
+int vrzoom_spyglass;
+int mouseclick_left;
+int mouseclick_right;
+int discord_mute;
+
 int extlight_full;
 int extlight_formation;
 int extlight_position;
@@ -118,10 +152,11 @@ int extlight_covert;
 int extlight_flashsteady;
 
 int pilotbody;
-int helmetvisor;
-int charactercustm;
 int mirrors;
+int charactercustm;
+int sunglasses;
 int oxygenmask;
+int helmetvisor;
 int visortinteffect;
 char tinteffect_on = 0;
 
@@ -281,6 +316,44 @@ int dcs_fighter_common_functions()
 	DMS_right 	= 0;
 	DMS_left 	= 0;
 
+	// Weapons and CM
+	guntrigger_1st			= DX1;																						// Gun Trigger 1st stage
+	guntrigger_2nd			= DX6;																						// Gun Trigger 2nd stage
+	weaponrelease			= DX2;																						// Weapons Release Button
+	uncage					= DX23;																						// Uncage Button
+	cm_dispense				= DX19;																						// Countermeasure dispense button
+
+	// Radios
+	voip_radio1				= DX27; 																					// VOIP Radio 1 (UHF)
+	voip_radio2				= DX29; 																					// VOIP Radio 2 (VHF)
+	voip_ics				= DX30; 																					// VOIP Intercom
+
+	// Aircraft functions
+	nws						= DX3;																						// Node Wheel Steering
+	canopy_toggle			= DX11; 																					// Canopy toggle
+	wheelbrake				= DX12;																						// Wheel brake
+	engine_ignition_left	= DX33;																						// Left engine ignition
+	engine_ignition_right	= DX34; 																					// Right engine ignition
+	apu_on					= DX35;																						// APU on
+	apu_off					= DX36;																						// APU off
+	reticle_depr_incr		= DX39; 																					// Reticle depression increase
+	reticle_depr_decr		= DX40; 																					// Reticle depression decrease
+	seat_up					= DX41; 																					// Seat position up
+	seat_down				= DX42;																						// Seat position down
+	nw_strut_extend			= DX34;																						// Nose wheel strut extend
+	nw_strut_retract		= DX35; 																					// Nose wheel strut retract / kneel
+
+	// Visual and Sound
+	zoom_in					= DX7;																						// Zoom in (flat screen / IR)
+	zoom_out				= DX9;																						// Zoom out (flat screen / IR)
+	snapview_right			= DX8;																						// Snap view right (numpad_6)
+	snapview_left			= DX10;																						// Snap view left (numpad_4)
+	vrzoom					= DX15;																						// Zoom normal (VR)
+	vrzoom_spyglass			= DX16;																						// Zoom max (VR)
+	mouseclick_left			= DX17;																						// Left mouse button
+	mouseclick_right		= DX18;																						// Right mouse button
+	discord_mute			= DX21; 																					// Discord mute toggle
+
 	// Emergency Stores Jettison (can be specified per airplane)
 	emergency_stores_jettison = CHAIN( L_SHIFT, D(10), 'e' );															// EMERGENCY STORES JETTISON Button
 
@@ -301,7 +374,7 @@ int dcs_fighter_common_functions()
 
 	// Cockpit Visuals
 	pilotbody   	= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT );											// Pilot Body toggle
-	//sunglasses  	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'v', D(), UP+L_SHIFT ); 		  								// OLD - Sunglasses toggle
+	sunglasses  	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'v', D(), UP+L_SHIFT ); 		  								// Sunglasses toggle (headgear next)
 	charactercustm  = CHAIN( DOWN+L_ALT, D(10), PULSE+';', D(), UP+L_ALT ); 		  									// Character Customisation
 	mirrors     	= CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'m', D(), UP+L_SHIFT+R_SHIFT ); 						// Toggle Mirrors
 	oxygenmask		= 0;																								// Oxygen Mask toggle
@@ -355,28 +428,28 @@ int dcs_fighter_common_controls()
 	// Camera/Gun Trigger
 	// TG1
 	MapKeyIOUMD(&AVA_F16, TG1, 	0,	 																			// IU - 
-								DX1, 																			// OU - Trigger First Detent
+								guntrigger_1st, 																// OU - Trigger First Detent
 							  	0,  																			// IM - 
 							  	0,  																			// OM - 
 							  	0,  																			// ID - 
-							  	DX1 ); 																			// OD - Trigger First Detent
+							  	guntrigger_1st ); 																// OD - Trigger First Detent
 	// TG2
 	MapKeyIOUMD(&AVA_F16, TG2, 	SPC,																			// IU - Fire Weapon (GIB)
-								DX6, 																			// OU - Trigger Second Detent
+								guntrigger_2nd, 																// OU - Trigger Second Detent
 								0, 																				// IM - 
 								0, 																				// OM - 
 								SPC, 																			// ID - Fire Weapon (GIB)
-								DX6 );																			// OD - Trigger Second Detent
+								guntrigger_2nd );																// OD - Trigger Second Detent
 
 	// Nosewheel Steering Button
 	// S1
 	MapKeyIO(&AVA_F16, S1,  	SEQ( PULSE+F10, PULSE+F1 ),														// I - map
-							 	DX3 ); 																			// O - Nosewheel Steering Button
+							 	nws ); 																			// O - Nosewheel Steering Button
 
 	// Weapon Release Button
 	// S2
 	MapKeyIO(&AVA_F16, S2,  	emergency_stores_jettison, 														// I - EMERGENCY STORES JETTISON
-								DX2 );																			// O - Weapon Release
+								weaponrelease );																// O - Weapon Release
 
 
 	// Target Management Switch (in JESTER switch section)
@@ -395,11 +468,12 @@ int dcs_fighter_common_controls()
 							 	CHAIN( R_CTL, D(10), '.' )); 													// O - trim nose up
 	// H1R
 	MapKeyIO(&AVA_F16, H1R, 	TEMPO( PULSE+F2, 																// I - F2 outside view
-									   charactercustm, 500 ),													//     [long] Character Customisation window
+									   sunglasses, 500 ),														//     [long] Sunglasses toggle (headgear next)
 							 	CHAIN( R_CTL, D(10), '/' )); 													// O - trim right wing down
 	// H1L	
 	MapKeyIO(&AVA_F16, H1L, 	TEMPO( PULSE+F6, 																// I - F6 weapon view
-									   CHAIN( DOWN+L_CTL, D(10), PULSE+F6, D(), UP+L_CTL ), 500 ),				//     [long] F6 weapon to target view
+									   //CHAIN( DOWN+L_CTL, D(10), PULSE+F6, D(), UP+L_CTL ), 500 ),			//     [long] F6 weapon to target view
+									   charactercustm, 500 ),													//     [long] Character Customisation window
 							 	CHAIN( R_CTL, D(10), ',' )); 													// O - trim left wing down
 
 
@@ -462,9 +536,9 @@ int dcs_fighter_common_controls()
 									  "else ActKey( PULSE+KEYON+KPENT );" ),									//	   snap zoom normal
 								speedbrakes_close );															// O - Close Speed Brakes
 	// SPDB
-	MapKeyIO(&Throttle, SPDB, 	EXEC( "if(WHDN_mode) ActKey( KEYON+DX12 );" ),									// I - [WHDN] wheel brake 
+	MapKeyIO(&Throttle, SPDB, 	EXEC( "if(WHDN_mode) ActKey( KEYON+wheelbrake );" ),							// I - [WHDN] wheel brake 
 							  	speedbrakes_open );																// O - Open Speed Brakes Momentary
-	MapKeyRIO(&Throttle, SPDB, 	EXEC( "if(WHDN_mode) ActKey( DX12 );" ),										// I - [WHDN] release DX12
+	MapKeyRIO(&Throttle, SPDB, 	EXEC( "if(WHDN_mode) ActKey( wheelbrake );" ),									// I - [WHDN] release wheel brake (DX12)
 							   	speedbrakes_close );															// O - Close Speed Brakes
 
 
