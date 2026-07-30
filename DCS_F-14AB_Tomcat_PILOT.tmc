@@ -41,7 +41,7 @@ int dcs_f14ab_pilot_controls()
 
 	// -------------------- COMMON CONTROLS -------------------------
 					
-	dcs_f14ab_pilot_button_definitions();					// load button definitions used by COMMON
+	dcs_f14ab_pilot_button_definitions();				// load button definitions used by COMMON
 	dcs_fighter_common_controls();						// load dcs COMMON controls
 	dcs_fighter_common_mfd();							// load dcs MFD controls
 														// before aircraft controls, to allow for overwriting of common controls when necessary

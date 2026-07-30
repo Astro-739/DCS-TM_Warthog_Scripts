@@ -92,6 +92,11 @@ int atc_requestlanding;
 int tanker_inbound;
 int tanker_precontact;
 
+int bsc_listmissions;
+int bsc_dialcode;
+int bsc_startmission;
+int bsc_validatelanding;
+
 int startup;
 int dragchute_deploy;
 int dragchute_release;
@@ -117,13 +122,15 @@ int weaponrelease;
 int uncage;
 int cm_dispense;
 
-int voip_radio1;
-int voip_radio2;
-int voip_ics;
+int radio1_voip;
+int radio2_voip;
+int radio3_acspecific;
+int radio4_acspecific;
 
 int nws;
 int canopy_toggle;
 int wheelbrake;
+int pitch_override;
 int engine_ignition_left;
 int engine_ignition_right;
 int apu_on;
@@ -245,7 +252,7 @@ int dcs_fighter_common_functions()
 	flight_engagebandits 		= CHAIN( DOWN+L_WIN, D(10), PULSE+'b', D(), UP+L_WIN );									// Flight - Engage Bandits
 	flight_coverme				= CHAIN( DOWN+L_WIN, D(10), PULSE+'w', D(), UP+L_WIN );									// Flight - Cover Me
 	flight_pincerright			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F2, D(200), PULSE+F1 ); 		// Radio menu (\), Flight, Go Pincer, Right
-	//flight_attackgroundtargets 	= CHAIN( DOWN+L_WIN, D(10), PULSE+'g', D(), UP+L_WIN );									// Flight - Attack ground targets
+	flight_attackgroundtargets 	= CHAIN( DOWN+L_WIN, D(10), PULSE+'g', D(), UP+L_WIN );									// Flight - Attack ground targets
 	flight_attackgroundtargets	= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F1, D(200), PULSE+F5 ); 		// Radio menu (\), Flight, Engage, Attack ground targets
 	flight_attackairdefences 	= CHAIN( DOWN+L_WIN, D(10), PULSE+'d', D(), UP+L_WIN );									// Flight - Attack air defenses
 	flight_attackmytarget		= CHAIN( DOWN+L_WIN, D(10), PULSE+'q', D(), UP+L_WIN );									// Flight - Attack My Target
@@ -276,13 +283,13 @@ int dcs_fighter_common_functions()
 	jtac_followoncomms			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 ); 											// Radio menu (\), JTAC, Follow-on Comms
 	jtac_checkout				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F2 ); 											// Radio menu (\), JTAC, Check Out
 
-	ground_rearmrefuel			= CHAIN( DOWN+L_ALT, D(10), PULSE+USB[0x34], D(), UP+L_ALT );        			  		// Rearming and Refueling Window   (L_ALT+')
+	ground_rearmrefuel			= CHAIN( DOWN+L_ALT, D(10), PULSE+USB[0x34], D(), UP+L_ALT );        			  							// Rearming and Refueling Window   (L_ALT+')
 	ground_removewheelchocks	= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F5, D(200), PULSE+F2 );		// Radio menu (\), Prev, GroundCrew, Wheel Chocks, Remove
 
-	atc_requeststartup			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F3 );		// Radio menu (\), ATC, Airfield, Request start-up
+	atc_requeststartup			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F3 );		// Radio menu (\), Prev, ATC, Airfield, Request start-up
 	atc_requesttaxitakeoff		= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 );		// Radio menu (\), Prev, ATC, Airfield, Request taxi/take-off
-	atc_inbound					= CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ); 		// Radio menu (\), ATC, Airfield, Inbound
-	atc_requestlanding			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 );				 							// Request landing short menu
+	atc_inbound					= CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ); 							// Radio menu (\), ATC, Airfield, Inbound
+	atc_requestlanding			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 );				 												// Request landing short menu
 	
 	tanker_inbound				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F6, D(200), PULSE+F1, D(10000), PULSE+F12 ); 	// Radio menu (\), Tanker menu, inbound, 3s delay, Exit
 	tanker_precontact			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(10000), PULSE+F12 ); 						// Radio menu (\), Ready Pre-Contact (menu shortcut), 3s delay, Radio menu (\)
@@ -290,13 +297,18 @@ int dcs_fighter_common_functions()
 	cv_requestlaunch			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F3, D(200), PULSE+F2 ); 		// TODO Radio menu (\), xxxxxxx
 	cv_inbound					= SEQ( CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ), 	// Radio menu (\), ATC, CV, Inbound
 									   CHAIN( PULSE+USB[0x31], D(200), PULSE+F2 )); 									// Radio menu (\), See you at 10 (menu shortcut)
-	cv_salute					= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'u', D(), UP+L_SHIFT ); 							// Salute  // TODO new command in DCS - deck crew stuff
+	cv_salute					= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'u', D(), UP+L_SHIFT ); 							// Salute
 	cv_calltheball				= CHAIN( DOWN+L_WIN, D(10), PULSE+'x', D(), UP+L_WIN ); 								// Call the Ball
 	
 	uhf_radiomenu				= CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x31], D(), UP+R_ALT );							// Transmit Switch - UHF (radio menu)
 	vhf_radiomenu				= CHAIN( DOWN+R_CTL, D(10), PULSE+USB[0x31], D(), UP+R_CTL );							// Transmit Switch - VHF (radio menu)
 	radiomenu					= PULSE+USB[0x31];																		// Transmit Switch - radio menu
 
+	// BSC server comms
+	bsc_listmissions			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F2, D(200), PULSE+F1 ); 		// Radio menu (\), Other, Missions, List Missions
+	bsc_dialcode				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F2, D(200), PULSE+F3 ); 		// Radio menu (\), Other, Missions, Dial Code
+	bsc_startmission			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F2, D(200), PULSE+F4 ); 		// Radio menu (\), Other, Missions, Start
+	bsc_validatelanding			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F1, D(200), PULSE+F3 ); 		// Radio menu (\), Other, Player, Validate Landing
 
     // Start-up Sequence (can be specified per airplane)
 	startup 	= CHAIN( R_SHIFT, D(10), 's' ); 																		// Battery / MAIN PWR Switch
@@ -324,14 +336,16 @@ int dcs_fighter_common_functions()
 	cm_dispense				= DX19;																						// Countermeasure dispense button
 
 	// Radios
-	voip_radio1				= DX27; 																					// VOIP Radio 1 (UHF)
-	voip_radio2				= DX29; 																					// VOIP Radio 2 (VHF)
-	voip_ics				= DX30; 																					// VOIP Intercom
+	radio1_voip				= DX27; 																					// Radio 1 (VOIP UHF)
+	radio2_voip				= DX29; 																					// Radio 2 (VOIP VHF)
+	radio3_acspecific		= DX28; 																					// Radio 3 (A/C specific function)
+	radio4_acspecific		= DX30; 																					// Radio 4 (VOIP Intercom / A/C specific function)
 
-	// Aircraft functions
+	// Systems
 	nws						= DX3;																						// Node Wheel Steering
 	canopy_toggle			= DX11; 																					// Canopy toggle
 	wheelbrake				= DX12;																						// Wheel brake
+	pitch_override			= DX22;																						// Manual pitch override
 	engine_ignition_left	= DX33;																						// Left engine ignition
 	engine_ignition_right	= DX34; 																					// Right engine ignition
 	apu_on					= DX35;																						// APU on
@@ -529,10 +543,10 @@ int dcs_fighter_common_controls()
 
 	// Speedbrake Switch
 	// SPDF
-	MapKeyIO(&Throttle, SPDF, 	EXEC( "if(VR_mode) ActKey( KEYON+DX16 );"										// I - [VR] VR zoom max
+	MapKeyIO(&Throttle, SPDF, 	EXEC( "if(VR_mode) ActKey( KEYON+vrzoom_spyglass );"										// I - [VR] VR zoom max
 									  "else ActKey( PULSE+KEYON+R_SHIFT+USB[0x55] );" ),						//	   snap zoom max   (R_SHIFT+KP*)
 								speedbrakes_open );																// O - Open Speed Brakes
-	MapKeyRIO(&Throttle, SPDF, 	EXEC( "if(VR_mode) ActKey( DX16 );"												// I - [VR] release DX16 (return to normal zoom)
+	MapKeyRIO(&Throttle, SPDF, 	EXEC( "if(VR_mode) ActKey( vrzoom_spyglass );"												// I - [VR] release DX16 (return to normal zoom)
 									  "else ActKey( PULSE+KEYON+KPENT );" ),									//	   snap zoom normal
 								speedbrakes_close );															// O - Close Speed Brakes
 	// SPDB
@@ -620,35 +634,35 @@ int dcs_fighter_common_controls()
 
 	// Engine Operation (Engine idle, start-up sequence, groundcrew, afterburner detent)
 	// EOLIGN
-	MapKeyIO(&Throttle, EOLIGN,		startup,																		// I - Start-up sequence
-									CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));						// O - Left Throttle - IDLE
+	MapKeyIO(&Throttle, EOLIGN,		startup,																			// I - Start-up sequence
+									CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));							// O - Left Throttle - IDLE
 	// EOLNORM
-	MapKey(&Throttle, EOLNORM, 		0 );																			//
+	MapKey(&Throttle, EOLNORM, 		0 );																				//
 	// EOLMOTOR
-	MapKeyIO(&Throttle, EOLMOTOR, 	0,																				// I - 
-									groundcrew ); 																	// O - Groundcrew steps
+	MapKeyIO(&Throttle, EOLMOTOR, 	0,																					// I - 
+									groundcrew ); 																		// O - Groundcrew steps
 
 	// EORIGN
-	MapKeyIO(&Throttle, EORIGN,		0,																				// I - 
-									CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));						// O - Right Throttle - IDLE
+	MapKeyIO(&Throttle, EORIGN,		0,																					// I - 
+									CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));							// O - Right Throttle - IDLE
 	// EORNORM
-	MapKey(&Throttle, EORNORM, 		0 );																			// 
+	MapKey(&Throttle, EORNORM, 		0 );																				// 
 	// EORMOTOR
-	MapKeyIO(&Throttle, EORMOTOR, 	0,																				// I - 
-									EXEC( "afterburnerdetent_present = 1;" 											// O - Engage afterburner detent
+	MapKeyIO(&Throttle, EORMOTOR, 	0,																					// I - 
+									EXEC( "afterburnerdetent_present = 1;" 												// O - Engage afterburner detent
 										  "afterburnerdetent(1);" ));
-	MapKeyRIO(&Throttle, EORMOTOR, 	0,																				// I - 
-									EXEC( "afterburnerdetent_present = 0;" 											// O - Disengage afterburner detent
+	MapKeyRIO(&Throttle, EORMOTOR, 	0,																					// I - 
+									EXEC( "afterburnerdetent_present = 0;" 												// O - Disengage afterburner detent
 										  "afterburnerdetent(0);" ));
 
 
 	// Engine idle/off
 	// IDLELON
-	MapKey(&Throttle, IDLELON, 		CHAIN( DOWN+L_SHIFT, D(10), PULSE+END, D(), UP+L_SHIFT ));						// Throttle Left - OFF
-	MapKeyR(&Throttle, IDLELON, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));						// Throttle Left - IDLE
+	MapKey(&Throttle, IDLELON, 		CHAIN( DOWN+L_SHIFT, D(10), PULSE+END, D(), UP+L_SHIFT ));							// Throttle Left - OFF
+	MapKeyR(&Throttle, IDLELON, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));							// Throttle Left - IDLE
 	// IDLERON
-	MapKey(&Throttle, IDLERON, 		CHAIN( D(100), DOWN+R_SHIFT, D(10), PULSE+END, D(), UP+R_SHIFT ));				// Throttle Right - OFF
-	MapKeyR(&Throttle, IDLERON, 	CHAIN( D(100), DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));				// Throttle Right - IDLE
+	MapKey(&Throttle, IDLERON, 		CHAIN( D(100), DOWN+R_SHIFT, D(10), PULSE+END, D(), UP+R_SHIFT ));					// Throttle Right - OFF
+	MapKeyR(&Throttle, IDLERON, 	CHAIN( D(100), DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));					// Throttle Right - IDLE
 
 
 	// THR_LEFT
@@ -661,17 +675,17 @@ int dcs_fighter_common_controls()
 	MapAxis(&Throttle, THR_FC, DX_SLIDER_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);
 	SetSCurve(&Throttle, THR_FC, 0, 0, 0, 0, 0);
 	// SCX
-	MapAxis(&Throttle, SCX, DX_XROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);											// RDR CURSOR Switch - X axis
+	MapAxis(&Throttle, SCX, DX_XROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);													// RDR CURSOR Switch - X axis
 	SetSCurve(&Throttle, SCX, 0, 0, 0, 0, 0);
 	// SCY
-	MapAxis(&Throttle, SCY, DX_YROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);											// RDR CURSOR Switch - Y axis
+	MapAxis(&Throttle, SCY, DX_YROT_AXIS, AXIS_NORMAL, MAP_ABSOLUTE);													// RDR CURSOR Switch - Y axis
 	SetSCurve(&Throttle, SCY, 0, 0, 0, 0, 0);
 
 
 
 	// --------- also load SWITCH part of COMMON controls -----------
 	
-	dcs_fighter_common_switch();																				// controls to be switched back after JESTER use
+	dcs_fighter_common_switch();																						// controls to be switched back after JESTER use
 
 
 }	// =====  end dcs_fighter_common_controls()	 ==================================================
@@ -686,32 +700,32 @@ int dcs_fighter_common_switch()
 	
 	// Target Management Switch
 	// H2U
-	MapKeyIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX15 );"												// I - VR zoom
-									  "else ActKey ( KEYON+DX7 );" ),													//     TrackIR zoom in slow (KP*)
+	MapKeyIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( KEYON+vrzoom );"											// I - VR zoom
+									  "else ActKey ( KEYON+zoom_in );" ),												//     TrackIR zoom in slow (KP*)
 								TMS_fwd );																				// O - TMS fwd
-	MapKeyRIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( DX15 );"													// I - Release DX15
-									  "else ActKey ( DX7 );" ),															// 	   Release DX7
+	MapKeyRIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( vrzoom );"													// I - Release vrzoom
+									  "else ActKey ( zoom_in );" ),														// 	   Release zoom_in
 								0 );																					// O - 
 	// H2D
 	MapKeyIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( PULSE+KEYON+L_ALT+'c' );"									// I - VR toggle mouse pointer
-									  "else ActKey ( KEYON+DX9 );" ),													// 	   TrackIR zoom out slow (KP\)
+									  "else ActKey ( KEYON+zoom_out );" ),												// 	   TrackIR zoom out slow (KP\)
 								TMS_aft ); 																				// O - TMS aft
 	MapKeyRIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( 0 );"														// I - 
-									  "else ActKey ( DX9 );" ),															// 	   Release DX9
+									  "else ActKey ( zoom_out );" ),													// 	   Release zoom_out
 								0 );																					// O - 
 	// H2R							
-	MapKeyIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX18 );"												// I - VR Right mouse click
-									  "else ActKey ( KEYON+DX8 );" ),													// 	   TrackIR snap view right (LWIN+KP6)
+	MapKeyIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( KEYON+mouseclick_right );"									// I - VR Right mouse click
+									  "else ActKey ( KEYON+snapview_right );" ),										// 	   TrackIR snap view right (LWIN+KP6)
 								TMS_right ); 																			// O - TMS right
-	MapKeyRIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( DX18 );"													// I - Release DX18
-									  "else ActKey ( DX8 );" ),															// 	   Release DX8
+	MapKeyRIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( mouseclick_right );"										// I - Release mouseclick_right
+									  "else ActKey ( snapview_right );" ),												// 	   Release snapview_right
 								0 );																					// O - 
 	// H2L
-	MapKeyIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX17 );"												// I - VR Left mouse click
-									  "else ActKey ( KEYON+DX10 );" ),													// 	   TrackIR snap view left (LWIN+KP4)
+	MapKeyIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( KEYON+mouseclick_left );"									// I - VR Left mouse click
+									  "else ActKey ( KEYON+snapview_left );" ),											// 	   TrackIR snap view left (LWIN+KP4)
 								TMS_left );																				// O - TMS left
-	MapKeyRIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( DX17 );"													// I - Release DX17
-									  "else ActKey ( DX10 );" ),														// 	   Release DX10
+	MapKeyRIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( mouseclick_left );"										// I - Release mouseclick_left
+									  "else ActKey ( snapview_left );" ),												// 	   Release snapview_left
 								0 );																					// O - 
 
 
@@ -738,7 +752,7 @@ int dcs_fighter_common_switch()
 	// MSU
 	MapKeyIOUMD(&Throttle, MSU, TEMPO( flight_engagebandits, 															// IU - Flight - Engage Bandits
 									   flight_pincerright, 500 ),														// 		[long] Flight - Pincer Right
-								DX27,																					// OU - Transmit Switch - Radio 1 (VOIP)
+								radio1_voip,																			// OU - Transmit Switch - Radio 1 (VOIP)
 								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_requestlaunch );" 					// IM - [CAR]  Request Catapult Launch
 											 "else if(WHDN_mode) ActKey( PULSE+KEYON+atc_requeststartup );" 			//		[WHDN] Request Engine Start
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"								//		[AAR]  -
@@ -747,14 +761,14 @@ int dcs_fighter_common_switch()
 											 "else if(WHDN_mode) ActKey( PULSE+KEYON+0 );"								//		[long] [WHDN] -
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"								//		[long] [AAR]  -
 											 "else ActKey( PULSE+KEYON+flight_opencloseformation );" ), 500 ),			//		[long] Flight - Open/Close Formation
-								DX27,																					// OM - Transmit Switch - Radio 1 (VOIP)
+								radio1_voip,																			// OM - Transmit Switch - Radio 1 (VOIP)
 								TEMPO( flight_attackgroundtargets,														// ID - Flight - Attack ground targets
 									   flight_attackairdefences, 500 ),													//		[long] Flight - Attack air defences
-								DX27 );																					// OD - Transmit Switch - Radio 1 (VOIP)
+								radio1_voip );																			// OD - Transmit Switch - Radio 1 (VOIP)
 	// MSD
 	MapKeyIOUMD(&Throttle, MSD, TEMPO( flight_completemissionrejoin,													// IU - Flight - Complete mission and rejoin
 									   flight_coverme, 500 ),															// 		[long] Flight - Cover Me
-								DX29,																					// OU - Transmit Switch - Radio 2 (VOIP)
+								radio2_voip,																			// OU - Transmit Switch - Radio 2 (VOIP)
 								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_inbound );" 							// IM - [CAR] CV Inbound / See you at 10
 											 "else if(WHDN_mode) ActKey( PULSE+KEYON+atc_requestlanding );" 			//		[WHDN] Request Landing
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+tanker_inbound );"					//		[AAR]  Tanker Inbound
@@ -763,44 +777,44 @@ int dcs_fighter_common_switch()
 											 "else if(WHDN_mode) ActKey( PULSE+KEYON+0 );" 								//		[long] [WHDN] -
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"								//		[long] [AAR]  -
 											 "else ActKey( PULSE+KEYON+flight_rtb);" ), 500 ),							//		[long] Flight - RTB
-								DX29,																					// OM - Transmit Switch - Radio 2 (VOIP)
+								radio2_voip,																			// OM - Transmit Switch - Radio 2 (VOIP)
 								TEMPO( flight_completemissionrejoin,													// ID - Flight - Complete mission and rejoin
 									   0, 500 ),																		//		[long] Flight - 
-								DX29 );																					// OD - Transmit Switch - Radio 2 (VOIP)
+								radio2_voip );																			// OD - Transmit Switch - Radio 2 (VOIP)
 	// MSR
 	MapKeyIOUMD(&Throttle, MSR, TEMPO( flight_spreadfour, 																// IU - Flight - Formation Spread Four
 									   flight_lineabreast, 500 ),														// 		[long] Flight - Formation Line Abreast
-								DX28,																					// OU - U_MSR
+								radio3_acspecific,																		// OU - Radio 3 - A/C specific function
 								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_salute );" 							// IM - [CAR] CV Salute
-											 "else if(WHDN_mode) ActKey( PULSE+KEYON+atc_requesttaxitakeoff );" 		//	[WHDN] Request taxi, take-off (short menu)
+											 "else if(WHDN_mode) ActKey( PULSE+KEYON+atc_requesttaxitakeoff );" 		//		[WHDN] Request taxi, take-off (short menu)
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+tanker_precontact );"				//		[AAR]  Tanker "Ready for precontact" radio call
 											 "else ActKey( PULSE+KEYON+flight_fingerfour );" ),							//		Flight - Finger Four
 									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 									// 		[long] [CAR]  -
-											 "else if(WHDN_mode) ActKey( PULSE+KEYON+0 );" 								//		[long] [WHDN] -
+											 "else if(WHDN_mode) ActKey( PULSE+KEYON+bsc_listmissions );" 				//		[long] [WHDN] - BSC List Missions
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"								//		[long] [AAR]  -
 											 "else ActKey( PULSE+KEYON+flight_echelonright );" ), 500 ),				//		[long] Flight - Formation Echelon Right
-								DX28,																					// OM - M_MSR
+								radio3_acspecific,																		// OM - Radio 3 - A/C specific function
 								//TEMPO( jtac_followoncomms,															// ID - JTAC - Follow-on Comms (readback, etc)
 								//	   jtac_checkin15, 500 ),															// 		[long] JTAC - Check in for 15 minutes
 								TEMPO( flight_trail,																	// ID - Flight - Formation Trail
 									   flight_lineabreast, 500 ),														// 		[long] Flight - Formation Line Abreast
-								DX28 );																					// OD - D_MSR
+								radio3_acspecific );																	// OD - Radio 3 - A/C specific function
 	// MSL
 	MapKeyIOUMD(&Throttle, MSL, TEMPO( awacs_declare,										 							// IU - AWACS Declare
 									   awacs_requestpicture, 500 ),														// 		[long] AWACS Request Picture
-								DX30,																					// OU - U_MSL
+								radio4_acspecific,																		// OU - Radio 4 - VOIP Intercom / A/C specific function
 								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_calltheball );" 						// IM - [CAR]  Call the Ball
-											 "else if(WHDN_mode) ActKey( PULSE+KEYON+ground_rearmrefuel );" 			//		[WHDN] Rearming and Refueling Window   (L_ALT+')
+											 "else if(WHDN_mode) ActKey( PULSE+KEYON+ground_rearmrefuel );" 			//		[WHDN] Rearming and Refueling Window  (L_ALT+')
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+awacs_bogeydope );"					//		[AAR]  Request AWACS Bogey Dope
 											 "else ActKey( PULSE+KEYON+awacs_declare );" ),								//		AWACS Declare
 									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 									// 		[long] [CAR]  -
 											 "else if(WHDN_mode) ActKey( PULSE+KEYON+0 );" 								//		[long] [WHDN] -
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"								//		[long] [AAR]  -
 											 "else ActKey( PULSE+KEYON+awacs_requestpicture );" ), 500 ),				//		[long] AWACS Request Picture
-								DX30,																					// OM - M_MSL
+								radio4_acspecific,																		// OM - Radio 4 - VOIP Intercom / A/C specific function
 								TEMPO( flight_radaroffon,																// ID - Flight - Radar Off/On
 									   awacs_requestpicture, 500 ),														// 		[long] AWACS Request Picture
-								DX30 );																					// OD - D_MSL
+								radio4_acspecific );																	// OD - Radio 4 - VOIP Intercom / A/C specific function
 	// MSP 
 	MapKeyIO(&Throttle, MSP, 	PULSE+F12,																				// I - F12 exit radio menu
 								radiomenu );			 																// O - Radio menu

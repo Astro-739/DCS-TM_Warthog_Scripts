@@ -9,6 +9,10 @@ include "DCS_Fighter_Common.tmc"
 
 // -------------------------- INITIALISE ----------------------------
 
+int enable;
+int antennaelev_up;
+int antennaelev_down;
+
 int autopilot_ALThold;	
 int autopilot_ATThold;
 int autopilot_off;
@@ -50,7 +54,11 @@ int main()
 	DMS_right 	= CHAIN( R_ALT, D(10), '/' );													// DMS right
 	DMS_left 	= CHAIN( R_ALT, D(10), ',' );													// DMS left
 
-	
+	// DX
+	enable 				= DX24;																	// ENABLE Switch - Depress
+	antennaelev_up		= DX13; 																// Antenna elevation up
+	antennaelev_down	= DX14; 																// Antenna elevation down
+
 	// Start-up Sequence (overwrites common)
 	startup = SEQ( CHAIN( L_ALT, D(10), 's' ), 													// MAIN PWR Switch - BATT
 				   CHAIN( R_SHIFT, D(10), 's' ), 												// MAIN PWR Switch - MAIN PWR
@@ -211,10 +219,10 @@ int main()
 									   500 ));																	//
 	// CSD
 	MapKeyIO(&Throttle, CSD, 	CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x57], D(), UP+L_CTL ),						// I - ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
-							 	DX24 );																			// O - ENABLE Switch - Depress
+							 	enable );																		// O - ENABLE Switch - Depress
 	// CSR
 	MapKeyIO(&Throttle, CSR, 	CHAIN( L_CTL, D(10), RARROW ), 													// I - ICP Data Control Switch - SEQ (dobber sequence)
-							 	DX23 );																			// O - UNCAGE Switch
+							 	uncage );																		// O - UNCAGE Switch
 	// CSL
 	MapKeyIO(&Throttle, CSL, 	CHAIN( L_CTL, D(10), LARROW ), 													// I - ICP Data Control Switch - RET (dobber return)
 							 	TEMPO( CHAIN( L_CTL, D(10), KP7 ),												// O - ICP Priority Function Button - 7 (MARK)
@@ -224,10 +232,10 @@ int main()
 	// China Hat (overwrite of common)
 	// CHF
 	MapKeyIO(&Throttle, CHF, 	brightness_up, 																	// I - brightness up for goggle/HMCS
-							 	REXEC( 20, 200, "ActKey( PULSE+KEYON+DX13 );" ));								// O - ANT ELEV Knob - CW/up    (REXEC to slow down repeat press)
+							 	REXEC( 20, 200, "ActKey( PULSE+KEYON+antennaelev_up );" ));						// O - ANT ELEV Knob - CW/up    (REXEC to slow down repeat press)
 	// CHB
 	MapKeyIO(&Throttle, CHB, 	brightness_down,																// I - brightness down for goggle/HMCS
-							 	REXEC( 21, 200, "ActKey( PULSE+KEYON+DX14 );" ));								// O - ANT ELEV Knob - CCW/down    (REXEC to slow down repeat press)
+							 	REXEC( 21, 200, "ActKey( PULSE+KEYON+antennaelev_down );" ));					// O - ANT ELEV Knob - CCW/down    (REXEC to slow down repeat press)
 
 
 
@@ -245,7 +253,7 @@ int main()
 	MapKeyIOUMD(&Throttle, RDRNRM, 	0, 																				// IU - 
 									0,																				// OU - 
 									CHAIN( DOWN+L_SHIFT, D(10), PULSE+'c', D(), UP+L_SHIFT ),						// IM - Canopy Handle - DOWN/UP
-									DX11,																			// OM - Canopy - OPEN/CLOSE
+									canopy_toggle,																	// OM - Canopy - OPEN/CLOSE
 									0,																				// ID - 
 									0 );																			// OD - 
 
@@ -269,7 +277,7 @@ int main()
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),							// 	   LED5 OFF for MANUAL PITCH Override
 									0 );																			// O - 
 	// EFLOVER
-	MapKeyIO(&Throttle, EFLOVER, 	CHAIN( DX22, D(),																// I - MANUAL PITCH Override Switch - OVRD
+	MapKeyIO(&Throttle, EFLOVER, 	CHAIN( pitch_override, D(),														// I - MANUAL PITCH Override Switch - OVRD
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),							// 	   LED5 ON for MANUAL PITCH Override
 									0 );																			// O - 
 
@@ -282,7 +290,7 @@ int main()
 
 	// SC (overwrite of common)
 	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - re-centre IR tracker / VR helmet
-									   PULSE+DX21, 500 ),														//     [long] discord mute toggle
+									   PULSE+discord_mute, 500 ),												//     [long] discord mute toggle
 								PULSE+'d' );																	// O - Expand/FOV Button
 
 
