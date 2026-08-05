@@ -304,6 +304,10 @@ int dcs_fighter_common_functions()
 	vhf_radiomenu				= CHAIN( DOWN+R_CTL, D(10), PULSE+USB[0x31], D(), UP+R_CTL );							// Transmit Switch - VHF (radio menu)
 	radiomenu					= PULSE+USB[0x31];																		// Transmit Switch - radio menu
 
+	// Heatblur CW server comms
+
+	// SPS Contention server comms
+	
 	// BSC server comms
 	bsc_listmissions			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F2, D(200), PULSE+F1 ); 		// Radio menu (\), Other, Missions, List Missions
 	bsc_dialcode				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F2, D(200), PULSE+F3 ); 		// Radio menu (\), Other, Missions, Dial Code

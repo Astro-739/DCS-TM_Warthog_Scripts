@@ -19,6 +19,8 @@ int autopilot_off;
 int autopilot;
 char autopilot_mode = 0;
 
+int parkingbrake;
+
 int override;	
 char override_dog = 0;		
 
@@ -106,6 +108,9 @@ int main()
 					 "printf(\"override_dogfight = %i\\xa\", override_dog);" );									// print state to output window
 
 
+	// Parking Brake 
+	parkingbrake = SEQ( CHAIN( DOWN+R_CTL, D(10), PULSE+'p', D(), UP+R_CTL ),									// ANTI-SKID Switch - PARKING BRAKE
+						CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'p', D(), UP+R_CTL+R_SHIFT ));					// ANTI-SKID Switch - ANTI-SKID
 
 
 
@@ -225,7 +230,8 @@ int main()
 							 	uncage );																		// O - UNCAGE Switch
 	// CSL
 	MapKeyIO(&Throttle, CSL, 	CHAIN( L_CTL, D(10), LARROW ), 													// I - ICP Data Control Switch - RET (dobber return)
-							 	TEMPO( CHAIN( L_CTL, D(10), KP7 ),												// O - ICP Priority Function Button - 7 (MARK)
+							 	TEMPO( EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+parkingbrake );" 				// O - [WHDN] Toggle parking brake
+											 "else ActKey (PULSE+KEYON+L_CTL+KP7);" ),							// 	   ICP Priority Function Button - 7 (MARK)
 									   CHAIN( L_CTL, D(10), KP0 ), 500 ));										//	   [long] ICP Priority Function Button - 0 (M-SEL)
 									   
 
@@ -289,9 +295,9 @@ int main()
 	MapKey(&Throttle, IDLERON, 		0 );																			//
 
 	// SC (overwrite of common)
-	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - re-centre IR tracker / VR helmet
-									   PULSE+discord_mute, 500 ),												//     [long] discord mute toggle
-								PULSE+'d' );																	// O - Expand/FOV Button
+	MapKeyIO(&Throttle, SC, 		TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - re-centre IR tracker / VR helmet
+									   	   PULSE+discord_mute, 500 ),												//     [long] discord mute toggle
+									PULSE+'d' );																	// O - Expand/FOV Button
 
 
 	// U LAYER - Air-to-Air Mode
