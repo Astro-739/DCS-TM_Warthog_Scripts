@@ -218,13 +218,15 @@ int main()
 
 	// Coolie Switch
 	// CSU
-	MapKeyIO(&Throttle, CSU, 	CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x56], D(), UP+L_CTL ),						// I - ICP DED Increment/Decrement Switch - Decrement   (L_CTL+NUM-)
-							 	TEMPO( CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'v', D(), UP+R_CTL+R_SHIFT ),	// O - FUEL QTY SEL Knob - CW
+	MapKeyIO(&Throttle, CSU, 	TEMPO( CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x56], D(), UP+L_CTL ),				// I - ICP DED Increment/Decrement Switch - Decrement   (L_CTL+NUM-)
+							 		   seat_down, 500 ),														//	   [long] Seat down
+								TEMPO( CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'v', D(), UP+R_CTL+R_SHIFT ),	// O - FUEL QTY SEL Knob - CW
 								       CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'c', D(), UP+R_CTL+R_SHIFT ), 	//	   [long] FUEL QTY SEL Knob - NORM
 									   500 ));																	//
 	// CSD
-	MapKeyIO(&Throttle, CSD, 	CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x57], D(), UP+L_CTL ),						// I - ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
-							 	enable );																		// O - ENABLE Switch - Depress
+	MapKeyIO(&Throttle, CSD, 	TEMPO( CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x57], D(), UP+L_CTL ),				// I - ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
+							 		   seat_up, 500 ),															//	   [long] Seat up
+								enable );																		// O - ENABLE Switch - Depress
 	// CSR
 	MapKeyIO(&Throttle, CSR, 	CHAIN( L_CTL, D(10), RARROW ), 													// I - ICP Data Control Switch - SEQ (dobber sequence)
 							 	uncage );																		// O - UNCAGE Switch

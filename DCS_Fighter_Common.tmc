@@ -291,8 +291,8 @@ int dcs_fighter_common_functions()
 	atc_inbound					= CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ); 							// Radio menu (\), ATC, Airfield, Inbound
 	atc_requestlanding			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 );				 												// Request landing short menu
 	
-	tanker_inbound				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F6, D(200), PULSE+F1, D(10000), PULSE+F12 ); 	// Radio menu (\), Tanker menu, inbound, 3s delay, Exit
-	tanker_precontact			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(10000), PULSE+F12 ); 						// Radio menu (\), Ready Pre-Contact (menu shortcut), 3s delay, Radio menu (\)
+	tanker_inbound				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F6, D(200), PULSE+F1, D(10000), PULSE+F12 ); 	// Radio menu (\), Tanker menu, inbound, 10s delay, Exit
+	tanker_precontact			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1 );  											// Radio menu (\), Ready Pre-Contact (menu shortcut)
 
 	cv_requestlaunch			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F1, D(200), PULSE+F3, D(200), PULSE+F2 ); 		// TODO Radio menu (\), xxxxxxx
 	cv_inbound					= SEQ( CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ), 	// Radio menu (\), ATC, CV, Inbound
@@ -336,8 +336,8 @@ int dcs_fighter_common_functions()
 	guntrigger_1st			= DX1;																						// Gun Trigger 1st stage
 	guntrigger_2nd			= DX6;																						// Gun Trigger 2nd stage
 	weaponrelease			= DX2;																						// Weapons Release Button
-	uncage					= DX23;																						// Uncage Button
 	cm_dispense				= DX19;																						// Countermeasure dispense button
+	uncage					= DX23;																						// Uncage Button
 
 	// Radios
 	radio1_voip				= DX27; 																					// Radio 1 (VOIP UHF)
@@ -358,8 +358,8 @@ int dcs_fighter_common_functions()
 	reticle_depr_decr		= DX40; 																					// Reticle depression decrease
 	seat_up					= DX41; 																					// Seat position up
 	seat_down				= DX42;																						// Seat position down
-	nw_strut_extend			= DX34;																						// Nose wheel strut extend
-	nw_strut_retract		= DX35; 																					// Nose wheel strut retract / kneel
+	nw_strut_extend			= DX43;																						// Nose wheel strut extend
+	nw_strut_retract		= DX44; 																					// Nose wheel strut retract / kneel
 
 	// Visual and Sound
 	zoom_in					= DX7;																						// Zoom in (flat screen / IR)
@@ -524,7 +524,7 @@ int dcs_fighter_common_controls()
 	// Canopy
 	// RDRNRM
 	MapKeyUMD(&Throttle, RDRNRM, 0, 																			// U - 
-								DX11,																			// M - Canopy - OPEN/CLOSE (always return switch to RDRDIS)
+								canopy_toggle,																	// M - Canopy - OPEN/CLOSE (always return switch to RDRDIS)
 								0 );																			// D -  
 	// RDRDIS
 	MapKeyUMD(&Throttle, RDRDIS, 0,																				// U -  
@@ -547,10 +547,10 @@ int dcs_fighter_common_controls()
 
 	// Speedbrake Switch
 	// SPDF
-	MapKeyIO(&Throttle, SPDF, 	EXEC( "if(VR_mode) ActKey( KEYON+vrzoom_spyglass );"										// I - [VR] VR zoom max
+	MapKeyIO(&Throttle, SPDF, 	EXEC( "if(VR_mode) ActKey( KEYON+vrzoom_spyglass );"							// I - [VR] VR zoom max
 									  "else ActKey( PULSE+KEYON+R_SHIFT+USB[0x55] );" ),						//	   snap zoom max   (R_SHIFT+KP*)
 								speedbrakes_open );																// O - Open Speed Brakes
-	MapKeyRIO(&Throttle, SPDF, 	EXEC( "if(VR_mode) ActKey( vrzoom_spyglass );"												// I - [VR] release DX16 (return to normal zoom)
+	MapKeyRIO(&Throttle, SPDF, 	EXEC( "if(VR_mode) ActKey( vrzoom_spyglass );"									// I - [VR] release VR zoom max (DX16)
 									  "else ActKey( PULSE+KEYON+KPENT );" ),									//	   snap zoom normal
 								speedbrakes_close );															// O - Close Speed Brakes
 	// SPDB
