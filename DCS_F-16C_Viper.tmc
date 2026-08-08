@@ -49,12 +49,14 @@ int main()
 	TMS_right 	= CHAIN( R_CTL, D(10), RARROW );												// TMS right
 	TMS_left 	= CHAIN( R_CTL, D(10), LARROW );												// TMS left
 
-
 	// Display Management Switch (overwrites common)
 	DMS_fwd 	= CHAIN( R_ALT, D(10), ';' );													// DMS fwd
 	DMS_aft 	= CHAIN( R_ALT, D(10), '.' );													// DMS aft
 	DMS_right 	= CHAIN( R_ALT, D(10), '/' );													// DMS right
 	DMS_left 	= CHAIN( R_ALT, D(10), ',' );													// DMS left
+
+	// Landing Horn Button (overwrites common)
+	LDGH_long	= CHAIN( L_CTL, D(10), USB[0x55] );												// ICP DRIFT CUTOUT/WARN RESET 3-pos Switch: WARN RESET <> NORM (Num *)
 
 	// DX
 	enable 				= DX24;																	// ENABLE Switch - Depress

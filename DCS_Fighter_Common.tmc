@@ -81,6 +81,7 @@ int jtac_attackcomplete;		// F1
 int jtac_checkout;				// F2 soms F7
 
 int ground_rearmrefuel;
+int ground_dtceditor;
 int ground_removewheelchocks;
 int groundcrew;
 
@@ -110,11 +111,11 @@ int TMS_fwd;
 int TMS_aft;
 int TMS_right;
 int TMS_left;
-
 int	DMS_fwd;
 int	DMS_aft;
 int	DMS_right;
 int	DMS_left;
+int LDGH_long;
 
 int guntrigger_1st;
 int	guntrigger_2nd;
@@ -185,6 +186,8 @@ char CAR_mode = 0;										// CarrierOps mode
 char WHDN_mode = 1;										// Wheels Down mode (assumption start on ground)
 char AAR_mode = 0;										// Air-to-Air Refuelling mode
 char VR_mode = 1;										// VR zoom controls mode (assumption start with VR)
+
+int tacview_bookmark;
 
 
 
@@ -284,6 +287,7 @@ int dcs_fighter_common_functions()
 	jtac_checkout				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F2 ); 											// Radio menu (\), JTAC, Check Out
 
 	ground_rearmrefuel			= CHAIN( DOWN+L_ALT, D(10), PULSE+USB[0x34], D(), UP+L_ALT );        			  							// Rearming and Refueling Window   (L_ALT+')
+	ground_dtceditor			= CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'k', D(), UP+R_CTL+R_SHIFT );										// DTC editor window
 	ground_removewheelchocks	= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F5, D(200), PULSE+F2 );		// Radio menu (\), Prev, GroundCrew, Wheel Chocks, Remove
 
 	atc_requeststartup			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F3 );		// Radio menu (\), Prev, ATC, Airfield, Request start-up
@@ -331,6 +335,9 @@ int dcs_fighter_common_functions()
 	DMS_aft 	= 0;
 	DMS_right 	= 0;
 	DMS_left 	= 0;
+
+	// LDGH (can be specified per airplane)
+	LDGH_long	= 0;
 
 	// Weapons and CM
 	guntrigger_1st			= DX1;																						// Gun Trigger 1st stage
@@ -421,7 +428,11 @@ int dcs_fighter_common_functions()
 									   "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+',' );"				// Flashlight brightness down
 									   "else ActKey( PULSE+KEYON+DX38 );" );											// HUD/HMCS/Reticle brightness down
 																														// FLIR brightness
-							  
+	// External
+	tacview_bookmark = CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT );											// Tacview Bookmark
+
+
+
 
 }	// =====  end dcs_fighter_common_functions()  =================================================
 
@@ -602,13 +613,12 @@ int dcs_fighter_common_controls()
 	MapKey(&Throttle, APUOFF, 	0 );																			//
 
 
-	// LDGH (Master Caution, DTC, VR_mode, Tacview bookmark)
-	MapKeyIO(&Throttle, LDGH, 	TEMPO( CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'y', D(), UP+L_CTL+L_SHIFT ),			// I - Toggle Chat
-									   //CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT ),							// I - Tacview Bookmark
+	// LDGH (Master Caution, DTC, VR_mode)
+	MapKeyIO(&Throttle, LDGH, 	TEMPO( CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'y', D(), UP+L_CTL+L_SHIFT ),			// I - Toggle in-game chat
 									   EXEC( "VR_mode = !VR_mode;"														//     [long] Switch VR mode on/off
 									   "printf(\"VR_mode = %i\\xa\", VR_mode);" ), 500 ),								// 	          print state to output window
 								TEMPO( CHAIN( DOWN+L_ALT, D(10), DOWN+'m', D(300), UP+'m', D(10), UP+L_ALT ), 			// O - Master Caution Button
-									   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'k', D(), UP+R_CTL+R_SHIFT ), 500 ));	//	   [long] Open DTC
+									   LDGH_long, 500 ));																//	   [long] A/C specific function
 
 
 	// Engine Override Left (Front/Back seat, manual pitch override)
@@ -774,8 +784,8 @@ int dcs_fighter_common_switch()
 									   flight_coverme, 500 ),															// 		[long] Flight - Cover Me
 								radio2_voip,																			// OU - Transmit Switch - Radio 2 (VOIP)
 								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_inbound );" 							// IM - [CAR] CV Inbound / See you at 10
-											 "else if(WHDN_mode) ActKey( PULSE+KEYON+atc_requestlanding );" 			//		[WHDN] Request Landing
-											 "else if(AAR_mode) ActKey( PULSE+KEYON+tanker_inbound );"					//		[AAR]  Tanker Inbound
+											 "else if(WHDN_mode) ActKey( PULSE+KEYON+ground_dtceditor );" 				//		[WHDN] DTC editor
+											 "else if(AAR_mode) ActKey( PULSE+KEYON+tanker_inbound );"					//		[AAR] Tanker Inbound
 											 "else ActKey( PULSE+KEYON+atc_inbound );" ),								//		ATC - Inbound
 									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 									// 		[long] [CAR]  -
 											 "else if(WHDN_mode) ActKey( PULSE+KEYON+0 );" 								//		[long] [WHDN] -
