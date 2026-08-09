@@ -101,11 +101,8 @@ int bsc_validatelanding;
 int startup;
 int dragchute_deploy;
 int dragchute_release;
-
 int speedbrakes_open;
 int speedbrakes_close;
-
-int emergency_stores_jettison;
 
 int TMS_fwd;
 int TMS_aft;
@@ -115,7 +112,7 @@ int	DMS_fwd;
 int	DMS_aft;
 int	DMS_right;
 int	DMS_left;
-int LDGH_long;
+int LDGH_short;
 
 int guntrigger_1st;
 int	guntrigger_2nd;
@@ -142,6 +139,10 @@ int seat_up;
 int seat_down;
 int nw_strut_extend;
 int nw_strut_retract;
+int gear_up;
+int gear_down;
+int hook_up;
+int hook_down;
 
 int zoom_in;
 int zoom_out;
@@ -152,6 +153,10 @@ int vrzoom_spyglass;
 int mouseclick_left;
 int mouseclick_right;
 int discord_mute;
+
+int mastercaution;
+int eject;
+int emergency_stores_jettison;
 
 int extlight_full;
 int extlight_formation;
@@ -336,23 +341,23 @@ int dcs_fighter_common_functions()
 	DMS_right 	= 0;
 	DMS_left 	= 0;
 
-	// LDGH (can be specified per airplane)
-	LDGH_long	= 0;
+	// LDGH - Landing Horn Silencer Button (can be specified per airplane)
+	LDGH_short	= 0;
 
-	// Weapons and CM
+	// DX - Weapons and CM
 	guntrigger_1st			= DX1;																						// Gun Trigger 1st stage
 	guntrigger_2nd			= DX6;																						// Gun Trigger 2nd stage
 	weaponrelease			= DX2;																						// Weapons Release Button
 	cm_dispense				= DX19;																						// Countermeasure dispense button
 	uncage					= DX23;																						// Uncage Button
 
-	// Radios
+	// DX - Radios
 	radio1_voip				= DX27; 																					// Radio 1 (VOIP UHF)
 	radio2_voip				= DX29; 																					// Radio 2 (VOIP VHF)
 	radio3_acspecific		= DX28; 																					// Radio 3 (A/C specific function)
 	radio4_acspecific		= DX30; 																					// Radio 4 (VOIP Intercom / A/C specific function)
 
-	// Systems
+	// DX - Systems
 	nws						= DX3;																						// Node Wheel Steering
 	canopy_toggle			= DX11; 																					// Canopy toggle
 	wheelbrake				= DX12;																						// Wheel brake
@@ -368,7 +373,15 @@ int dcs_fighter_common_functions()
 	nw_strut_extend			= DX43;																						// Nose wheel strut extend
 	nw_strut_retract		= DX44; 																					// Nose wheel strut retract / kneel
 
-	// Visual and Sound
+	// Systems
+	mastercaution	= CHAIN( DOWN+L_ALT, D(10), DOWN+'m', D(300), UP+'m', D(10), UP+L_ALT );							// Master caution button
+	gear_up			= CHAIN( DOWN+L_CTL, D(10), PULSE+'g', D(), UP+L_CTL ); 											// Gear up 
+	gear_down		= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'g', D(), UP+L_SHIFT ); 										// Gear down
+	hook_up			= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'h', D(), UP+L_CTL+L_ALT );									// HOOK Switch - UP
+	hook_down		= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'h', D(), UP+L_CTL+L_SHIFT );								// HOOK Switch - DOWN
+	eject			= CHAIN( DOWN+L_CTL, D(10), PULSE+'e', D(), UP+L_CTL ); 											// EJECT
+
+	// DX - Visual and Sound
 	zoom_in					= DX7;																						// Zoom in (flat screen / IR)
 	zoom_out				= DX9;																						// Zoom out (flat screen / IR)
 	snapview_right			= DX8;																						// Snap view right (numpad_6)
@@ -501,7 +514,6 @@ int dcs_fighter_common_controls()
 							 	CHAIN( R_CTL, D(10), '/' )); 													// O - trim right wing down
 	// H1L	
 	MapKeyIO(&AVA_F16, H1L, 	TEMPO( PULSE+F6, 																// I - F6 weapon view
-									   //CHAIN( DOWN+L_CTL, D(10), PULSE+F6, D(), UP+L_CTL ), 500 ),			//     [long] F6 weapon to target view
 									   charactercustm, 500 ),													//     [long] Character Customisation window
 							 	CHAIN( R_CTL, D(10), ',' )); 													// O - trim left wing down
 
@@ -524,7 +536,7 @@ int dcs_fighter_common_controls()
 	// MIC Switch (in JESTER switch section)
 
 	// Left Throttle Button
-	MapKeyIO(&Throttle, LTB, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'e', D(), UP+L_CTL ), 							// I - EJECT
+	MapKeyIO(&Throttle, LTB, 	eject, 																			// I - EJECT
 								EXEC( "if (afterburnerdetent_present) {"										// O - If detent present
 										   "afterburnerdetent(0);"												//       Engage afterburner
 										   "afterburnerdetent_lifted = 1;"										// 	     Lift detent
@@ -545,13 +557,13 @@ int dcs_fighter_common_controls()
 	// Landing Gear
 	// EACON
 	MapKeyUMD(&Throttle, EACON,	0, 																				// U - 
-								CHAIN( DOWN+L_CTL, D(10), PULSE+'g', D(), UP+L_CTL, 							// M - gear up 
+								CHAIN( gear_up, 																// M - Gear up 
 									   EXEC( "WHDN_mode = 0;"													//	   WHDN_mode off
 											 "printf(\"WHDN_mode = 0\\xa\");" )),								//
 								0 );																			// D -
 	// EACOFF
 	MapKeyUMD(&Throttle, EACOFF, 0, 																			// U -
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'g', D(), UP+L_SHIFT, 						// M - gear down
+								CHAIN( gear_down, 																// M - Gear down
 									   EXEC( "WHDN_mode = 1;"													//	   WHDN_mode on
 											 "printf(\"WHDN_mode = 1\\xa\");" )),								//
 								0 );																			// D -
@@ -617,8 +629,8 @@ int dcs_fighter_common_controls()
 	MapKeyIO(&Throttle, LDGH, 	TEMPO( CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'y', D(), UP+L_CTL+L_SHIFT ),			// I - Toggle in-game chat
 									   EXEC( "VR_mode = !VR_mode;"														//     [long] Switch VR mode on/off
 									   "printf(\"VR_mode = %i\\xa\", VR_mode);" ), 500 ),								// 	          print state to output window
-								TEMPO( CHAIN( DOWN+L_ALT, D(10), DOWN+'m', D(300), UP+'m', D(10), UP+L_ALT ), 			// O - Master Caution Button
-									   LDGH_long, 500 ));																//	   [long] A/C specific function
+								TEMPO( LDGH_short, 																		// O - A/C specific function
+									   mastercaution, 500 ));															//	   [long] Master Caution Button
 
 
 	// Engine Override Left (Front/Back seat, manual pitch override)
@@ -636,13 +648,13 @@ int dcs_fighter_common_controls()
 	MapKeyIOUMD(&Throttle, EFROVER, 	0,																				// IU - 
 										0,																				// OU - 
 										dragchute_deploy,																// IM - Drag Chute deploy
-										CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'h', D(), UP+L_CTL+L_SHIFT ),			// OM - HOOK Switch - DOWN
+										hook_down,																		// OM - HOOK Switch - DOWN
 										0,																				// ID - 
 										0 );																			// OD - 
 	MapKeyRIOUMD(&Throttle, EFROVER, 	0,																				// IU -
 										0,																				// OU - 
 										dragchute_release,																// IM - Drag Chute release
-										CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'h', D(), UP+L_CTL+L_ALT ),				// OM - HOOK Switch - UP
+										hook_up,																		// OM - HOOK Switch - UP
 										0,																				// ID - 
 										0 );																			// OD - 
 
@@ -808,8 +820,6 @@ int dcs_fighter_common_switch()
 											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"								//		[long] [AAR]  -
 											 "else ActKey( PULSE+KEYON+flight_echelonright );" ), 500 ),				//		[long] Flight - Formation Echelon Right
 								radio3_acspecific,																		// OM - Radio 3 - A/C specific function
-								//TEMPO( jtac_followoncomms,															// ID - JTAC - Follow-on Comms (readback, etc)
-								//	   jtac_checkin15, 500 ),															// 		[long] JTAC - Check in for 15 minutes
 								TEMPO( flight_trail,																	// ID - Flight - Formation Trail
 									   flight_lineabreast, 500 ),														// 		[long] Flight - Formation Line Abreast
 								radio3_acspecific );																	// OD - Radio 3 - A/C specific function

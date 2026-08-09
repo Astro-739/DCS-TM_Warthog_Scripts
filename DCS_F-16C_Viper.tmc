@@ -55,10 +55,10 @@ int main()
 	DMS_right 	= CHAIN( R_ALT, D(10), '/' );													// DMS right
 	DMS_left 	= CHAIN( R_ALT, D(10), ',' );													// DMS left
 
-	// Landing Horn Button (overwrites common)
-	LDGH_long	= CHAIN( L_CTL, D(10), USB[0x55] );												// ICP DRIFT CUTOUT/WARN RESET 3-pos Switch: WARN RESET <> NORM (Num *)
+	// Landing Horn Silencer Button (overwrites common)
+	LDGH_short	= CHAIN( DOWN+L_CTL, D(10), DOWN+USB[0x55], D(100), UP+USB[0x55], D(), UP+L_CTL );					// ICP DRIFT CUTOUT/WARN RESET 3-pos Switch: WARN RESET <> NORM (Num *)
 
-	// DX
+	// DX - A/C specific
 	enable 				= DX24;																	// ENABLE Switch - Depress
 	antennaelev_up		= DX13; 																// Antenna elevation up
 	antennaelev_down	= DX14; 																// Antenna elevation down
