@@ -113,6 +113,10 @@ int	DMS_aft;
 int	DMS_right;
 int	DMS_left;
 int LDGH_short;
+int	trim_up;
+int	trim_down;
+int	trim_right;
+int	trim_left;
 
 int guntrigger_1st;
 int	guntrigger_2nd;
@@ -352,6 +356,12 @@ int dcs_fighter_common_functions()
 	// LDGH - Landing Horn Silencer Button (can be specified per airplane)
 	LDGH_short	= 0;
 
+	// Trim
+	trim_up		= CHAIN( R_CTL, D(10), '.' ); 																			// trim nose up
+	trim_down	= CHAIN( R_CTL, D(10), ';' ); 																			// trim nose down
+	trim_right	= CHAIN( R_CTL, D(10), '/' ); 																			// trim right wing down
+	trim_left	= CHAIN( R_CTL, D(10), ',' ); 																			// trim left wing down
+
 	// DX - Weapons and CM
 	guntrigger_1st			= DX1;																						// Gun Trigger 1st stage
 	guntrigger_2nd			= DX6;																						// Gun Trigger 2nd stage
@@ -521,19 +531,19 @@ int dcs_fighter_common_controls()
 	// H1U
 	MapKeyIO(&AVA_F16, H1U, 			TEMPO( helmetvisor, 															// I - Helmet Visor toggle
 						 	 				   mirrors, 500 ),   														// 	   [long] Toggle Mirrors
-										CHAIN( R_CTL, D(10), ';' )); 													// O - trim nose down
+										trim_down ); 																	// O - trim nose down
 	// H1D
 	MapKeyIO(&AVA_F16, H1D, 			TEMPO( PULSE+F1, 																// I - F1 cockpit view
 											   pilotbody, 500 ),														//	   [long] Pilot Body toggle
-									 	CHAIN( R_CTL, D(10), '.' )); 													// O - trim nose up
+									 	trim_up ); 																		// O - trim nose up
 	// H1R
 	MapKeyIO(&AVA_F16, H1R, 			TEMPO( PULSE+F2, 																// I - F2 outside view
 											   sunglasses, 500 ),														//     [long] Sunglasses toggle (headgear next)
-									 	CHAIN( R_CTL, D(10), '/' )); 													// O - trim right wing down
+									 	trim_right ); 																	// O - trim right wing down
 	// H1L	
 	MapKeyIO(&AVA_F16, H1L, 			TEMPO( PULSE+F6, 																// I - F6 weapon view
 											   charactercustm, 500 ),													//     [long] Character Customisation window
-									 	CHAIN( R_CTL, D(10), ',' )); 													// O - trim left wing down
+									 	trim_left ); 																	// O - trim left wing down
 
 
 	// JOYX

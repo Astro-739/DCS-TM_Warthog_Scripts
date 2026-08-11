@@ -270,7 +270,7 @@ int main()
 	// Engine Operation
 	// EOLIGN (overwrites common)
 	MapKeyIO(&Throttle, EOLIGN,		startup, 																		// I - Start-up Sequence
-									CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));						// O - Right Throttle - IDLE
+									throttle_right_idle );															// O - Right Throttle - IDLE
 	// EOLNORM in common
 	// EOLMOTOR
 	MapKeyIO(&Throttle, EOLMOTOR, 	CHAIN( DOWN+L_SHIFT, D(10), DOWN+'s', D(100), UP+'s', D(), UP+L_SHIFT ),		// I - JFS Switch - START 2
@@ -293,13 +293,13 @@ int main()
 
 	// Engine idle/off (overwrite of common)
 	// IDLELON
-	MapKey(&Throttle, IDLELON, 		CHAIN( DOWN+R_SHIFT, D(10), PULSE+END, D(), UP+R_SHIFT ));						// Throttle - OFF
-	MapKeyR(&Throttle, IDLELON, 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));						// Throttle - IDLE
+	MapKey(&Throttle, IDLELON, 		throttle_right_off );															// Throttle - OFF
+	MapKeyR(&Throttle, IDLELON, 	throttle_right_idle );															// Throttle - IDLE
 	// IDLERON
 	MapKey(&Throttle, IDLERON, 		0 );																			//
 
 	// SC (overwrite of common)
-	MapKeyIO(&Throttle, SC, 		TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - re-centre IR tracker / VR helmet
+	MapKeyIO(&Throttle, SC, 		TEMPO( recentre_irvr,															// I - re-centre IR tracker / VR helmet
 									   	   PULSE+discord_mute, 500 ),												//     [long] discord mute toggle
 									PULSE+'d' );																	// O - Expand/FOV Button
 
