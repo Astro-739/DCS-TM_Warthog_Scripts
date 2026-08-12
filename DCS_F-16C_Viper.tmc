@@ -104,15 +104,15 @@ int main()
 
 
 	// A-A override function
-	override = EXEC( "if(!override_dog) ActKey( PULSE+KEYON+L_CTL+'3' );"										// DOGFIGHT/Missile Override Switch - DOGFIGHT
-					 "if(override_dog) ActKey( PULSE+KEYON+L_CTL+'4' );"										// DOGFIGHT/Missile Override Switch - MISSILE OVERRIDE
-					 "override_dog = !override_dog;" 															// switch override_dog
-					 "printf(\"override_dogfight = %i\\xa\", override_dog);" );									// print state to output window
+	override 			= EXEC( "if(!override_dog) ActKey( PULSE+KEYON+L_CTL+'3' );"							// DOGFIGHT/Missile Override Switch - DOGFIGHT
+								 "if(override_dog) ActKey( PULSE+KEYON+L_CTL+'4' );"							// DOGFIGHT/Missile Override Switch - MISSILE OVERRIDE
+								 "override_dog = !override_dog;" 												// switch override_dog
+								 "printf(\"override_dogfight = %i\\xa\", override_dog);" );						// print state to output window
 
 
 	// Parking Brake 
-	parkingbrake = SEQ( CHAIN( DOWN+R_CTL, D(10), PULSE+'p', D(), UP+R_CTL ),									// ANTI-SKID Switch - PARKING BRAKE
-						CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'p', D(), UP+R_CTL+R_SHIFT ));					// ANTI-SKID Switch - ANTI-SKID
+	parkingbrake 		= SEQ( CHAIN( DOWN+R_CTL, D(10), PULSE+'p', D(), UP+R_CTL ),							// ANTI-SKID Switch - PARKING BRAKE
+							   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'p', D(), UP+R_CTL+R_SHIFT ));			// ANTI-SKID Switch - ANTI-SKID
 
 
 
