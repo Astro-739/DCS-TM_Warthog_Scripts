@@ -1,6 +1,6 @@
 // DCS F-16C Viper Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.25.127
-// version 2.3, Jan 2026
+// version 2.4, Aug 2026
 
 
 include "target.tmh"
@@ -268,15 +268,13 @@ int main()
 									0 );																			// OD - 
 
 	// Engine Operation
-	// EOLIGN (overwrites common)
-	MapKeyIO(&Throttle, EOLIGN,		startup, 																		// I - Start-up Sequence
-									throttle_right_idle );															// O - Right Throttle - IDLE
+	// EOLIGN in common
 	// EOLNORM in common
 	// EOLMOTOR
 	MapKeyIO(&Throttle, EOLMOTOR, 	CHAIN( DOWN+L_SHIFT, D(10), DOWN+'s', D(100), UP+'s', D(), UP+L_SHIFT ),		// I - JFS Switch - START 2
 									0 ); 																			// O - 
 	// EORIGN (overwrites common)
-	MapKey(&Throttle, EORIGN, 		0 ); 																			// 
+	MapKey(&Throttle, EORIGN, 		0 ); 																			// only single engine
 	// EORNORM in common
 	// EORMOTOR in common
 
@@ -291,12 +289,10 @@ int main()
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),							// 	   LED5 ON for MANUAL PITCH Override
 									0 );																			// O - 
 
-	// Engine idle/off (overwrite of common)
-	// IDLELON
-	MapKey(&Throttle, IDLELON, 		throttle_right_off );															// Throttle - OFF
-	MapKeyR(&Throttle, IDLELON, 	throttle_right_idle );															// Throttle - IDLE
-	// IDLERON
-	MapKey(&Throttle, IDLERON, 		0 );																			//
+	// Engine idle/off
+	// IDLELON in common
+	// IDLERON (overwrite of common)
+	MapKey(&Throttle, IDLERON, 		0 );																			// only single engine
 
 	// SC (overwrite of common)
 	MapKeyIO(&Throttle, SC, 		TEMPO( recentre_irvr,															// I - re-centre IR tracker / VR helmet
