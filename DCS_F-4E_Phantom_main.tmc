@@ -249,7 +249,7 @@ int main()
 
 	// -------------------- SEAT CONTROLS ---------------------------
 
-	// Engine Override
+	// Engine Override Left
 	// EFLNORM	
 	MapKeyIO(&Throttle, EFLNORM, 	CHAIN( 0, D(), 													// I - Emergency Quick Release Lever - Release
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),			// 	   LED5 OFF for MANUAL Override

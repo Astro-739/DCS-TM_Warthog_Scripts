@@ -279,7 +279,7 @@ int main()
 	// EORMOTOR in common
 
 
-	// Engine Override Left
+/*	// Engine Override Left
 	// EFLNORM
 	MapKeyIO(&Throttle, EFLNORM, 	CHAIN( 0, D(), 																	// I - MANUAL PITCH Override Switch - NORM
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),							// 	   LED5 OFF for MANUAL PITCH Override
@@ -288,6 +288,7 @@ int main()
 	MapKeyIO(&Throttle, EFLOVER, 	CHAIN( pitch_override, D(),														// I - MANUAL PITCH Override Switch - OVRD
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),							// 	   LED5 ON for MANUAL PITCH Override
 									0 );																			// O - 
+*/
 
 	// Engine idle/off
 	// IDLELON in common
