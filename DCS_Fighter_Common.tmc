@@ -132,7 +132,7 @@ int radio4_acspecific;
 int nws;
 int canopy_toggle;
 int wheelbrake;
-int pitch_override;
+int attcontrol_override;
 int engine_ignition_left;
 int engine_ignition_right;
 int apu_on;
@@ -386,7 +386,7 @@ int dcs_fighter_common_functions()
 	nws						= DX3;																						// Node Wheel Steering
 	canopy_toggle			= DX11; 																					// Canopy toggle
 	wheelbrake				= DX12;																						// Wheel brake
-	pitch_override			= DX22;																						// Manual pitch override
+	attcontrol_override		= DX22;																						// Manual attitude control override
 	engine_ignition_left	= DX33;																						// Left engine ignition
 	engine_ignition_right	= DX34; 																					// Right engine ignition
 	apu_on					= DX35;																						// APU on
@@ -678,11 +678,11 @@ int dcs_fighter_common_controls()
 
 	// Engine Override Left (Front/Back seat, manual pitch override)
 	// EFLNORM
-	MapKeyIO(&Throttle, EFLNORM, 		CHAIN( 0, D(), 																	// I - MANUAL PITCH Override Switch - NORM
+	MapKeyIO(&Throttle, EFLNORM, 		CHAIN( 0, D(), 																	// I - Attitude control override switch - NORM
 											   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),							// 	   LED5 OFF for MANUAL PITCH Override
 										0 );																			// O - (Front seat)
 	// EFLOVER
-	MapKeyIO(&Throttle, EFLOVER, 		CHAIN( pitch_override, D(),														// I - MANUAL PITCH Override Switch - OVRD
+	MapKeyIO(&Throttle, EFLOVER, 		CHAIN( attcontrol_override, D(),												// I - Attitude control override switch - OVRD
 											   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),							// 	   LED5 ON for MANUAL PITCH Override
 										0 );																			// O - (Back seat)
 	MapKeyR(&Throttle, EFLOVER, 		0 );																			// 
