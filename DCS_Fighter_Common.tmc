@@ -165,6 +165,7 @@ int mouseclick_right;
 int discord_mute;
 int recentre_irvr;
 int ingamechat_toggle;
+int F10map_toggle;
 
 int	kneeboard_toggle;
 int	kneeboard_mark;
@@ -426,6 +427,7 @@ int dcs_fighter_common_functions()
 	// Visual
 	recentre_irvr			= CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL );										// Re-centre IR tracker / VR helmet
 	ingamechat_toggle		= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'y', D(), UP+L_CTL+L_SHIFT );						// Toggle in-game chat
+	F10map_toggle			= SEQ( PULSE+F10, PULSE+F1 );																// Toggle F10 map
 
 	// Emergency Stores Jettison (can be specified per airplane)
 	emergency_stores_jettison = CHAIN( L_SHIFT, D(10), 'e' );															// EMERGENCY STORES JETTISON Button
@@ -465,27 +467,27 @@ int dcs_fighter_common_functions()
 	kneeboard_prevshcut		= CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'[', D(), UP+R_SHIFT+L_SHIFT );					// kneeboard previous shortcut
 
 	// Night Vision function
-	nightvision 		= SEQ( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(), UP+R_SHIFT, D(),								// Night vision goggles (NVG) on
-									  EXEC( "nightvision_on = 1;" )),
-					   		   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(), UP+R_SHIFT, D(),								// Night vision goggles (NVG) off
-									  EXEC( "nightvision_on = 0;" )));
+	nightvision 			= SEQ( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(), UP+R_SHIFT, D(),							// Night vision goggles (NVG) on
+										  EXEC( "nightvision_on = 1;" )),
+					   			   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(), UP+R_SHIFT, D(),							// Night vision goggles (NVG) off
+										  EXEC( "nightvision_on = 0;" )));
 
 	// Flashlight function
-	flashlight 			= SEQ( CHAIN( DOWN+L_ALT, D(10), PULSE+'l', D(), UP+L_ALT, D(),									// Flashlight on
-									  EXEC( "flashlight_on = 1;" )),
-					  		   CHAIN( DOWN+L_ALT, D(10), PULSE+'l', D(), UP+L_ALT, D(),									// Flashlight off
-									  EXEC( "flashlight_on = 0;" )));
+	flashlight 				= SEQ( CHAIN( DOWN+L_ALT, D(10), PULSE+'l', D(), UP+L_ALT, D(),								// Flashlight on
+										  EXEC( "flashlight_on = 1;" )),
+						  		   CHAIN( DOWN+L_ALT, D(10), PULSE+'l', D(), UP+L_ALT, D(),								// Flashlight off
+										  EXEC( "flashlight_on = 0;" )));
 
 	// Brightness function
-	brightness_up 		= REXEC( 100, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_CTL+R_SHIFT+'h' );"				// NVG brightness up
-										   "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+'.' );"			// Flashlight brightness up
-										   "else ActKey( PULSE+KEYON+DX37 );" );										// HUD/HMCS/Reticle brightness up
-	brightness_down 	= REXEC( 101, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_ALT+R_SHIFT+'h' );"				// NVG brightness down
-										   "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+',' );"			// Flashlight brightness down
-										   "else ActKey( PULSE+KEYON+DX38 );" );										// HUD/HMCS/Reticle brightness down
+	brightness_up 			= REXEC( 100, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_CTL+R_SHIFT+'h' );"			// NVG brightness up
+											   "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+'.' );"		// Flashlight brightness up
+											   "else ActKey( PULSE+KEYON+DX37 );" );									// HUD/HMCS/Reticle brightness up
+	brightness_down 		= REXEC( 101, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_ALT+R_SHIFT+'h' );"			// NVG brightness down
+											   "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+',' );"		// Flashlight brightness down
+											   "else ActKey( PULSE+KEYON+DX38 );" );									// HUD/HMCS/Reticle brightness down
 																														// FLIR brightness
 	// External
-	tacview_bookmark 	= CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT );											// Tacview Bookmark
+	tacview_bookmark 		= CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT );										// Tacview Bookmark
 
 
 
@@ -528,7 +530,7 @@ int dcs_fighter_common_controls()
 
 	// Nosewheel Steering Button
 	// S1
-	MapKeyIO(&AVA_F16, S1,  			SEQ( PULSE+F10, PULSE+F1 ),														// I - F10 map toggle
+	MapKeyIO(&AVA_F16, S1,  			F10map_toggle,																	// I - F10 map toggle
 									 	nws ); 																			// O - Nosewheel Steering Button
 
 	// Weapon Release Button
