@@ -63,7 +63,7 @@ int dcs_f14ab_pilot_controls()
 	// JSTR layer
 	// Expand FOV Button - S3
 	MapKey(&AVA_F16, S3,  		EXEC( "if(LTRN_mode) dcs_f14ab_jester_lantirn_controls();"								// Switch to JESTER LANTIRN controls (LTRN_mode ON)
-								  	  "else dcs_f14ab_jester_controls();" ));												// Switch to JESTER controls (LTRN_mode OFF)
+								  	  "else dcs_f14ab_jester_controls();" ));											// Switch to JESTER controls (LTRN_mode OFF)
 	MapKeyR(&AVA_F16, S3,  		EXEC( "dcs_fighter_common_switch();" 													// Switch back to COMMON,
 								  	  "dcs_f14ab_pilot_controls_switch();" ));											//   and PILOT controls
 
@@ -155,24 +155,24 @@ int dcs_f14ab_pilot_controls()
 	// FLAPU
 	MapKey(&Throttle, FLAPU,  	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ));								// Flap Switch - UP
 	// FLAPM
-	MapKey(&Throttle, FLAPM, 	0);																						// 
+	MapKey(&Throttle, FLAPM, 	0 );																					// 
 	// FLAPD	
-	MapKey(&Throttle, FLAPD,  	PULSE+'f');																				// Flap Switch - DOWN
+	MapKey(&Throttle, FLAPD,  	PULSE+'f' );																			// Flap Switch - DOWN
 
 	
 	// Engine Operation
 	// EOLIGN
 	MapKeyIO(&Throttle, EOLIGN,	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'c', D(), UP+R_SHIFT ),								// I - Crank Left Engine
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT ));								// O - Throttle Left - IDLE
+								throttle_left_idle );																	// O - Throttle Left - IDLE
 
 	// EORIGN
 	MapKeyIO(&Throttle, EORIGN, CHAIN( DOWN+R_CTL, D(10), PULSE+'c', D(), UP+R_CTL ),									// I - Crank Right Engine
-								CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT ));								// O - Throttle Right - IDLE
+								throttle_right_idle );																	// O - Throttle Right - IDLE
 
 
 	// SC
 	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),							// I - re-centre IR tracker / VR helmet
-									   PULSE+DX21, 500 ),																//     [long] discord mute toggle
+									   PULSE+discord_mute, 500 ),														//     [long] discord mute toggle
 								CHAIN( L_SHIFT+L_CTL, D(10), 't' ));													// O - PLM button
 
 

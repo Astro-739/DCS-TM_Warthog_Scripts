@@ -165,14 +165,14 @@ int main()
 	// ----- JESTER calls -----
 
 	// Radar
-	JSTR_rdr_stby			= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'0', D(), UP+L_CTL+R_CTL );
-	JSTR_rdr_active			= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'1', D(), UP+L_CTL+R_CTL );
-	JSTR_rdr_iff			= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'7', D(), UP+L_CTL+R_CTL );
+	JSTR_rdr_stby				= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'0', D(), UP+L_CTL+R_CTL );
+	JSTR_rdr_active				= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'1', D(), UP+L_CTL+R_CTL );
+	JSTR_rdr_iff				= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'7', D(), UP+L_CTL+R_CTL );
 	// Radar - Range
-	JSTR_rdr_range_25n		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'1', D(), UP+L_CTL+L_ALT );
-	JSTR_rdr_range_25w		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'2', D(), UP+L_CTL+L_ALT );
-	JSTR_rdr_range_50n		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'3', D(), UP+L_CTL+L_ALT );
-	JSTR_rdr_range_50w		= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'4', D(), UP+L_CTL+L_ALT );
+	JSTR_rdr_range_25n			= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'1', D(), UP+L_CTL+L_ALT );
+	JSTR_rdr_range_25w			= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'2', D(), UP+L_CTL+L_ALT );
+	JSTR_rdr_range_50n			= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'3', D(), UP+L_CTL+L_ALT );
+	JSTR_rdr_range_50w			= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'4', D(), UP+L_CTL+L_ALT );
 	// Radar - Elevation
 	JSTR_rdr_elev_7500_lower	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'1', D(), UP+L_CTL+R_SHIFT );
 	JSTR_rdr_elev_3500_lower	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'2', D(), UP+L_CTL+R_SHIFT );
@@ -184,34 +184,37 @@ int main()
 	JSTR_rdr_elev_20_30k		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'7', D(), UP+L_CTL+R_SHIFT );
 	JSTR_rdr_elev_30_40k		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'8', D(), UP+L_CTL+R_SHIFT );
 	JSTR_rdr_elev_40_50k		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'9', D(), UP+L_CTL+R_SHIFT );
+
 	// Navigation
-	JSTR_nav_wp_next		= CHAIN( PULSE+'a', D(200),
-									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
-									 PULSE+'w' );
-	JSTR_nav_wp1			= CHAIN( PULSE+'a', D(200),
-									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
-									 PULSE+'e', D(200), 
-									 PULSE+'w' );
+	JSTR_nav_wp_next			= CHAIN( PULSE+'a', D(200),
+										 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
+										 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
+										 PULSE+'w' );
+	JSTR_nav_wp1				= CHAIN( PULSE+'a', D(200),
+										 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
+										 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
+										 PULSE+'e', D(200), 
+										 PULSE+'w' );
+
 	// Start-up
-	JSTR_startup			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );
-	JSTR_loudclear			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
-	JSTR_ins_fine			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
-	JSTR_ins_wpn			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL );
+	JSTR_startup				= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );
+	JSTR_loudclear				= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
+	JSTR_ins_fine				= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
+	JSTR_ins_wpn				= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL );
+
 	// General
 	JSTR_jammer_transmit		= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'9', D(), UP+L_CTL+R_CTL );
-	JSTR_jammer_stby		= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'8', D(), UP+L_CTL+R_CTL );
+	JSTR_jammer_stby			= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'8', D(), UP+L_CTL+R_CTL );
 
-	JSTR_menu				= 'a';
-	JSTR_menu_right			= PULSE+'e';
-	JSTR_menu_left			= PULSE+'q';
-	JSTR_menu_select		= PULSE+'w';
-	JSTR_menu_main			= CHAIN( DOWN+R_CTL, D(10), PULSE+'w', D(), UP+R_CTL );
+	JSTR_menu					= 'a';
+	JSTR_menu_right				= PULSE+'e';
+	JSTR_menu_left				= PULSE+'q';
+	JSTR_menu_select			= PULSE+'w';
+	JSTR_menu_main				= CHAIN( DOWN+R_CTL, D(10), PULSE+'w', D(), UP+R_CTL );
 
-	JSTR_context_short		= PULSE+'v';
-	JSTR_context_long		= CHAIN( DOWN+'v', D(500), UP+'v');
-	JSTR_context_double		= CHAIN( PULSE+'v', D(200), PULSE+'v');
+	JSTR_context_short			= PULSE+'v';
+	JSTR_context_long			= CHAIN( DOWN+'v', D(500), UP+'v');
+	JSTR_context_double			= CHAIN( PULSE+'v', D(200), PULSE+'v');
 
 
 
