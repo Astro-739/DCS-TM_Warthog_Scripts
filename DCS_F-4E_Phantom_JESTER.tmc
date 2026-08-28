@@ -34,7 +34,7 @@ int dcs_f4e_jester_controls()
 	// H3U
 	MapKeyIO(&AVA_F16, H3U, 	0,																						// I - 
 								TEMPO( SEQ( JSTR_rdr_range_50n, JSTR_rdr_range_50w ),									// O - Radar range 50 narrow/wide
-									   JSTR_rdr_elev_10_20k, 500 ));														//     [long] Radar elevation 10 - 20k ft
+									   JSTR_rdr_elev_10_20k, 500 ));													//     [long] Radar elevation 10 - 20k ft
 	// H3D
 	MapKeyIO(&AVA_F16, H3D, 	0,																						// I - 
 								TEMPO( SEQ( JSTR_rdr_range_25n, JSTR_rdr_range_25w ),									// O - Radar range 25 narrow/wide

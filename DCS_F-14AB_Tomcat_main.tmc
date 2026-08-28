@@ -181,9 +181,9 @@ int main()
 						   JSTR_rdr_range_400 );
 
 	// Radar elevation select
-	JSTR_rdr_elev_low		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
+	JSTR_rdr_elev_low		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 													// Main menu
+									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 									// A2A radar
+									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 										
 									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL );
 	JSTR_rdr_elev_lowmid	= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
@@ -310,7 +310,7 @@ int main()
 	// Exterior Lighting - Full
 	extlight_full 		= CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'l', D(), UP+L_SHIFT+R_SHIFT, D(100),				// Lights Anti Collision ON
 							     DOWN+L_CTL+R_SHIFT, D(10), PULSE+'l', D(), UP+L_CTL+R_SHIFT, D(100),					// Lights Position Wing BRT
-						   		 DOWN+L_ALT+R_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+R_SHIFT,	D(100),					// Lights Position Tail BRT
+						   		 DOWN+L_ALT+R_SHIFT, D(10), PULSE+'l', D(), UP+L_ALT+R_SHIFT, D(100),					// Lights Position Tail BRT
 						   		 PULSE+'l', D(100),																		// Exterior Lights Master Switch ON
 						   		 REXEC( 0, 100, "ActKey( PULSE+KEYON+R_CTL+'l' );", RNOSTOP ), 							// Lights Formation Brightnes Down
 						   		 D(800),																				// loop 8x

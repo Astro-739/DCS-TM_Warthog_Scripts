@@ -401,8 +401,8 @@ int dcs_fighter_common_functions()
 
 	// Systems
 	mastercaution			= CHAIN( DOWN+L_ALT, D(10), DOWN+'m', D(300), UP+'m', D(10), UP+L_ALT );					// Master caution button
-	gear_up					= CHAIN( DOWN+L_CTL, D(10), PULSE+'g', D(), UP+L_CTL ); 									// Gear up 
-	gear_down				= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'g', D(), UP+L_SHIFT ); 								// Gear down
+	gear_up					= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'g', D(), UP+L_SHIFT ); 								// Gear up 
+	gear_down				= CHAIN( DOWN+L_CTL, D(10), PULSE+'g', D(), UP+L_CTL ); 									// Gear down
 	hook_up					= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'h', D(), UP+L_CTL+L_ALT );							// HOOK Switch - UP
 	hook_down				= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'h', D(), UP+L_CTL+L_SHIFT );						// HOOK Switch - DOWN
 	eject					= CHAIN( DOWN+L_CTL, D(10), PULSE+'e', D(), UP+L_CTL ); 									// EJECT
