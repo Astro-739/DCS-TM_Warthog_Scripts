@@ -55,8 +55,9 @@ int main()
 	DMS_right 	= CHAIN( R_ALT, D(10), '/' );													// DMS right
 	DMS_left 	= CHAIN( R_ALT, D(10), ',' );													// DMS left
 
-	// Landing Horn Silencer Button (overwrites common)
+	// Buttons (overwrite common)
 	LDGH_short	= CHAIN( DOWN+L_CTL, D(10), DOWN+USB[0x55], D(100), UP+USB[0x55], D(), UP+L_CTL );					// ICP DRIFT CUTOUT/WARN RESET 3-pos Switch: WARN RESET <> NORM (Num *)
+	SC_short	= PULSE+'d';																	// Expand/FOV Button
 
 	// DX - A/C specific
 	enable 				= DX24;																	// ENABLE Switch - Depress
@@ -288,9 +289,9 @@ int main()
 	MapKey(&Throttle, IDLERON, 		0 );																			// only single engine
 
 	// SC (overwrite of common)
-	MapKeyIO(&Throttle, SC, 		TEMPO( recentre_irvr,															// I - re-centre IR tracker / VR helmet
-									   	   PULSE+discord_mute, 500 ),												//     [long] discord mute toggle
-									PULSE+'d' );																	// O - Expand/FOV Button
+//	MapKeyIO(&Throttle, SC, 		TEMPO( recentre_irvr,															// I - re-centre IR tracker / VR helmet
+//									   	   PULSE+discord_mute, 500 ),												//     [long] discord mute toggle
+//									PULSE+'d' );																	// O - Expand/FOV Button
 
 
 	// U LAYER - Air-to-Air Mode

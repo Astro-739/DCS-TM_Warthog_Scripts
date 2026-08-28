@@ -113,6 +113,7 @@ int	DMS_aft;
 int	DMS_right;
 int	DMS_left;
 int LDGH_short;
+int SC_short;
 int	trim_up;
 int	trim_down;
 int	trim_right;
@@ -361,8 +362,9 @@ int dcs_fighter_common_functions()
 	DMS_right 	= 0;
 	DMS_left 	= 0;
 
-	// LDGH - Landing Horn Silencer Button (can be specified per airplane)
+	// Buttons (can be specified per airplane)
 	LDGH_short	= 0;
+	SC_short	= 0;
 
 	// Trim
 	trim_up		= CHAIN( R_CTL, D(10), '.' ); 																			// trim nose up
@@ -651,7 +653,7 @@ int dcs_fighter_common_controls()
 	// SC (IR/VR re-centre, Discord mute)
 	MapKeyIO(&Throttle, SC, 			TEMPO( recentre_irvr,															// I - re-centre IR tracker / VR helmet
 											   discord_mute, 500 ),														//     [long] discord mute toggle
-										0 );																			// O - 
+										SC_short );																		// O - specified per airplane
 
 								
 	// APUON (APU & Air Refuel)
