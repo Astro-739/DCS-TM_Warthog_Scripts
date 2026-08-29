@@ -1,16 +1,15 @@
 // DCS F-14AB Tomcat Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.25.127
-// version 2.2, Jan 2026
+// version 1.0, Aug 2026
 
 
 
 // ------------------------- INCLUDE --------------------------------
 
 include "target.tmh"
-include "DCS_F-14AB_Tomcat_PILOT.tmc"						// all PILOT controls
+include "DCS_F-14BU_Tomcat_PILOT.tmc"						// all PILOT controls
 include "DCS_F-14AB_Tomcat_RIO.tmc"							// all RIO controls
 include "DCS_F-14AB_Tomcat_JESTER.tmc"						// all JESTER controls
-//include "DCS_F-14AB_Tomcat_macros.ttm"						// definitions
 include "DCS_Fighter_Common.tmc"							// all dcs fighter COMMON controls
 
 
@@ -23,8 +22,6 @@ int extlight_posdim;
 
 int steercmdlist, index_stcmd = 0;							// (start with second element after increment, element 0 is first element in list)
 int radarrangelist, index_range = 2;						// (current is middle of five (assumption 100 nm), element 2, element 0 is first element in list)
-int radarelevlist, index_elev = 2;							// (current is middle of five, element 2, element 0 is first element in list)
-int radarazlist, index_az = 2;								// (current is middle of five, element 2, element 0 is first element in list)
 int steerpointlist_aa, index_stpt_aa = -1;					// (start with first element after increment, wp1, element 0 is first element in list)
 int steerpointlist_ag, index_stpt_ag = -1;					// (start with first element after increment, wp1, element 0 is first element in list)
 int lantirn_q_stptlist;
@@ -41,16 +38,6 @@ int	JSTR_rdr_range_50;
 int	JSTR_rdr_range_100;
 int	JSTR_rdr_range_200;
 int	JSTR_rdr_range_400;
-int	JSTR_rdr_elev_low;
-int	JSTR_rdr_elev_lowmid;
-int	JSTR_rdr_elev_middle;
-int	JSTR_rdr_elev_highmid;
-int	JSTR_rdr_elev_high;
-int	JSTR_rdr_az_left;
-int	JSTR_rdr_az_leftcntr;
-int	JSTR_rdr_az_center;
-int	JSTR_rdr_az_rightcntr;
-int	JSTR_rdr_az_right;
 int	JSTR_rdr_ac_stab;
 int	JSTR_rdr_ground_stab;
 int	JSTR_rdr_az_elev_auto;
@@ -108,7 +95,6 @@ int	JSTR_context_short;
 int	JSTR_context_long;
 int	JSTR_context_double;
 
-//int JSTR_tcs_menu;
 char LTRN_mode = 0;
 
 int JSTR_toggle_RWS_TWS;
@@ -121,7 +107,6 @@ int JSTR_rwr_unknown_norm;
 int JSTR_WHDN_startup;
 int	JSTR_nav_wp123;
 
-
 int	Steer_CMD_TACAN;
 int	Steer_CMD_Destination;
 int	Steer_CMD_AWLPCD;
@@ -129,16 +114,12 @@ int	Steer_CMD_VEC;
 int	Steer_CMD_MAN;
 
 
-
-
-
-
 define AB 75											// detent position at AB% of full throttle reach (80% for F-14B, 75% for F-14A)
 
 
 
 
-// ------------------------------ MAIN F-14AB ------------------------------------------------------
+// ------------------------------ MAIN F-14BU ------------------------------------------------------
 
 int main()
 {
@@ -155,8 +136,6 @@ int main()
 	// -------------------- AIRCRAFT FUNCTIONS ----------------------
 
 	// ------------------------- LISTS ------------------------------
-	// List items are defined in DCS_F-14AB_Tomcat_macros.ttm
-	
 
 	// Steer CMD select
 	Steer_CMD_TACAN			= CHAIN( DOWN+L_ALT, D(10), PULSE+'1', D(), UP+L_ALT );
@@ -184,67 +163,6 @@ int main()
 						   JSTR_rdr_range_100,
 						   JSTR_rdr_range_200,
 						   JSTR_rdr_range_400 );
-
-	// Radar elevation select
-	JSTR_rdr_elev_low		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 													// Main menu
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 									// A2A radar
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 										
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL );
-	JSTR_rdr_elev_lowmid	= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );
-	JSTR_rdr_elev_middle	= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
-	JSTR_rdr_elev_highmid	= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL );
-	JSTR_rdr_elev_high	 	= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL );
-
-	radarelevlist 	= SEQ( JSTR_rdr_elev_low,
-						   JSTR_rdr_elev_lowmid,
-						   JSTR_rdr_elev_middle,
-						   JSTR_rdr_elev_highmid,
-						   JSTR_rdr_elev_high );
-
-	// Radar azimuth select						 
-	JSTR_rdr_az_left		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL );
-	JSTR_rdr_az_leftcntr	= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );
-	JSTR_rdr_az_center		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
-	JSTR_rdr_az_rightcntr	= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL );
-	JSTR_rdr_az_right		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL, D(200), 
-									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL );
-
-	radarazlist 	= SEQ( JSTR_rdr_az_left,
-						   JSTR_rdr_az_leftcntr,
-						   JSTR_rdr_az_center,
-						   JSTR_rdr_az_rightcntr,
-						   JSTR_rdr_az_right );
 
 	// Navigation Steerpoint select
 	JSTR_nav_wp1		= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'1', D(), UP+L_CTL+L_SHIFT );
@@ -420,9 +338,6 @@ int main()
 									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
 
 	// LANTIRN
-//	JSTR_tcs_menu			= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 
-//									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL, D(200), 
-//									 DOWN+L_CTL, D(10), PULSE+'8', D(), UP+L_CTL, D(200) );
 	JSTR_lntrn_q_des		= CHAIN( PULSE+'a', D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 
 									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
@@ -528,7 +443,7 @@ int main()
 
 	// -------------------- PILOT CONTROLS --------------------------
 
-	dcs_f14ab_pilot_controls();							// PILOT controls (loaded first, assumimg player starts as pilot)
+	dcs_f14bu_pilot_controls();							// PILOT controls (loaded first, assumimg player starts as pilot)
 
 
 	// -------------------- SEAT CONTROLS ---------------------------
@@ -537,7 +452,7 @@ int main()
 	// EFLNORM	
 	MapKeyIO(&Throttle, EFLNORM, 	0,															// I - 
 									CHAIN( PULSE+'1', D(100),									// O - Switch to PILOT cockpit
-										   EXEC( "dcs_f14ab_pilot_controls_switch();" 			//     switch to PILOT controls
+										   EXEC( "dcs_f14bu_pilot_controls_switch();" 			//     switch to PILOT controls
 										   		 "printf(\"PILOT controls\\xa\");" )));			// 	   print state to output window
 	// EFLOVER
 	MapKeyIO(&Throttle, EFLOVER, 	0,															// I - 
@@ -564,20 +479,6 @@ int autopilot_mode()
 	else if (Throttle[APALT]) ActKey(KEYON+PULSE+L_ALT+R_CTL+'p');						// Autopilot - Vector ACL
 	else ActKey(KEYON+PULSE+L_ALT+L_SHIFT+'a');											// Autopilot - Altitude Hold
 }
-
-
-
-// ------------------------- TCS MENU -------------------------------
-
-//int checktcsmenu()
-//{
-//	if (!tcs_menu_on) {
-//		ActKey(KEYON+PULSE+JSTR_TCS_menu);												// Turn on TCS menu (when not already on)
-//		tcs_menu_on = 1;
-//		LTRN_mode = 1;																	// LTRN_mode ON
-//		dcs_f14ab_jester_lantirn_controls();												// Load JESTER LANTIRN controls
-//	}
-//}
 
 
 
