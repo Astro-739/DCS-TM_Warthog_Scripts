@@ -65,8 +65,8 @@ int dcs_f14bu_pilot_controls()
 
 	// JSTR layer
 	// Expand FOV Button - S3
-	MapKey(&AVA_F16, S3,  		EXEC( "if(LTRN_mode) dcs_f14ab_jester_lantirn_controls();"								// Switch to JESTER LANTIRN controls (LTRN_mode ON)
-								  	  "else dcs_f14ab_jester_controls();" ));											// Switch to JESTER controls (LTRN_mode OFF)
+	MapKey(&AVA_F16, S3,  		EXEC( "if(LTRN_mode) dcs_f14_jester_lantirn_controls();"								// Switch to JESTER LANTIRN controls (LTRN_mode ON)
+								  	  "else dcs_f14_jester_controls();" ));											// Switch to JESTER controls (LTRN_mode OFF)
 	MapKeyR(&AVA_F16, S3,  		EXEC( "dcs_fighter_common_switch();" 													// Switch back to COMMON,
 								  	  "dcs_f14bu_pilot_controls_switch();" ));											//   and PILOT controls
 
@@ -87,7 +87,7 @@ int dcs_f14bu_pilot_controls()
 							 	0); 																					// O - 
 	// H4P
 	MapKeyIO(&AVA_F16, H4P, 	0, 																						// I - 
-							 	CHAIN( DOWN+L_ALT, D(10), PULSE+'d', D(), UP+L_ALT )); 									// O - DLC Toggle / Countermeasure Dispense
+							 	cm_dispense ); 																			// O - DLC Toggle / Countermeasure Dispense
 
 	
 	
@@ -213,7 +213,7 @@ int dcs_f14bu_pilot_controls()
 									   EXEC( "if(Joystick[S3]) {"														// 	   If JSTR shift is pressed
 											   "LTRN_mode = 1;"															// 	   LTRN_mode ON
 											   "printf(\"LTRN_mode = 1\\xa\");"											// 
-											   "dcs_f14ab_jester_lantirn_controls();"									//	   Load JESTER LANTIRN controls
+											   "dcs_f14_jester_lantirn_controls();"										//	   Load JESTER LANTIRN controls
 											   "}" ),																	//
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED3) )); 									//     A-G mode on, LED3 ON for D layer
 	MapKeyRIO(&Throttle, BSB, 	CHAIN( EXEC( "CAR_mode = 0;"															// I - Set CAR_mode OFF

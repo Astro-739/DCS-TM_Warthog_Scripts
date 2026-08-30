@@ -88,7 +88,7 @@ int dcs_f14ab_pilot_controls()
 							 	0); 																					// O - 
 	// H4P
 	MapKeyIO(&AVA_F16, H4P, 	0, 																						// I - 
-							 	CHAIN( DOWN+L_ALT, D(10), PULSE+'d', D(), UP+L_ALT )); 									// O - DLC Toggle / Countermeasure Dispense
+							 	cm_dispense ); 																			// O - DLC Toggle / Countermeasure Dispense
 
 	
 	

@@ -9,7 +9,7 @@
 include "target.tmh"
 include "DCS_F-14BU_Tomcat_PILOT.tmc"						// all PILOT controls
 include "DCS_F-14AB_Tomcat_RIO.tmc"							// all RIO controls
-include "DCS_F-14AB_Tomcat_JESTER.tmc"						// all JESTER controls
+include "DCS_F-14_Tomcat_JESTER.tmc"						// all JESTER controls
 include "DCS_Fighter_Common.tmc"							// all dcs fighter COMMON controls
 
 
@@ -40,7 +40,6 @@ int	JSTR_rdr_range_200;
 int	JSTR_rdr_range_400;
 int	JSTR_rdr_ac_stab;
 int	JSTR_rdr_ground_stab;
-int	JSTR_rdr_az_elev_auto;
 int	JSTR_lock_enemy_ahead;
 int	JSTR_lock_friend_ahead;
 int	JSTR_lock_ahead;
@@ -78,8 +77,12 @@ int JSTR_lntrn_srch_samactive;
 int JSTR_lntrn_srch_armoractive;
 int JSTR_lntrn_nexttgt;
 int JSTR_lntrn_prevtgt;
+
+char LTRN_mode = 0;
+
 int JSTR_agwpn_comptgt;
 int JSTR_agwpn_comppilot;
+
 int	JSTR_startup;
 int	JSTR_loudclear;
 int	JSTR_ins_fine;
@@ -94,8 +97,6 @@ int JSTR_context;
 int	JSTR_context_short;
 int	JSTR_context_long;
 int	JSTR_context_double;
-
-char LTRN_mode = 0;
 
 int JSTR_toggle_RWS_TWS;
 int JSTR_ground_ac_stbl;
@@ -389,10 +390,7 @@ int main()
 	JSTR_ins_fine			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
 	JSTR_ins_wpn			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL );
 	// General
-	JSTR_jett_droptanks		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 											// Main menu
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 							// Air to air radar
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 							// Within visual range radar
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL );									// Jettison drop tanks
+	JSTR_jett_droptanks		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'j', D(), UP+L_CTL+R_SHIFT );
 	JSTR_jammer_onoff		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 											// Main menu
 									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 							// CMS & RWR
 									 DOWN+L_CTL, D(10), PULSE+'7', D(), UP+L_CTL );									// Jammer XMIT / STBY toggle

@@ -1,14 +1,14 @@
-// JESTER file for DCS_F-14AB_Tomcat.tmc  by Astro
-// TARGET version 3.0.24.618
-// version 2.0, Feb 2025
+// JESTER file for DCS_F-14_Tomcat.tmc  by Astro
+// TARGET version 3.0.25.127
+// version 2.1, Aug 2026
 
 
 
 
 
-// ------------------------------ F-14AB JESTER CONTROLS --------------------------------------------
+// -------------------------------- F-14 JESTER CONTROLS --------------------------------------------
 
-int dcs_f14ab_jester_controls()
+int dcs_f14_jester_controls()
 // JESTER controls should stay within JESTER switch set (TMS, DMS, CS, MS)
 {
 
@@ -46,31 +46,20 @@ int dcs_f14ab_jester_controls()
 	MapKeyIO(&AVA_F16, H3U, 	0,																						// I - 
 								TEMPO( EXEC( "index_range = (index_range+1)%5;"											// O -     
 											 "ActKey( KEYON+PULSE+X(radarrangelist, index_range) );" ),					//     Radar range step up
-									//   EXEC( "index_elev = (index_elev+1)%5;"											//     
-									//		 "ActKey( KEYON+PULSE+X(radarelevlist, index_elev) );" ), 500 ));			//     [long] Radar elevation step up
 										0, 500 ));
 	// H3D
 	MapKeyIO(&AVA_F16, H3D, 	0,																						// I - 
 								TEMPO( EXEC( "index_range = (index_range+4)%5;"											// O -     
 											 "ActKey( KEYON+PULSE+X(radarrangelist, index_range) );" ),					//     Radar range step down
-									//   EXEC( "index_elev = (index_elev+4)%5;"											//     
-									//		 "ActKey( KEYON+PULSE+X(radarelevlist, index_elev) );" ), 500 ));			// 	   [long] Radar elevation step down
 										0, 500 ));
 	// H3R
 	MapKeyIO(&AVA_F16, H3R, 	0, 																						// I - 
 								TEMPO( CHAIN( JSTR_rdr_range_auto, D(),													// O - Radar - Range Auto
 											  EXEC( "index_range = 2;" )),												//	   Reset range index to 2 (100 nm) (element 0 is first element in list)
-									//   EXEC( "index_az = (index_az+1)%5;"												//     
-									//		 "ActKey( KEYON+PULSE+X(radarazlist, index_az) );" ), 500 ));				// 	   [long] Radar azimuth step right
 										0, 500 ));
 	// H3L
 	MapKeyIO(&AVA_F16, H3L, 	0, 																						// I - 
-								//TEMPO( CHAIN( JSTR_rdr_az_elev_auto, D(),												// O - Radar - Az/El Auto
-									//		  EXEC( "index_az = 2;"														//	   Reset azimuth index to Center (element 0 is first element in list)
-									//				"index_elev = 2;" )),												//	   Reset elevation index to Middle (element 0 is first element in list)
-									//   EXEC( "index_az = (index_az+4)%5;"												//     
-									//		 "ActKey( KEYON+PULSE+X(radarazlist, index_az) );" ), 500 ));				// 	   [long] Radar azimuth step left
-								0 );
+								0 );																					// O - 
 
 
 
@@ -162,7 +151,7 @@ int dcs_f14ab_jester_controls()
 
 
 
-}	// =====  end dcs_f14ab_jester_controls()  ======================================================
+}	// =====  end dcs_f14_jester_controls()  ======================================================
 
 
 
@@ -170,7 +159,7 @@ int dcs_f14ab_jester_controls()
 
 // ------------------------------ JESTER LANTIRN CONTROLS -----------------------------------------
 
-int dcs_f14ab_jester_lantirn_controls()
+int dcs_f14_jester_lantirn_controls()
 {
 
 	// -------------------- FLIGHT STICK ----------------------------
@@ -281,4 +270,4 @@ int dcs_f14ab_jester_lantirn_controls()
 
 
 
-}	// =====  end dcs_f14ab_jester_lantirn_controls()  ==============================================
+}	// =====  end dcs_f14_jester_lantirn_controls()  ==============================================
