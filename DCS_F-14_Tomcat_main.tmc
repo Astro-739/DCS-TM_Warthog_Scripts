@@ -1,6 +1,6 @@
-// DCS F-14AB Tomcat Thrustmaster Warthog/AVA/MFD Script by Astro
+// DCS F-14 Tomcat Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.25.127
-// version 1.0, Aug 2026
+// version 3.0, Sep 2026
 
 
 
@@ -19,6 +19,35 @@ include "DCS_Fighter_Common.tmc"							// all dcs fighter COMMON controls
 
 int autopilot;
 int extlight_posdim;	
+
+int	displaymode_cruise;
+int	displaymode_a2a;
+int	displaymode_a2g;
+int displaymode_next;
+int displaymode_prev;
+int	wingsweep_fwd;
+int	wingsweep_aft;
+int	wingsweep_bomb;
+int	wingsweep_auto;
+int	acmcover_open;
+int	acmcover_close;
+int	acmcover_toggle;
+int missilemode_toggle;
+int	vsl_hi;
+int	vsl_lo;
+int	pal;
+int	plm;
+int	dlcthumb_fwd;
+int	dlcthumb_aft;
+int fcsstab_roll_on;
+int fcsstab_roll_off;
+int fcsstab_roll_toggle;
+int	bombing_tool;
+int	checklist_tool;
+int	virt_browser;
+int	manual_toggle;
+int horns_left;
+int horns_right;
 
 int steercmdlist, index_stcmd = 0;							// (start with second element after increment, element 0 is first element in list)
 int radarrangelist, index_range = 2;						// (current is middle of five (assumption 100 nm), element 2, element 0 is first element in list)
@@ -42,7 +71,7 @@ int	JSTR_rdr_ac_stab;
 int	JSTR_rdr_ground_stab;
 int	JSTR_lock_enemy_ahead;
 int	JSTR_lock_friend_ahead;
-int	JSTR_lock_ahead;
+int	JSTR_lock_tgt_ahead;
 int	JSTR_break_lock;
 int	JSTR_lock_TWS_tgt_1;
 int	JSTR_lock_TWS_tgt_2;
@@ -215,7 +244,36 @@ int main()
 	
 
 	// ------------------------- FUNCTIONS --------------------------
-					
+
+	displaymode_cruise	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'2', D(), UP+L_SHIFT );
+	displaymode_a2a		= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'3', D(), UP+L_SHIFT );
+	displaymode_a2g		= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'4', D(), UP+L_SHIFT );
+	displaymode_prev	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'6', D(), UP+L_SHIFT );
+	displaymode_next	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'7', D(), UP+L_SHIFT );
+	wingsweep_fwd		= CHAIN( L_ALT, D(10), 'w' );
+	wingsweep_aft		= CHAIN( L_SHIFT+R_CTL, D(10), 'w' );
+	wingsweep_bomb		= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'w', D(), UP+L_CTL+R_CTL );
+	wingsweep_auto		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'w', D(), UP+L_CTL+R_SHIFT );
+	acmcover_open		= CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'c', D(), UP+R_SHIFT+L_ALT );
+	acmcover_close		= CHAIN( DOWN+R_SHIFT+L_CTL, D(10), PULSE+'c', D(), UP+R_SHIFT+L_CTL );
+	acmcover_toggle		= CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'c', D(), UP+R_SHIFT+L_SHIFT );
+	missilemode_toggle	= CHAIN( DOWN+L_CTL, D(10), PULSE+'p', D(), UP+L_CTL );
+	vsl_hi				= CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'t', D(), UP+R_SHIFT+L_SHIFT );
+	vsl_lo				= CHAIN( DOWN+R_SHIFT+L_CTL, D(10), PULSE+'t', D(), UP+R_SHIFT+L_CTL );
+	pal					= CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'t', D(), UP+R_SHIFT+L_ALT );
+	plm					= CHAIN( L_SHIFT+L_CTL, D(10), 't' );
+	dlcthumb_fwd		= CHAIN( L_SHIFT, D(10), 'd' );
+	dlcthumb_aft		= CHAIN( L_CTL, D(10), 'd' );
+	fcsstab_roll_on		= CHAIN( DOWN+R_CTL+L_SHIFT, D(10), PULSE+'r', D(), UP+R_CTL+L_SHIFT );
+	fcsstab_roll_off	= CHAIN( DOWN+R_CTL+L_CTL, D(10), PULSE+'r', D(), UP+R_CTL+L_CTL );
+	fcsstab_roll_toggle	= CHAIN( DOWN+R_CTL+L_ALT, D(10), PULSE+'r', D(), UP+R_CTL+L_ALT );
+	bombing_tool		= CHAIN( DOWN+R_CTL, D(10), PULSE+'b', D(), UP+R_CTL );
+	checklist_tool		= CHAIN( DOWN+R_CTL, D(10), PULSE+'c', D(), UP+R_CTL );
+	virt_browser		= CHAIN( DOWN+R_CTL, D(10), PULSE+'v', D(), UP+R_CTL );
+	manual_toggle		= CHAIN( DOWN+R_ALT, D(10), PULSE+'m', D(), UP+R_ALT );
+	horns_left			= CHAIN( DOWN+L_SHIFT+L_ALT, D(10), PULSE+'o', D(), UP+L_SHIFT+L_ALT );
+	horns_right			= CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'o', D(), UP+R_SHIFT+L_ALT );
+
 	// Autopilot function
 	autopilot 	= SEQ( CHAIN( EXEC( "autopilot_mode();" ), D(200),														// Set autopilot mode
 							  DOWN+L_ALT+L_SHIFT, D(10), PULSE+'p', D(), UP+L_ALT+L_SHIFT ),							// Autopilot on
@@ -286,15 +344,10 @@ int main()
 	// Radar - Stabilise
 	JSTR_rdr_ac_stab		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'8', D(), UP+L_CTL+R_SHIFT );
 	JSTR_rdr_ground_stab	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'9', D(), UP+L_CTL+R_SHIFT );
-	// Radar – Auto Azimuth and Elevation Radar
-	JSTR_rdr_az_elev_auto	= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 												// Main menu
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 								// Air to air radar
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 								// Beyond visual range radar
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL );										// Auto el and az radar
 	// Radar – STT Lock
 	JSTR_lock_enemy_ahead 	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'1', D(), UP+L_CTL+R_SHIFT );
 	JSTR_lock_friend_ahead 	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'2', D(), UP+L_CTL+R_SHIFT );
-	JSTR_lock_ahead 		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'3', D(), UP+L_CTL+R_SHIFT );
+	JSTR_lock_tgt_ahead 	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'3', D(), UP+L_CTL+R_SHIFT );
 	JSTR_break_lock			= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'5', D(), UP+L_CTL+R_SHIFT );
 	JSTR_lock_TWS_tgt_1		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 												// Main menu
 									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 								// Air to air radar
@@ -441,7 +494,7 @@ int main()
 
 	// -------------------- PILOT CONTROLS --------------------------
 
-	dcs_f14bu_pilot_controls();							// PILOT controls (loaded first, assumimg player starts as pilot)
+	dcs_f14_pilot_controls();							// PILOT controls (loaded first, assumimg player starts as pilot)
 
 
 	// -------------------- SEAT CONTROLS ---------------------------
@@ -450,7 +503,7 @@ int main()
 	// EFLNORM	
 	MapKeyIO(&Throttle, EFLNORM, 	0,															// I - 
 									CHAIN( PULSE+'1', D(100),									// O - Switch to PILOT cockpit
-										   EXEC( "dcs_f14bu_pilot_controls_switch();" 			//     switch to PILOT controls
+										   EXEC( "dcs_f14_pilot_controls_switch();" 			//     switch to PILOT controls
 										   		 "printf(\"PILOT controls\\xa\");" )));			// 	   print state to output window
 	// EFLOVER
 	MapKeyIO(&Throttle, EFLOVER, 	0,															// I - 

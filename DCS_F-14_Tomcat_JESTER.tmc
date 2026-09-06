@@ -1,6 +1,6 @@
-// JESTER file for DCS_F-14_Tomcat.tmc  by Astro
+// JESTER file for DCS_F-14_Tomcat  by Astro
 // TARGET version 3.0.25.127
-// version 2.1, Aug 2026
+// version 3.0, Sep 2026
 
 
 
@@ -18,19 +18,19 @@ int dcs_f14_jester_controls()
 	// Target Management Switch
 	// H2U
 	MapKeyIO(&AVA_F16, H2U, 	0,																						// I - 
-							 	TEMPO( JSTR_context_double,								 								// O - Radar – STT Lock Enemy Ahead
-									   JSTR_lock_enemy_ahead, 500 ));													//     [long] Radar – STT Lock TWS Target #1
+							 	TEMPO( JSTR_lock_tgt_ahead,								 								// O - Radar – STT Lock Target Ahead
+									   JSTR_lock_enemy_ahead, 500 ));													//     [long] Radar – STT Lock Enemy Ahead
 	MapKeyRIO(&AVA_F16, H2U, 	0,																						// I -
 								0 );																					// O -
 	// H2D
 	MapKeyIO(&AVA_F16, H2D, 	0, 																						// I - 
-							 	TEMPO( JSTR_context_long,																// O - Radar – Break Lock
-									   JSTR_break_lock, 500 ));															//     [long] Radar – STT Lock TWS Target #3
+							 	TEMPO( JSTR_break_lock,																	// O - Radar – Break Lock
+									   0, 500 ));																		//     [long] 
 	MapKeyRIO(&AVA_F16, H2D, 	0,																						// I -
 								0 );																					// O -
 	// H2R							
 	MapKeyIO(&AVA_F16, H2R, 	0, 																						// I - 
-							 	TEMPO( JSTR_context_short, 																// O - Radar – Toggle RWS/TWS Mode
+							 	TEMPO( JSTR_context_double, 																// O - Radar – Toggle RWS/TWS Mode
 									   JSTR_toggle_RWS_TWS, 500 ));														//     [long] Radar – STT Lock TWS Target #2
 	MapKeyRIO(&AVA_F16, H2R, 	0,																						// I -
 								0 );																					// O -

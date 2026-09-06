@@ -1,13 +1,13 @@
-// PILOT file for DCS_F-14AB_Tomcat.tmc  by Astro
+// PILOT file for DCS_F-14_Tomcat  by Astro
 // TARGET version 3.0.25.127
-// version 1.0, Aug 2026
+// version 3.0, Sep 2026
 
 
 
 
 // -------------------- PILOT BUTTON DEFINITIONS --------------------------------------------------
 
-int dcs_f14bu_pilot_button_definitions()																				// In separate function to reload after Jester switch
+int dcs_f14_pilot_button_definitions()																				// In separate function to reload after Jester switch
 {
 
 	// Target Management Switch / Armament Selector (overwrites common)
@@ -18,9 +18,9 @@ int dcs_f14bu_pilot_button_definitions()																				// In separate funct
 
 	// Display Management Switch (overwrites common)
 	DMS_fwd 	= TEMPO( CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'v', D(), UP+L_ALT+R_SHIFT ),							// VDI Mode Toggle
-						 CHAIN( DOWN+L_SHIFT, D(10), PULSE+'6', D(), UP+L_SHIFT ), 500 );								// [long] Display mode previous
+						 displaymode_prev, 500 );																		// [long] Display mode previous
 	DMS_aft 	= TEMPO( CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'h', D(), UP+L_ALT+R_SHIFT ),							// HSD Mode Toggle
-						 CHAIN( DOWN+L_SHIFT, D(10), PULSE+'7', D(), UP+L_SHIFT ), 500 );								// [long] Display mode next
+						 displaymode_next, 500 );																		// [long] Display mode next
 	DMS_right 	= TEMPO( JSTR_rwr_unknown_norm,																			// [JSTR] RWR Unknown/NORM toggle
 						 EXEC( "index_stcmd = (index_stcmd+1)%5;"														// [long] Steer CMD next
 							   "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ), 500 );							// 		
@@ -29,22 +29,22 @@ int dcs_f14bu_pilot_button_definitions()																				// In separate funct
 							   "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ),	500 );							// 		
 
 	// Buttons (overwrite common)
-	SC_short	= CHAIN( L_SHIFT+L_CTL, D(10), 't' );																	// PLM button
+	SC_short	= plm;																									// PLM button
 
 
-}	// end dcs_f14ab_pilot_button_definitions()	===================================================
+}	// end dcs_f14_pilot_button_definitions()	===================================================
 
 
 
 
 // ---------------------------------- F-14BU PILOT CONTROLS ----------------------------------------
 
-int dcs_f14bu_pilot_controls()
+int dcs_f14_pilot_controls()
 {
 
 	// -------------------- COMMON CONTROLS -------------------------
 					
-	dcs_f14bu_pilot_button_definitions();				// load button definitions used by COMMON
+	dcs_f14_pilot_button_definitions();				// load button definitions used by COMMON
 	dcs_fighter_common_controls();						// load dcs COMMON controls
 	dcs_fighter_common_mfd();							// load dcs MFD controls
 														// before aircraft controls, to allow for overwriting of common controls when necessary
@@ -66,25 +66,27 @@ int dcs_f14bu_pilot_controls()
 	// JSTR layer
 	// Expand FOV Button - S3
 	MapKey(&AVA_F16, S3,  		EXEC( "if(LTRN_mode) dcs_f14_jester_lantirn_controls();"								// Switch to JESTER LANTIRN controls (LTRN_mode ON)
-								  	  "else dcs_f14_jester_controls();" ));											// Switch to JESTER controls (LTRN_mode OFF)
+								  	  "else dcs_f14_jester_controls();" ));												// Switch to JESTER controls (LTRN_mode OFF)
 	MapKeyR(&AVA_F16, S3,  		EXEC( "dcs_fighter_common_switch();" 													// Switch back to COMMON,
-								  	  "dcs_f14bu_pilot_controls_switch();" ));											//   and PILOT controls
+								  	  "dcs_f14_pilot_controls_switch();" ));											//   and PILOT controls
 
 
 
 	// Countermeasure Management Switch
 	// H4U	
-	MapKeyIO(&AVA_F16, H4U, 	CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'t', D(), UP+R_SHIFT+L_SHIFT ),				// I - Target designate up / VSL HI
-							 	CHAIN( L_SHIFT, D(10), 'd' ));															// O - DLC Thumbwheel Forward
+	MapKeyIO(&AVA_F16, H4U, 	vsl_hi,																					// I - Target designate up / VSL HI
+							 	dlcthumb_fwd );																			// O - DLC Thumbwheel Forward
 	// H4D
-	MapKeyIO(&AVA_F16, H4D, 	CHAIN( DOWN+R_SHIFT+L_CTL, D(10), PULSE+'t', D(), UP+R_SHIFT+L_CTL ), 					// I - Target designate down / VSL LO
-							 	CHAIN( L_CTL, D(10), 'd' ));															// O - DLC Thumbwheel Aft
+	MapKeyIO(&AVA_F16, H4D, 	vsl_lo, 																				// I - Target designate down / VSL LO
+							 	dlcthumb_aft );																			// O - DLC Thumbwheel Aft
 	// H4R
-	MapKeyIO(&AVA_F16, H4R, 	CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'t', D(), UP+R_SHIFT+L_ALT ), 					// I - Target designate fwd / PAL
-			  				 	0);																						// O - 
+	MapKeyIO(&AVA_F16, H4R, 	pal, 																					// I - Target designate fwd / PAL
+			  				 	TEMPO( 0,																				// O - 
+									   horns_right, 500	));																//	   [long] Throw horns right
 	// H4L
-	MapKeyIO(&AVA_F16, H4L, 	CHAIN( L_SHIFT+L_CTL, D(10), 't' ), 													// I - PLM button
-							 	0); 																					// O - 
+	MapKeyIO(&AVA_F16, H4L, 	0, 																						// I - 
+			  				 	TEMPO( 0,																				// O - 
+									   horns_left, 500	));																//	   [long] Throw horns left
 	// H4P
 	MapKeyIO(&AVA_F16, H4P, 	0, 																						// I - 
 							 	cm_dispense ); 																			// O - DLC Toggle / Countermeasure Dispense
@@ -177,23 +179,15 @@ int dcs_f14bu_pilot_controls()
 	// U LAYER - [O] Air-to-Air Mode
 	//			 [I] ACM Mode
 	// BSF - LED1 ON/OFF
-	MapKeyIO(&Throttle, BSF, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'3', D(), UP+L_SHIFT, D(200),							// I - Display mode air to air
-									   DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'a', D(), UP+L_SHIFT+R_SHIFT, D(200),			// 	   Master arm cover open
-									   DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT,	D(200),							// 	   Master arm on
-									   DOWN+R_CTL+L_CTL, D(10), PULSE+'r', D(), UP+R_CTL+L_CTL, D(200),					//     AFCS Roll Stabilisation Off
-									   DOWN+L_CTL+R_SHIFT, D(10), PULSE+'w', D(), UP+L_CTL+R_SHIFT, D(100),				//	   Wing Sweep Auto Mode
-									   DOWN+R_SHIFT+L_ALT, D(10), PULSE+'c', D(), UP+R_SHIFT+L_ALT, D(),				//	   ACM cover open
+	MapKeyIO(&Throttle, BSF, 	CHAIN( displaymode_a2a, D(200),															// I - Display mode air to air
+									   acmcover_open, D(),																//	   ACM cover open
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED1) ), 									// 	   LED1 ON for U layer
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'3', D(), UP+L_SHIFT, D(200),							// O - Display mode air to air
-									   DOWN+R_CTL+L_CTL, D(10), PULSE+'r', D(), UP+R_CTL+L_CTL, D(200),					//     AFCS Roll Stabilisation Off
-									   DOWN+L_CTL+R_SHIFT, D(10), PULSE+'w', D(), UP+L_CTL+R_SHIFT, D(),				//	   Wing Sweep Auto Mode
+								CHAIN( displaymode_a2a, D(200),															// O - Display mode air to air
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED1) )); 									// 	   LED1 ON for U layer
-	MapKeyRIO(&Throttle, BSF, 	CHAIN( DOWN+R_SHIFT+L_CTL, D(10), PULSE+'c', D(), UP+R_SHIFT+L_CTL, D(200),				// I - ACM cover close
-									   DOWN+L_SHIFT, D(10), PULSE+'2', D(), UP+L_SHIFT, D(200),							// 	   Display mode cruise
-									   DOWN+R_CTL+L_SHIFT, D(10), PULSE+'r', D(), UP+R_CTL+L_SHIFT, D(),				//	   AFCS Roll Stabilisation On
+	MapKeyRIO(&Throttle, BSF, 	CHAIN( acmcover_close, D(200),															// I - ACM cover close
+									   displaymode_cruise, D(200),														// 	   Display mode cruise
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED1) ), 									// 	   LED1 OFF for U layer 
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'2', D(), UP+L_SHIFT, D(200),							// O - Display mode cruise
-									   DOWN+R_CTL+L_SHIFT, D(10), PULSE+'r', D(), UP+R_CTL+L_SHIFT, D(),				//	   AFCS Roll Stabilisation On
+								CHAIN( displaymode_cruise, D(200),														// O - Display mode cruise
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED1) )); 									// 	   LED1 OFF for U layer
 
 	// M LAYER - Navigation Mode
@@ -207,7 +201,7 @@ int dcs_f14bu_pilot_controls()
 									   EXEC( "CAR_mode = 1;"															// 	   Set CAR_mode ON
 											 "printf(\"CAR_mode = 1\\xa\");" ),											// 
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),									//     LED5 ON
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'4', D(), UP+L_SHIFT, D(100),							// O - Display mode air to ground
+								CHAIN( displaymode_a2g, D(100),															// O - Display mode air to ground
 									   EXEC( "if((index_stpt_aa)%3 == 2) index_stpt_ag = 4;"							// 	   Set correct steerpoint in A-G mode (element 0 is first element in list)
 											 "else index_stpt_ag = (index_stpt_aa)%3;" ),								// 
 									   EXEC( "if(Joystick[S3]) {"														// 	   If JSTR shift is pressed
@@ -219,7 +213,7 @@ int dcs_f14bu_pilot_controls()
 	MapKeyRIO(&Throttle, BSB, 	CHAIN( EXEC( "CAR_mode = 0;"															// I - Set CAR_mode OFF
 											 "printf(\"CAR_mode = 0\\xa\");" ),											// 
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),									//     LED5 OFF
-								CHAIN( DOWN+L_SHIFT, D(10), PULSE+'2', D(), UP+L_SHIFT, D(),							// O - Display mode cruise
+								CHAIN( displaymode_cruise, D(),															// O - Display mode cruise
 									   EXEC( "if((index_stpt_ag)%5 > 1) index_stpt_aa = 2;"								// 	   Set correct steerpoint in A-A mode (IP and ST default to WP3, element 0 is first element in list)
 											 "else index_stpt_aa = (index_stpt_ag)%5;" ),								//
 									   EXEC( "LTRN_mode = 0;"															//     LTRN_mode OFF
@@ -230,22 +224,22 @@ int dcs_f14bu_pilot_controls()
 	
 	// ---------- Also load SWITCH part of PILOT controls -----------
 	
-	dcs_f14bu_pilot_controls_switch();																					// controls to be switched back after JESTER use
+	dcs_f14_pilot_controls_switch();																					// controls to be switched back after JESTER use
 
 
-}	// ====  end dcs_f14bu_pilot_controls()  ========================================================
+}	// ====  end dcs_f14_pilot_controls()  ========================================================
 
 
 
 
 // -----------------  PILOT SWITCH CONTROLS to be switched back after JESTER use ------------------
 
-int dcs_f14bu_pilot_controls_switch()
+int dcs_f14_pilot_controls_switch()
 {
 
 	// -------------------- COMMON SWITCH CONTROLS ------------------
 
-	dcs_f14bu_pilot_button_definitions();					// load button definitions used by COMMON
+	dcs_f14_pilot_button_definitions();					// load button definitions used by COMMON
 	dcs_fighter_common_switch();							// switch back to common controls
 
 
@@ -254,40 +248,39 @@ int dcs_f14bu_pilot_controls_switch()
 	// Coolie Switch
 	// CSU
 	MapKeyIOUMD(&Throttle, CSU, 0,																						// IU - 
-								CHAIN( DOWN+L_CTL, D(10), PULSE+'p', D(), UP+L_CTL ), 									// OU - Missile Mode Toggle (boresight/slave)
+								0, 																						// OU - 
 								seat_down,																  				// IM - Seat Adjustment Down
 								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+nw_strut_retract );" ),						// OM - [WHDN] Nose strut kneel
 								0,																						// ID - 
 								JSTR_agwpn_comptgt ); 																	// OD - Set Computer Target Weapons (CCRP)
 	// CSD
 	MapKeyIOUMD(&Throttle, CSD, 0,																	 					// IU - 
-								CHAIN( DOWN+L_ALT, D(10), PULSE+'p', D(), UP+L_ALT, D(200),			 					// OU - Toggle Missile Prep
-									   DOWN+L_SHIFT, D(10), PULSE+'p', D(), UP+L_SHIFT, D(200),							//      Toggle SW Cooling
-									   DOWN+L_WIN, D(10), PULSE+'p', D(), UP+L_WIN ),									//      Toggle Gun Rate
+								missilemode_toggle,																		// OU - Missile Mode Toggle (boresight/slave)
 								seat_up,																  				// IM - Seat Adjustment Up
 								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+nw_strut_extend );" ),							// OM - [WHDN] Nose strut extend
-								CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'w', D(), UP+L_CTL+R_CTL ),	 					// ID - Wing Sweep Bomb Mode
+								wingsweep_bomb,														 					// ID - Wing Sweep Bomb Mode
 								JSTR_agwpn_comppilot );												 					// OD - Set Computer Pilot Weapons (CCIP)
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, TEMPO( 0,																				// IU - 
-									   CHAIN( L_SHIFT+R_CTL, D(10), 'w' ), 500 ),										// 		[long] Wing Sweep Aft
+									   wingsweep_aft, 500 ),															// 		[long] Wing Sweep Aft
 								uncage,																					// OU - CAGE-SEAM button
-								TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'b', D(), UP+R_CTL ),							// IM - Bombing Tool
-									   CHAIN( L_SHIFT+R_CTL, D(10), 'w' ), 500 ),										// 		[long] Wing Sweep Aft
+								TEMPO( bombing_tool,																	// IM - Bombing Tool
+									   wingsweep_aft, 500 ),															// 		[long] Wing Sweep Aft
 								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+L_SHIFT+R_SHIFT+'e' );" ),						// OM - [WHDN] Ejection Seat Safety - ARMED
-								TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+'b', D(), UP+R_CTL ),							// ID - Bombing Tool
-									   CHAIN( L_SHIFT+R_CTL, D(10), 'w' ), 500 ),										// 		[long] Wing Sweep Aft
+								TEMPO( bombing_tool,																	// ID - Bombing Tool
+									   wingsweep_aft, 500 ),															// 		[long] Wing Sweep Aft
 								0 );																					// OD - 
 	// CSL
-	MapKeyIOUMD(&Throttle, CSL, TEMPO( CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'w', D(), UP+L_CTL+R_SHIFT ),			// IU - Wing Sweep Auto Mode
-									   CHAIN( L_ALT, D(10), 'w' ), 500 ),												// 		[long] Wing Sweep Forward
-								0,																						// OU - 
-								TEMPO( CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'w', D(), UP+L_CTL+R_SHIFT ),			// IM - Wing Sweep Auto Mode
-									   CHAIN( L_ALT, D(10), 'w' ), 500 ),												// 		[long] Wing Sweep Forward
+	MapKeyIOUMD(&Throttle, CSL, TEMPO( wingsweep_auto,																	// IU - Wing Sweep Auto Mode
+									   wingsweep_fwd, 500 ),															// 		[long] Wing Sweep Forward
+								TEMPO( acmcover_toggle,																	// OU - ACM mode toggle
+									   fcsstab_roll_toggle, 500 ),														// 		[long] FCS Roll Stabilisation toggle
+								TEMPO( wingsweep_auto,																	// IM - Wing Sweep Auto Mode
+									   wingsweep_fwd, 500 ),															// 		[long] Wing Sweep Forward
 								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+R_CTL+L_SHIFT+'p' );" ),						// OM - [WHDN] Parking brake toggle
-								TEMPO( CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'w', D(), UP+L_CTL+R_SHIFT ),			// IM - Wing Sweep Auto Mode
-									   CHAIN( L_ALT, D(10), 'w' ), 500 ),												// 		[long] Wing Sweep Forward
+								TEMPO( wingsweep_auto,																	// IM - Wing Sweep Auto Mode
+									   wingsweep_fwd, 500 ),															// 		[long] Wing Sweep Forward
 								0 );																					// OD - 
 
 
-} 	// =====  end of dcs_f14bu_pilot_controls_switch()  =============================================
+} 	// =====  end of dcs_f14_pilot_controls_switch()  =============================================
