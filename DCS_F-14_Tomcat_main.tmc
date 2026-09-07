@@ -7,7 +7,7 @@
 // ------------------------- INCLUDE --------------------------------
 
 include "target.tmh"
-include "DCS_F-14BU_Tomcat_PILOT.tmc"						// all PILOT controls
+include "DCS_F-14_Tomcat_PILOT.tmc"							// all PILOT controls
 include "DCS_F-14AB_Tomcat_RIO.tmc"							// all RIO controls
 include "DCS_F-14_Tomcat_JESTER.tmc"						// all JESTER controls
 include "DCS_Fighter_Common.tmc"							// all dcs fighter COMMON controls
@@ -20,11 +20,14 @@ include "DCS_Fighter_Common.tmc"							// all dcs fighter COMMON controls
 int autopilot;
 int extlight_posdim;	
 
+int displaymode_takeoff;
 int	displaymode_cruise;
 int	displaymode_a2a;
 int	displaymode_a2g;
+int displaymode_land;
 int displaymode_next;
 int displaymode_prev;
+int displaymode_whdn;
 int	wingsweep_fwd;
 int	wingsweep_aft;
 int	wingsweep_bomb;
@@ -75,8 +78,6 @@ int	JSTR_lock_tgt_ahead;
 int	JSTR_break_lock;
 int	JSTR_lock_TWS_tgt_1;
 int	JSTR_lock_TWS_tgt_2;
-int	JSTR_lock_TWS_tgt_3;
-int	JSTR_lock_TWS_tgt_4;
 int	JSTR_rwr_norm;
 int	JSTR_rwr_ai;
 int	JSTR_rwr_aaa;
@@ -245,11 +246,15 @@ int main()
 
 	// ------------------------- FUNCTIONS --------------------------
 
+	displaymode_takeoff	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'1', D(), UP+L_SHIFT );
 	displaymode_cruise	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'2', D(), UP+L_SHIFT );
 	displaymode_a2a		= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'3', D(), UP+L_SHIFT );
 	displaymode_a2g		= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'4', D(), UP+L_SHIFT );
+	displaymode_land	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'5', D(), UP+L_SHIFT );
 	displaymode_prev	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'6', D(), UP+L_SHIFT );
 	displaymode_next	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'7', D(), UP+L_SHIFT );
+	displaymode_whdn	= EXEC( "if (WHDN_mode) ActKey(PULSE+KEYON+displaymode_land);"
+								"else ActKey(PULSE+KEYON+displaymode_cruise);" );
 	wingsweep_fwd		= CHAIN( L_ALT, D(10), 'w' );
 	wingsweep_aft		= CHAIN( L_SHIFT+R_CTL, D(10), 'w' );
 	wingsweep_bomb		= CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'w', D(), UP+L_CTL+R_CTL );
@@ -274,6 +279,7 @@ int main()
 	horns_left			= CHAIN( DOWN+L_SHIFT+L_ALT, D(10), PULSE+'o', D(), UP+L_SHIFT+L_ALT );
 	horns_right			= CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'o', D(), UP+R_SHIFT+L_ALT );
 
+
 	// Autopilot function
 	autopilot 	= SEQ( CHAIN( EXEC( "autopilot_mode();" ), D(200),														// Set autopilot mode
 							  DOWN+L_ALT+L_SHIFT, D(10), PULSE+'p', D(), UP+L_ALT+L_SHIFT ),							// Autopilot on
@@ -281,12 +287,12 @@ int main()
 	
 
 	// Ground Crew Start-up
-	groundcrew	= SEQ( CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F1, D(10000), 			// Radio menu (\), Ground crew, Wheel Chocks, Place 
-							  PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F2, D(100), PULSE+F1, D(13000), 			// Radio menu (\), Ground crew, Ground Electric Power, On
-							  PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F1, D(13000) ),		// Radio menu (\), Ground crew, Ground Air Supply, Connect
-					   CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F2, D(13000),			// Radio menu (\), Ground crew, Ground Air Supply, Disconnect
-							  PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F2, D(100), PULSE+F2, D(13000), 			// Radio menu (\), Ground crew, Ground Electric Power, Off
-							  PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F2 ));					// Radio menu (\), Ground crew, Wheel Chocks, Remove
+	groundcrew	= SEQ( CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F4, D(200), PULSE+F1, D(10000), 	// Radio menu (\), Prev menu, Ground crew, Wheel Chocks, Place 
+							  PULSE+USB[0x31], D(200), PULSE+F8, D(200), PULSE+F2, D(200), PULSE+F1, D(13000), 						// Radio menu (\), Ground crew, Ground Electric Power, On
+							  PULSE+USB[0x31], D(200), PULSE+F8, D(200), PULSE+F5, D(200), PULSE+F1, D(13000) ),					// Radio menu (\), Ground crew, Ground Air Supply, Connect
+					   CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F5, D(200), PULSE+F2, D(13000),	// Radio menu (\), Prev menu, Ground crew, Ground Air Supply, Disconnect
+							  PULSE+USB[0x31], D(200), PULSE+F8, D(200), PULSE+F2, D(200), PULSE+F2, D(13000), 						// Radio menu (\), Ground crew, Ground Electric Power, Off
+							  PULSE+USB[0x31], D(200), PULSE+F8, D(200), PULSE+F4, D(200), PULSE+F2 ));								// Radio menu (\), Ground crew, Wheel Chocks, Remove
 
 
 	// Exterior Lighting - Full
@@ -361,18 +367,7 @@ int main()
 									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 								// STT lock
 									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 								// TWS target number
 									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL );										// TWS track 2
-	JSTR_lock_TWS_tgt_3		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 												// Main menu
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 								// Air to air radar
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 								// Beyond visual range radar
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 								// STT lock
-									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 								// TWS target number
-									 DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );										// TWS track 3
-	JSTR_lock_TWS_tgt_4		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 												// Main menu
-									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200), 								// Air to air radar
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 								// Beyond visual range radar
-									 DOWN+L_CTL, D(10), PULSE+'1', D(), UP+L_CTL, D(200), 								// STT lock
-									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 								// TWS target number
-									 DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );										// TWS track 4
+
 	// RWR
 	JSTR_rwr_norm			= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 												// Normal
 									 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL, D(200), 

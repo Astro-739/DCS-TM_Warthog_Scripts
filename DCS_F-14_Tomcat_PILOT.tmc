@@ -5,9 +5,9 @@
 
 
 
-// -------------------- PILOT BUTTON DEFINITIONS --------------------------------------------------
+// ------------------------------ PILOT BUTTON DEFINITIONS ----------------------------------------
 
-int dcs_f14_pilot_button_definitions()																				// In separate function to reload after Jester switch
+int dcs_f14_pilot_button_definitions()																					// In separate function to reload after Jester switch
 {
 
 	// Target Management Switch / Armament Selector (overwrites common)
@@ -20,7 +20,7 @@ int dcs_f14_pilot_button_definitions()																				// In separate functio
 	DMS_fwd 	= TEMPO( CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'v', D(), UP+L_ALT+R_SHIFT ),							// VDI Mode Toggle
 						 displaymode_prev, 500 );																		// [long] Display mode previous
 	DMS_aft 	= TEMPO( CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'h', D(), UP+L_ALT+R_SHIFT ),							// HSD Mode Toggle
-						 displaymode_next, 500 );																		// [long] Display mode next
+						 displaymode_whdn, 500 );																		// [long] Display mode WHDN (cruise/land)
 	DMS_right 	= TEMPO( JSTR_rwr_unknown_norm,																			// [JSTR] RWR Unknown/NORM toggle
 						 EXEC( "index_stcmd = (index_stcmd+1)%5;"														// [long] Steer CMD next
 							   "ActKey( KEYON+PULSE+X(steercmdlist, index_stcmd) );" ), 500 );							// 		
@@ -37,14 +37,14 @@ int dcs_f14_pilot_button_definitions()																				// In separate functio
 
 
 
-// ---------------------------------- F-14BU PILOT CONTROLS ----------------------------------------
+// ---------------------------------- F-14 PILOT CONTROLS -----------------------------------------
 
 int dcs_f14_pilot_controls()
 {
 
 	// -------------------- COMMON CONTROLS -------------------------
 					
-	dcs_f14_pilot_button_definitions();				// load button definitions used by COMMON
+	dcs_f14_pilot_button_definitions();					// load button definitions used by COMMON
 	dcs_fighter_common_controls();						// load dcs COMMON controls
 	dcs_fighter_common_mfd();							// load dcs MFD controls
 														// before aircraft controls, to allow for overwriting of common controls when necessary
@@ -239,7 +239,7 @@ int dcs_f14_pilot_controls_switch()
 
 	// -------------------- COMMON SWITCH CONTROLS ------------------
 
-	dcs_f14_pilot_button_definitions();					// load button definitions used by COMMON
+	dcs_f14_pilot_button_definitions();						// load button definitions used by COMMON
 	dcs_fighter_common_switch();							// switch back to common controls
 
 
@@ -250,14 +250,14 @@ int dcs_f14_pilot_controls_switch()
 	MapKeyIOUMD(&Throttle, CSU, 0,																						// IU - 
 								0, 																						// OU - 
 								seat_down,																  				// IM - Seat Adjustment Down
-								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+nw_strut_retract );" ),						// OM - [WHDN] Nose strut kneel
+								EXEC( "if (WHDN_mode) ActKey( PULSE+KEYON+nw_strut_retract );" ),						// OM - [WHDN] Nose strut kneel
 								0,																						// ID - 
 								JSTR_agwpn_comptgt ); 																	// OD - Set Computer Target Weapons (CCRP)
 	// CSD
 	MapKeyIOUMD(&Throttle, CSD, 0,																	 					// IU - 
 								missilemode_toggle,																		// OU - Missile Mode Toggle (boresight/slave)
 								seat_up,																  				// IM - Seat Adjustment Up
-								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+nw_strut_extend );" ),							// OM - [WHDN] Nose strut extend
+								EXEC( "if (WHDN_mode) ActKey( PULSE+KEYON+nw_strut_extend );" ),						// OM - [WHDN] Nose strut extend
 								wingsweep_bomb,														 					// ID - Wing Sweep Bomb Mode
 								JSTR_agwpn_comppilot );												 					// OD - Set Computer Pilot Weapons (CCIP)
 	// CSR
@@ -266,7 +266,7 @@ int dcs_f14_pilot_controls_switch()
 								uncage,																					// OU - CAGE-SEAM button
 								TEMPO( bombing_tool,																	// IM - Bombing Tool
 									   wingsweep_aft, 500 ),															// 		[long] Wing Sweep Aft
-								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+L_SHIFT+R_SHIFT+'e' );" ),						// OM - [WHDN] Ejection Seat Safety - ARMED
+								EXEC( "if (WHDN_mode) ActKey( PULSE+KEYON+L_SHIFT+R_SHIFT+'e' );" ),					// OM - [WHDN] Ejection Seat Safety - ARMED
 								TEMPO( bombing_tool,																	// ID - Bombing Tool
 									   wingsweep_aft, 500 ),															// 		[long] Wing Sweep Aft
 								0 );																					// OD - 
@@ -277,7 +277,7 @@ int dcs_f14_pilot_controls_switch()
 									   fcsstab_roll_toggle, 500 ),														// 		[long] FCS Roll Stabilisation toggle
 								TEMPO( wingsweep_auto,																	// IM - Wing Sweep Auto Mode
 									   wingsweep_fwd, 500 ),															// 		[long] Wing Sweep Forward
-								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+R_CTL+L_SHIFT+'p' );" ),						// OM - [WHDN] Parking brake toggle
+								EXEC( "if (WHDN_mode) ActKey( PULSE+KEYON+R_CTL+L_SHIFT+'p' );" ),						// OM - [WHDN] Parking brake toggle
 								TEMPO( wingsweep_auto,																	// IM - Wing Sweep Auto Mode
 									   wingsweep_fwd, 500 ),															// 		[long] Wing Sweep Forward
 								0 );																					// OD - 

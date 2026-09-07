@@ -44,38 +44,38 @@ int main()
 	// -------------------- AIRCRAFT FUNCTIONS ----------------------
 
 	// Target Management Switch / Armament Selector (overwrites common)
-	TMS_fwd 	= CHAIN( R_CTL, D(10), UARROW );												// TMS fwd
-	TMS_aft 	= CHAIN( R_CTL, D(10), DARROW );												// TMS aft
-	TMS_right 	= CHAIN( R_CTL, D(10), RARROW );												// TMS right
-	TMS_left 	= CHAIN( R_CTL, D(10), LARROW );												// TMS left
+	TMS_fwd 	= CHAIN( R_CTL, D(10), UARROW );																// TMS fwd
+	TMS_aft 	= CHAIN( R_CTL, D(10), DARROW );																// TMS aft
+	TMS_right 	= CHAIN( R_CTL, D(10), RARROW );																// TMS right
+	TMS_left 	= CHAIN( R_CTL, D(10), LARROW );																// TMS left
 
 	// Display Management Switch (overwrites common)
-	DMS_fwd 	= CHAIN( R_ALT, D(10), ';' );													// DMS fwd
-	DMS_aft 	= CHAIN( R_ALT, D(10), '.' );													// DMS aft
-	DMS_right 	= CHAIN( R_ALT, D(10), '/' );													// DMS right
-	DMS_left 	= CHAIN( R_ALT, D(10), ',' );													// DMS left
+	DMS_fwd 	= CHAIN( R_ALT, D(10), ';' );																	// DMS fwd
+	DMS_aft 	= CHAIN( R_ALT, D(10), '.' );																	// DMS aft
+	DMS_right 	= CHAIN( R_ALT, D(10), '/' );																	// DMS right
+	DMS_left 	= CHAIN( R_ALT, D(10), ',' );																	// DMS left
 
 	// Buttons (overwrite common)
-	LDGH_short	= CHAIN( DOWN+L_CTL, D(10), DOWN+USB[0x55], D(100), UP+USB[0x55], D(), UP+L_CTL );					// ICP DRIFT CUTOUT/WARN RESET 3-pos Switch: WARN RESET <> NORM (Num *)
-	SC_short	= PULSE+'d';																	// Expand/FOV Button
+	LDGH_short	= CHAIN( DOWN+L_CTL, D(10), DOWN+USB[0x55], D(100), UP+USB[0x55], D(), UP+L_CTL );				// ICP DRIFT CUTOUT/WARN RESET 3-pos Switch: WARN RESET <> NORM (Num *)
+	SC_short	= PULSE+'d';																					// Expand/FOV Button
 
 	// DX - A/C specific
-	enable 				= DX24;																	// ENABLE Switch - Depress
-	antennaelev_up		= DX13; 																// Antenna elevation up
-	antennaelev_down	= DX14; 																// Antenna elevation down
+	enable 				= DX24;																					// ENABLE Switch - Depress
+	antennaelev_up		= DX13; 																				// Antenna elevation up
+	antennaelev_down	= DX14; 																				// Antenna elevation down
 
 	// Start-up Sequence (overwrites common)
-	startup = SEQ( CHAIN( L_ALT, D(10), 's' ), 													// MAIN PWR Switch - BATT
-				   CHAIN( R_SHIFT, D(10), 's' ), 												// MAIN PWR Switch - MAIN PWR
-				   CHAIN( R_CTL, D(10), 's' )); 												// JFS Switch - START 1
+	startup = SEQ( CHAIN( L_ALT, D(10), 's' ), 																	// MAIN PWR Switch - BATT
+				   CHAIN( R_SHIFT, D(10), 's' ), 																// MAIN PWR Switch - MAIN PWR
+				   CHAIN( R_CTL, D(10), 's' )); 																// JFS Switch - START 1
 
 
 	// Autopilot function
-	autopilot_ALThold 	= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_SHIFT,		// Autopilot PITCH Switch - ALT HOLD  (extra 100ms needed by DCS)
+	autopilot_ALThold 	= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_SHIFT,	// Autopilot PITCH Switch - ALT HOLD  (extra 100ms needed by DCS)
 							     EXEC( "autopilot_mode = 1;" ));
-	autopilot_ATThold 	= CHAIN( DOWN+L_CTL+L_ALT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_ALT,			// Autopilot PITCH Switch - ATT HOLD  (extra 100ms needed by DCS)
+	autopilot_ATThold 	= CHAIN( DOWN+L_CTL+L_ALT, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL+L_ALT,		// Autopilot PITCH Switch - ATT HOLD  (extra 100ms needed by DCS)
 							   	 EXEC( "autopilot_mode = 1;" ));
-	autopilot_off 		= CHAIN( DOWN+L_CTL, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL, 						// Autopilot PITCH Switch - A/P OFF   (extra 100ms needed by DCS)
+	autopilot_off 		= CHAIN( DOWN+L_CTL, D(10), DOWN+'p', D(100), UP+'p', D(), UP+L_CTL, 					// Autopilot PITCH Switch - A/P OFF   (extra 100ms needed by DCS)
 						   		 EXEC( "autopilot_mode = 0;" ));
 	
 	autopilot 			= EXEC( "if(!autopilot_mode) ActKey( PULSE+KEYON+autopilot_ALThold );"
