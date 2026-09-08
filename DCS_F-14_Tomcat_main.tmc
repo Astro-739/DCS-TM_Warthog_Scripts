@@ -130,8 +130,6 @@ int	JSTR_context_double;
 
 int JSTR_toggle_RWS_TWS;
 int JSTR_ground_ac_stbl;
-int JSTR_rdr_range_50_25;
-int	JSTR_rdr_range_50_25_auto;
 int JSTR_rdr_offon;
 int JSTR_rwr_ai_norm;
 int JSTR_rwr_unknown_norm;
@@ -434,7 +432,7 @@ int main()
 									 DOWN+L_CTL, D(10), PULSE+'2', D(), UP+L_CTL, D(200) );
 	// Start-up
 	JSTR_startup			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );
-	JSTR_loudclear			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
+	JSTR_loudclear			= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'d', D(), UP+L_CTL+R_SHIFT );
 	JSTR_ins_fine			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
 	JSTR_ins_wpn			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL );
 	// General
@@ -457,11 +455,6 @@ int main()
 	// ----- JSTR functions ----------- define sequences here, are remembered when switching controls
 	JSTR_rdr_offon			= SEQ( JSTR_rdr_off,										// Radar - Silent/Active
 								   JSTR_rdr_on );
-	JSTR_rdr_range_50_25	= SEQ( JSTR_rdr_range_50,									// Radar - Range 50/25
-								   JSTR_rdr_range_25 );
-	JSTR_rdr_range_50_25_auto	= SEQ( JSTR_rdr_range_50,								// Radar - Range 50/25/auto
-									   JSTR_rdr_range_25,
-									   JSTR_rdr_range_auto );
 	JSTR_ground_ac_stbl		= SEQ( JSTR_rdr_ground_stab,								// Radar - Ground/Aircraft Stabilize
 								   JSTR_rdr_ac_stab );
 	JSTR_toggle_RWS_TWS		= SEQ( JSTR_rdr_mode_RWS,									// Radar - RWS/TWS Mode

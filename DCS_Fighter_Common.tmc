@@ -146,8 +146,8 @@ int nw_strut_extend;
 int nw_strut_retract;
 int gear_up;
 int gear_down;
-int hook_up;
-int hook_down;
+int hook_retract;
+int hook_extend;
 int throttle_left_off;
 int throttle_left_idle;
 int throttle_right_off;
@@ -400,13 +400,13 @@ int dcs_fighter_common_functions()
 	seat_down				= DX42;																						// Seat position down
 	nw_strut_extend			= DX43;																						// Nose wheel strut extend
 	nw_strut_retract		= DX44; 																					// Nose wheel strut retract / kneel
+	hook_extend				= DX45;																						// HOOK Switch - DOWN
+	hook_retract			= DX46;																						// HOOK Switch - UP
 
 	// Systems
 	mastercaution			= CHAIN( DOWN+L_ALT, D(10), DOWN+'m', D(300), UP+'m', D(10), UP+L_ALT );					// Master caution button
 	gear_up					= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'g', D(), UP+L_SHIFT ); 								// Gear up 
 	gear_down				= CHAIN( DOWN+L_CTL, D(10), PULSE+'g', D(), UP+L_CTL ); 									// Gear down
-	hook_up					= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'h', D(), UP+L_CTL+L_ALT );							// HOOK Switch - UP
-	hook_down				= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'h', D(), UP+L_CTL+L_SHIFT );						// HOOK Switch - DOWN
 	eject					= CHAIN( DOWN+L_CTL, D(10), PULSE+'e', D(), UP+L_CTL ); 									// EJECT
 	throttle_left_off		= CHAIN( DOWN+L_SHIFT, D(10), PULSE+END, D(), UP+L_SHIFT );									// Throttle Left - OFF
 	throttle_left_idle		= CHAIN( DOWN+L_SHIFT, D(10), PULSE+HOME, D(), UP+L_SHIFT );								// Throttle Left - IDLE
@@ -699,13 +699,13 @@ int dcs_fighter_common_controls()
 	MapKeyIOUMD(&Throttle, EFROVER, 	0,																				// IU - 
 										0,																				// OU - 
 										dragchute_deploy,																// IM - Drag Chute deploy
-										hook_down,																		// OM - HOOK Switch - DOWN
+										hook_extend,																		// OM - HOOK Switch - DOWN
 										0,																				// ID - 
 										0 );																			// OD - 
 	MapKeyRIOUMD(&Throttle, EFROVER, 	0,																				// IU -
 										0,																				// OU - 
 										dragchute_release,																// IM - Drag Chute release
-										hook_up,																		// OM - HOOK Switch - UP
+										hook_retract,																		// OM - HOOK Switch - UP
 										0,																				// ID - 
 										0 );																			// OD - 
 

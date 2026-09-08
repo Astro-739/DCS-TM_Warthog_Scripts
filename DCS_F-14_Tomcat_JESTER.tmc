@@ -17,50 +17,38 @@ int dcs_f14_jester_controls()
 
 	// Target Management Switch
 	// H2U
-	MapKeyIO(&AVA_F16, H2U, 	0,																						// I - 
-							 	TEMPO( JSTR_lock_tgt_ahead,								 								// O - Radar – STT Lock Target Ahead
-									   JSTR_lock_enemy_ahead, 500 ));													//     [long] Radar – STT Lock Enemy Ahead
-	MapKeyRIO(&AVA_F16, H2U, 	0,																						// I -
-								0 );																					// O -
+	MapKey(&AVA_F16, H2U, 		TEMPO( JSTR_lock_tgt_ahead,								 								// Radar – STT Lock Target Ahead
+									   JSTR_lock_enemy_ahead, 500 ));													// [long] Radar – STT Lock Enemy Ahead
+	MapKeyR(&AVA_F16, H2U, 		0 );																					// 
 	// H2D
-	MapKeyIO(&AVA_F16, H2D, 	0, 																						// I - 
-							 	TEMPO( JSTR_break_lock,																	// O - Radar – Break Lock
-									   0, 500 ));																		//     [long] 
-	MapKeyRIO(&AVA_F16, H2D, 	0,																						// I -
-								0 );																					// O -
+	MapKey(&AVA_F16, H2D, 		TEMPO( JSTR_break_lock,																	// Radar – Break Lock
+									   0, 500 ));																		// [long] 
+	MapKeyR(&AVA_F16, H2D, 		0 );																					// 
 	// H2R							
-	MapKeyIO(&AVA_F16, H2R, 	0, 																						// I - 
-							 	TEMPO( JSTR_context_double, 																// O - Radar – Toggle RWS/TWS Mode
-									   JSTR_toggle_RWS_TWS, 500 ));														//     [long] Radar – STT Lock TWS Target #2
-	MapKeyRIO(&AVA_F16, H2R, 	0,																						// I -
-								0 );																					// O -
+	MapKey(&AVA_F16, H2R, 		TEMPO( JSTR_context_double, 															// Jester Context double
+									   JSTR_toggle_RWS_TWS, 500 ));														// [long] Radar – Toggle RWS/TWS Mode
+	MapKeyR(&AVA_F16, H2R, 		0 );																					// 
 	// H2L
-	MapKeyIO(&AVA_F16, H2L, 	0,																						// I -
-							 	JSTR_context );		 																	// O - Radar - Mode Auto
-	MapKeyRIO(&AVA_F16, H2L, 	0,																						// I -
-								0 );																					// O -
+	MapKey(&AVA_F16, H2L, 		JSTR_context );		 																	// Jester Context
+	MapKeyR(&AVA_F16, H2L, 		0 );																					// 
 
 								
 	// Display Management Switch
 	// H3U
-	MapKeyIO(&AVA_F16, H3U, 	0,																						// I - 
-								TEMPO( EXEC( "index_range = (index_range+1)%5;"											// O -     
-											 "ActKey( KEYON+PULSE+X(radarrangelist, index_range) );" ),					//     Radar range step up
-									   0, 500 ));																		//	   [long]
+	MapKey(&AVA_F16, H3U, 		TEMPO( EXEC( "index_range = (index_range+1)%5;"											// Radar range step up
+											 "ActKey( KEYON+PULSE+X(radarrangelist, index_range) );" ),					// 
+									   0, 500 ));																		// [long]
 	// H3D
-	MapKeyIO(&AVA_F16, H3D, 	0,																						// I - 
-								TEMPO( EXEC( "index_range = (index_range+4)%5;"											// O -     
-											 "ActKey( KEYON+PULSE+X(radarrangelist, index_range) );" ),					//     Radar range step down
-									   0, 500 ));																		//	   [long]
+	MapKey(&AVA_F16, H3D, 		TEMPO( EXEC( "index_range = (index_range+4)%5;"											// Radar range step down
+											 "ActKey( KEYON+PULSE+X(radarrangelist, index_range) );" ),					//
+									   0, 500 ));																		// [long]
 	// H3R
-	MapKeyIO(&AVA_F16, H3R, 	0, 																						// I - 
-								TEMPO( JSTR_ground_ac_stbl,																// O - Radar - Ground/Aircraft Stabilize
-									   0, 500 ));																		//	   [long]
+	MapKey(&AVA_F16, H3R, 		TEMPO( JSTR_ground_ac_stbl,																// Radar - Ground/Aircraft Stabilize
+									   0, 500 ));																		// [long]
 	// H3L
-	MapKeyIO(&AVA_F16, H3L, 	0, 																						// I - 
-								TEMPO( CHAIN( JSTR_rdr_range_auto, D(),													// O - Radar - Range Auto
-											  EXEC( "index_range = 2;" )),												//	   Reset range index to 2 (100 nm) (element 0 is first element in list)
-									   JSTR_rdr_mode_auto, 500 ));														//	   [long] Radar - Mode Auto
+	MapKeyIO(&AVA_F16, H3L, 	TEMPO( CHAIN( JSTR_rdr_range_auto, D(),													// Radar - Range Auto
+											  EXEC( "index_range = 2;" )),												// Reset range index to 2 (100 nm) (element 0 is first element in list)
+									   JSTR_rdr_mode_auto, 500 ));														// [long] Radar - Mode Auto
 
 
 
@@ -69,86 +57,86 @@ int dcs_f14_jester_controls()
 
 	// MIC Switch (Transmit Switch)
 	// MSU
-	MapKeyIOUMD(&Throttle, MSU, 0, 																				// IU - 
-								0,																	 			// OU - 
-								0,																				// IM - 
-								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+JSTR_WHDN_startup );" 					// OM - [WHDN] JSTR_WHDN_startup
-									  "else ActKey( PULSE+KEYON+0 );" ),										//		
-								0,																				// ID - 
-								0 );																			// OD - 
+	MapKeyIOUMD(&Throttle, MSU, 0, 																						// IU - 
+								0,																			 			// OU - 
+								0,																						// IM - 
+								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+JSTR_WHDN_startup );" 							// OM - [WHDN] JSTR_WHDN_startup
+									  "else ActKey( PULSE+KEYON+0 );" ),												//		
+								0,																						// ID - 
+								0 );																					// OD - 
 	// MSD
-	MapKeyIOUMD(&Throttle, MSD, 0, 																				// IU - 
-								TEMPO( 0, 																		// OU - 
-									   JSTR_jett_droptanks, 500 ),												//		[long] JSTR_jett_droptanks
-								0,																				// IM - 
-								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+JSTR_check );" 						// OM - [WHDN] JSTR_check
-									  "else ActKey( PULSE+KEYON+JSTR_nav_homebase );" ),						//		JSTR_nav_homebase
-								0,																				// ID - 
-								0 );																			// OD - 
+	MapKeyIOUMD(&Throttle, MSD, 0, 																						// IU - 
+								TEMPO( 0, 																				// OU - 
+									   JSTR_jett_droptanks, 500 ),														//		[long] JSTR_jett_droptanks
+								0,																						// IM - 
+								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+JSTR_check );" 								// OM - [WHDN] JSTR_check
+									  "else ActKey( PULSE+KEYON+JSTR_nav_homebase );" ),								//		JSTR_nav_homebase
+								0,																						// ID - 
+								0 );																					// OD - 
 	// MSR
-	MapKeyIOUMD(&Throttle, MSR, 0, 																				// IU - 
-								JSTR_jammer_onoff,																// OU - JSTR_jammer_onoff
-								0,																				// IM - 
-								CHAIN( JSTR_nav_wp1,															// OM - JSTR_nav_wp1
-									   EXEC( "index_stpt_aa = 0;" )),											//		Set steerpoint index to match wp1 (first element is 0)
-								0,																				// ID - 
-								JSTR_jammer_onoff );															// OD - 
+	MapKeyIOUMD(&Throttle, MSR, 0, 																						// IU - 
+								JSTR_jammer_onoff,																		// OU - JSTR_jammer_onoff
+								0,																						// IM - 
+								CHAIN( JSTR_nav_wp1,																	// OM - JSTR_nav_wp1
+									   EXEC( "index_stpt_aa = 0;" )),													//		Set steerpoint index to match wp1 (first element is 0)
+								0,																						// ID - 
+								JSTR_jammer_onoff );																	// OD - 
 	// MSL
-	MapKeyIOUMD(&Throttle, MSL, 0, 																				// IU - 
-								TEMPO( JSTR_ground_ac_stbl,														// OU - Radar - Ground/Aircraft Stabilize
-									   JSTR_rdr_offon, 500 ),													//		[long] JSTR_rdr_offon
-								0,																				// IM - 
-								TEMPO( JSTR_ground_ac_stbl,														// OM - Radar - Ground/Aircraft Stabilize
-									   JSTR_rdr_offon, 500 ),													//		[long] JSTR_rdr_offon
-								0,																				// ID - 
-								TEMPO( JSTR_ground_ac_stbl,														// OD - Radar - Ground/Aircraft Stabilize
-									   JSTR_rdr_offon, 500 ));													//		[long] JSTR_rdr_offon
+	MapKeyIOUMD(&Throttle, MSL, 0, 																						// IU - 
+								TEMPO( JSTR_ground_ac_stbl,																// OU - Radar - Ground/Aircraft Stabilize
+									   JSTR_rdr_offon, 500 ),															//		[long] JSTR_rdr_offon
+								0,																						// IM - 
+								TEMPO( JSTR_ground_ac_stbl,																// OM - Radar - Ground/Aircraft Stabilize
+									   JSTR_rdr_offon, 500 ),															//		[long] JSTR_rdr_offon
+								0,																						// ID - 
+								TEMPO( JSTR_ground_ac_stbl,																// OD - Radar - Ground/Aircraft Stabilize
+									   JSTR_rdr_offon, 500 ));															//		[long] JSTR_rdr_offon
 
 	// MSP 
-	MapKeyIO(&Throttle, MSP, 	0,																				// I - 
-								JSTR_menu );																	// O - JSTR_menu 
+	MapKeyIO(&Throttle, MSP, 	0,																						// I - 
+								JSTR_menu );																			// O - JSTR_menu 
 
 
 
 	// Coolie Switch
 	// CSU
-	MapKeyIOUMD(&Throttle, CSU, 0, 																				// IU - 
-								0,																				// OU - 
-								0,																				// IM - 
-								0,																				// OM - 
-								0,																				// ID - 
-								0 );																			// OD - 
+	MapKeyIOUMD(&Throttle, CSU, 0, 																						// IU - 
+								0,																						// OU - 
+								0,																						// IM - 
+								0,																						// OM - 
+								0,																						// ID - 
+								0 );																					// OD - 
 	// CSD
-	MapKeyIOUMD(&Throttle, CSD, 0, 																				// IU - 
-								JSTR_menu,																		// OU - JSTR_menu
-								0,																				// IM - 
-								JSTR_menu,																		// OM - JSTR_menu
-								0,																				// ID - 
-								JSTR_menu );																	// OD - JSTR_menu
+	MapKeyIOUMD(&Throttle, CSD, 0, 																						// IU - 
+								JSTR_menu,																				// OU - JSTR_menu
+								0,																						// IM - 
+								JSTR_menu,																				// OM - JSTR_menu
+								0,																						// ID - 
+								JSTR_menu );																			// OD - JSTR_menu
 	// CSR
-	MapKeyIOUMD(&Throttle, CSR, 0,																	 			// IU - 
-								EXEC( "index_stpt_aa = (index_stpt_aa+1)%3;"									// OU - Next A-A Steerpoint    
-									  //"printf(\"index_stpt_aa = %i\\xa\", index_stpt_aa);"					// test
-									  "ActKey( KEYON+PULSE+X(steerpointlist_aa, index_stpt_aa) );" ), 			// 
-								0,																				// IM - 
-								EXEC( "index_stpt_aa = (index_stpt_aa+1)%3;"									// OM - Next A-A Steerpoint    
-									  //"printf(\"index_stpt_aa = %i\\xa\", index_stpt_aa);"					// test
-									  "ActKey( KEYON+PULSE+X(steerpointlist_aa, index_stpt_aa) );" ), 			// 
-								0,																				// ID - 
-								EXEC( "index_stpt_ag = (index_stpt_ag+1)%5;"									// OD - Next A-G Steerpoint    
-									  "ActKey( KEYON+PULSE+X(steerpointlist_ag, index_stpt_ag) );" ));			// 
+	MapKeyIOUMD(&Throttle, CSR, 0,																			 			// IU - 
+								EXEC( "index_stpt_aa = (index_stpt_aa+1)%3;"											// OU - Next A-A Steerpoint    
+									  //"printf(\"index_stpt_aa = %i\\xa\", index_stpt_aa);"							// test
+									  "ActKey( KEYON+PULSE+X(steerpointlist_aa, index_stpt_aa) );" ), 					// 
+								0,																						// IM - 
+								EXEC( "index_stpt_aa = (index_stpt_aa+1)%3;"											// OM - Next A-A Steerpoint    
+									  //"printf(\"index_stpt_aa = %i\\xa\", index_stpt_aa);"							// test
+									  "ActKey( KEYON+PULSE+X(steerpointlist_aa, index_stpt_aa) );" ), 					// 
+								0,																						// ID - 
+								EXEC( "index_stpt_ag = (index_stpt_ag+1)%5;"											// OD - Next A-G Steerpoint    
+									  "ActKey( KEYON+PULSE+X(steerpointlist_ag, index_stpt_ag) );" ));					// 
 	// CSL
-	MapKeyIOUMD(&Throttle, CSL, 0, 																				// IU - 
-								EXEC( "index_stpt_aa = (index_stpt_aa+2)%3;"									// OU - Previous A-A Steerpoint    
-									  //"printf(\"index_stpt_aa = %i\\xa\", index_stpt_aa);"					// test
-									  "ActKey( KEYON+PULSE+X(steerpointlist_aa, index_stpt_aa) );" ), 			// 
-								0,																				// IM - 
-								EXEC( "index_stpt_aa = (index_stpt_aa+2)%3;"									// OM - Previous A-A Steerpoint    
-									  //"printf(\"index_stpt_aa = %i\\xa\", index_stpt_aa);"					// test
-									  "ActKey( KEYON+PULSE+X(steerpointlist_aa, index_stpt_aa) );" ), 			// 
-								0,																				// ID - 
-								EXEC( "index_stpt_ag = (index_stpt_ag+4)%5;"									// OD - Previous A-G Steerpoint
-									  "ActKey( KEYON+PULSE+X(steerpointlist_ag, index_stpt_ag) );" )); 			// 
+	MapKeyIOUMD(&Throttle, CSL, 0, 																						// IU - 
+								EXEC( "index_stpt_aa = (index_stpt_aa+2)%3;"											// OU - Previous A-A Steerpoint    
+									  //"printf(\"index_stpt_aa = %i\\xa\", index_stpt_aa);"							// test
+									  "ActKey( KEYON+PULSE+X(steerpointlist_aa, index_stpt_aa) );" ), 					// 
+								0,																						// IM - 
+								EXEC( "index_stpt_aa = (index_stpt_aa+2)%3;"											// OM - Previous A-A Steerpoint    
+									  //"printf(\"index_stpt_aa = %i\\xa\", index_stpt_aa);"							// test
+									  "ActKey( KEYON+PULSE+X(steerpointlist_aa, index_stpt_aa) );" ), 					// 
+								0,																						// ID - 
+								EXEC( "index_stpt_ag = (index_stpt_ag+4)%5;"											// OD - Previous A-G Steerpoint
+									  "ActKey( KEYON+PULSE+X(steerpointlist_ag, index_stpt_ag) );" )); 					// 
 
 
 
@@ -203,71 +191,70 @@ int dcs_f14_jester_lantirn_controls()
 
 	// MIC Switch (Transmit Switch) - LANTIRN
 	// MSU
-	MapKeyIOUMD(&Throttle, MSU, 0, 																				// IU - 
-								0,													 							// OU - 
-								0,																				// IM - 
-								0, 																				// OM - 
-								0,																				// ID - 
-								JSTR_lntrn_q_eyeballs );														// OD - LANTIRN - Cue Eyeballs
+	MapKeyIOUMD(&Throttle, MSU, 0, 																						// IU - 
+								0,															 							// OU - 
+								0,																						// IM - 
+								0, 																						// OM - 
+								0,																						// ID - 
+								JSTR_lntrn_q_eyeballs );																// OD - LANTIRN - Cue Eyeballs
 	// MSD
-	MapKeyIOUMD(&Throttle, MSD, 0, 																				// IU - 
-								0, 																				// OU - 
-								0,																				// IM - 
-								0,																				// OM - 
-								0,																				// ID - 
-								JSTR_lntrn_q_headctrl );														// OD - LANTIRN - Cue Head Control
+	MapKeyIOUMD(&Throttle, MSD, 0, 																						// IU - 
+								0, 																						// OU - 
+								0,																						// IM - 
+								0,																						// OM - 
+								0,																						// ID - 
+								JSTR_lntrn_q_headctrl );																// OD - LANTIRN - Cue Head Control
 	// MSR
-	MapKeyIOUMD(&Throttle, MSR, 0, 																				// IU - 
-								0,																				// OU - 
-								0,																				// IM - 
-								0,																				// OM - 
-								0,																				// ID - 
-								JSTR_lntrn_q_hud );																// OD - LANTIRN - Cue HUD
+	MapKeyIOUMD(&Throttle, MSR, 0, 																						// IU - 
+								0,																						// OU - 
+								0,																						// IM - 
+								0,																						// OM - 
+								0,																						// ID - 
+								JSTR_lntrn_q_hud );																		// OD - LANTIRN - Cue HUD
 	// MSL
-	MapKeyIOUMD(&Throttle, MSL, 0, 																				// IU - 
-								0,																				// OU - 
-								0,																				// IM - 
-								0,																				// OM - 
-								0,																				// ID - 
-								0 );																			// OD - 
+	MapKeyIOUMD(&Throttle, MSL, 0, 																						// IU - 
+								0,																						// OU - 
+								0,																						// IM - 
+								0,																						// OM - 
+								0,																						// ID - 
+								0 );																					// OD - 
 	// MSP 
-	MapKeyIO(&Throttle, MSP, 	0,																				// I - 
-								JSTR_menu );																	// O - JSTR_menu 
+	MapKeyIO(&Throttle, MSP, 	0,																						// I - 
+								JSTR_menu );																			// O - JSTR_menu 
 								
 
 
 	// Coolie Switch - LANTIRN
 	// CSU
-	MapKeyIOUMD(&Throttle, CSU, 0, 																				// IU - 
-								0,																				// OU - 
-								0,																				// IM - 
-								0,																				// OM - 
-								0,																				// ID - 
-								EXEC( "index_stpt_ag = (index_stpt_ag+4)%5;"									// OD - Previous A-G Steerpoint
-									  "ActKey( KEYON+PULSE+X(steerpointlist_ag, index_stpt_ag) );" )); 			// 
+	MapKeyIOUMD(&Throttle, CSU, 0, 																						// IU - 
+								0,																						// OU - 
+								0,																						// IM - 
+								0,																						// OM - 
+								0,																						// ID - 
+								EXEC( "index_stpt_ag = (index_stpt_ag+4)%5;"											// OD - Previous A-G Steerpoint
+									  "ActKey( KEYON+PULSE+X(steerpointlist_ag, index_stpt_ag) );" )); 					// 
 	// CSD
-	MapKeyIOUMD(&Throttle, CSD, 0,																	 			// IU - 
-								0,																				// OU - 
-								0,																				// IM - 
-								0,																				// OM - 
-								0,																				// ID - 
-								EXEC( "index_stpt_ag = (index_stpt_ag+1)%5;"									// OD - Next A-G Steerpoint    
-									  "ActKey( KEYON+PULSE+X(steerpointlist_ag, index_stpt_ag) );" ));			// 
+	MapKeyIOUMD(&Throttle, CSD, 0,																			 			// IU - 
+								0,																						// OU - 
+								0,																						// IM - 
+								0,																						// OM - 
+								0,																						// ID - 
+								EXEC( "index_stpt_ag = (index_stpt_ag+1)%5;"											// OD - Next A-G Steerpoint    
+									  "ActKey( KEYON+PULSE+X(steerpointlist_ag, index_stpt_ag) );" ));					// 
 	// CSR
-	MapKeyIOUMD(&Throttle, CSR, 0,																				// IU - 
-								0,																				// OU - 
-								0,																				// IM - 
-								0,																				// OM - 
-								0,																				// ID - 
-								EXEC( "ActKey( KEYON+PULSE+X(lantirn_q_stptlist, index_stpt_ag) );"	));			// OD - LANTIRN - Cue Current Steerpoint    
+	MapKeyIOUMD(&Throttle, CSR, 0,																						// IU - 
+								0,																						// OU - 
+								0,																						// IM - 
+								0,																						// OM - 
+								0,																						// ID - 
+								EXEC( "ActKey( KEYON+PULSE+X(lantirn_q_stptlist, index_stpt_ag) );"	));					// OD - LANTIRN - Cue Current Steerpoint    
 	// CSL
-	MapKeyIOUMD(&Throttle, CSL, 0,																				// IU - 
-								0,																				// OU - 
-								0,																				// IM - 
-								0,																				// OM - 
-								0,																				// ID - 
-								JSTR_lntrn_q_des );																// OD - LANTIRN - Cue Designated 
-
+	MapKeyIOUMD(&Throttle, CSL, 0,																						// IU - 
+								0,																						// OU - 
+								0,																						// IM - 
+								0,																						// OM - 
+								0,																						// ID - 
+								JSTR_lntrn_q_des );																		// OD - LANTIRN - Cue Designated 
 
 
 
