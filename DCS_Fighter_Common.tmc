@@ -313,9 +313,9 @@ int dcs_fighter_common_functions()
 	jtac_checkout				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F2 ); 											// Radio menu (\), JTAC, Check Out
 
 	ground_rearmrefuel			= CHAIN( DOWN+L_ALT, D(10), PULSE+USB[0x34], D(), UP+L_ALT );        			  							// Rearming and Refueling Window   (L_ALT+')
-	ground_dtceditor			= CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'k', D(), UP+R_CTL+R_SHIFT );										// DTC editor window
 	ground_removewheelchocks	= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F5, D(200), PULSE+F2 );		// Radio menu (\), Prev, GroundCrew, Wheel Chocks, Remove
-
+	ground_dtceditor			= CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'k', D(), UP+R_CTL+R_SHIFT );										// DTC editor window
+	
 	atc_requeststartup			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F3 );		// Radio menu (\), Prev, ATC, Airfield, Request start-up
 	atc_requesttaxitakeoff		= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 );		// Radio menu (\), Prev, ATC, Airfield, Request taxi/take-off
 	atc_inbound					= CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ); 							// Radio menu (\), ATC, Airfield, Inbound
@@ -672,7 +672,7 @@ int dcs_fighter_common_controls()
 	MapKey(&Throttle, APUOFF, 			0 );																			//
 
 
-	// LDGH (Master Caution, DTC, VR_mode)
+	// LDGH (Master Caution, VR_mode)
 	MapKeyIO(&Throttle, LDGH, 			TEMPO( ingamechat_toggle,														// I - Toggle in-game chat
 											   EXEC( "VR_mode = !VR_mode;"												//     [long] Switch VR mode on/off
 											   "printf(\"VR_mode = %i\\xa\", VR_mode);" ), 500 ),						// 	          print state to output window

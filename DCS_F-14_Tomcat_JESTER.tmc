@@ -46,7 +46,7 @@ int dcs_f14_jester_controls()
 	MapKey(&AVA_F16, H3R, 		TEMPO( JSTR_ground_ac_stbl,																// Radar - Ground/Aircraft Stabilize
 									   0, 500 ));																		// [long]
 	// H3L
-	MapKeyIO(&AVA_F16, H3L, 	TEMPO( CHAIN( JSTR_rdr_range_auto, D(),													// Radar - Range Auto
+	MapKey(&AVA_F16, H3L, 		TEMPO( CHAIN( JSTR_rdr_range_auto, D(),													// Radar - Range Auto
 											  EXEC( "index_range = 2;" )),												// Reset range index to 2 (100 nm) (element 0 is first element in list)
 									   JSTR_rdr_mode_auto, 500 ));														// [long] Radar - Mode Auto
 
@@ -57,85 +57,59 @@ int dcs_f14_jester_controls()
 
 	// MIC Switch (Transmit Switch)
 	// MSU
-	MapKeyIOUMD(&Throttle, MSU, 0, 																						// IU - 
-								0,																			 			// OU - 
-								0,																						// IM - 
-								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+JSTR_WHDN_startup );" 							// OM - [WHDN] JSTR_WHDN_startup
+	MapKeyUMD(&Throttle, MSU, 	0,																			 			// U - 
+								EXEC( "if (WHDN_mode) ActKey( PULSE+KEYON+JSTR_WHDN_startup );" 						// M - [WHDN] JSTR_WHDN_startup
 									  "else ActKey( PULSE+KEYON+0 );" ),												//		
-								0,																						// ID - 
-								0 );																					// OD - 
+								0 );																					// D - 
 	// MSD
-	MapKeyIOUMD(&Throttle, MSD, 0, 																						// IU - 
-								TEMPO( 0, 																				// OU - 
-									   JSTR_jett_droptanks, 500 ),														//		[long] JSTR_jett_droptanks
-								0,																						// IM - 
-								EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+JSTR_check );" 								// OM - [WHDN] JSTR_check
-									  "else ActKey( PULSE+KEYON+JSTR_nav_homebase );" ),								//		JSTR_nav_homebase
-								0,																						// ID - 
-								0 );																					// OD - 
+	MapKeyUMD(&Throttle, MSD, 	TEMPO( 0, 																				// U - 
+									   JSTR_jett_droptanks, 500 ),														//	   [long] JSTR_jett_droptanks
+								EXEC( "if (WHDN_mode) ActKey( PULSE+KEYON+JSTR_check );" 								// M - [WHDN] JSTR_check
+									  "else ActKey( PULSE+KEYON+JSTR_nav_homebase );" ),								//	   JSTR_nav_homebase
+								0 );																					// D - 
 	// MSR
-	MapKeyIOUMD(&Throttle, MSR, 0, 																						// IU - 
-								JSTR_jammer_onoff,																		// OU - JSTR_jammer_onoff
-								0,																						// IM - 
-								CHAIN( JSTR_nav_wp1,																	// OM - JSTR_nav_wp1
-									   EXEC( "index_stpt_aa = 0;" )),													//		Set steerpoint index to match wp1 (first element is 0)
-								0,																						// ID - 
-								JSTR_jammer_onoff );																	// OD - 
+	MapKeyUMD(&Throttle, MSR, 	JSTR_jammer_onoff,																		// U - JSTR_jammer_onoff
+								CHAIN( JSTR_nav_wp1,																	// M - JSTR_nav_wp1
+									   EXEC( "index_stpt_aa = 0;" )),													//	   Set steerpoint index to match wp1 (first element is 0)
+								JSTR_jammer_onoff );																	// D - JSTR_jammer_onoff
 	// MSL
-	MapKeyIOUMD(&Throttle, MSL, 0, 																						// IU - 
-								TEMPO( JSTR_ground_ac_stbl,																// OU - Radar - Ground/Aircraft Stabilize
-									   JSTR_rdr_offon, 500 ),															//		[long] JSTR_rdr_offon
-								0,																						// IM - 
-								TEMPO( JSTR_ground_ac_stbl,																// OM - Radar - Ground/Aircraft Stabilize
-									   JSTR_rdr_offon, 500 ),															//		[long] JSTR_rdr_offon
-								0,																						// ID - 
-								TEMPO( JSTR_ground_ac_stbl,																// OD - Radar - Ground/Aircraft Stabilize
-									   JSTR_rdr_offon, 500 ));															//		[long] JSTR_rdr_offon
-
+	MapKeyUMD(&Throttle, MSL, 	TEMPO( JSTR_ground_ac_stbl,																// U - Radar - Ground/Aircraft Stabilize
+									   JSTR_rdr_offon, 500 ),															//	   [long] JSTR_rdr_offon
+								TEMPO( JSTR_ground_ac_stbl,																// M - Radar - Ground/Aircraft Stabilize
+									   JSTR_rdr_offon, 500 ),															//	   [long] JSTR_rdr_offon
+								TEMPO( JSTR_ground_ac_stbl,																// D - Radar - Ground/Aircraft Stabilize
+									   JSTR_rdr_offon, 500 ));															//	   [long] JSTR_rdr_offon
 	// MSP 
-	MapKeyIO(&Throttle, MSP, 	0,																						// I - 
-								JSTR_menu );																			// O - JSTR_menu 
+	MapKey(&Throttle, MSP, 		JSTR_menu );																			// JSTR_menu 
 
 
 
 	// Coolie Switch
 	// CSU
-	MapKeyIOUMD(&Throttle, CSU, 0, 																						// IU - 
-								0,																						// OU - 
-								0,																						// IM - 
-								0,																						// OM - 
-								0,																						// ID - 
-								0 );																					// OD - 
+	MapKeyUMD(&Throttle, CSU, 	0,																						// U - 
+								0,																						// M - 
+								0 );																					// D - 
 	// CSD
-	MapKeyIOUMD(&Throttle, CSD, 0, 																						// IU - 
-								JSTR_menu,																				// OU - JSTR_menu
-								0,																						// IM - 
-								JSTR_menu,																				// OM - JSTR_menu
-								0,																						// ID - 
-								JSTR_menu );																			// OD - JSTR_menu
+	MapKeyUMD(&Throttle, CSD, 	JSTR_menu,																				// U - JSTR_menu
+								JSTR_menu,																				// M - JSTR_menu
+								JSTR_menu );																			// D - JSTR_menu
 	// CSR
-	MapKeyIOUMD(&Throttle, CSR, 0,																			 			// IU - 
-								EXEC( "index_stpt_aa = (index_stpt_aa+1)%3;"											// OU - Next A-A Steerpoint    
+	MapKeyUMD(&Throttle, CSR, 	EXEC( "index_stpt_aa = (index_stpt_aa+1)%3;"											// U - Next A-A Steerpoint    
 									  //"printf(\"index_stpt_aa = %i\\xa\", index_stpt_aa);"							// test
 									  "ActKey( KEYON+PULSE+X(steerpointlist_aa, index_stpt_aa) );" ), 					// 
-								0,																						// IM - 
-								EXEC( "index_stpt_aa = (index_stpt_aa+1)%3;"											// OM - Next A-A Steerpoint    
+								EXEC( "index_stpt_aa = (index_stpt_aa+1)%3;"											// M - Next A-A Steerpoint    
 									  //"printf(\"index_stpt_aa = %i\\xa\", index_stpt_aa);"							// test
 									  "ActKey( KEYON+PULSE+X(steerpointlist_aa, index_stpt_aa) );" ), 					// 
-								0,																						// ID - 
-								EXEC( "index_stpt_ag = (index_stpt_ag+1)%5;"											// OD - Next A-G Steerpoint    
+								EXEC( "index_stpt_ag = (index_stpt_ag+1)%5;"											// D - Next A-G Steerpoint    
 									  "ActKey( KEYON+PULSE+X(steerpointlist_ag, index_stpt_ag) );" ));					// 
 	// CSL
-	MapKeyIOUMD(&Throttle, CSL, 0, 																						// IU - 
-								EXEC( "index_stpt_aa = (index_stpt_aa+2)%3;"											// OU - Previous A-A Steerpoint    
+	MapKeyUMD(&Throttle, CSL, 	EXEC( "index_stpt_aa = (index_stpt_aa+2)%3;"											// U - Previous A-A Steerpoint    
 									  //"printf(\"index_stpt_aa = %i\\xa\", index_stpt_aa);"							// test
 									  "ActKey( KEYON+PULSE+X(steerpointlist_aa, index_stpt_aa) );" ), 					// 
-								0,																						// IM - 
-								EXEC( "index_stpt_aa = (index_stpt_aa+2)%3;"											// OM - Previous A-A Steerpoint    
+								EXEC( "index_stpt_aa = (index_stpt_aa+2)%3;"											// M - Previous A-A Steerpoint    
 									  //"printf(\"index_stpt_aa = %i\\xa\", index_stpt_aa);"							// test
 									  "ActKey( KEYON+PULSE+X(steerpointlist_aa, index_stpt_aa) );" ), 					// 
-								0,																						// ID - 
-								EXEC( "index_stpt_ag = (index_stpt_ag+4)%5;"											// OD - Previous A-G Steerpoint
+								EXEC( "index_stpt_ag = (index_stpt_ag+4)%5;"											// D - Previous A-G Steerpoint
 									  "ActKey( KEYON+PULSE+X(steerpointlist_ag, index_stpt_ag) );" )); 					// 
 
 
