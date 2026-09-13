@@ -17,16 +17,26 @@ int dcs_f14_jester_controls()
 
 	// Target Management Switch
 	// H2U
-	MapKey(&AVA_F16, H2U, 		TEMPO( JSTR_lock_tgt_ahead,								 								// Radar – STT Lock Target Ahead
-									   JSTR_lock_enemy_ahead, 500 ));													// [long] Radar – STT Lock Enemy Ahead
+	MapKeyUMD(&AVA_F16, H2U, 	TEMPO( JSTR_lock_tgt_ahead,								 								// U - Radar – STT Lock Target Ahead
+									   JSTR_lock_enemy_ahead, 500 ),													// 	   [long] Radar – STT Lock Enemy Ahead
+								TEMPO( JSTR_lock_tgt_ahead,								 								// M - Radar – STT Lock Target Ahead
+									   JSTR_lock_enemy_ahead, 500 ),													// 	   [long] Radar – STT Lock Enemy Ahead
+								JSTR_lntrn_designate );																	// D - LANTIRN - Laser Designate
 	MapKeyR(&AVA_F16, H2U, 		0 );																					// 
 	// H2D
-	MapKey(&AVA_F16, H2D, 		TEMPO( JSTR_break_lock,																	// Radar – Break Lock
-									   0, 500 ));																		// [long] 
+	MapKeyUMD(&AVA_F16, H2D, 	TEMPO( JSTR_break_lock,																	// U - Radar – Break Lock
+									   0, 500 ),																		// 	   [long] 
+								TEMPO( JSTR_break_lock,																	// M - Radar – Break Lock
+									   0, 500 ),																		// 	   [long]  
+								JSTR_lntrn_undesignate );																// D - LANTIRN - Laser Undesignate
 	MapKeyR(&AVA_F16, H2D, 		0 );																					// 
 	// H2R							
-	MapKey(&AVA_F16, H2R, 		TEMPO( JSTR_context_double, 															// Jester Context double
-									   JSTR_toggle_RWS_TWS, 500 ));														// [long] Radar – Toggle RWS/TWS Mode
+	MapKeyUMD(&AVA_F16, H2R, 	TEMPO( JSTR_context_double, 															// U - Jester Context double
+									   JSTR_toggle_RWS_TWS, 500 ),														// 	   [long] Radar – Toggle RWS/TWS Mode
+								TEMPO( JSTR_context_double, 															// M - Jester Context double
+									   JSTR_toggle_RWS_TWS, 500 ),														// 	   [long] Radar – Toggle RWS/TWS Mode
+								TEMPO( JSTR_lntrn_nexttgt,  															// D - LANTIRN - Next Target
+									   JSTR_lntrn_bwhot_tggl, 500 ));													// 	   LANTIRN - Black/white hot toggle
 	MapKeyR(&AVA_F16, H2R, 		0 );																					// 
 	// H2L
 	MapKey(&AVA_F16, H2L, 		JSTR_context );		 																	// Jester Context
@@ -86,9 +96,9 @@ int dcs_f14_jester_controls()
 
 	// Coolie Switch
 	// CSU
-	MapKeyUMD(&Throttle, CSU, 	0,																						// U - 
-								0,																						// M - 
-								0 );																					// D - 
+	MapKeyUMD(&Throttle, CSU, 	JSTR_context,																			// U - 
+								JSTR_context,																			// M - 
+								JSTR_context );																			// D - 
 	// CSD
 	MapKeyUMD(&Throttle, CSD, 	JSTR_menu,																				// U - JSTR_menu
 								JSTR_menu,																				// M - JSTR_menu
@@ -116,120 +126,3 @@ int dcs_f14_jester_controls()
 
 }	// =====  end dcs_f14_jester_controls()  ======================================================
 
-
-
-
-
-// ------------------------------ JESTER LANTIRN CONTROLS -----------------------------------------
-
-int dcs_f14_jester_lantirn_controls()
-{
-
-	// -------------------- FLIGHT STICK ----------------------------
-
-	// Target Management Switch - LANTIRN
-	// H2U
-	MapKeyIO(&AVA_F16, H2U, 	0,																						// I - 
-							 	TEMPO( 0,												 								// O - 
-									   JSTR_lntrn_designate, 500 ));													//     [long] LANTIRN - Laser Designate
-	// H2D
-	MapKeyIO(&AVA_F16, H2D, 	0, 																						// I - 
-							 	TEMPO( JSTR_lntrn_stblarea,																// O - LANTIRN - Stabilise Area
-									   JSTR_lntrn_undesignate, 500 ));													//     [long] LANTIRN - Laser Undesignate
-	// H2R							
-	MapKeyIO(&AVA_F16, H2R, 	0, 																						// I - 
-							 	JSTR_lntrn_nexttgt ); 																	// O - LANTIRN - Next Target
-	// H2L
-	MapKeyIO(&AVA_F16, H2L, 	0,																						// I -
-							 	JSTR_lntrn_prevtgt ); 																	// O - LANTIRN - Previous Target
-	MapKeyRIO(&AVA_F16, H2L, 	0,																						// I -
-								0 );																					// O -
-
-
-	// Display Management Switch - LANTIRN
-	// H3U
-	MapKeyIO(&AVA_F16, H3U, 	0,																						// I - 
-								JSTR_lntrn_srch_anyactive ); 															// O - LANTIRN - Search any active target
-	// H3D
-	MapKeyIO(&AVA_F16, H3D, 	0,																						// I - 
-								JSTR_lntrn_srch_aircraftall );															// O - LANTIRN - Search any aircraft
-	// H3R
-	MapKeyIO(&AVA_F16, H3R, 	0, 																						// I - 
-								JSTR_lntrn_srch_samactive );															// O - LANTIRN - Search any active SAM
-	// H3L
-	MapKeyIO(&AVA_F16, H3L, 	0, 																						// I - 
-								JSTR_lntrn_srch_armoractive );															// O - LANTIRN - Search any active Armour
-
-
-	// -------------------- THROTTLE --------------------------------
-
-	// MIC Switch (Transmit Switch) - LANTIRN
-	// MSU
-	MapKeyIOUMD(&Throttle, MSU, 0, 																						// IU - 
-								0,															 							// OU - 
-								0,																						// IM - 
-								0, 																						// OM - 
-								0,																						// ID - 
-								JSTR_lntrn_q_eyeballs );																// OD - LANTIRN - Cue Eyeballs
-	// MSD
-	MapKeyIOUMD(&Throttle, MSD, 0, 																						// IU - 
-								0, 																						// OU - 
-								0,																						// IM - 
-								0,																						// OM - 
-								0,																						// ID - 
-								JSTR_lntrn_q_headctrl );																// OD - LANTIRN - Cue Head Control
-	// MSR
-	MapKeyIOUMD(&Throttle, MSR, 0, 																						// IU - 
-								0,																						// OU - 
-								0,																						// IM - 
-								0,																						// OM - 
-								0,																						// ID - 
-								JSTR_lntrn_q_hud );																		// OD - LANTIRN - Cue HUD
-	// MSL
-	MapKeyIOUMD(&Throttle, MSL, 0, 																						// IU - 
-								0,																						// OU - 
-								0,																						// IM - 
-								0,																						// OM - 
-								0,																						// ID - 
-								0 );																					// OD - 
-	// MSP 
-	MapKeyIO(&Throttle, MSP, 	0,																						// I - 
-								JSTR_menu );																			// O - JSTR_menu 
-								
-
-
-	// Coolie Switch - LANTIRN
-	// CSU
-	MapKeyIOUMD(&Throttle, CSU, 0, 																						// IU - 
-								0,																						// OU - 
-								0,																						// IM - 
-								0,																						// OM - 
-								0,																						// ID - 
-								EXEC( "index_stpt_ag = (index_stpt_ag+4)%5;"											// OD - Previous A-G Steerpoint
-									  "ActKey( KEYON+PULSE+X(steerpointlist_ag, index_stpt_ag) );" )); 					// 
-	// CSD
-	MapKeyIOUMD(&Throttle, CSD, 0,																			 			// IU - 
-								0,																						// OU - 
-								0,																						// IM - 
-								0,																						// OM - 
-								0,																						// ID - 
-								EXEC( "index_stpt_ag = (index_stpt_ag+1)%5;"											// OD - Next A-G Steerpoint    
-									  "ActKey( KEYON+PULSE+X(steerpointlist_ag, index_stpt_ag) );" ));					// 
-	// CSR
-	MapKeyIOUMD(&Throttle, CSR, 0,																						// IU - 
-								0,																						// OU - 
-								0,																						// IM - 
-								0,																						// OM - 
-								0,																						// ID - 
-								EXEC( "ActKey( KEYON+PULSE+X(lantirn_q_stptlist, index_stpt_ag) );"	));					// OD - LANTIRN - Cue Current Steerpoint    
-	// CSL
-	MapKeyIOUMD(&Throttle, CSL, 0,																						// IU - 
-								0,																						// OU - 
-								0,																						// IM - 
-								0,																						// OM - 
-								0,																						// ID - 
-								JSTR_lntrn_q_des );																		// OD - LANTIRN - Cue Designated 
-
-
-
-}	// =====  end dcs_f14_jester_lantirn_controls()  ==============================================

@@ -65,8 +65,7 @@ int dcs_f14_pilot_controls()
 
 	// JSTR layer
 	// Expand FOV Button - S3
-	MapKey(&AVA_F16, S3,  		EXEC( "if(LTRN_mode) dcs_f14_jester_lantirn_controls();"								// Switch to JESTER LANTIRN controls (LTRN_mode ON)
-								  	  "else dcs_f14_jester_controls();" ));												// Switch to JESTER controls (LTRN_mode OFF)
+	MapKey(&AVA_F16, S3,  		EXEC( "dcs_f14_jester_controls();" ));													// Switch to JESTER controls
 	MapKeyR(&AVA_F16, S3,  		EXEC( "dcs_fighter_common_switch();" 													// Switch back to COMMON,
 								  	  "dcs_f14_pilot_controls_switch();" ));											//   and PILOT controls
 
@@ -74,10 +73,10 @@ int dcs_f14_pilot_controls()
 
 	// Countermeasure Management Switch
 	// H4U	
-	MapKeyIO(&AVA_F16, H4U, 	vsl_hi,																					// I - Target designate up / VSL HI
+	MapKeyIO(&AVA_F16, H4U, 	tgtdes_vsl_hi,																			// I - Target designate up / VSL HI
 							 	dlcthumb_fwd );																			// O - DLC Thumbwheel Forward
 	// H4D
-	MapKeyIO(&AVA_F16, H4D, 	vsl_lo, 																				// I - Target designate down / VSL LO
+	MapKeyIO(&AVA_F16, H4D, 	tgtdes_vsl_lo, 																			// I - Target designate down / VSL LO
 							 	dlcthumb_aft );																			// O - DLC Thumbwheel Aft
 	// H4R
 	MapKeyIO(&AVA_F16, H4R, 	pal, 																					// I - Target designate fwd / PAL
@@ -122,7 +121,7 @@ int dcs_f14_pilot_controls()
 
 	// Autopilot
 	// APENG	
-	MapKeyIO(&Throttle, APENG, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'t', D(), UP+L_CTL ),									// Toggle Auto Throttle
+	MapKeyIO(&Throttle, APENG, 	autothrottle,																			// Toggle Auto Throttle
 								autopilot );																			// Autopilot on/off
 	// APDIS
 	MapKey(&Throttle, APDIS, 	0 ); 																					// see autopilot_mode()
@@ -204,11 +203,6 @@ int dcs_f14_pilot_controls()
 								CHAIN( displaymode_a2g, D(100),															// O - Display mode air to ground
 									   EXEC( "if((index_stpt_aa)%3 == 2) index_stpt_ag = 4;"							// 	   Set correct steerpoint in A-G mode (element 0 is first element in list)
 											 "else index_stpt_ag = (index_stpt_aa)%3;" ),								// 
-									   EXEC( "if(Joystick[S3]) {"														// 	   If JSTR shift is pressed
-											   "LTRN_mode = 1;"															// 	   LTRN_mode ON
-											   "printf(\"LTRN_mode = 1\\xa\");"											// 
-											   "dcs_f14_jester_lantirn_controls();"										//	   Load JESTER LANTIRN controls
-											   "}" ),																	//
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED3) )); 									//     A-G mode on, LED3 ON for D layer
 	MapKeyRIO(&Throttle, BSB, 	CHAIN( EXEC( "CAR_mode = 0;"															// I - Set CAR_mode OFF
 											 "printf(\"CAR_mode = 0\\xa\");" ),											// 
@@ -216,12 +210,28 @@ int dcs_f14_pilot_controls()
 								CHAIN( displaymode_cruise, D(),															// O - Display mode cruise
 									   EXEC( "if((index_stpt_ag)%5 > 1) index_stpt_aa = 2;"								// 	   Set correct steerpoint in A-A mode (IP and ST default to WP3, element 0 is first element in list)
 											 "else index_stpt_aa = (index_stpt_ag)%5;" ),								//
-									   EXEC( "LTRN_mode = 0;"															//     LTRN_mode OFF
-											 "printf(\"LTRN_mode = 0\\xa\");" ),										// 
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED3) ));									// 	   A-G mode off, LED3 OFF for D layer
 
 	
+
+	// ---------------------------- MFD -----------------------------
+
+	// Brightness and Contrast control VDI screen
+	MapKeyIO(&LMFD, CONU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'i' ), 													// I - Right MFD CON Up
+								CHAIN( R_WIN+L_SHIFT, D(10), 'i' ));													// O - VDI Screen Contrast Inc (Slow)
+
+	MapKeyIO(&LMFD, COND, 		CHAIN( R_WIN+R_SHIFT, D(10), 'j' ), 													// I - Right MFD CON Down
+								CHAIN( R_WIN+L_SHIFT, D(10), 'j' ));													// O - VDI Screen Contrast Dec (Slow)
+
+	MapKeyIO(&LMFD, BRTU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'u' ), 													// I - Right MFD BRT Up
+								CHAIN( R_WIN+L_SHIFT, D(10), 'u' ));													// O - VDI Screen Brightness Knob Inc (Slow)
+
+	MapKeyIO(&LMFD, BRTD, 		CHAIN( R_WIN+R_SHIFT, D(10), 'h' ), 													// I - Right MFD BRT Down
+								CHAIN( R_WIN+L_SHIFT, D(10), 'h' ));													// O - VDI Screen Brightness Knob Dec (Slow)
+
 	
+
+
 	// ---------- Also load SWITCH part of PILOT controls -----------
 	
 	dcs_f14_pilot_controls_switch();																					// controls to be switched back after JESTER use
@@ -252,14 +262,14 @@ int dcs_f14_pilot_controls_switch()
 								seat_down,																  				// IM - Seat Adjustment Down
 								EXEC( "if (WHDN_mode) ActKey( PULSE+KEYON+nw_strut_retract );" ),						// OM - [WHDN] Nose strut kneel
 								0,																						// ID - 
-								JSTR_agwpn_comptgt ); 																	// OD - Set Computer Target Weapons (CCRP)
+								0 ); 																					// OD - 
 	// CSD
 	MapKeyIOUMD(&Throttle, CSD, 0,																	 					// IU - 
 								missilemode_toggle,																		// OU - Missile Mode Toggle (boresight/slave)
 								seat_up,																  				// IM - Seat Adjustment Up
 								EXEC( "if (WHDN_mode) ActKey( PULSE+KEYON+nw_strut_extend );" ),						// OM - [WHDN] Nose strut extend
 								wingsweep_bomb,														 					// ID - Wing Sweep Bomb Mode
-								JSTR_agwpn_comppilot );												 					// OD - Set Computer Pilot Weapons (CCIP)
+								0 );																 					// OD - 
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, TEMPO( 0,																				// IU - 
 									   wingsweep_aft, 500 ),															// 		[long] Wing Sweep Aft
