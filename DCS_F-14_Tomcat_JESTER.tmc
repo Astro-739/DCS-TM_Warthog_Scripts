@@ -21,25 +21,31 @@ int dcs_f14_jester_controls()
 									   JSTR_lock_enemy_ahead, 500 ),													// 	   [long] Radar – STT Lock Enemy Ahead
 								TEMPO( JSTR_lock_tgt_ahead,								 								// M - Radar – STT Lock Target Ahead
 									   JSTR_lock_enemy_ahead, 500 ),													// 	   [long] Radar – STT Lock Enemy Ahead
-								JSTR_lntrn_designate );																	// D - LANTIRN - Laser Designate
+								JSTR_context );																			// D - Jester Context (Designate / Send coordinates)
 	MapKeyR(&AVA_F16, H2U, 		0 );																					// 
 	// H2D
 	MapKeyUMD(&AVA_F16, H2D, 	TEMPO( JSTR_break_lock,																	// U - Radar – Break Lock
 									   0, 500 ),																		// 	   [long] 
 								TEMPO( JSTR_break_lock,																	// M - Radar – Break Lock
 									   0, 500 ),																		// 	   [long]  
-								JSTR_lntrn_undesignate );																// D - LANTIRN - Laser Undesignate
+								TEMPO( JSTR_lntrn_stblarea,																// D - LANTIRN - Stabilise Area
+									   JSTR_lntrn_undesignate, 500 ));													//	   [long] LANTIRN - Laser Undesignate
 	MapKeyR(&AVA_F16, H2D, 		0 );																					// 
 	// H2R							
 	MapKeyUMD(&AVA_F16, H2R, 	TEMPO( JSTR_context_double, 															// U - Jester Context double
 									   JSTR_toggle_RWS_TWS, 500 ),														// 	   [long] Radar – Toggle RWS/TWS Mode
 								TEMPO( JSTR_context_double, 															// M - Jester Context double
 									   JSTR_toggle_RWS_TWS, 500 ),														// 	   [long] Radar – Toggle RWS/TWS Mode
-								TEMPO( JSTR_lntrn_nexttgt,  															// D - LANTIRN - Next Target
-									   JSTR_lntrn_bwhot_tggl, 500 ));													// 	   LANTIRN - Black/white hot toggle
+								TEMPO( JSTR_context_double,  															// D - LANTIRN - Zoom toggle
+									   JSTR_lntrn_nexttgt, 500 ));														// 	   [long] LANTIRN - Next Target
 	MapKeyR(&AVA_F16, H2R, 		0 );																					// 
 	// H2L
-	MapKey(&AVA_F16, H2L, 		JSTR_context );		 																	// Jester Context
+	MapKeyUMD(&AVA_F16, H2L, 	TEMPO( 0, 																				// U - 
+									   0, 500 ),																		// 	   [long] 
+								TEMPO( 0, 																				// U - 
+									   0, 500 ),																		// 	   [long] 
+								TEMPO( JSTR_lntrn_bwhot_tggl,  															// D - LANTIRN - Black/white hot toggle
+									   JSTR_lntrn_prevtgt, 500 ));														// 	   [long] LANTIRN - Previous Target
 	MapKeyR(&AVA_F16, H2L, 		0 );																					// 
 
 								

@@ -7,10 +7,10 @@
 // ------------------------- INCLUDE --------------------------------
 
 include "target.tmh"
-include "DCS_F-14_Tomcat_PILOT.tmc"							// all PILOT controls
-include "DCS_F-14AB_Tomcat_RIO.tmc"							// all RIO controls
-include "DCS_F-14_Tomcat_JESTER.tmc"						// all JESTER controls
-include "DCS_Fighter_Common.tmc"							// all dcs fighter COMMON controls
+include "DCS_F-14_Tomcat_PILOT.tmc"							// PILOT controls
+include "DCS_F-14AB_Tomcat_RIO.tmc"							// RIO controls
+include "DCS_F-14_Tomcat_JESTER.tmc"						// JESTER controls
+include "DCS_Fighter_Common.tmc"							// DCS fighter COMMON controls
 
 
 
@@ -276,7 +276,7 @@ int main()
 	horns_right			= CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'o', D(), UP+R_SHIFT+L_ALT );
 
 
-	// Autopilot function
+	// Autopilot
 	autopilot 	= SEQ( CHAIN( EXEC( "autopilot_mode();" ), D(200),														// Set autopilot mode
 							  DOWN+L_ALT+L_SHIFT, D(10), PULSE+'p', D(), UP+L_ALT+L_SHIFT ),							// Autopilot on
 					   CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'p', D(), UP+L_ALT+L_CTL ));								// Autopilot off
@@ -323,9 +323,6 @@ int main()
 	// Exterior Lighting - Covert
 	extlight_covert 	= CHAIN( DOWN+L_CTL, D(10), PULSE+'l', D(), UP+L_CTL );											// Exterior Lights Master Switch OFF
 
-
-	// Air-to-Air Refuelling
-																														// Master Arm Off
 
 
 	// JESTER calls
@@ -433,11 +430,13 @@ int main()
 										 DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL );
 	JSTR_lntrn_prevtgt			= CHAIN( PULSE+'a', D(200), 
 										 DOWN+L_CTL, D(10), PULSE+'6', D(), UP+L_CTL );
+
 	// Start-up
 	JSTR_startup			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );
 	JSTR_loudclear			= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'s', D(), UP+L_CTL+R_SHIFT );
 	JSTR_ins_fine			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );
 	JSTR_ins_wpn			= CHAIN( PULSE+'a', D(200), DOWN+L_CTL, D(10), PULSE+'5', D(), UP+L_CTL );
+	
 	// General
 	JSTR_jett_droptanks		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'j', D(), UP+L_CTL+R_SHIFT );
 	JSTR_jammer_onoff		= CHAIN( PULSE+'a', D(200), PULSE+'a', D(200), 											// Main menu
