@@ -93,10 +93,17 @@ int atc_requestlanding;
 int tanker_inbound;
 int tanker_precontact;
 
+int cont_picture_bogeydope;
+int cont_picture_enemy;
+int cont_picture_friend;
 int bsc_listmissions;
 int bsc_dialcode;
 int bsc_startmission;
 int bsc_validatelanding;
+int hbcw_picture_bogeydope;
+int hbcw_picture_declare;
+int hbcw_picture_enemy;
+int hbcw_picture_friend;
 
 int startup;
 int dragchute_deploy;
@@ -213,6 +220,9 @@ char WHDN_mode = 1;										// Wheels Down mode (assumption start on ground)
 char AAR_mode = 0;										// Air-to-Air Refuelling mode
 char VR_mode = 1;										// VR zoom controls mode (assumption start with VR)
 
+int COMM_mode = 1;										// Server Comms mode:  0 - AI wingmen, 1 - Contention, 2 - Heatblur CW, 3 - BSC
+int comm_mode_adjust;
+
 int tacview_bookmark;
 
 
@@ -260,7 +270,7 @@ int dcs_fighter_common_configuration()
 	Configure(&Sol_SolR, MODE_EXCLUDED);
 	Configure(&Sol_SolRL, MODE_EXCLUDED);
 	
-	if(Init(&EventHandle)) return 1;
+	if (Init(&EventHandle)) return 1;
 	
 	SetKBRate(40, 50);																							// (a < b) a = pulse duration, b = delay duration
 	SetKBLayout(KB_ENG);
@@ -335,8 +345,15 @@ int dcs_fighter_common_functions()
 	radiomenu					= PULSE+USB[0x31];																		// Transmit Switch - radio menu
 
 	// Heatblur CW server comms
+	hbcw_picture_bogeydope		= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F1, D(200), PULSE+F1 ); 		// Radio menu (\), Other, EWR System, Bogey Dope
+	hbcw_picture_declare		= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F1, D(200), PULSE+F2 ); 		// Radio menu (\), Other, EWR System, Declare
+	hbcw_picture_enemy			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F1, D(200), PULSE+F3 ); 		// Radio menu (\), Other, EWR System, Request Picture
+	hbcw_picture_friend			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F1, D(200), PULSE+F4 ); 		// Radio menu (\), Other, EWR System, Request Friendly Picture
 
 	// SPS Contention server comms
+	cont_picture_bogeydope		= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F1, D(200), PULSE+F1 ); 		// Radio menu (\), Other, EW Radar, Request Bogey Dope
+	cont_picture_enemy			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F1, D(200), PULSE+F2 ); 		// Radio menu (\), Other, EW Radar, Request Enemy Picture (max 6)
+	cont_picture_friend			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F1, D(200), PULSE+F4 ); 		// Radio menu (\), Other, EW Radar, Request Friendly Picture (max 6)
 	
 	// BSC server comms
 	bsc_listmissions			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F2, D(200), PULSE+F1 ); 		// Radio menu (\), Other, Missions, List Missions
@@ -485,13 +502,18 @@ int dcs_fighter_common_functions()
 										  		"printf(\"flashlight_on = 0\\xa\");" )));								//
 
 	// Brightness function
-	brightness_up 			= REXEC( 100, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_CTL+R_SHIFT+'h' );"			// NVG brightness up
-											   "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+'.' );"		// Flashlight brightness up
+	brightness_up 			= REXEC( 100, 100, "if (nightvision_on) ActKey( PULSE+KEYON+R_CTL+R_SHIFT+'h' );"			// NVG brightness up
+											   "else if (flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+'.' );"		// Flashlight brightness up
 											   "else ActKey( PULSE+KEYON+DX37 );" );									// HUD/HMCS/Reticle brightness up
-	brightness_down 		= REXEC( 101, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_ALT+R_SHIFT+'h' );"			// NVG brightness down
-											   "else if(flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+',' );"		// Flashlight brightness down
+	brightness_down 		= REXEC( 101, 100, "if (nightvision_on) ActKey( PULSE+KEYON+R_ALT+R_SHIFT+'h' );"			// NVG brightness down
+											   "else if (flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+',' );"		// Flashlight brightness down
 											   "else ActKey( PULSE+KEYON+DX38 );" );									// HUD/HMCS/Reticle brightness down
-																														// FLIR brightness
+
+	// COMM_mode adjust function
+	comm_mode_adjust		= EXEC( "COMM_mode = COMM_mode + 1;"														//
+									"if (COMM_mode > 3) COMM_mode = 0;"													//
+									"printf(\"COMM_mode = %i\\xa\", COMM_mode);" );										//
+
 	// External
 	tacview_bookmark 		= CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT );										// Tacview Bookmark
 
@@ -509,11 +531,13 @@ int dcs_fighter_common_controls()
 
 	// ---------------------- INITIAL VALUES ------------------------
 
-	printf("\xa--- Initial Mode Values ---\xa");																		// 
-	printf("AAR_mode = %i\xa", AAR_mode);																				// print initial AAR_mode
-	printf("CAR_mode = %i\xa", CAR_mode);																				// print initial CAR_mode
-	printf("WHDN_mode = %i\xa", WHDN_mode);																				// print initial WHDN_mode
-	printf("VR_mode = %i\xa", VR_mode);																					// print initial VR_mode
+	printf( "\xa--- Initial Mode Values ---\xa" );																		// 
+	printf( "AAR_mode = %i\xa", AAR_mode );																				// print initial AAR_mode
+	printf( "CAR_mode = %i\xa", CAR_mode );																				// print initial CAR_mode
+	printf( "WHDN_mode = %i\xa", WHDN_mode );																			// print initial WHDN_mode
+	printf( "COMM_mode = %i\xa", COMM_mode );																			// print initial Server Comms mode
+	printf( "VR_mode = %i\xa", VR_mode );																				// print initial VR_mode
+
 
 
 	// ------------------------ FLIGHT STICK ------------------------
@@ -522,7 +546,7 @@ int dcs_fighter_common_controls()
 	// TG1
 	MapKeyIOUMD(&AVA_F16, TG1, 			0,	 																			// IU - 
 										guntrigger_1st, 																// OU - Trigger First Detent
-									  	0,  																			// IM - 
+									  	comm_mode_adjust, 																// IM - 
 									  	0,  																			// OM - 
 							  			0,  																			// ID - 
 									  	guntrigger_1st ); 																// OD - Trigger First Detent
@@ -621,16 +645,16 @@ int dcs_fighter_common_controls()
 
 	// Speedbrake Switch
 	// SPDF
-	MapKeyIO(&Throttle, SPDF, 			EXEC( "if(VR_mode) ActKey( KEYON+vrzoom_spyglass );"							// I - [VR] VR zoom max
+	MapKeyIO(&Throttle, SPDF, 			EXEC( "if (VR_mode) ActKey( KEYON+vrzoom_spyglass );"							// I - [VR] VR zoom max
 											  "else ActKey( PULSE+KEYON+R_SHIFT+USB[0x55] );" ),						//	   snap zoom max   (R_SHIFT+KP*)
 										speedbrakes_open );																// O - Open Speed Brakes
-	MapKeyRIO(&Throttle, SPDF, 			EXEC( "if(VR_mode) ActKey( vrzoom_spyglass );"									// I - [VR] release VR zoom max (DX16)
+	MapKeyRIO(&Throttle, SPDF, 			EXEC( "if (VR_mode) ActKey( vrzoom_spyglass );"									// I - [VR] release VR zoom max (DX16)
 											  "else ActKey( PULSE+KEYON+KPENT );" ),									//	   snap zoom normal
 										speedbrakes_close );															// O - Close Speed Brakes
 	// SPDB
-	MapKeyIO(&Throttle, SPDB, 			EXEC( "if(WHDN_mode) ActKey( KEYON+wheelbrake );" ),							// I - [WHDN] wheel brake 
+	MapKeyIO(&Throttle, SPDB, 			EXEC( "if (WHDN_mode) ActKey( KEYON+wheelbrake );" ),							// I - [WHDN] wheel brake 
 							  			speedbrakes_open );																// O - Open Speed Brakes Momentary
-	MapKeyRIO(&Throttle, SPDB, 			EXEC( "if(WHDN_mode) ActKey( wheelbrake );" ),									// I - [WHDN] release wheel brake (DX12)
+	MapKeyRIO(&Throttle, SPDB, 			EXEC( "if (WHDN_mode) ActKey( wheelbrake );" ),									// I - [WHDN] release wheel brake (DX12)
 							   			speedbrakes_close );															// O - Close Speed Brakes
 
 
@@ -703,13 +727,13 @@ int dcs_fighter_common_controls()
 	MapKeyIOUMD(&Throttle, EFROVER, 	0,																				// IU - 
 										0,																				// OU - 
 										dragchute_deploy,																// IM - Drag Chute deploy
-										hook_extend,																		// OM - HOOK Switch - DOWN
+										hook_extend,																	// OM - HOOK Switch - DOWN
 										0,																				// ID - 
 										0 );																			// OD - 
 	MapKeyRIOUMD(&Throttle, EFROVER, 	0,																				// IU -
 										0,																				// OU - 
 										dragchute_release,																// IM - Drag Chute release
-										hook_retract,																		// OM - HOOK Switch - UP
+										hook_retract,																	// OM - HOOK Switch - UP
 										0,																				// ID - 
 										0 );																			// OD - 
 
@@ -831,72 +855,104 @@ int dcs_fighter_common_switch()
 
 	// MIC Switch (Transmit Switch)
 	// MSU
-	MapKeyIOUMD(&Throttle, MSU, TEMPO( flight_engagebandits, 															// IU - Flight - Engage Bandits
-									   flight_pincerright, 500 ),														// 		[long] Flight - Pincer Right
-								radio1_voip,																			// OU - Transmit Switch - Radio 1 (VOIP)
-								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_requestlaunch );" 					// IM - [CAR]  Request Catapult Launch
-											 "else if(WHDN_mode) ActKey( PULSE+KEYON+atc_requeststartup );" 			//		[WHDN] Request Engine Start
-											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"								//		[AAR]  -
-											 "else ActKey( PULSE+KEYON+flight_rejoinformation );" ),					//		Flight - Rejoin Formation
-									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 									// 		[long] [CAR]  -
-											 "else if(WHDN_mode) ActKey( PULSE+KEYON+0 );"								//		[long] [WHDN] -
-											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"								//		[long] [AAR]  -
-											 "else ActKey( PULSE+KEYON+flight_opencloseformation );" ), 500 ),			//		[long] Flight - Open/Close Formation
-								radio1_voip,																			// OM - Transmit Switch - Radio 1 (VOIP)
-								TEMPO( flight_attackgroundtargets,														// ID - Flight - Attack ground targets
-									   flight_attackairdefences, 500 ),													//		[long] Flight - Attack air defences
-								radio1_voip );																			// OD - Transmit Switch - Radio 1 (VOIP)
+	MapKeyIOUMD(&Throttle, MSU, TEMPO( EXEC( "if (COMM_mode == 0) ActKey( PULSE+KEYON+flight_engagebandits );"					// IU - [AI comms] Flight - Engage Bandits
+											 "else if (COMM_mode == 1) ActKey( PULSE+KEYON+0 );" 								//		[Cont comms] 
+											 "else if (COMM_mode == 2) ActKey( PULSE+KEYON+0 );" ),								//		[HBCW comms] 
+									   EXEC( "if (COMM_mode == 0) ActKey( PULSE+KEYON+flight_pincerright;" ),					// 		[long] [AI comms] Flight - Pincer Right
+									   500 ),																					//
+								radio1_voip,																					// OU - Transmit Switch - Radio 1 (VOIP)
+								TEMPO( EXEC( "if (CAR_mode) ActKey( PULSE+KEYON+cv_requestlaunch );" 							// IM - [CAR]  Request Catapult Launch
+											 "else if (WHDN_mode) ActKey( PULSE+KEYON+atc_requeststartup );" 					//		[WHDN] Request Engine Start
+											 "else if (AAR_mode) ActKey( PULSE+KEYON+0 );"										//		[AAR]  -
+											 "else if (COMM_mode == 0) ActKey( PULSE+KEYON+flight_rejoinformation );"			//		[AI comms] Flight - Rejoin Formation
+											 "else if (COMM_mode == 1) ActKey( 0 );" 											//		[Cont comms] 
+											 "else if (COMM_mode == 2) ActKey( 0 );" ),											//		[HBCW comms] 
+									   EXEC( "if (CAR_mode) ActKey( PULSE+KEYON+0 );" 											// 		[long] [CAR]  -
+											 "else if (WHDN_mode) ActKey( PULSE+KEYON+0 );"										//		[long] [WHDN] -
+											 "else if (AAR_mode) ActKey( PULSE+KEYON+0 );"										//		[long] [AAR]  -
+											 "else if (COMM_mode == 0) ActKey( PULSE+KEYON+flight_opencloseformation );" ), 	//		[long] [AI comms] Flight - Open/Close Formation
+									   500 ),																					//
+								radio1_voip,																					// OM - Transmit Switch - Radio 1 (VOIP)
+								TEMPO( EXEC( "if (COMM_mode == 0) ActKey( PULSE+KEYON+flight_attackgroundtargets );"			// ID - [AI comms] Flight - Attack ground targets
+											 "else if (COMM_mode == 1) ActKey( PULSE+KEYON+0 );" 								//		[Cont comms] 
+											 "else if (COMM_mode == 2) ActKey( PULSE+KEYON+0 );" ),								//		[HBCW comms] 
+									   EXEC( "if (COMM_mode == 0) ActKey( PULSE+KEYON+flight_attackairdefences;" ),				// 		[long] [AI comms] Flight - Attack air defences
+									   500 ),																					//
+								radio1_voip );																					// OD - Transmit Switch - Radio 1 (VOIP)
 	// MSD
-	MapKeyIOUMD(&Throttle, MSD, TEMPO( flight_completemissionrejoin,													// IU - Flight - Complete mission and rejoin
-									   flight_coverme, 500 ),															// 		[long] Flight - Cover Me
-								radio2_voip,																			// OU - Transmit Switch - Radio 2 (VOIP)
-								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_inbound );" 							// IM - [CAR] CV Inbound / See you at 10
-											 "else if(WHDN_mode) ActKey( PULSE+KEYON+ground_dtceditor );" 				//		[WHDN] DTC editor
-											 "else if(AAR_mode) ActKey( PULSE+KEYON+tanker_inbound );"					//		[AAR] Tanker Inbound
-											 "else ActKey( PULSE+KEYON+atc_inbound );" ),								//		ATC - Inbound
-									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 									// 		[long] [CAR]  -
-											 "else if(WHDN_mode) ActKey( PULSE+KEYON+0 );" 								//		[long] [WHDN] -
-											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"								//		[long] [AAR]  -
-											 "else ActKey( PULSE+KEYON+flight_rtb);" ), 500 ),							//		[long] Flight - RTB
-								radio2_voip,																			// OM - Transmit Switch - Radio 2 (VOIP)
-								TEMPO( flight_completemissionrejoin,													// ID - Flight - Complete mission and rejoin
-									   0, 500 ),																		//		[long] Flight - 
-								radio2_voip );																			// OD - Transmit Switch - Radio 2 (VOIP)
+	MapKeyIOUMD(&Throttle, MSD, TEMPO( EXEC( "if (COMM_mode == 0) ActKey( PULSE+KEYON+flight_completemissionrejoin );"			// IU - [AI comms] Flight - Complete mission and rejoin
+											 "else if (COMM_mode == 1) ActKey( PULSE+KEYON+0 );" 								//		[Cont comms] 
+											 "else if (COMM_mode == 2) ActKey( PULSE+KEYON+0 );" ),								//		[HBCW comms] 
+									   EXEC( "if (COMM_mode == 0) ActKey( PULSE+KEYON+flight_coverme;" ),						// 		[long] [AI comms] Flight - Cover Me
+									   500 ),																					//
+								radio2_voip,																					// OU - Transmit Switch - Radio 2 (VOIP)
+								TEMPO( EXEC( "if (CAR_mode) ActKey( PULSE+KEYON+cv_inbound );" 									// IM - [CAR] CV Inbound / See you at 10
+											 "else if (WHDN_mode) ActKey( PULSE+KEYON+ground_dtceditor );" 						//		[WHDN] DTC editor
+											 "else if (AAR_mode) ActKey( PULSE+KEYON+tanker_inbound );"							//		[AAR] Tanker Inbound
+											 "else ActKey( PULSE+KEYON+atc_inbound );" ),										//		[AI comms] ATC - Inbound
+									   EXEC( "if (CAR_mode) ActKey( PULSE+KEYON+0 );" 											// 		[long] [CAR]  -
+											 "else if (WHDN_mode) ActKey( PULSE+KEYON+0 );" 									//		[long] [WHDN] -
+											 "else if (AAR_mode) ActKey( PULSE+KEYON+0 );"										//		[long] [AAR]  -
+											 "else if (COMM_mode == 0) ActKey( PULSE+KEYON+flight_rtb);" ),						//		[long] [AI comms] Flight - RTB
+									   500 ),																					//
+								radio2_voip,																					// OM - Transmit Switch - Radio 2 (VOIP)
+								TEMPO( EXEC( "if (COMM_mode == 0) ActKey( PULSE+KEYON+flight_completemissionrejoin );"			// ID - [AI comms] Flight - Complete mission and rejoin
+											 "else if (COMM_mode == 1) ActKey( PULSE+KEYON+0 );" 								//		[Cont comms] 
+											 "else if (COMM_mode == 2) ActKey( PULSE+KEYON+0 );" ),								//		[HBCW comms] 
+									   EXEC( "if (COMM_mode == 0) ActKey( PULSE+KEYON+0;" ),									// 		[long] [AI comms] 
+									   500 ),																					//
+								radio2_voip );																					// OD - Transmit Switch - Radio 2 (VOIP)
 	// MSR
-	MapKeyIOUMD(&Throttle, MSR, TEMPO( flight_spreadfour, 																// IU - Flight - Formation Spread Four
-									   flight_lineabreast, 500 ),														// 		[long] Flight - Formation Line Abreast
-								radio3_acspecific,																		// OU - Radio 3 - A/C specific function
-								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_salute );" 							// IM - [CAR] CV Salute
-											 "else if(WHDN_mode) ActKey( PULSE+KEYON+atc_requesttaxitakeoff );" 		//		[WHDN] Request taxi, take-off (short menu)
-											 "else if(AAR_mode) ActKey( PULSE+KEYON+tanker_precontact );"				//		[AAR]  Tanker "Ready for precontact" radio call
-											 "else ActKey( PULSE+KEYON+flight_fingerfour );" ),							//		Flight - Finger Four
-									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 									// 		[long] [CAR]  -
-											 "else if(WHDN_mode) ActKey( PULSE+KEYON+bsc_listmissions );" 				//		[long] [WHDN] - BSC List Missions
-											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"								//		[long] [AAR]  -
-											 "else ActKey( PULSE+KEYON+flight_echelonright );" ), 500 ),				//		[long] Flight - Formation Echelon Right
-								radio3_acspecific,																		// OM - Radio 3 - A/C specific function
-								TEMPO( flight_trail,																	// ID - Flight - Formation Trail
-									   flight_lineabreast, 500 ),														// 		[long] Flight - Formation Line Abreast
-								radio3_acspecific );																	// OD - Radio 3 - A/C specific function
+	MapKeyIOUMD(&Throttle, MSR, TEMPO( EXEC( "if (COMM_mode == 0) ActKey( PULSE+KEYON+flight_spreadfour );"						// IU - [AI comms] Flight - Formation Spread Four
+											 "else if (COMM_mode == 1) ActKey( PULSE+KEYON+cont_picture_enemy );" 				//		[Cont comms] EW radar enemy picture
+											 "else if (COMM_mode == 2) ActKey( PULSE+KEYON+0 );" ),								//		[HBCW comms] 
+									   EXEC( "if (COMM_mode == 0) ActKey( PULSE+KEYON+flight_lineabreast;" ),					// 		[long] [AI comms] Flight - Formation Line Abreast
+									   500 ),																					//
+								radio3_acspecific,																				// OU - Radio 3 - A/C specific function
+								TEMPO( EXEC( "if (CAR_mode) ActKey( PULSE+KEYON+cv_salute );" 									// IM - [CAR] CV Salute
+											 "else if (WHDN_mode) ActKey( PULSE+KEYON+atc_requesttaxitakeoff );" 				//		[WHDN] Request taxi, take-off (short menu)
+											 "else if (AAR_mode) ActKey( PULSE+KEYON+tanker_precontact );"						//		[AAR]  Tanker "Ready for precontact" radio call
+											 "else if (COMM_mode == 0) ActKey( PULSE+KEYON+flight_fingerfour );"				//		[AI comms] Flight - Finger Four
+											 "else if (COMM_mode == 1) ActKey( PULSE+KEYON+cont_picture_enemy );" ),			//		[Cont comms] EW radar enemy picture
+									   EXEC( "if (CAR_mode) ActKey( PULSE+KEYON+0 );" 											// 		[long] [CAR]  -
+											 "else if (WHDN_mode) ActKey( PULSE+KEYON+bsc_listmissions );" 						//		[long] [WHDN] - BSC List Missions
+											 "else if (AAR_mode) ActKey( PULSE+KEYON+0 );"										//		[long] [AAR]  -
+											 "else if (COMM_mode == 0) ActKey( PULSE+KEYON+flight_echelonright );" ),			//		[long] [AI comms] Flight - Formation Echelon Right
+									   500 ),																					//
+								radio3_acspecific,																				// OM - Radio 3 - A/C specific function
+								TEMPO( EXEC( "if (COMM_mode == 0) ActKey( PULSE+KEYON+flight_trail );"							// ID - [AI comms] Flight - Formation Trail
+											 "else if (COMM_mode == 1) ActKey( PULSE+KEYON+0 );" 								//		[Cont comms] 
+											 "else if (COMM_mode == 2) ActKey( PULSE+KEYON+0 );" ),								//		[HBCW comms] 
+									   EXEC( "if (COMM_mode == 0) ActKey( PULSE+KEYON+flight_lineabreast;" ),					// 		[long] [AI comms] Formation Line Abreast
+									   500 ),																					//
+								radio3_acspecific );																			// OD - Radio 3 - A/C specific function
 	// MSL
-	MapKeyIOUMD(&Throttle, MSL, TEMPO( awacs_declare,										 							// IU - AWACS Declare
-									   awacs_requestpicture, 500 ),														// 		[long] AWACS Request Picture
-								radio4_acspecific,																		// OU - Radio 4 - VOIP Intercom / A/C specific function
-								TEMPO( EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+cv_calltheball );" 						// IM - [CAR]  Call the Ball
-											 "else if(WHDN_mode) ActKey( PULSE+KEYON+ground_rearmrefuel );" 			//		[WHDN] Rearming and Refueling Window  (L_ALT+')
-											 "else if(AAR_mode) ActKey( PULSE+KEYON+awacs_bogeydope );"					//		[AAR]  Request AWACS Bogey Dope
-											 "else ActKey( PULSE+KEYON+awacs_declare );" ),								//		AWACS Declare
-									   EXEC( "if(CAR_mode) ActKey( PULSE+KEYON+0 );" 									// 		[long] [CAR]  -
-											 "else if(WHDN_mode) ActKey( PULSE+KEYON+0 );" 								//		[long] [WHDN] -
-											 "else if(AAR_mode) ActKey( PULSE+KEYON+0 );"								//		[long] [AAR]  -
-											 "else ActKey( PULSE+KEYON+awacs_requestpicture );" ), 500 ),				//		[long] AWACS Request Picture
-								radio4_acspecific,																		// OM - Radio 4 - VOIP Intercom / A/C specific function
-								TEMPO( flight_radaroffon,																// ID - Flight - Radar Off/On
-									   awacs_requestpicture, 500 ),														// 		[long] AWACS Request Picture
-								radio4_acspecific );																	// OD - Radio 4 - VOIP Intercom / A/C specific function
+	MapKeyIOUMD(&Throttle, MSL, TEMPO( EXEC( "if (COMM_mode == 0) ActKey( PULSE+KEYON+awacs_declare );"							// IU - [AI comms] AWACS Declare
+											 "else if (COMM_mode == 1) ActKey( PULSE+KEYON+cont_picture_friend );" 				//		[Cont comms] EW radar friendly picture
+											 "else if (COMM_mode == 2) ActKey( PULSE+KEYON+0 );" ),								//		[HBCW comms] 
+									   EXEC( "if (COMM_mode == 0) ActKey( PULSE+KEYON+awacs_requestpicture;" ),					// 		[long] [AI comms] AWACS Request Picture
+									   500 ),																					//
+								radio4_acspecific,																				// OU - Radio 4 - VOIP Intercom / A/C specific function
+								TEMPO( EXEC( "if (CAR_mode) ActKey( PULSE+KEYON+cv_calltheball );" 								// IM - [CAR]  Call the Ball
+											 "else if (WHDN_mode) ActKey( PULSE+KEYON+ground_rearmrefuel );" 					//		[WHDN] Rearming and Refueling Window  (L_ALT+')
+											 "else if (AAR_mode) ActKey( PULSE+KEYON+awacs_bogeydope );"						//		[AAR]  Request AWACS Bogey Dope
+											 "else if (COMM_mode == 0) ActKey( PULSE+KEYON+awacs_declare );"					//		[AI comms] AWACS Declare
+											 "else if (COMM_mode == 1) ActKey( PULSE+KEYON+cont_picture_friend );" ),			//		[Cont comms] EW radar friendly picture
+									   EXEC( "if (CAR_mode) ActKey( PULSE+KEYON+0 );" 											// 		[long] [CAR]  -
+											 "else if (WHDN_mode) ActKey( PULSE+KEYON+0 );" 									//		[long] [WHDN] -
+											 "else if (AAR_mode) ActKey( PULSE+KEYON+0 );"										//		[long] [AAR]  -
+											 "else if (COMM_mode == 0) ActKey( PULSE+KEYON+awacs_requestpicture );" ), 			//		[long] [AI comms] AWACS Request Picture
+									   500 ),																					//
+								radio4_acspecific,																				// OM - Radio 4 - VOIP Intercom / A/C specific function
+								TEMPO( EXEC( "if (COMM_mode == 0) ActKey( PULSE+KEYON+flight_radaroffon );"						// ID - [AI comms] Flight - Radar Off/On
+											 "else if (COMM_mode == 1) ActKey( PULSE+KEYON+cont_picture_friend );" 				//		[Cont comms] EW radar friendly picture
+											 "else if (COMM_mode == 2) ActKey( PULSE+KEYON+0 );" ),								//		[HBCW comms] 
+									   EXEC( "if (COMM_mode == 0) ActKey( PULSE+KEYON+awacs_requestpicture;" ),					// 		[long] [AI comms] AWACS Request Picture
+									   500 ),																					//
+								radio4_acspecific );																			// OD - Radio 4 - VOIP Intercom / A/C specific function
 	// MSP 
-	MapKeyIO(&Throttle, MSP, 	PULSE+F12,																				// I - F12 exit radio menu
-								radiomenu );			 																// O - Radio menu
+	MapKeyIO(&Throttle, MSP, 	PULSE+F12,																						// I - F12 exit radio menu
+								radiomenu );			 																		// O - Radio menu
 
 
 }	// end dcs_fighter_common_switch()	===========================================================
