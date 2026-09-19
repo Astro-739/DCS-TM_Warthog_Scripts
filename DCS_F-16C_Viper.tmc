@@ -9,9 +9,27 @@ include "DCS_Fighter_Common.tmc"
 
 // -------------------------- INITIALISE ----------------------------
 
+int CMS_fwd;
+int CMS_aft;
+int CMS_right;
+int CMS_left;
+
 int enable;
 int antennaelev_up;
 int antennaelev_down;
+int mastermode_a2a;
+int mastermode_a2g;
+int masterarm_arm;
+int masterarm_off;
+int masterarm_sim;
+int canopyhandle_toggle;
+int ecmxmit_up;
+int ecmxmit_down;
+int cmprogram_cw;
+int cmprogram_ccw;
+int rfswitch_norm;
+int rfswitch_quiet;
+int rfswitch_silent;
 
 int autopilot_ALThold;	
 int autopilot_ATThold;
@@ -59,11 +77,33 @@ int main()
 	LDGH_short	= CHAIN( DOWN+L_CTL, D(10), DOWN+USB[0x55], D(100), UP+USB[0x55], D(), UP+L_CTL );				// ICP DRIFT CUTOUT/WARN RESET 3-pos Switch: WARN RESET <> NORM (Num *)
 	SC_short	= PULSE+'d';																					// Expand/FOV Button
 
+	// Countermeasure Management Switch
+	CMS_fwd 	= CHAIN( DOWN+R_SHIFT, D(10), PULSE+';', D(), UP+R_SHIFT );										// Countermeasures Management Switch - Fwd
+	CMS_aft 	= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'.', D(), UP+R_SHIFT ); 									// Countermeasures Management Switch - Aft
+	CMS_right 	= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'/', D(), UP+R_SHIFT );										// Countermeasures Management Switch - Right
+	CMS_left 	= CHAIN( DOWN+R_SHIFT, D(10), PULSE+',', D(), UP+R_SHIFT ); 									// Countermeasures Management Switch - Left
+
 	// DX - A/C specific
 	enable 				= DX24;																					// ENABLE Switch - Depress
 	antennaelev_up		= DX13; 																				// Antenna elevation up
 	antennaelev_down	= DX14; 																				// Antenna elevation down
 
+	// Systems
+	mastermode_a2a		= PULSE+'1';
+	mastermode_a2g		= PULSE+'2';
+	masterarm_arm		= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT );								// MASTER ARM Switch - MASTER ARM
+	masterarm_sim		= CHAIN( DOWN+R_SHIFT+R_CTL, D(10), PULSE+'a', D(), UP+R_SHIFT+R_CTL );					// MASTER ARM Switch - SIMULATE
+	masterarm_off		= CHAIN( DOWN+R_CTL, D(10), PULSE+'a', D(), UP+R_CTL );									// MASTER ARM Switch - OFF
+	canopyhandle_toggle	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'c', D(), UP+L_SHIFT );								// Canopy Handle - DOWN/UP
+	ecmxmit_up			= CHAIN( DOWN+L_SHIFT+L_CTL, D(10), PULSE+'f', D(), UP+L_SHIFT+L_CTL );					// ECM XMIT Switch - Up
+	ecmxmit_down		= CHAIN( DOWN+L_SHIFT+L_CTL, D(10), PULSE+'v', D(), UP+L_SHIFT+L_CTL );					// ECM XMIT Switch - Down
+	cmprogram_cw		= CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ); 								// PROGRAM Knob - CW
+	cmprogram_ccw		= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ); 							// PROGRAM Knob - CCW
+	rfswitch_norm		= PULSE+'r';																			// RF Switch - NORM
+	rfswitch_quiet		= CHAIN( DOWN+L_CTL, D(10), PULSE+'r', D(), UP+L_CTL );									// RF Switch - QUIET
+	rfswitch_silent		= CHAIN( DOWN+R_CTL, D(10), PULSE+'r', D(), UP+R_CTL );									// RF Switch - SILENT
+
+	
 	// Start-up Sequence (overwrites common)
 	startup = SEQ( CHAIN( L_ALT, D(10), 's' ), 																	// MAIN PWR Switch - BATT
 				   CHAIN( R_SHIFT, D(10), 's' ), 																// MAIN PWR Switch - MAIN PWR
@@ -97,11 +137,6 @@ int main()
 								 DOWN+R_CTL+L_CTL, D(10), PULSE+'l', D(), UP+R_CTL+L_CTL, D(),					// FUSELAGE Switch - OFF
 								 LED(&Throttle, LED_ONOFF, LED_CURRENT-LED4) );									// LED4 OFF
 	extlight_flashsteady = CHAIN( DOWN+R_ALT, D(10), PULSE+'l', D(), UP+R_ALT );								// FLASH STEADY Switch - FLASH/STEADY
-
-//	extlight_dimbright 		SEQ( CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'l', D(), UP+R_SHIFT+L_ALT, D(),		// WING/TAIL Switch - DIM
-//										DOWN+R_CTL+L_ALT, D(10), PULSE+'l', D(), UP+R_CTL+L_ALT ),				// FUSELAGE Switch - DIM
-//								 CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'l', D(), UP+R_SHIFT+L_SHIFT, D(),	// WING/TAIL Switch - BRT
-//										DOWN+R_CTL+L_SHIFT, D(10), PULSE+'l', D(), UP+R_CTL+L_SHIFT )),			// FUSELAGE Switch - BRT
 
 
 	// A-A override function
@@ -143,11 +178,11 @@ int main()
 	// Nosewheel Steering Button
 	// S1
 	MapKeyIOUMD(&AVA_F16, S1, 	F10map_toggle,																	// IU - F10 map
-							 	's', 																			// OU - NWS A/R DISC MSL STEP Button
+							 	nws, 																			// OU - NWS A/R DISC MSL STEP Button
 							    F10map_toggle, 																	// IM - F10 map
-							    's',																 			// OM - NWS A/R DISC MSL STEP Button
+							    nws,																 			// OM - NWS A/R DISC MSL STEP Button
 							    F10map_toggle,								 									// ID - F10 map
-							    TEMPO( PULSE+'s',																// OD - [short] NWS A/R DISC MSL STEP Button
+							    TEMPO( PULSE+nws,																// OD - [short] NWS A/R DISC MSL STEP Button
 									   CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'6', D(), UP+L_ALT+R_SHIFT ),	//		[long]  Switch AG weapon type (SMS page Right MFD OSB 6)
 									   500 ));
 
@@ -160,20 +195,20 @@ int main()
 
  	// Countermeasure Management Switch
 	// H4U
-	MapKeyIO(&AVA_F16, H4U, 	CHAIN( DOWN+L_SHIFT+L_CTL, D(10), PULSE+'f', D(), UP+L_SHIFT+L_CTL ),			// I - ECM XMIT Switch - Up
-							 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+';', D(), UP+R_SHIFT ));						// O - Countermeasures Management Switch - Fwd
+	MapKeyIO(&AVA_F16, H4U, 	ecmxmit_up,																		// I - ECM XMIT Switch - Up
+							 	CMS_fwd );																		// O - Countermeasures Management Switch - Fwd
 	// H4D
-	MapKeyIO(&AVA_F16, H4D, 	CHAIN( DOWN+L_SHIFT+L_CTL, D(10), PULSE+'v', D(), UP+L_SHIFT+L_CTL ),			// I - ECM XMIT Switch - Down
-							 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'.', D(), UP+R_SHIFT )); 						// O - Countermeasures Management Switch - Aft
+	MapKeyIO(&AVA_F16, H4D, 	ecmxmit_down,																	// I - ECM XMIT Switch - Down
+							 	CMS_aft ); 																		// O - Countermeasures Management Switch - Aft
 	// H4R
-	MapKeyIO(&AVA_F16, H4R, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ), 							// I - PROGRAM Knob - CW
-			  				 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+'/', D(), UP+R_SHIFT ));						// O - Countermeasures Management Switch - Right
+	MapKeyIO(&AVA_F16, H4R, 	cmprogram_cw, 																	// I - PROGRAM Knob - CW
+			  				 	CMS_right );																	// O - Countermeasures Management Switch - Right
 	// H4L
-	MapKeyIO(&AVA_F16, H4L, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ), 						// I - PROGRAM Knob - CCW
-							 	CHAIN( DOWN+R_SHIFT, D(10), PULSE+',', D(), UP+R_SHIFT )); 						// O - Countermeasures Management Switch - Left
+	MapKeyIO(&AVA_F16, H4L, 	cmprogram_ccw, 																	// I - PROGRAM Knob - CCW
+							 	CMS_left ); 																	// O - Countermeasures Management Switch - Left
 	// H4P
 	MapKeyIO(&AVA_F16, H4P, 	0, 																				// I - 
-							 	CHAIN( DOWN+L_ALT, D(10), DOWN+'f', D(100), UP+'f', D(), UP+L_ALT ));			// O - CHAFF/FLARE Dispense Button (program 5)
+							 	cm_dispense );																	// O - CHAFF/FLARE Dispense Button (program 5)
 
 
 
@@ -252,18 +287,18 @@ int main()
 
 	// Flaps Switch (RF Switch)
 	// FLAPU
-	MapKey(&Throttle, FLAPU,  	PULSE+'r' );																	// RF Switch - NORM
+	MapKey(&Throttle, FLAPU,  	rfswitch_norm );																// RF Switch - NORM
 	// FLAPM
-	MapKey(&Throttle, FLAPM, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'r', D(), UP+L_CTL ));							// RF Switch - QUIET
+	MapKey(&Throttle, FLAPM, 	rfswitch_quiet );																// RF Switch - QUIET
 	// FLAPD
-	MapKey(&Throttle, FLAPD,  	CHAIN( DOWN+R_CTL, D(10), PULSE+'r', D(), UP+R_CTL ));							// RF Switch - SILENT
+	MapKey(&Throttle, FLAPD,  	rfswitch_silent );																// RF Switch - SILENT
 
 
 	// Canopy
 	// RDRNRM
 	MapKeyIOUMD(&Throttle, RDRNRM, 	0, 																				// IU - 
 									0,																				// OU - 
-									CHAIN( DOWN+L_SHIFT, D(10), PULSE+'c', D(), UP+L_SHIFT ),						// IM - Canopy Handle - DOWN/UP
+									canopyhandle_toggle,															// IM - Canopy Handle - DOWN/UP
 									canopy_toggle,																	// OM - Canopy - OPEN/CLOSE
 									0,																				// ID - 
 									0 );																			// OD - 
@@ -288,17 +323,12 @@ int main()
 	// IDLERON (overwrite of common)
 	MapKey(&Throttle, IDLERON, 		0 );																			// only single engine
 
-	// SC (overwrite of common)
-//	MapKeyIO(&Throttle, SC, 		TEMPO( recentre_irvr,															// I - re-centre IR tracker / VR helmet
-//									   	   PULSE+discord_mute, 500 ),												//     [long] discord mute toggle
-//									PULSE+'d' );																	// O - Expand/FOV Button
-
 
 	// U LAYER - Air-to-Air Mode
 	// BSF - LED1 ON/OFF
 	MapKeyIO(&Throttle, BSF, 	CHAIN( override, D(100),														// I - DOGFIGHT/Missile Override Switch - DOGFIGHT
-									   DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT ),						// 	   MASTER ARM Switch - MASTER ARM
-								CHAIN( PULSE+'1', D(100),														// O - A-A mode on
+									   masterarm_arm ),															// 	   MASTER ARM Switch - MASTER ARM
+								CHAIN( mastermode_a2a, D(100),													// O - A-A mode on
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED1) )); 							// 	   LED1 ON for U layer
 	MapKeyRIO(&Throttle, BSF, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'0', D(), UP+L_CTL,								// I - DOGFIGHT/Missile Override Switch - CENTER
 									   EXEC( "override_dog = 0;" 												//	   reset override status
@@ -306,7 +336,7 @@ int main()
 								CHAIN( DOWN+L_CTL, D(10), PULSE+'0', D(), UP+L_CTL,								// O - DOGFIGHT/Missile Override Switch - CENTER
 									   EXEC( "override_dog = 0;"												//	   Reset, in case override was started when in A-A mode
 									         "printf(\"override_dogfight = %i\\xa\", override_dog);"), D(),		//     print state to output window
-									   PULSE+'1', D(100),														// 	   A-A mode off
+									   mastermode_a2a, D(100),													// 	   A-A mode off
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED1) )); 							//     LED1 OFF for U layer
 	
 	// M LAYER - Navigation Mode
@@ -316,15 +346,15 @@ int main()
 
 	// D LAYER - Air-to-Ground Mode
 	// BSB - LED3 ON/OFF
-	MapKeyIO(&Throttle, BSB, 	CHAIN( PULSE+'2', D(100),														// I - A-G mode on
-									   DOWN+R_SHIFT+R_CTL, D(10), PULSE+'a', D(), UP+R_SHIFT+R_CTL,	D(),		//     MASTER ARM Switch - SIMULATE
+	MapKeyIO(&Throttle, BSB, 	CHAIN( mastermode_a2g, D(100),													// I - A-G mode on
+									   masterarm_sim, D(),														//     MASTER ARM Switch - SIMULATE
 									   DOWN+R_SHIFT, D(10), PULSE+'e', D(), UP+R_SHIFT ),						//	   GND JETT ENABLE Switch - ENABLE
-								CHAIN( PULSE+'2', D(100),														// O - A-G mode on
+								CHAIN( mastermode_a2g, D(100),													// O - A-G mode on
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED3) )); 							//     LED3 ON for D layer
-	MapKeyRIO(&Throttle, BSB, 	CHAIN( PULSE+'2', D(100),														// I - A-G mode off
-									   DOWN+R_CTL, D(10), PULSE+'a', D(), UP+R_CTL, D(),						//     MASTER ARM Switch - OFF
+	MapKeyRIO(&Throttle, BSB, 	CHAIN( mastermode_a2g, D(100),													// I - A-G mode off
+									   masterarm_off, D(),														//     MASTER ARM Switch - OFF
 									   DOWN+R_CTL, D(10), PULSE+'e', D(), UP+R_CTL ),							//	   GND JETT ENABLE Switch - OFF
-								CHAIN( PULSE+'2', D(100),														// O - A-G mode off
+								CHAIN( mastermode_a2g, D(100),													// O - A-G mode off
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED3) )); 							//     LED3 OFF for D layer
 
 

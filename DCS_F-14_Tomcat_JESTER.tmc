@@ -28,8 +28,8 @@ int dcs_f14_jester_controls()
 									   0, 500 ),																		// 	   [long] 
 								TEMPO( JSTR_break_lock,																	// M - Radar – Break Lock
 									   0, 500 ),																		// 	   [long]  
-								TEMPO( JSTR_lntrn_stblarea,																// D - LANTIRN - Stabilise Area
-									   JSTR_lntrn_undesignate, 500 ));													//	   [long] LANTIRN - Laser Undesignate
+								TEMPO( JSTR_lntrn_undesignate,															// D - LANTIRN - Laser Undesignate
+									   JSTR_lntrn_stblarea, 500 ));														//	   [long] LANTIRN - Stabilise Area
 	MapKeyR(&AVA_F16, H2D, 		0 );																					// 
 	// H2R							
 	MapKeyUMD(&AVA_F16, H2R, 	TEMPO( JSTR_context_double, 															// U - Jester Context double
@@ -42,7 +42,7 @@ int dcs_f14_jester_controls()
 	// H2L
 	MapKeyUMD(&AVA_F16, H2L, 	TEMPO( 0, 																				// U - 
 									   0, 500 ),																		// 	   [long] 
-								TEMPO( 0, 																				// U - 
+								TEMPO( 0, 																				// M - 
 									   0, 500 ),																		// 	   [long] 
 								TEMPO( JSTR_lntrn_bwhot_tggl,  															// D - LANTIRN - Black/white hot toggle
 									   JSTR_lntrn_prevtgt, 500 ));														// 	   [long] LANTIRN - Previous Target
