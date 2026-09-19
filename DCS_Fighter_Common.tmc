@@ -470,15 +470,19 @@ int dcs_fighter_common_functions()
 
 	// Night Vision function
 	nightvision 			= SEQ( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(), UP+R_SHIFT, D(),							// Night vision goggles (NVG) on
-										  EXEC( "nightvision_on = 1;" )),
+										  EXEC( "nightvision_on = 1;"													//
+										  		"printf(\"nightvision_on = 1\\xa\");" )),								//
 					   			   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(), UP+R_SHIFT, D(),							// Night vision goggles (NVG) off
-										  EXEC( "nightvision_on = 0;" )));
+										  EXEC( "nightvision_on = 0;"													//
+										  		"printf(\"nightvision_on = 0\\xa\");" )));								//
 
 	// Flashlight function
 	flashlight 				= SEQ( CHAIN( DOWN+L_ALT, D(10), PULSE+'l', D(), UP+L_ALT, D(),								// Flashlight on
-										  EXEC( "flashlight_on = 1;" )),
+										  EXEC( "flashlight_on = 1;"													//
+										  		"printf(\"flashlight_on = 1\\xa\");" )),								//
 						  		   CHAIN( DOWN+L_ALT, D(10), PULSE+'l', D(), UP+L_ALT, D(),								// Flashlight off
-										  EXEC( "flashlight_on = 0;" )));
+										  EXEC( "flashlight_on = 0;"													// 
+										  		"printf(\"flashlight_on = 0\\xa\");" )));								//
 
 	// Brightness function
 	brightness_up 			= REXEC( 100, 100, "if(nightvision_on) ActKey( PULSE+KEYON+R_CTL+R_SHIFT+'h' );"			// NVG brightness up
@@ -660,7 +664,7 @@ int dcs_fighter_common_controls()
 	MapKeyIO(&Throttle, APUON, 			CHAIN( airrefuel_open,	D(), 													// I - AIR REFUEL Switch - OPEN
 											   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5), D(),						// 		LED5 ON for Aerial Refuelling
 											   EXEC( "AAR_mode = 1;"													//		AAR_mode on
-												     "WHDN_mode = 0;"													//		set WHDN_mode = 0, otherwise conflicts //TODO test
+												     "WHDN_mode = 0;"													//		set WHDN_mode = 0, otherwise conflicts
 													 "printf(\"AAR_mode = 1\\xa\");" )),								// 		print state to output window
 										apu_on );																		// O - APU on
 	MapKeyRIO(&Throttle, APUON, 		CHAIN( airrefuel_close, D(),													// I - AIR REFUEL Switch - CLOSE
