@@ -27,6 +27,13 @@ int dscgscreen_tv;
 int cagebutton;
 int cm_dispprog_norm;
 int cm_dispprog_flares;
+int rwr_prio_open;
+int rwr_search;
+int rwr_unknown;
+int rwr_tgtsep;
+int flapsslats_norm;
+int flapsslats_out;
+int flapsslats_outdown;
 int	bombing_table;
 int	virt_browser;
 int	manual_toggle;
@@ -125,6 +132,13 @@ int main()
 	cm_dispprog_flares	= CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'q', D(), UP+L_ALT+L_SHIFT );								// Dispense Program - Flares
 	dscgscreen_radar	= CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_SHIFT );							// DSCG Screen Mode - Radar
 	dscgscreen_tv		= CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_ALT );								// DSCG Screen Mode - Tv
+	rwr_prio_open		= CHAIN( R_ALT, D(10), '1' );																		// RWR Priority/Open Mode Button
+	rwr_search			= CHAIN( R_ALT, D(10), '2' );																		// RWR Search Button
+	rwr_tgtsep			= CHAIN( R_ALT, D(10), '5' );																		// RWR Target Separation Button
+	rwr_unknown			= CHAIN( R_ALT, D(10), '6' );																		// RWR Unknown Button
+	flapsslats_norm		= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'f', D(), UP+L_CTL+L_SHIFT );								// Flaps/Slats Switch - Norm
+	flapsslats_out		= CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL );												// Flaps/Slats Switch - Out
+	flapsslats_outdown	= CHAIN( DOWN+L_CTL+L_ALT, D(10), PULSE+'f', D(), UP+L_CTL+L_ALT );									// Flaps/Slats Switch - Out&Down
 	bombing_table		= CHAIN( DOWN+R_CTL, D(10), PULSE+'b', D(), UP+R_CTL );
 	virt_browser		= CHAIN( DOWN+R_CTL, D(10), PULSE+'v', D(), UP+R_CTL );
 	manual_toggle		= CHAIN( DOWN+R_ALT, D(10), PULSE+'m', D(), UP+R_ALT );

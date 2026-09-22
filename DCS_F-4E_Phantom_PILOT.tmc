@@ -22,9 +22,9 @@ int dcs_f4e_pilot_button_definitions()
 	// Display Management Switch (overwrites common)
 	DMS_fwd 	= SEQ( dscgscreen_radar, dscgscreen_tv );																// DSCG Screen Mode - Radar/TV
 	DMS_aft 	= 0;																									// DMS aft
-	DMS_right 	= CHAIN( R_ALT, D(10), '2' );																			// RWR Search Button
-	DMS_left 	= TEMPO( CHAIN( DOWN+R_ALT, D(10), DOWN+'1', D(200), UP+'1', D(), UP+R_ALT ),							// RWR Mode - Norm/Prio toggle
-						 CHAIN( R_ALT, D(10), '5' ), 500 );																// RWR Target Separation Button
+	DMS_right 	= rwr_search;																							// RWR Search Button
+	DMS_left 	= TEMPO( rwr_prio_open,																					// RWR Mode - Norm/Prio toggle
+						 rwr_tgtsep, 500 );																				// RWR Target Separation Button
 
 	// Buttons (overwrite common)
 	SC_short	= 0;																									// 
@@ -162,16 +162,11 @@ int dcs_f4e_pilot_controls()
 
 	// Flaps Switch
 	// FLAPU
-	MapKey(&Throttle, FLAPU,  	CHAIN( D(300), DOWN+L_CTL+L_SHIFT, D(10), PULSE+'f', D(), UP+L_CTL+L_SHIFT ));		// Flaps/Slats Switch - Norm
+	MapKey(&Throttle, FLAPU,  	CHAIN( D(300), flapsslats_norm ));													// Flaps/Slats Switch - Norm
 	// FLAPM
-	MapKeyIO(&Throttle, FLAPM, 	CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'f', D(), UP+L_SHIFT+R_CTL, D(200),			// I - Slats Override Switch Cover - Open
-									   DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'f', D(), UP+R_SHIFT+L_SHIFT ),			//	   Slats Override Switch - In
-								CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));								// O - Flaps/Slats Switch - Out
-	MapKeyRIO(&Throttle, FLAPM,	CHAIN( DOWN+L_CTL+R_CTL, D(10), PULSE+'f', D(), UP+L_CTL+R_CTL ), 					// I - Slats Override Switch Cover - Close
-								0 );																				// O - 
-								//DOWN+R_SHIFT+L_CTL, D(10), PULSE+'f', D(), UP+R_SHIFT+L_CTL, D(200),				// I - Slats Override Switch - Norm
+	MapKey(&Throttle, FLAPM, 	flapsslats_out );																	// Flaps/Slats Switch - Out
 	// FLAPD	
-	MapKey(&Throttle, FLAPD,  	CHAIN( D(300), DOWN+L_CTL+L_ALT, D(10), PULSE+'f', D(), UP+L_CTL+L_ALT ));			// Flaps/Slats Switch - Out&Down
+	MapKey(&Throttle, FLAPD,  	CHAIN( D(300), flapsslats_outdown ));												// Flaps/Slats Switch - Out&Down
 
 
 	// Engine Operation
