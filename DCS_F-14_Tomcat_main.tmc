@@ -488,12 +488,12 @@ int main()
 	MapKeyIO(&Throttle, EFLNORM, 	0,															// I - 
 									CHAIN( PULSE+'1', D(100),									// O - Switch to PILOT cockpit
 										   EXEC( "dcs_f14_pilot_controls_switch();" 			//     switch to PILOT controls
-										   		 "printf(\"PILOT controls\\xa\");" )));			// 	   print state to output window
+										   		 "printf(\"F-14 PILOT controls\\xa\");" )));	// 	   print state to output window
 	// EFLOVER
 	MapKeyIO(&Throttle, EFLOVER, 	0,															// I - 
 									CHAIN( PULSE+'2', D(100),									// O - Switch to RIO cockpit
 										   EXEC( "dcs_f14ab_rio_controls();"					//     load RIO controls
-										   		 "printf(\"RIO controls\\xa\");" )));			// 	   print state to output window
+										   		 "printf(\"F-14 RIO controls\\xa\");" )));		// 	   print state to output window
 	MapKeyRIO(&Throttle, EFLOVER, 	0,															// I - 
 									0 );														// O - 
 								

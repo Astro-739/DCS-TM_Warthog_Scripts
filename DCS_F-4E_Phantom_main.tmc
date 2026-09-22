@@ -1,6 +1,6 @@
 // DCS F-4E Phantom Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.25.127
-// version 2.3, Jul 2026
+// version 2.3, Sep 2026
 
 
 // --------------------------- INCLUDE ------------------------------
@@ -15,6 +15,21 @@ include "DCS_Fighter_Common.tmc"							// all dcs fighter COMMON controls
 
 
 // -------------------------- INITIALISE ----------------------------
+
+int pinkyswitch_radar;
+int pinkyswitch_heat;
+int pinkyswitch_gun;
+int hudmode_a2a;
+int hudmode_a2g;
+int hudmode_cage;
+int dscgscreen_radar;
+int dscgscreen_tv;
+int cagebutton;
+int cm_dispprog_norm;
+int cm_dispprog_flares;
+int	bombing_table;
+int	virt_browser;
+int	manual_toggle;
 
 int autopilot;
 int extlight_posdim;	
@@ -98,7 +113,23 @@ int main()
 
 
 	// -------------------- AIRCRAFT FUNCTIONS ----------------------
-					
+
+	pinkyswitch_radar	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT );											// Gun/Missile Pinky Switch - Radar
+	pinkyswitch_heat	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT );											// Gun/Missile Pinky Switch - Heat
+	pinkyswitch_gun		= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'w', D(), UP+L_SHIFT );											// Gun/Missile Pinky Switch - Gun
+	hudmode_a2a			= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'h', D(), UP+L_SHIFT );
+	hudmode_a2g			= CHAIN( DOWN+L_CTL, D(10), PULSE+'h', D(), UP+L_CTL );
+	hudmode_cage		= CHAIN( DOWN+L_ALT, D(10), PULSE+'h', D(), UP+L_ALT );
+	cagebutton			= 'c';
+	cm_dispprog_norm	= CHAIN( DOWN+L_ALT+L_CTL, D(10), PULSE+'q', D(), UP+L_ALT+L_CTL );									// Dispense Program - Normal
+	cm_dispprog_flares	= CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'q', D(), UP+L_ALT+L_SHIFT );								// Dispense Program - Flares
+	dscgscreen_radar	= CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_SHIFT );							// DSCG Screen Mode - Radar
+	dscgscreen_tv		= CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'d', D(), UP+R_SHIFT+L_ALT );								// DSCG Screen Mode - Tv
+	bombing_table		= CHAIN( DOWN+R_CTL, D(10), PULSE+'b', D(), UP+R_CTL );
+	virt_browser		= CHAIN( DOWN+R_CTL, D(10), PULSE+'v', D(), UP+R_CTL );
+	manual_toggle		= CHAIN( DOWN+R_ALT, D(10), PULSE+'m', D(), UP+R_ALT );
+	
+
 	// Autopilot function
 	autopilot = SEQ( CHAIN( DOWN+L_ALT+L_SHIFT, D(10), PULSE+'a', D(), UP+L_ALT+L_SHIFT, D(200),						// Autopilot/AFCS on
 							EXEC( "autopilot_mode();" )),																// Set autopilot mode
@@ -258,13 +289,13 @@ int main()
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),			// 	   LED5 OFF for MANUAL Override
 									CHAIN( PULSE+'1', D(100),										// O - Switch to PILOT cockpit
 										   EXEC( "dcs_f4e_pilot_controls_switch();"					//     Switch back to PILOT controls
-												 "printf(\"PILOT controls\\xa\");" )));				// 	   print state to output window
+												 "printf(\"F-4E PILOT controls\\xa\");" )));		// 	   print state to output window
 	// EFLOVER
 	MapKeyIO(&Throttle, EFLOVER, 	CHAIN( DX22, D(),												// I - Emergency Quick Release Lever - Press
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),			// 	   LED5 ON for MANUAL Override
 									CHAIN( PULSE+'2', D(100),										// O - Switch to WSO cockpit
 										   EXEC( "dcs_f4e_wso_controls();" 							//     load WSO controls
-										   		 "printf(\"WSO controls\\xa\");" )));				// 	   print state to output window
+										   		 "printf(\"F-4E WSO controls\\xa\");" )));			// 	   print state to output window
 	MapKeyRIO(&Throttle, EFLOVER, 	0,																// I - 
 									0 );															// O - 
 								
