@@ -30,6 +30,7 @@ int dcs_f14_pilot_button_definitions()																					// In separate functi
 
 	// Buttons (overwrite common)
 	SC_short	= plm;																									// PLM button
+	LDGH_short	= 0;																									// 
 
 
 }	// end dcs_f14_pilot_button_definitions()	===================================================
@@ -157,11 +158,11 @@ int dcs_f14_pilot_controls()
 
 	// Flaps Switch
 	// FLAPU
-	MapKey(&Throttle, FLAPU,  	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ));								// Flap Switch - UP
+	MapKey(&Throttle, FLAPU,  	flaps_up );																				// Flap Switch - UP
 	// FLAPM
 	MapKey(&Throttle, FLAPM, 	0 );																					// 
 	// FLAPD	
-	MapKey(&Throttle, FLAPD,  	PULSE+'f' );																			// Flap Switch - DOWN
+	MapKey(&Throttle, FLAPD,  	flaps_down );																			// Flap Switch - DOWN
 
 	
 	// Engine Operation

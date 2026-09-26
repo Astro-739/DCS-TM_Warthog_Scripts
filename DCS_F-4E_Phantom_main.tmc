@@ -118,7 +118,6 @@ int main()
 	dcs_fighter_common_functions();						// load dcs COMMON functions
 
 
-
 	// -------------------- AIRCRAFT FUNCTIONS ----------------------
 
 	pinkyswitch_radar	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'d', D(), UP+L_SHIFT );											// Gun/Missile Pinky Switch - Radar

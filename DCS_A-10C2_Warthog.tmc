@@ -1,6 +1,6 @@
 // DCS A-10C2 Warthog Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.25.127
-// version 2.2, Nov 2025
+// version 2.3, Sep 2026
 
 
 include "target.tmh"
@@ -14,6 +14,10 @@ int mastermodecontrolbutton;
 int mastermode_aa;
 int mastermode_nav;
 int deferdelay;
+
+int eac_arm;
+int ufcrocker_up;
+int ufcrocker_down;
 
 define AB 100											// detent position at AB% of full throttle reach
 
@@ -41,7 +45,23 @@ int main()
 	TMS_right 	= CHAIN( L_CTL, D(10), RARROW );																// TMS right
 	TMS_left 	= CHAIN( L_CTL, D(10), LARROW );																// TMS left
 	
+	// Display Management Switch (overwrites common)
+	DMS_fwd 	= CHAIN( R_ALT, D(10), ';' );																	// Coolie fwd
+	DMS_aft 	= CHAIN( R_ALT, D(10), '.' );																	// Coolie aft
+	DMS_right 	= CHAIN( R_ALT, D(10), '/' );																	// Coolie right
+	DMS_left 	= CHAIN( R_ALT, D(10), ',' );																	// Coolie left
 
+	// Buttons (overwrite common)
+	LDGH_short	= 0;																							// 
+	SC_short	= 'v';																							// China Hat Fwd
+
+
+	// keybinds
+	eac_arm				= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'e', D(), UP+R_SHIFT );								// EAC Arm
+	ufcrocker_up		= CHAIN( DOWN+L_SHIFT, D(10), PULSE+';', D(), UP+L_SHIFT );								// UFC STEER UP Rocker switch
+	ufcrocker_down		= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'.', D(), UP+L_SHIFT );								// UFC STEER DOWN Rocker switch
+
+	
 	// Start-up Sequence (overwrites common)
 	startup = SEQ( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'s', D(), UP+R_SHIFT ), 									// Battery power
 				   CHAIN( DOWN+L_ALT, D(10), PULSE+'s', D(), UP+L_ALT ), 										// Inverter STBY
@@ -122,54 +142,6 @@ int main()
 							    PULSE+'m',															 			// M - [always use NAV]
 							    mastermodecontrolbutton);														// D - Master Mode Control Button
 
-/*  -------------  TO COMMON
-	// Target Management Switch
-	// H2U
-	MapKeyIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX15 );"										// I - VR zoom
-									  "else ActKey ( KEYON+DX7 );" ),											//     TrackIR zoom in
-								CHAIN( L_CTL, D(10), UARROW ));													// O - TMS up
-	MapKeyRIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( DX15 );"											// I - Release DX15
-									  "else ActKey ( DX7 );" ),													// 	   Release DX7
-								0 );																			// O - 
-	// H2D
-	MapKeyIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( PULSE+KEYON+L_ALT+'c' );"							// I - VR toggle mouse pointer
-									  "else ActKey ( KEYON+DX9 );" ),											// 	   TrackIR zoom out
-								CHAIN( L_CTL, D(10), DARROW ));													// O - TMS down
-	MapKeyRIO(&AVA_F16, H2D, 	EXEC( "if (VR_mode) ActKey ( 0 );"												// I - 
-									  "else ActKey ( DX9 );" ),													// 	   Release DX9
-								0 );																			// O - 
-	// H2R							
-	MapKeyIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX18 );"										// I - VR Right mouse click
-									  "else ActKey ( KEYON+DX8 );" ),											// 	   TrackIR snap view right MFD (LWIN+KP6)
-								CHAIN( L_CTL, D(10), RARROW ));													// O - TMS right
-	MapKeyRIO(&AVA_F16, H2R, 	EXEC( "if (VR_mode) ActKey ( DX18 );"											// I - Release DX18
-									  "else ActKey ( DX8 );" ),													// 	   Release DX8
-								0 );																			// O - 
-	// H2L
-	MapKeyIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( KEYON+DX17 );"										// I - VR Left mouse click
-									  "else ActKey ( KEYON+DX10 );" ),											// 	   TrackIR snap view left MFD (LWIN+KP4)
-								CHAIN( L_CTL, D(10), LARROW ));													// O - TMS left
-	MapKeyRIO(&AVA_F16, H2L, 	EXEC( "if (VR_mode) ActKey ( DX17 );"											// I - Release DX17
-									  "else ActKey ( DX10 );" ),												// 	   Release DX10
-								0 );																			// O - 
-
-
-/*
-	// Target Management Switch  -----  OLD
-	// H2U
-	MapKeyIO(&AVA_F16, H2U, 	CHAIN( L_CTL, D(10), UARROW ),													// I - TMS up
-							 	DX7 );		 																	// O - zoom in  (KP*)
-	// H2D
-	MapKeyIO(&AVA_F16, H2D, 	CHAIN( L_CTL, D(10), DARROW ),													// I - TMS down
-							 	DX9 );																			// O - zoom out (KP\)
-	// H2R							
-	MapKeyIO(&AVA_F16, H2R, 	CHAIN( L_CTL, D(10), RARROW ),													// I - TMS right
-							 	DX8 ); 																			// O - snap view right MFD (LWIN+KP6)
-	// H2L
-	MapKeyIO(&AVA_F16, H2L, 	CHAIN( L_CTL, D(10), LARROW ),													// I - TMS left
-							 	DX10 ); 																		// O - snap view left MFD (LWIN+KP4)
-*/
-
 
  	// Countermeasure Management Switch
 	// H4U
@@ -235,25 +207,25 @@ int main()
 	// EACON
 	MapKeyIOUMD(&Throttle, EACON,	0, 																			// IU - 
 									0,																			// OU - 
-									CHAIN( DOWN+R_SHIFT, D(10), PULSE+'e', D(), UP+R_SHIFT ),					// IM - EAC Arm
-									CHAIN( DOWN+L_CTL, D(10), PULSE+'g', D(), UP+L_CTL ), 						// OM - gear up 
+									eac_arm,																	// IM - EAC Arm
+									gear_up, 																	// OM - gear up 
 									0,																			// ID - 
 									0 );																		// OD -
 	// EACOFF
 	MapKeyIOUMD(&Throttle, EACOFF, 	0, 																			// IU -
 									0,																			// OU - 
 									0,																			// IM - 
-									CHAIN( DOWN+L_SHIFT, D(10), PULSE+'g', D(), UP+L_SHIFT ), 					// OM - gear down
+									gear_down, 																	// OM - gear down
 									0,																			// ID - 
 									0 );																		// OD -
 
 	
 	// Coolie Switch
 	// CSU
-	MapKeyIO(&Throttle, CSU, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'.', D(), UP+L_SHIFT ),						// I - UFC STEER DOWN Rocker switch
+	MapKeyIO(&Throttle, CSU, 	ufcrocker_down,																	// I - UFC STEER DOWN Rocker switch
 								END );																			// O - DMS down
 	// CSD
-	MapKeyIO(&Throttle, CSD, 	CHAIN( DOWN+L_SHIFT, D(10), PULSE+';', D(), UP+L_SHIFT ),						// I - UFC STEER UP Rocker switch
+	MapKeyIO(&Throttle, CSD, 	ufcrocker_up,																	// I - UFC STEER UP Rocker switch
 								HOME );																			// O - DMS up
 	// CSR
 	MapKeyIO(&Throttle, CSR, 	0, 																				// I - 
@@ -272,8 +244,8 @@ int main()
 							 	'c' );																			// O - China Hat Aft
 */
 
-	// Left Throttle Button
-	MapKeyIO(&Throttle, LTB, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'e', D(), UP+L_CTL ), 							// I - EJECT
+	// Left Throttle Button (overwrite of common)
+	MapKeyIO(&Throttle, LTB, 	eject, 																			// I - EJECT
 								'q' );																			// O - Left Throttle Button
 								
 
@@ -298,22 +270,14 @@ int main()
 									CHAIN( PULSE+DX22, D(),														// O - Flight control - MANUAL REVERSION    ********* FIX DX in DCS
 										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ));						// 	   LED5 ON for MANUAL
 
-	// SC (overwrite of common)
-	MapKeyIO(&Throttle, SC, 	TEMPO( CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL ),					// I - re-centre IR tracker / VR helmet
-									   PULSE+DX21, 500 ),														//     [long] discord mute toggle
-								'v' );																			// O - China Hat Fwd
 
 	// U LAYER - Air-to-Air Mode
 	// BSF - LED1 ON/OFF
 	MapKeyIO(&Throttle, BSF, 	0,																				// I - 
 								CHAIN( mastermode_aa, D(100),													// O - A-A mode on
-									   //DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT,	D(100),					// 	   Master switch ARM
-									   //DOWN+R_SHIFT+R_CTL, D(10), PULSE+'g', D(), UP+R_SHIFT+R_CTL,				//     GUN/PAC switch GUNARM
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED1) )); 							// 	   LED1 ON for U layer
 	MapKeyRIO(&Throttle, BSF, 	0,																				// I - 
 								CHAIN( PULSE+'m', D(100),														// O - A-A mode off
-									   //DOWN+R_CTL, D(10), PULSE+'a', D(), UP+R_CTL,	D(100),						//     Master switch SAFE
-									   //DOWN+R_CTL, D(10), PULSE+'g', D(), UP+R_CTL,								//     GUN/PAC switch SAFE
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED1) )); 							//     LED1 OFF for U layer
 	
 	// M LAYER - Navigation Mode
@@ -325,13 +289,9 @@ int main()
 	// BSB - LED3 ON/OFF
 	MapKeyIO(&Throttle, BSB, 	0,																				// I -
 								CHAIN( mastermodecontrolbutton, D(100),											// O - A-G mode on
-									   //DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT,	D(100),					//     Master switch ARM
-									   //DOWN+R_SHIFT, D(10), PULSE+'g', D(), UP+R_SHIFT,							//     GUN/PAC switch ARM
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED3) )); 							//     LED3 ON for D layer
 	MapKeyRIO(&Throttle, BSB, 	0,																				// I -
 								CHAIN( mastermode_nav, D(100),													// O - A-G mode off
-									   //DOWN+R_CTL, D(10), PULSE+'a', D(), UP+R_CTL,	D(100),						//     Master switch SAFE
-									   //DOWN+R_CTL, D(10), PULSE+'g', D(), UP+R_CTL,								//     GUN/PAC switch SAFE
 									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED3) )); 							//     LED3 OFF for D layer
 
 

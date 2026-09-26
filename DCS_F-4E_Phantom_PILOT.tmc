@@ -28,7 +28,8 @@ int dcs_f4e_pilot_button_definitions()
 
 	// Buttons (overwrite common)
 	SC_short	= 0;																									// 
-
+	LDGH_short	= 0;																									// 
+	
 
 }	// end dcs_f4e_pilot_button_definitions()	===================================================
 
