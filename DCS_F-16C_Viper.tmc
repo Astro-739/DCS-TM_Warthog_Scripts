@@ -1,6 +1,6 @@
 // DCS F-16C Viper Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.25.127
-// version 2.4, Aug 2026
+// version 3.0, Oct 2026
 
 
 include "target.tmh"
@@ -30,6 +30,21 @@ int cmprogram_ccw;
 int rfswitch_norm;
 int rfswitch_quiet;
 int rfswitch_silent;
+int gndjettison_enable;
+int gndjettison_off;
+int overrideswitch_dog;
+int overrideswitch_msl;
+int overrideswitch_cent;
+int mfd_right_osb06;
+int icp_dedrocker_incr;
+int icp_dedrocker_decr;
+int icp_dobber_seq;
+int icp_dobber_ret;
+int icp_priobutton_0;
+int icp_priobutton_7;
+int fuelqtysel_cw;
+int fuelqtysel_norm;
+int jfsswitch_start2;
 
 int autopilot_ALThold;	
 int autopilot_ATThold;
@@ -39,7 +54,7 @@ char autopilot_mode = 0;
 
 int parkingbrake;
 
-int override;	
+int override_dogfight;	
 char override_dog = 0;		
 
 define AB 75											// detent position at AB% of full throttle reach
@@ -85,10 +100,10 @@ int main()
 
 	// DX - A/C specific
 	enable 				= DX24;																					// ENABLE Switch - Depress
-	antennaelev_up		= DX13; 																				// Antenna elevation up
-	antennaelev_down	= DX14; 																				// Antenna elevation down
+	antennaelev_up		= chinahat_fwd; 																		// Antenna elevation up (DX13)
+	antennaelev_down	= chinahat_back; 																		// Antenna elevation down (DX14)
 
-	// Systems
+	// Keybindings
 	mastermode_a2a		= PULSE+'1';
 	mastermode_a2g		= PULSE+'2';
 	masterarm_arm		= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT );								// MASTER ARM Switch - MASTER ARM
@@ -102,12 +117,27 @@ int main()
 	rfswitch_norm		= PULSE+'r';																			// RF Switch - NORM
 	rfswitch_quiet		= CHAIN( DOWN+L_CTL, D(10), PULSE+'r', D(), UP+L_CTL );									// RF Switch - QUIET
 	rfswitch_silent		= CHAIN( DOWN+R_CTL, D(10), PULSE+'r', D(), UP+R_CTL );									// RF Switch - SILENT
+	gndjettison_enable	= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'e', D(), UP+R_SHIFT );								// GND JETT ENABLE Switch - ENABLE
+	gndjettison_off		= CHAIN( DOWN+R_CTL, D(10), PULSE+'e', D(), UP+R_CTL );									// GND JETT ENABLE Switch - OFF
+	overrideswitch_cent	= CHAIN( DOWN+L_CTL, D(10), PULSE+'0', D(), UP+L_CTL );									// DOGFIGHT/Missile Override Switch - CENTER
+	overrideswitch_dog	= CHAIN( DOWN+L_CTL, D(10), PULSE+'3', D(), UP+L_CTL );									// DOGFIGHT/Missile Override Switch - DOGFIGHT
+	overrideswitch_msl	= CHAIN( DOWN+L_CTL, D(10), PULSE+'4', D(), UP+L_CTL );									// DOGFIGHT/Missile Override Switch - MISSILE OVERRIDE
+	mfd_right_osb06		= CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'6', D(), UP+L_ALT+R_SHIFT );					// Switch AG weapon type (SMS page Right MFD OSB 6)
+	icp_dedrocker_incr	= CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x57], D(), UP+L_CTL );							// ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
+	icp_dedrocker_decr	= CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x56], D(), UP+L_CTL );							// ICP DED Increment/Decrement Switch - Decrement   (L_CTL+NUM-)
+	icp_dobber_seq		= CHAIN( L_CTL, D(10), RARROW ); 														// ICP Data Control Switch - SEQ (dobber sequence)
+	icp_dobber_ret		= CHAIN( L_CTL, D(10), LARROW ); 														// ICP Data Control Switch - RET (dobber return)
+	icp_priobutton_0	= CHAIN( L_CTL, D(10), KP0 );															// ICP Priority Function Button - 0 (M-SEL)
+	icp_priobutton_7	= CHAIN( L_CTL, D(10), KP7 );															// ICP Priority Function Button - 7 (MARK)
+	fuelqtysel_cw		= CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'v', D(), UP+R_CTL+R_SHIFT );					// FUEL QTY SEL Knob - CW
+	fuelqtysel_norm		= CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'c', D(), UP+R_CTL+R_SHIFT ); 				// FUEL QTY SEL Knob - NORM
+	jfsswitch_start2	= CHAIN( DOWN+L_SHIFT, D(10), DOWN+'s', D(100), UP+'s', D(), UP+L_SHIFT );				// JFS Switch - START 2
 
-	
+
 	// Start-up Sequence (overwrites common)
-	startup = SEQ( CHAIN( L_ALT, D(10), 's' ), 																	// MAIN PWR Switch - BATT
-				   CHAIN( R_SHIFT, D(10), 's' ), 																// MAIN PWR Switch - MAIN PWR
-				   CHAIN( R_CTL, D(10), 's' )); 																// JFS Switch - START 1
+	startup 			= SEQ( CHAIN( L_ALT, D(10), 's' ), 														// MAIN PWR Switch - BATT
+				   			   CHAIN( R_SHIFT, D(10), 's' ), 													// MAIN PWR Switch - MAIN PWR
+				   			   CHAIN( R_CTL, D(10), 's' )); 													// JFS Switch - START 1
 
 
 	// Autopilot function
@@ -140,10 +170,9 @@ int main()
 
 
 	// A-A override function
-	override 			= EXEC( "if(!override_dog) ActKey( PULSE+KEYON+L_CTL+'3' );"							// DOGFIGHT/Missile Override Switch - DOGFIGHT
-								 "if(override_dog) ActKey( PULSE+KEYON+L_CTL+'4' );"							// DOGFIGHT/Missile Override Switch - MISSILE OVERRIDE
-								 "override_dog = !override_dog;" 												// switch override_dog
-								 "printf(\"override_dogfight = %i\\xa\", override_dog);" );						// print state to output window
+	override_dogfight	= EXEC( "if(!override_dog) ActKey( PULSE+KEYON+overrideswitch_dog );"					// DOGFIGHT/Missile Override Switch - DOGFIGHT
+								"if(override_dog) ActKey( PULSE+KEYON+overrideswitch_cent );"					// DOGFIGHT/Missile Override Switch - CENTER
+								"override_dog = !override_dog;" ); 												// switch override_dog
 
 
 	// Parking Brake 
@@ -180,17 +209,16 @@ int main()
 	MapKeyIOUMD(&AVA_F16, S1, 	F10map_toggle,																	// IU - F10 map
 							 	nws, 																			// OU - NWS A/R DISC MSL STEP Button
 							    F10map_toggle, 																	// IM - F10 map
-							    nws,																 			// OM - NWS A/R DISC MSL STEP Button
+							    nws,																		 	// OM - NWS A/R DISC MSL STEP Button
 							    F10map_toggle,								 									// ID - F10 map
 							    TEMPO( PULSE+nws,																// OD - [short] NWS A/R DISC MSL STEP Button
-									   CHAIN( DOWN+L_ALT+R_SHIFT, D(10), PULSE+'6', D(), UP+L_ALT+R_SHIFT ),	//		[long]  Switch AG weapon type (SMS page Right MFD OSB 6)
-									   500 ));
+									   mfd_right_osb06, 500 ));													//		[long]  Switch AG weapon type (SMS page Right MFD OSB 6)
 
 
 	// Expand FOV Button - S3
-	MapKeyUMD(&AVA_F16, S3,     override,																		// U - dogfight then missile override
+	MapKeyUMD(&AVA_F16, S3,     override_dogfight,																// U - dogfight override
 							    autopilot,															 			// M - autopilot on/off (Autopilot PITCH Switch - ALT HOLD)
-							    0);																				// D - 
+							    override_dogfight );															// D - dogfight override
 
 
  	// Countermeasure Management Switch
@@ -256,23 +284,22 @@ int main()
 
 	// Coolie Switch
 	// CSU
-	MapKeyIO(&Throttle, CSU, 	TEMPO( CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x56], D(), UP+L_CTL ),				// I - ICP DED Increment/Decrement Switch - Decrement   (L_CTL+NUM-)
+	MapKeyIO(&Throttle, CSU, 	TEMPO( icp_dedrocker_decr,														// I - ICP DED Increment/Decrement Switch - Decrement   (L_CTL+NUM-)
 							 		   seat_down, 500 ),														//	   [long] Seat down
-								TEMPO( CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'v', D(), UP+R_CTL+R_SHIFT ),	// O - FUEL QTY SEL Knob - CW
-								       CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'c', D(), UP+R_CTL+R_SHIFT ), 	//	   [long] FUEL QTY SEL Knob - NORM
-									   500 ));																	//
+								TEMPO( fuelqtysel_cw,															// O - FUEL QTY SEL Knob - CW
+								       fuelqtysel_norm, 500 ));												 	//	   [long] FUEL QTY SEL Knob - NORM
 	// CSD
-	MapKeyIO(&Throttle, CSD, 	TEMPO( CHAIN( DOWN+L_CTL, D(10), PULSE+USB[0x57], D(), UP+L_CTL ),				// I - ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
+	MapKeyIO(&Throttle, CSD, 	TEMPO( icp_dedrocker_incr,														// I - ICP DED Increment/Decrement Switch - Increment   (L_CTL+NUM+)
 							 		   seat_up, 500 ),															//	   [long] Seat up
 								enable );																		// O - ENABLE Switch - Depress
 	// CSR
-	MapKeyIO(&Throttle, CSR, 	CHAIN( L_CTL, D(10), RARROW ), 													// I - ICP Data Control Switch - SEQ (dobber sequence)
-							 	uncage );																		// O - UNCAGE Switch
+	MapKeyIO(&Throttle, CSR, 	icp_dobber_seq, 																// I - ICP Data Control Switch - SEQ (dobber sequence)
+							 	sidewinder_uncage );															// O - UNCAGE Switch
 	// CSL
-	MapKeyIO(&Throttle, CSL, 	CHAIN( L_CTL, D(10), LARROW ), 													// I - ICP Data Control Switch - RET (dobber return)
+	MapKeyIO(&Throttle, CSL, 	icp_dobber_ret, 																// I - ICP Data Control Switch - RET (dobber return)
 							 	TEMPO( EXEC( "if(WHDN_mode) ActKey( PULSE+KEYON+parkingbrake );" 				// O - [WHDN] Toggle parking brake
-											 "else ActKey (PULSE+KEYON+L_CTL+KP7);" ),							// 	   ICP Priority Function Button - 7 (MARK)
-									   CHAIN( L_CTL, D(10), KP0 ), 500 ));										//	   [long] ICP Priority Function Button - 0 (M-SEL)
+											 "else ActKey (PULSE+KEYON+icp_priobutton_7);" ),					// 	   ICP Priority Function Button - 7 (MARK)
+									   icp_priobutton_0, 500 ));												//	   [long] ICP Priority Function Button - 0 (M-SEL)
 									   
 
 	// China Hat (overwrite of common)
@@ -307,7 +334,7 @@ int main()
 	// EOLIGN in common
 	// EOLNORM in common
 	// EOLMOTOR
-	MapKeyIO(&Throttle, EOLMOTOR, 	CHAIN( DOWN+L_SHIFT, D(10), DOWN+'s', D(100), UP+'s', D(), UP+L_SHIFT ),		// I - JFS Switch - START 2
+	MapKeyIO(&Throttle, EOLMOTOR, 	jfsswitch_start2,																// I - JFS Switch - START 2
 									0 ); 																			// O - 
 	// EORIGN (overwrites common)
 	MapKey(&Throttle, EORIGN, 		0 ); 																			// only single engine
@@ -326,46 +353,35 @@ int main()
 
 	// U LAYER - Air-to-Air Mode
 	// BSF - LED1 ON/OFF
-	MapKeyIO(&Throttle, BSF, 	CHAIN( override, D(100),														// I - DOGFIGHT/Missile Override Switch - DOGFIGHT
-									   masterarm_arm ),															// 	   MASTER ARM Switch - MASTER ARM
-								CHAIN( mastermode_a2a, D(100),													// O - A-A mode on
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED1) )); 							// 	   LED1 ON for U layer
-	MapKeyRIO(&Throttle, BSF, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'0', D(), UP+L_CTL,								// I - DOGFIGHT/Missile Override Switch - CENTER
-									   EXEC( "override_dog = 0;" 												//	   reset override status
-									         "printf(\"override_dogfight = %i\\xa\", override_dog);"), D(100)),	//     print state to output window
-								CHAIN( DOWN+L_CTL, D(10), PULSE+'0', D(), UP+L_CTL,								// O - DOGFIGHT/Missile Override Switch - CENTER
-									   EXEC( "override_dog = 0;"												//	   Reset, in case override was started when in A-A mode
-									         "printf(\"override_dogfight = %i\\xa\", override_dog);"), D(),		//     print state to output window
-									   mastermode_a2a, D(100),													// 	   A-A mode off
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED1) )); 							//     LED1 OFF for U layer
+	MapKeyIO(&Throttle, BSF, 	CHAIN( override_dogfight, D(200), masterarm_arm, D(), throttle_led1_on ),					// I - DOGFIGHT/Missile Override Switch - DOGFIGHT; MASTER ARM Switch - MASTER ARM; LED1 ON for U layer
+								CHAIN( mastermode_a2a, D(100), throttle_led1_on ));											// O - A-A mode on; LED1 ON for U layer
+	MapKeyRIO(&Throttle, BSF, 	CHAIN( throttle_led1_off, D(),																// I - LED1 OFF for U layer
+									   overrideswitch_cent, D(), EXEC( "override_dog = 0;" )),								//	   DOGFIGHT/Missile Override Switch - CENTER; reset dogfight override status
+								CHAIN( mastermode_a2a, D(100), throttle_led1_off, D(),										// O - A-A mode off; LED1 OFF for U layer
+									   overrideswitch_cent, D(), EXEC( "override_dog = 0;" )));								//	   DOGFIGHT/Missile Override Switch - CENTER; Reset, in case dogfight override was started when in A-A mode
 	
 	// M LAYER - Navigation Mode
 	// BSM - LED2 ON/OFF
-	MapKey(&Throttle, BSM, 		CHAIN( D(200), LED(&Throttle, LED_ONOFF, LED_CURRENT+LED2) ));					// LED2 ON for M layer
-	MapKeyR(&Throttle, BSM, 	LED(&Throttle, LED_ONOFF, LED_CURRENT-LED2) ); 									// LED2 OFF for M layer
+	MapKey(&Throttle, BSM, 		throttle_led2_on );																			// LED2 ON for M layer
+	MapKeyR(&Throttle, BSM, 	throttle_led2_off ); 																		// LED2 OFF for M layer
 
 	// D LAYER - Air-to-Ground Mode
 	// BSB - LED3 ON/OFF
-	MapKeyIO(&Throttle, BSB, 	CHAIN( mastermode_a2g, D(100),													// I - A-G mode on
-									   masterarm_sim, D(),														//     MASTER ARM Switch - SIMULATE
-									   DOWN+R_SHIFT, D(10), PULSE+'e', D(), UP+R_SHIFT ),						//	   GND JETT ENABLE Switch - ENABLE
-								CHAIN( mastermode_a2g, D(100),													// O - A-G mode on
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED3) )); 							//     LED3 ON for D layer
-	MapKeyRIO(&Throttle, BSB, 	CHAIN( mastermode_a2g, D(100),													// I - A-G mode off
-									   masterarm_off, D(),														//     MASTER ARM Switch - OFF
-									   DOWN+R_CTL, D(10), PULSE+'e', D(), UP+R_CTL ),							//	   GND JETT ENABLE Switch - OFF
-								CHAIN( mastermode_a2g, D(100),													// O - A-G mode off
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED3) )); 							//     LED3 OFF for D layer
+	MapKeyIO(&Throttle, BSB, 	CHAIN( mastermode_a2g, D(100), masterarm_sim, D(), gndjettison_enable ),					// I - A-G mode on; MASTER ARM Switch - SIMULATE; GND JETT ENABLE Switch - ENABLE
+								CHAIN( mastermode_a2g, D(100), throttle_led3_on ));											// O - A-G mode on; LED3 ON for D layer
+	MapKeyRIO(&Throttle, BSB, 	CHAIN( mastermode_a2g, D(100), masterarm_off, D(), gndjettison_off ),						// I - A-G mode off; MASTER ARM Switch - OFF; GND JETT ENABLE Switch - OFF
+								CHAIN( mastermode_a2g, D(100), throttle_led3_off, D(),										// O - A-G mode off; LED3 OFF for D layer
+									   overrideswitch_cent, D(), EXEC( "override_dog = 0;" )));								//	   DOGFIGHT/Missile Override Switch - CENTER; Reset, in case dogfight override was started when in A-G mode
 
 
 	// ---------------------------- MFD -----------------------------
 
 	// Backup on Left MFD for MAN RNG Knob
-	MapKeyIO(&LMFD, SYMU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'o' ), 											// I - Right MFD SYM Up
-								CHAIN( R_WIN+R_CTL, D(10), 'o' ));												// O - MAN RNG Knob - CW
+	MapKeyIO(&LMFD, SYMU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'o' ), 													// I - Right MFD SYM Up
+								CHAIN( R_WIN+R_CTL, D(10), 'o' ));														// O - MAN RNG Knob - CW
 
-	MapKeyIO(&LMFD, SYMD, 		CHAIN( R_WIN+R_SHIFT, D(10), 'k' ), 											// I - Right MFD SYM Down
-								CHAIN( R_WIN+R_CTL, D(10), 'k' ));												// O - MAN RNG Knob - CCW
+	MapKeyIO(&LMFD, SYMD, 		CHAIN( R_WIN+R_SHIFT, D(10), 'k' ), 													// I - Right MFD SYM Down
+								CHAIN( R_WIN+R_CTL, D(10), 'k' ));														// O - MAN RNG Knob - CCW
 
 
 

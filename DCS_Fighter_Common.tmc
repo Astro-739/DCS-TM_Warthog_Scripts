@@ -1,6 +1,6 @@
 // DCS Fighter Common Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.25.127
-// version 3.3, Aug 2026
+// version 3.4, Oct 2026
 //
 //
 // All common functions across DCS modules:
@@ -65,6 +65,7 @@ int awacs_declare;
 int uhf_radiomenu;
 int vhf_radiomenu;
 int radiomenu;
+int radiomenu_exit;
 
 int	cv_requestlaunch;
 int	cv_inbound;
@@ -82,7 +83,14 @@ int jtac_checkout;
 
 int ground_rearmrefuel;
 int ground_dtceditor;
-int ground_removewheelchocks;
+int ground_wheelchocks_place;
+int ground_wheelchocks_remove;
+int ground_elecpower_on;
+int ground_elecpower_off;
+int ground_airsupply_connect;
+int ground_airsupply_apply;
+int ground_airsupply_disconnect;
+
 int groundcrew;
 
 int atc_requeststartup;
@@ -129,7 +137,7 @@ int	trim_left;
 int guntrigger_1st;
 int	guntrigger_2nd;
 int weaponrelease;
-int uncage;
+int sidewinder_uncage;
 int cm_dispense;
 
 int radio1_voip;
@@ -140,6 +148,8 @@ int radio4_acspecific;
 int nws;
 int canopy_toggle;
 int wheelbrake;
+int chinahat_fwd;
+int chinahat_back;
 int attcontrol_override;
 int engine_ignition_left;
 int engine_ignition_right;
@@ -161,12 +171,18 @@ int throttle_right_off;
 int throttle_right_idle;
 int airrefuel_open;
 int airrefuel_close;
+int	sidewinder_volume_up;
+int	sidewinder_volume_down;
+int	radio1_volume_up;
+int	radio1_volume_down;
+int	rwr_volume_up;
+int	rwr_volume_down;
 
 int zoom_in;
 int zoom_out;
 int snapview_right;
 int snapview_left;
-int vrzoom;
+int vrzoom_in;
 int vrzoom_spyglass;
 int mouseclick_left;
 int mouseclick_right;
@@ -198,14 +214,14 @@ int charactercustm;
 int sunglasses;
 int oxygenmask;
 int helmetvisor;
-int visortinteffect;
-char tinteffect_on = 0;
+int visortinteffect_toggle;
+char tinteffect = 0;
 
-int nightvision;				
-char nightvision_on = 0;		
+int nightvision_toggle;				
+char nightvision = 0;		
 
-int flashlight;				
-char flashlight_on = 0;		
+int flashlight_toggle;				
+char flashlight = 0;		
 
 int brightness_up;	
 int brightness_down;	
@@ -215,15 +231,32 @@ char afterburnerdetent_present = 0;						// 0 - no detent present,
 char afterburnerdetent_lifted = 0;						// 0 - detent prevents throttle from going into afterburner, 
 														// 1 - detent is lifted and throttle moves into afterburner
 
-char CAR_mode = 0;										// CarrierOps mode
+int WHDN_mode_on;
+int WHDN_mode_off
 char WHDN_mode = 1;										// Wheels Down mode (assumption start on ground)
+int AAR_mode_on;
+int AAR_mode_off;
 char AAR_mode = 0;										// Air-to-Air Refuelling mode
+int CAR_mode_on;
+int CAR_mode_off;
+char CAR_mode = 0;										// CarrierOps mode
+int VR_mode_toggle;
 char VR_mode = 1;										// VR zoom controls mode (assumption start with VR)
-
+int COMM_mode_adjust;
 int COMM_mode = 1;										// Server Comms mode:  0 - AI wingmen, 1 - Contention, 2 - Heatblur CW, 3 - BSC
-int comm_mode_adjust;
 
 int tacview_bookmark;
+
+int throttle_led1_on;
+int throttle_led1_off;
+int throttle_led2_on;
+int throttle_led2_off;
+int throttle_led3_on;
+int throttle_led3_off;
+int throttle_led4_on;
+int throttle_led4_off;
+int throttle_led5_on;
+int throttle_led5_off;
 
 
 
@@ -279,6 +312,21 @@ int dcs_fighter_common_configuration()
 	
 	SetShiftButton(&AVA_F16, S4, &Throttle, BSF, BSB, 0);
 
+	// ---------------------- Warthog LEDs --------------------------
+
+	throttle_led1_on	= LED( &Throttle, LED_ONOFF, LED_CURRENT+LED1 );
+	throttle_led1_off	= LED( &Throttle, LED_ONOFF, LED_CURRENT-LED1 );
+	throttle_led2_on	= LED( &Throttle, LED_ONOFF, LED_CURRENT+LED2 );
+	throttle_led2_off	= LED( &Throttle, LED_ONOFF, LED_CURRENT-LED2 );
+	throttle_led3_on	= LED( &Throttle, LED_ONOFF, LED_CURRENT+LED3 );
+	throttle_led3_off	= LED( &Throttle, LED_ONOFF, LED_CURRENT-LED3 );
+	throttle_led4_on	= LED( &Throttle, LED_ONOFF, LED_CURRENT+LED4 );
+	throttle_led4_off	= LED( &Throttle, LED_ONOFF, LED_CURRENT-LED4 );
+	throttle_led5_on	= LED( &Throttle, LED_ONOFF, LED_CURRENT+LED5 );
+	throttle_led5_off	= LED( &Throttle, LED_ONOFF, LED_CURRENT-LED5 );
+
+
+
 }	// =====  end dcs_fighter_common_configuration()  =============================================
 
 
@@ -323,9 +371,15 @@ int dcs_fighter_common_functions()
 	jtac_checkout				= CHAIN( PULSE+USB[0x31], D(200), PULSE+F2 ); 											// Radio menu (\), JTAC, Check Out
 
 	ground_rearmrefuel			= CHAIN( DOWN+L_ALT, D(10), PULSE+USB[0x34], D(), UP+L_ALT );        			  							// Rearming and Refueling Window   (L_ALT+')
-	ground_removewheelchocks	= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F5, D(200), PULSE+F2 );		// Radio menu (\), Prev, GroundCrew, Wheel Chocks, Remove
 	ground_dtceditor			= CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'k', D(), UP+R_CTL+R_SHIFT );										// DTC editor window
-	
+	ground_wheelchocks_place	= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F4, D(200), PULSE+F1 );		// Radio menu (\), Prev, Ground crew, Wheel Chocks, Place
+	ground_wheelchocks_remove	= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F4, D(200), PULSE+F2 );		// Radio menu (\), Prev, Ground crew, Wheel Chocks, Remove
+	ground_elecpower_on			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F2, D(200), PULSE+F1 ); 		// Radio menu (\), Prev, Ground crew, Ground Electric Power, On
+	ground_elecpower_off		= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F2, D(200), PULSE+F2 ); 		// Radio menu (\), Prev, Ground crew, Ground Electric Power, Off
+	ground_airsupply_connect	= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F5, D(200), PULSE+F1 );		// Radio menu (\), Prev, Ground crew, Ground Air Supply, Connect
+	ground_airsupply_apply		= CHAIN( PULSE+USB[0x31], D(100), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F5, D(200), PULSE+F3 );		// Radio menu (\), Prev, Ground crew, Ground Air Supply, Apply
+	ground_airsupply_disconnect	= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F5, D(200), PULSE+F2 );		// Radio menu (\), Prev, Ground crew, Ground Air Supply, Disconnect
+
 	atc_requeststartup			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F3 );		// Radio menu (\), Prev, ATC, Airfield, Request start-up
 	atc_requesttaxitakeoff		= CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 );		// Radio menu (\), Prev, ATC, Airfield, Request taxi/take-off
 	atc_inbound					= CHAIN( PULSE+USB[0x31], D(200), PULSE+F5, D(200), PULSE+F1, D(200), PULSE+F1 ); 							// Radio menu (\), ATC, Airfield, Inbound
@@ -343,6 +397,7 @@ int dcs_fighter_common_functions()
 	uhf_radiomenu				= CHAIN( DOWN+R_ALT, D(10), PULSE+USB[0x31], D(), UP+R_ALT );							// Transmit Switch - UHF (radio menu)
 	vhf_radiomenu				= CHAIN( DOWN+R_CTL, D(10), PULSE+USB[0x31], D(), UP+R_CTL );							// Transmit Switch - VHF (radio menu)
 	radiomenu					= PULSE+USB[0x31];																		// Transmit Switch - radio menu
+	radiomenu_exit				= PULSE+F12;																			// F12 exit radio menu
 
 	// Heatblur CW server comms
 	hbcw_picture_bogeydope		= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F1, D(200), PULSE+F1 ); 		// Radio menu (\), Other, EWR System, Bogey Dope
@@ -361,12 +416,8 @@ int dcs_fighter_common_functions()
 	bsc_startmission			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F2, D(200), PULSE+F4 ); 		// Radio menu (\), Other, Missions, Start
 	bsc_validatelanding			= CHAIN( PULSE+USB[0x31], D(200), PULSE+F10, D(200), PULSE+F1, D(200), PULSE+F3 ); 		// Radio menu (\), Other, Player, Validate Landing
 
-    // Start-up Sequence (can be specified per airplane)
-	startup 	= CHAIN( R_SHIFT, D(10), 's' ); 																		// Battery / MAIN PWR Switch
-
-	// Ground Crew Sequence (can be specified per airplane)
-	groundcrew  = 0;																									// Ground Crew defined per aircraft when needed
-
+	// -------------- Functions specified per airplane --------------
+	
 	// Target Management Switch / Armament Selector (can be specified per airplane)
 	TMS_fwd 	= 0;
 	TMS_aft 	= 0;
@@ -383,6 +434,32 @@ int dcs_fighter_common_functions()
 	LDGH_short	= 0;
 	SC_short	= 0;
 
+	// Start-up Sequence (can be specified per airplane)
+	startup 	= CHAIN( R_SHIFT, D(10), 's' ); 																		// Battery / MAIN PWR Switch
+
+	// Ground Crew Sequence (can be specified per airplane)
+	groundcrew  = 0;																									// Ground Crew defined per aircraft when needed
+
+	// Emergency Stores Jettison (can be specified per airplane)
+	emergency_stores_jettison = CHAIN( L_SHIFT, D(10), 'e' );															// EMERGENCY STORES JETTISON Button
+
+	// Drag Chute (can be specified per airplane)
+	dragchute_deploy		= 0;																						// Drag Chute defined per aircraft when needed
+	dragchute_release		= 0;
+
+	// Speedbrakes (can be specified per airplane)
+	speedbrakes_open		= DX32;																						// Open speedbrakes
+	speedbrakes_close		= CHAIN( D(100), PULSE+DX31 );																// Close speedbrakes
+
+	// Exterior Lights (can be specified per airplane)
+	extlight_full 			= 0;
+	extlight_position 		= 0;
+	extlight_formation 		= 0;
+	extlight_covert 		= 0;
+	extlight_flashsteady 	= 0;
+
+	// --------------------------------------------------------------
+
 	// Trim
 	trim_up		= CHAIN( R_CTL, D(10), '.' ); 																			// trim nose up
 	trim_down	= CHAIN( R_CTL, D(10), ';' ); 																			// trim nose down
@@ -394,7 +471,7 @@ int dcs_fighter_common_functions()
 	guntrigger_2nd			= DX6;																						// Gun Trigger 2nd stage
 	weaponrelease			= DX2;																						// Weapons Release Button
 	cm_dispense				= DX19;																						// Countermeasure dispense button
-	uncage					= DX23;																						// Uncage Button
+	sidewinder_uncage		= DX23;																						// Sidewinder Uncage Button
 
 	// DX - Radios
 	radio1_voip				= DX27; 																					// Radio 1 (VOIP UHF)
@@ -406,6 +483,8 @@ int dcs_fighter_common_functions()
 	nws						= DX3;																						// Node Wheel Steering
 	canopy_toggle			= DX11; 																					// Canopy toggle
 	wheelbrake				= DX12;																						// Wheel brake
+	chinahat_fwd			= DX13; 																					// Antenna elevation up
+	chinahat_back			= DX14; 																					// Antenna elevation down
 	attcontrol_override		= DX22;																						// Manual attitude control override
 	engine_ignition_left	= DX33;																						// Left engine ignition
 	engine_ignition_right	= DX34; 																					// Right engine ignition
@@ -431,40 +510,30 @@ int dcs_fighter_common_functions()
 	throttle_right_idle		= CHAIN( DOWN+R_SHIFT, D(10), PULSE+HOME, D(), UP+R_SHIFT );								// Throttle Right - IDLE
 	airrefuel_open			= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'f', D(), UP+R_SHIFT );									// AIR REFUEL Switch - OPEN
 	airrefuel_close			= CHAIN( DOWN+R_CTL, D(10), PULSE+'f', D(), UP+R_CTL );										// AIR REFUEL Switch - CLOSE
+	sidewinder_volume_up	= CHAIN( L_CTL+L_SHIFT, D(10), '=' );
+	sidewinder_volume_down	= CHAIN( L_CTL+L_SHIFT, D(10), '-' );
+	radio1_volume_up		= CHAIN( L_ALT+L_SHIFT, D(10), '=' );
+	radio1_volume_down		= CHAIN( L_ALT+L_SHIFT, D(10), '-' );
+	rwr_volume_up			= CHAIN( R_CTL+L_SHIFT, D(10), '=' );
+	rwr_volume_down			= CHAIN( R_CTL+L_SHIFT, D(10), '-' );
 
 	// DX - Visual and Sound
 	zoom_in					= DX7;																						// Zoom in (flat screen / IR)
 	zoom_out				= DX9;																						// Zoom out (flat screen / IR)
 	snapview_right			= DX8;																						// Snap view right (numpad_6)
 	snapview_left			= DX10;																						// Snap view left (numpad_4)
-	vrzoom					= DX15;																						// Zoom normal (VR)
+	vrzoom_in				= DX15;																						// Zoom in (VR)
 	vrzoom_spyglass			= DX16;																						// Zoom max (VR)
 	mouseclick_left			= DX17;																						// Left mouse button
 	mouseclick_right		= DX18;																						// Right mouse button
 	discord_mute			= DX21; 																					// Discord mute toggle
 
 	// Visual
+	zoom_max				= CHAIN( DOWN+R_SHIFT, D(10), PULSE+USB[0x55], D(), UP+R_SHIFT );							// Snap zoom max (flat screen / IR) (R_SHIFT+KP*)
+	zoom_normal				= PULSE+KPENT;																				// Snap zoom normal (flat screen / IR)
 	recentre_irvr			= CHAIN( DOWN+R_CTL, D(10), PULSE+INS, D(), UP+R_CTL );										// Re-centre IR tracker / VR helmet
 	ingamechat_toggle		= CHAIN( DOWN+L_CTL+L_SHIFT, D(10), PULSE+'y', D(), UP+L_CTL+L_SHIFT );						// Toggle in-game chat
 	F10map_toggle			= SEQ( PULSE+F10, PULSE+F1 );																// Toggle F10 map
-
-	// Emergency Stores Jettison (can be specified per airplane)
-	emergency_stores_jettison = CHAIN( L_SHIFT, D(10), 'e' );															// EMERGENCY STORES JETTISON Button
-
-	// Drag Chute (can be specified per airplane)
-	dragchute_deploy		= 0;																						// Drag Chute defined per aircraft when needed
-	dragchute_release		= 0;
-
-	// Speedbrakes (can be specified per airplane)
-	speedbrakes_open		= DX32;																						// Open speedbrakes
-	speedbrakes_close		= CHAIN( D(100), PULSE+DX31 );																// Close speedbrakes
-
-	// Exterior Lights (can be specified per airplane)
-	extlight_full 			= 0;
-	extlight_position 		= 0;
-	extlight_formation 		= 0;
-	extlight_covert 		= 0;
-	extlight_flashsteady 	= 0;
 
 	// Cockpit Visuals
 	pilotbody   			= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'p', D(), UP+R_SHIFT );									// Pilot Body toggle
@@ -472,10 +541,10 @@ int dcs_fighter_common_functions()
 	charactercustm  		= CHAIN( DOWN+L_ALT, D(10), PULSE+';', D(), UP+L_ALT ); 		  							// Character Customisation
 	mirrors     			= CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'m', D(), UP+L_SHIFT+R_SHIFT ); 				// Toggle Mirrors
 	oxygenmask				= 0;																						// Oxygen Mask toggle
-	visortinteffect 		= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'v', D(), UP+L_CTL+R_SHIFT );						// Helmet visor tint effect toggle
+	visortinteffect_toggle 	= CHAIN( DOWN+L_CTL+R_SHIFT, D(10), PULSE+'v', D(), UP+L_CTL+R_SHIFT );						// Helmet visor tint effect toggle
 	helmetvisor 			= CHAIN( DOWN+L_CTL, D(10), PULSE+'v', D(), UP+L_CTL, D(),									// Helmet visor toggle
-									 EXEC( "if (!tinteffect_on) ActKey( PULSE+KEYON+visortinteffect );" 				// Activate Visor Tint Effect on first visor use
-										   "tinteffect_on = 1;" ));
+									 EXEC( "if (!tinteffect) ActKey( PULSE+KEYON+visortinteffect_toggle );" 			// Activate Visor Tint Effect on first visor use
+										   "tinteffect = 1;" ));
 
 	// Kneeboard
 	kneeboard_toggle		= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'k', D(), UP+R_SHIFT );									// kneeboard on/off
@@ -486,38 +555,50 @@ int dcs_fighter_common_functions()
 	kneeboard_prevshcut		= CHAIN( DOWN+R_SHIFT+L_SHIFT, D(10), PULSE+'[', D(), UP+R_SHIFT+L_SHIFT );					// kneeboard previous shortcut
 
 	// Night Vision function
-	nightvision 			= SEQ( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(), UP+R_SHIFT, D(),							// Night vision goggles (NVG) on
-										  EXEC( "nightvision_on = 1;"													//
-										  		"printf(\"nightvision_on = 1\\xa\");" )),								//
+	nightvision_toggle 		= SEQ( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(), UP+R_SHIFT, D(),							// Night vision goggles (NVG) on
+										  EXEC( "nightvision = 1;"														//
+										  		"printf(\"nightvision = 1\\xa\");" )),									//
 					   			   CHAIN( DOWN+R_SHIFT, D(10), PULSE+'h', D(), UP+R_SHIFT, D(),							// Night vision goggles (NVG) off
-										  EXEC( "nightvision_on = 0;"													//
-										  		"printf(\"nightvision_on = 0\\xa\");" )));								//
+										  EXEC( "nightvision = 0;"														//
+										  		"printf(\"nightvision = 0\\xa\");" )));									//
 
 	// Flashlight function
-	flashlight 				= SEQ( CHAIN( DOWN+L_ALT, D(10), PULSE+'l', D(), UP+L_ALT, D(),								// Flashlight on
-										  EXEC( "flashlight_on = 1;"													//
-										  		"printf(\"flashlight_on = 1\\xa\");" )),								//
+	flashlight_toggle 		= SEQ( CHAIN( DOWN+L_ALT, D(10), PULSE+'l', D(), UP+L_ALT, D(),								// Flashlight on
+										  EXEC( "flashlight = 1;"														//
+										  		"printf(\"flashlight = 1\\xa\");" )),									//
 						  		   CHAIN( DOWN+L_ALT, D(10), PULSE+'l', D(), UP+L_ALT, D(),								// Flashlight off
-										  EXEC( "flashlight_on = 0;"													// 
-										  		"printf(\"flashlight_on = 0\\xa\");" )));								//
+										  EXEC( "flashlight = 0;"														// 
+										  		"printf(\"flashlight = 0\\xa\");" )));									//
 
 	// Brightness function
-	brightness_up 			= REXEC( 100, 100, "if (nightvision_on) ActKey( PULSE+KEYON+R_CTL+R_SHIFT+'h' );"			// NVG brightness up
-											   "else if (flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+'.' );"		// Flashlight brightness up
+	brightness_up 			= REXEC( 100, 100, "if (nightvision) ActKey( PULSE+KEYON+R_CTL+R_SHIFT+'h' );"				// NVG brightness up
+											   "else if (flashlight) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+'.' );"			// Flashlight brightness up
 											   "else ActKey( PULSE+KEYON+DX37 );" );									// HUD/HMCS/Reticle brightness up
-	brightness_down 		= REXEC( 101, 100, "if (nightvision_on) ActKey( PULSE+KEYON+R_ALT+R_SHIFT+'h' );"			// NVG brightness down
-											   "else if (flashlight_on) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+',' );"		// Flashlight brightness down
+	brightness_down 		= REXEC( 101, 100, "if (nightvision) ActKey( PULSE+KEYON+R_ALT+R_SHIFT+'h' );"				// NVG brightness down
+											   "else if (flashlight) ActKey( PULSE+KEYON+L_ALT+R_SHIFT+',' );"			// Flashlight brightness down
 											   "else ActKey( PULSE+KEYON+DX38 );" );									// HUD/HMCS/Reticle brightness down
-
-	// COMM_mode adjust function
-	comm_mode_adjust		= EXEC( "COMM_mode = COMM_mode + 1;"														// Increase COMM-mode for each click
-									"if (COMM_mode > 3) COMM_mode = 0;"													// Cycle back to 0
-									"printf(\"COMM_mode = %i\\xa\", COMM_mode);" );										// Print to output window
 
 	// External
 	tacview_bookmark 		= CHAIN( DOWN+R_ALT, D(10), PULSE+'b', D(), UP+R_ALT );										// Tacview Bookmark
 
-
+	// Controller Modes
+	WHDN_mode_on			= EXEC( "WHDN_mode = 1;"																	// WHDN_mode on
+									"printf(\"WHDN_mode = 1\\xa\");" );													// Print status to output window
+	WHDN_mode_off			= EXEC( "WHDN_mode = 0;"																	// WHDN_mode off
+									"printf(\"WHDN_mode = 0\\xa\");" );													// Print status to output window
+	AAR_mode_on				= EXEC( "AAR_mode = 1;"																		// AAR_mode on
+									"printf(\"AAR_mode = 1\\xa\");" );													// Print status to output window
+	AAR_mode_off			= EXEC( "AAR_mode = 0;"																		// AAR_mode off
+									"WHDN_mode = 0;"																	// WHDN_mode off as precaution to prevent conflicts
+									"printf(\"AAR_mode = 0\\xa\");" );													// Print status to output window
+	CAR_mode_on				= EXEC( "CAR_mode = 1;"																		// CAR_mode on
+									"printf(\"CAR_mode = 1\\xa\");" );													// Print status to output window
+	CAR_mode_off			= EXEC( "CAR_mode = 0;"																		// CAR_mode off
+									"printf(\"CAR_mode = 0\\xa\");" );													// Print status to output window
+	VR_mode_toggle			= EXEC( "VR_mode = !VR_mode;"																// Switch VR mode on/off
+									"printf(\"VR_mode = %i\\xa\", VR_mode);" );											// Print state to output window
+	COMM_mode_adjust		= EXEC( "COMM_mode = (COMM_mode + 1)%3;"													// Increase COMM-mode for each click, cycle back after 3
+									"printf(\"COMM_mode = %i\\xa\", COMM_mode);" );										// Print to output window
 
 
 }	// =====  end dcs_fighter_common_functions()  =================================================
@@ -546,16 +627,16 @@ int dcs_fighter_common_controls()
 	// TG1
 	MapKeyIOUMD(&AVA_F16, TG1, 			0,	 																			// IU - 
 										guntrigger_1st, 																// OU - Trigger First Detent
-									  	comm_mode_adjust, 																// IM - Adjust Server comm_mode
+									  	COMM_mode_adjust, 																// IM - Adjust Server comm_mode
 									  	0,  																			// OM - 
 							  			0,  																			// ID - 
 									  	guntrigger_1st ); 																// OD - Trigger First Detent
 	// TG2
-	MapKeyIOUMD(&AVA_F16, TG2, 			SPC,																			// IU - Fire Weapon (GIB)
+	MapKeyIOUMD(&AVA_F16, TG2, 			0,																				// IU - 
 										guntrigger_2nd, 																// OU - Trigger Second Detent
 										0, 																				// IM - 
 										0, 																				// OM - 
-										SPC, 																			// ID - Fire Weapon (GIB)
+										0, 																				// ID - 
 										guntrigger_2nd );																// OD - Trigger Second Detent
 
 	// Nosewheel Steering Button
@@ -632,24 +713,20 @@ int dcs_fighter_common_controls()
 	// Landing Gear
 	// EACON
 	MapKeyUMD(&Throttle, EACON,			0, 																				// U - 
-										CHAIN( gear_up, 																// M - Gear up 
-											   EXEC( "WHDN_mode = 0;"													//	   WHDN_mode off
-													 "printf(\"WHDN_mode = 0\\xa\");" )),								//
+										CHAIN( gear_up, D(), WHDN_mode_off ),											// M - Gear up; WHDN_mode off
 										0 );																			// D -
 	// EACOFF
 	MapKeyUMD(&Throttle, EACOFF, 		0, 																				// U -
-										CHAIN( gear_down, 																// M - Gear down
-											   EXEC( "WHDN_mode = 1;"													//	   WHDN_mode on
-													 "printf(\"WHDN_mode = 1\\xa\");" )),								//
+										CHAIN( gear_down, D(), WHDN_mode_on ), 											// M - Gear down; WHDN_mode on
 										0 );																			// D -
 
 	// Speedbrake Switch
 	// SPDF
 	MapKeyIO(&Throttle, SPDF, 			EXEC( "if (VR_mode) ActKey( KEYON+vrzoom_spyglass );"							// I - [VR] VR zoom max
-											  "else ActKey( PULSE+KEYON+R_SHIFT+USB[0x55] );" ),						//	   snap zoom max   (R_SHIFT+KP*)
+											  "else ActKey( PULSE+KEYON+zoom_max );" ),									//	   snap zoom max   (R_SHIFT+KP*)
 										speedbrakes_open );																// O - Open Speed Brakes
 	MapKeyRIO(&Throttle, SPDF, 			EXEC( "if (VR_mode) ActKey( vrzoom_spyglass );"									// I - [VR] release VR zoom max (DX16)
-											  "else ActKey( PULSE+KEYON+KPENT );" ),									//	   snap zoom normal
+											  "else ActKey( PULSE+KEYON+zoom_normal );" ),								//	   snap zoom normal
 										speedbrakes_close );															// O - Close Speed Brakes
 	// SPDB
 	MapKeyIO(&Throttle, SPDB, 			EXEC( "if (WHDN_mode) ActKey( KEYON+wheelbrake );" ),							// I - [WHDN] wheel brake 
@@ -661,10 +738,10 @@ int dcs_fighter_common_controls()
 	// China Hat
 	// CHF
 	MapKeyIO(&Throttle, CHF, 			brightness_up, 																	// I - brightness up (HUD/HMCS/Reticle - Flashlight - NVG)
-							 			DX13 ); 																		// O - Radar Elevation Antenna Control - CW/Up
+							 			chinahat_fwd ); 																// O - Radar Elevation Antenna Control - CW/Up
 	// CHB
 	MapKeyIO(&Throttle, CHB, 			brightness_down,																// I - brightness down (HUD/HMCS/Reticle - Flashlight - NVG)
-							 			DX14 ); 																		// O - Radar Elevation Antenna Control - CCW/Down
+							 			chinahat_back ); 																// O - Radar Elevation Antenna Control - CCW/Down
 
 
 	// Pinky Switch (exterior lighting)
@@ -685,16 +762,9 @@ int dcs_fighter_common_controls()
 
 								
 	// APUON (APU & Air Refuel)
-	MapKeyIO(&Throttle, APUON, 			CHAIN( airrefuel_open,	D(), 													// I - AIR REFUEL Switch - OPEN
-											   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5), D(),						// 		LED5 ON for Aerial Refuelling
-											   EXEC( "AAR_mode = 1;"													//		AAR_mode on
-												     "WHDN_mode = 0;"													//		set WHDN_mode = 0, otherwise conflicts
-													 "printf(\"AAR_mode = 1\\xa\");" )),								// 		print state to output window
+	MapKeyIO(&Throttle, APUON, 			CHAIN( airrefuel_open, D(), AAR_mode_on, D(), throttle_led5_on ),				// I - AIR REFUEL Switch - OPEN; AAR_mode on; LED5 ON for Aerial Refuelling
 										apu_on );																		// O - APU on
-	MapKeyRIO(&Throttle, APUON, 		CHAIN( airrefuel_close, D(),													// I - AIR REFUEL Switch - CLOSE
-											   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5), D(),						// 		LED5 OFF for Aerial Refuelling
-											   EXEC( "AAR_mode = 0;" 													//		AAR_mode off
-												 	 "printf(\"AAR_mode = 0\\xa\");" )),								// 		print state to output window
+	MapKeyRIO(&Throttle, APUON, 		CHAIN( airrefuel_close, D(), AAR_mode_off, D(), throttle_led5_off ),			// I - AIR REFUEL Switch - CLOSE; AAR_mode off; LED5 OFF for Aerial Refuelling
 										apu_off );																		// O - APU off
 	// APUOFF
 	MapKey(&Throttle, APUOFF, 			0 );																			//
@@ -702,20 +772,17 @@ int dcs_fighter_common_controls()
 
 	// LDGH (Master Caution, VR_mode)
 	MapKeyIO(&Throttle, LDGH, 			TEMPO( ingamechat_toggle,														// I - Toggle in-game chat
-											   EXEC( "VR_mode = !VR_mode;"												//     [long] Switch VR mode on/off
-											   "printf(\"VR_mode = %i\\xa\", VR_mode);" ), 500 ),						// 	          print state to output window
+											   VR_mode_toggle, 500),													//     [long] Switch VR mode on/off
 										TEMPO( LDGH_short, 																// O - A/C specific function
 											   mastercaution, 500 ));													//	   [long] Master Caution Button
 
 
 	// Engine Override Left (Front/Back seat, manual pitch override)
 	// EFLNORM
-	MapKeyIO(&Throttle, EFLNORM, 		CHAIN( 0, D(), 																	// I - Attitude control override switch - NORM
-											   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ),							// 	   LED5 OFF for MANUAL PITCH Override
+	MapKeyIO(&Throttle, EFLNORM, 		CHAIN( 0, D(), throttle_led5_off ), 											// I - Attitude control override switch - NORM; LED5 OFF for MANUAL PITCH Override
 										0 );																			// O - (Front seat)
-	// EFLOVER
-	MapKeyIO(&Throttle, EFLOVER, 		CHAIN( attcontrol_override, D(),												// I - Attitude control override switch - OVRD
-											   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ),							// 	   LED5 ON for MANUAL PITCH Override
+	// EFLOVER   ----   PULSE of niet?????   check - F-5/16 niet
+	MapKeyIO(&Throttle, EFLOVER, 		CHAIN( attcontrol_override, D(), throttle_led5_on ),							// I - Attitude control override switch - OVRD; LED5 ON for MANUAL PITCH Override
 										0 );																			// O - (Back seat)
 	MapKeyR(&Throttle, EFLOVER, 		0 );																			// 
 
@@ -805,10 +872,10 @@ int dcs_fighter_common_switch()
 	
 	// Target Management Switch
 	// H2U
-	MapKeyIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( KEYON+vrzoom );"											// I - VR zoom
+	MapKeyIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( KEYON+vrzoom_in );"										// I - VR zoom in
 									  "else ActKey ( KEYON+zoom_in );" ),												//     TrackIR zoom in slow (KP*)
 								TMS_fwd );																				// O - TMS fwd
-	MapKeyRIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( vrzoom );"													// I - Release vrzoom
+	MapKeyRIO(&AVA_F16, H2U, 	EXEC( "if (VR_mode) ActKey ( vrzoom_in );"												// I - Release vrzoom_in
 									  "else ActKey ( zoom_in );" ),														// 	   Release zoom_in
 								0 );																					// O - 
 	// H2D
@@ -837,11 +904,11 @@ int dcs_fighter_common_switch()
 	// Display Management Switch
 	// H3U
 	MapKeyIO(&AVA_F16, H3U, 	TEMPO( kneeboard_toggle,																// I - kneeboard on/off
-									   nightvision, 500 ),																// 	   [long] Night Vision Goggles toggle
+									   nightvision_toggle, 500 ),														// 	   [long] Night Vision Goggles toggle
 								DMS_fwd );																				// O - DMS fwd
 	// H3D
 	MapKeyIO(&AVA_F16, H3D, 	TEMPO( kneeboard_mark,																	// I - kneeboard current position mark point
-									   flashlight, 500 ),																//	   [long] Flashlight on/off
+									   flashlight_toggle, 500 ),														//	   [long] Flashlight on/off
 								DMS_aft );																				// O - DMS aft
 	// H3R
 	MapKeyIO(&AVA_F16, H3R, 	TEMPO( kneeboard_nextpage, 																// I - kneeboard next page
@@ -953,7 +1020,7 @@ int dcs_fighter_common_switch()
 									   500 ),																					//
 								radio4_acspecific );																			// OD - Radio 4 - VOIP Intercom / A/C specific function
 	// MSP 
-	MapKeyIO(&Throttle, MSP, 	PULSE+F12,																						// I - F12 exit radio menu
+	MapKeyIO(&Throttle, MSP, 	radiomenu_exit,																					// I - F12 exit radio menu
 								radiomenu );			 																		// O - Radio menu
 
 
@@ -966,6 +1033,30 @@ int dcs_fighter_common_switch()
 
 int dcs_fighter_common_mfd()
 {
+
+	MapKeyIO(&LMFD, SYMU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'o' ), 											// I - Right MFD SYM Up
+								CHAIN( R_WIN+L_SHIFT, D(10), 'o' ));											// O - Left MFD SYM Up
+
+	MapKeyIO(&LMFD, SYMD, 		CHAIN( R_WIN+R_SHIFT, D(10), 'k' ), 											// I - Right MFD SYM Down
+								CHAIN( R_WIN+L_SHIFT, D(10), 'k' ));											// O - Left MFD SYM Down
+
+	MapKeyIO(&LMFD, CONU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'i' ), 											// I - Right MFD CON Up
+								CHAIN( R_WIN+L_SHIFT, D(10), 'i' ));											// O - Left MFD CON Up
+
+	MapKeyIO(&LMFD, COND, 		CHAIN( R_WIN+R_SHIFT, D(10), 'j' ), 											// I - Right MFD CON Down
+								CHAIN( R_WIN+L_SHIFT, D(10), 'j' ));											// O - Left MFD CON Down
+
+	MapKeyIO(&LMFD, BRTU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'u' ), 											// I - Right MFD BRT Up
+								CHAIN( R_WIN+L_SHIFT, D(10), 'u' ));											// O - Left MFD BRT Up
+
+	MapKeyIO(&LMFD, BRTD, 		CHAIN( R_WIN+R_SHIFT, D(10), 'h' ), 											// I - Right MFD BRT Down
+								CHAIN( R_WIN+L_SHIFT, D(10), 'h' ));											// O - Left MFD BRT Down
+
+	MapKeyIO(&LMFD, GAINU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'y' ), 											// I - Right MFD GAIN Up
+								CHAIN( R_WIN+L_SHIFT, D(10), 'y' ));											// O - Left MFD GAIN Up
+
+	MapKeyIO(&LMFD, GAIND, 		CHAIN( R_WIN+R_SHIFT, D(10), 'g' ), 											// I - Right MFD GAIN Down
+								CHAIN( R_WIN+L_SHIFT, D(10), 'g' ));											// O - Left MFD GAIN Down
 
 	MapKeyIO(&LMFD, OSB01, 		CHAIN( R_WIN+R_SHIFT, D(10), '1' ), 											// I - Right MFD OSB 01
 								CHAIN( R_WIN+L_SHIFT, D(10), '1' ));											// O - Left MFD OSB 01
@@ -1027,29 +1118,6 @@ int dcs_fighter_common_mfd()
 	MapKeyIO(&LMFD, OSB20, 		CHAIN( R_WIN+R_CTL, D(10), '0' ), 												// I - Right MFD OSB 20
 								CHAIN( R_WIN+L_CTL, D(10), '0' ));												// O - Left MFD OSB 20
 
-	MapKeyIO(&LMFD, SYMU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'o' ), 											// I - Right MFD SYM Up
-								CHAIN( R_WIN+L_SHIFT, D(10), 'o' ));											// O - Left MFD SYM Up
-
-	MapKeyIO(&LMFD, SYMD, 		CHAIN( R_WIN+R_SHIFT, D(10), 'k' ), 											// I - Right MFD SYM Down
-								CHAIN( R_WIN+L_SHIFT, D(10), 'k' ));											// O - Left MFD SYM Down
-
-	MapKeyIO(&LMFD, CONU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'i' ), 											// I - Right MFD CON Up
-								CHAIN( R_WIN+L_SHIFT, D(10), 'i' ));											// O - Left MFD CON Up
-
-	MapKeyIO(&LMFD, COND, 		CHAIN( R_WIN+R_SHIFT, D(10), 'j' ), 											// I - Right MFD CON Down
-								CHAIN( R_WIN+L_SHIFT, D(10), 'j' ));											// O - Left MFD CON Down
-
-	MapKeyIO(&LMFD, BRTU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'u' ), 											// I - Right MFD BRT Up
-								CHAIN( R_WIN+L_SHIFT, D(10), 'u' ));											// O - Left MFD BRT Up
-
-	MapKeyIO(&LMFD, BRTD, 		CHAIN( R_WIN+R_SHIFT, D(10), 'h' ), 											// I - Right MFD BRT Down
-								CHAIN( R_WIN+L_SHIFT, D(10), 'h' ));											// O - Left MFD BRT Down
-
-	MapKeyIO(&LMFD, GAINU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'y' ), 											// I - Right MFD GAIN Up
-								CHAIN( R_WIN+L_SHIFT, D(10), 'y' ));											// O - Left MFD GAIN Up
-
-	MapKeyIO(&LMFD, GAIND, 		CHAIN( R_WIN+R_SHIFT, D(10), 'g' ), 											// I - Right MFD GAIN Down
-								CHAIN( R_WIN+L_SHIFT, D(10), 'g' ));											// O - Left MFD GAIN Down
 
 
 }	// =====  end dcs_fighter_common_mfd()  ==============================================================

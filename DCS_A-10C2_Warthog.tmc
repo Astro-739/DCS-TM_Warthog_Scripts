@@ -1,6 +1,6 @@
 // DCS A-10C2 Warthog Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.25.127
-// version 2.3, Sep 2026
+// version 3.0, Oct 2026
 
 
 include "target.tmh"
@@ -18,6 +18,24 @@ int deferdelay;
 int eac_arm;
 int ufcrocker_up;
 int ufcrocker_down;
+int boatswitch_fwd;
+int boatswitch_centre;
+int boatswitch_aft;
+int CMS_fwd;
+int CMS_aft;
+int CMS_right;
+int CMS_left;
+int CMS_push;
+int coolie_up;
+int coolie_down;
+int coolie_right;
+int coolie_left;
+int chinahat_fwd;
+int chinahat_back;
+int ltb_short;
+int flaps_up;
+int flaps_down;
+
 
 define AB 100											// detent position at AB% of full throttle reach
 
@@ -46,29 +64,48 @@ int main()
 	TMS_left 	= CHAIN( L_CTL, D(10), LARROW );																// TMS left
 	
 	// Display Management Switch (overwrites common)
-	DMS_fwd 	= CHAIN( R_ALT, D(10), ';' );																	// Coolie fwd
-	DMS_aft 	= CHAIN( R_ALT, D(10), '.' );																	// Coolie aft
+	DMS_fwd 	= CHAIN( R_ALT, D(10), ';' );																	// Coolie up
+	DMS_aft 	= CHAIN( R_ALT, D(10), '.' );																	// Coolie down
 	DMS_right 	= CHAIN( R_ALT, D(10), '/' );																	// Coolie right
 	DMS_left 	= CHAIN( R_ALT, D(10), ',' );																	// Coolie left
 
-	// Buttons (overwrite common)
+	// Buttons (overwrites common)
 	LDGH_short	= 0;																							// 
 	SC_short	= 'v';																							// China Hat Fwd
 
 
-	// keybinds
+	// Keybindings
 	eac_arm				= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'e', D(), UP+R_SHIFT );								// EAC Arm
 	ufcrocker_up		= CHAIN( DOWN+L_SHIFT, D(10), PULSE+';', D(), UP+L_SHIFT );								// UFC STEER UP Rocker switch
 	ufcrocker_down		= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'.', D(), UP+L_SHIFT );								// UFC STEER DOWN Rocker switch
+	boatswitch_fwd		= CHAIN( DOWN+R_ALT, D(10), PULSE+RARROW, D(), UP+R_ALT );								// Boat Switch - Fwd
+	boatswitch_centre	= CHAIN( DOWN+R_ALT, D(10), PULSE+DARROW, D(), UP+R_ALT );								// Boat Switch - Centre
+	boatswitch_aft		= CHAIN( DOWN+R_ALT, D(10), PULSE+LARROW, D(), UP+R_ALT );								// Boat Switch - Aft
+	CMS_fwd				= '7';																					// Countermeasures Management Switch - Fwd
+	CMS_aft				= '8'; 																					// Countermeasures Management Switch - Aft
+	CMS_right			= '0';																					// Countermeasures Management Switch - Right
+	CMS_left			= '9'; 																					// Countermeasures Management Switch - Left
+	CMS_push			= '-';																					// Countermeasures Management Switch - Push
+	coolie_up			= HOME;																					// DMS up
+	coolie_down			= END;																					// DMS down
+	coolie_right		= PGDN; 																				// DMS right
+	coolie_left			= DEL;																					// DMS left
+	ltb_short			= 'q'																					// Left Throttle Button
+	flaps_up			= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT );								// Flaps Up (3 steps: down, manoeuvre, up)
+	flaps_down			= CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL );									// Flaps Down
 
-	
+	// DX bindings
+	chinahat_fwd		= DX13;																					// In Common this is bound to radar elevation
+	chinahat_back		= DX14;																					// In Common this is bound to radar elevation
+
+
 	// Start-up Sequence (overwrites common)
 	startup = SEQ( CHAIN( DOWN+R_SHIFT, D(10), PULSE+'s', D(), UP+R_SHIFT ), 									// Battery power
 				   CHAIN( DOWN+L_ALT, D(10), PULSE+'s', D(), UP+L_ALT ), 										// Inverter STBY
 				   CHAIN( DOWN+R_CTL, D(10), PULSE+'s', D(), UP+R_CTL )); 										// APU generator power
 
 	// Gound Crew (overwrites common)
-	groundcrew = CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F5, D(200), PULSE+F2 );		// Radio menu (\), Prev, GroundCrew, Wheel Chocks, Remove
+	groundcrew = ground_wheelchocks_remove;																		// Radio menu (\), Prev, GroundCrew, Wheel Chocks, Remove
 
 	// Master Modes function
 	mastermode = 0;																								// mastermode 0,1,2,3		NAV, GUN, CCIP, CCRP
@@ -85,6 +122,11 @@ int main()
 							 		  "deferdelay = deferdelay + 100;"											// delay is absolute, so needs to be increased for every while loop
 							 		  //"printf(\" mastermode %i \\xa\", mastermode);"							// print current mastermode in output window
 						   			"}" );
+
+/* 
+option: NAV geen control over MMCB, maar alleen in A2G
+dan wel even naar A2G switchen om op nav mode te zetten...
+*/
 
 
 	// Exterior Lighting
@@ -140,25 +182,25 @@ int main()
 	// Expand FOV Button - S3
 	MapKeyUMD(&AVA_F16, S3,  	0,																				// U - [always use A-A]
 							    PULSE+'m',															 			// M - [always use NAV]
-							    mastermodecontrolbutton);														// D - Master Mode Control Button
+							    mastermodecontrolbutton );														// D - Master Mode Control Button
 
 
  	// Countermeasure Management Switch
 	// H4U
-	MapKeyIO(&AVA_F16, H4U, 	CHAIN( DOWN+R_ALT, D(10), PULSE+RARROW, D(), UP+R_ALT ),						// I - Boat Switch - Fwd
-							 	'7' );																			// O - Countermeasures Management Switch - Fwd
+	MapKeyIO(&AVA_F16, H4U, 	boatswitch_fwd,																	// I - Boat Switch - Fwd
+							 	CMS_fwd );																		// O - Countermeasures Management Switch - Fwd
 	// H4D
-	MapKeyIO(&AVA_F16, H4D, 	CHAIN( DOWN+R_ALT, D(10), PULSE+LARROW, D(), UP+R_ALT ),						// I - Boat Switch - Aft
-							 	'8' ); 																			// O - Countermeasures Management Switch - Aft
+	MapKeyIO(&AVA_F16, H4D, 	boatswitch_aft,																	// I - Boat Switch - Aft
+							 	CMS_aft ); 																		// O - Countermeasures Management Switch - Aft
 	// H4R
-	MapKeyIO(&AVA_F16, H4R, 	CHAIN( DOWN+R_ALT, D(10), PULSE+DARROW, D(), UP+R_ALT ),						// I - Boat Switch - Centre
-			  				 	'0' );																			// O - Countermeasures Management Switch - Right
+	MapKeyIO(&AVA_F16, H4R, 	boatswitch_centre,																// I - Boat Switch - Centre
+			  				 	CMS_right );																	// O - Countermeasures Management Switch - Right
 	// H4L
 	MapKeyIO(&AVA_F16, H4L, 	0, 																				// I - 
-							 	'9' ); 																			// O - Countermeasures Management Switch - Left
+							 	CMS_left ); 																	// O - Countermeasures Management Switch - Left
 	// H4P
 	MapKeyIO(&AVA_F16, H4P, 	0, 																				// I - 
-							 	'-' );																			// O - Countermeasures Management Switch - Push
+							 	CMS_push );																		// O - Countermeasures Management Switch - Push
 
 
 
@@ -191,48 +233,48 @@ int main()
 
 	// Autopilot
 	// APENG	
-	MapKeyIO(&Throttle, APENG, 	0,																				// I - 
-								'a' );																			// O - LAAP Engage/Disengage
+	MapKeyIO(&Throttle, APENG, 		0,																				// I - 
+									'a' );																			// O - LAAP Engage/Disengage
 	// APDIS
-	MapKey(&Throttle, APDIS, 	0 ); 																			// 
+	MapKey(&Throttle, APDIS, 		0 ); 																			// 
 	// APPAT
-	MapKey(&Throttle, APPAT, 	PULSE+'2' );											 						// LAAP Path Hold
+	MapKey(&Throttle, APPAT, 		PULSE+'2' );											 						// LAAP Path Hold
 	// APAH
-	MapKey(&Throttle, APAH, 	PULSE+'3' );																	// LAAP Altitude/Heading Hold
+	MapKey(&Throttle, APAH, 		PULSE+'3' );																	// LAAP Altitude/Heading Hold
 	// APALT
-	MapKey(&Throttle, APALT, 	PULSE+'4' );																	// LAAP Altitude/Bank Hold
+	MapKey(&Throttle, APALT, 		PULSE+'4' );																	// LAAP Altitude/Bank Hold
 
 	
 	// Landing Gear / EAC
 	// EACON
-	MapKeyIOUMD(&Throttle, EACON,	0, 																			// IU - 
-									0,																			// OU - 
-									eac_arm,																	// IM - EAC Arm
-									gear_up, 																	// OM - gear up 
-									0,																			// ID - 
-									0 );																		// OD -
+	MapKeyIOUMD(&Throttle, EACON,	0, 																				// IU - 
+									0,																				// OU - 
+									eac_arm,																		// IM - EAC Arm
+									gear_up, 																		// OM - gear up 
+									0,																				// ID - 
+									0 );																			// OD -
 	// EACOFF
-	MapKeyIOUMD(&Throttle, EACOFF, 	0, 																			// IU -
-									0,																			// OU - 
-									0,																			// IM - 
-									gear_down, 																	// OM - gear down
-									0,																			// ID - 
-									0 );																		// OD -
+	MapKeyIOUMD(&Throttle, EACOFF, 	0, 																				// IU -
+									0,																				// OU - 
+									0,																				// IM - 
+									gear_down, 																		// OM - gear down
+									0,																				// ID - 
+									0 );																			// OD -
 
 	
 	// Coolie Switch
 	// CSU
-	MapKeyIO(&Throttle, CSU, 	ufcrocker_down,																	// I - UFC STEER DOWN Rocker switch
-								END );																			// O - DMS down
+	MapKeyIO(&Throttle, CSU, 		ufcrocker_down,																	// I - UFC STEER DOWN Rocker switch
+									coolie_down );																	// O - DMS down
 	// CSD
-	MapKeyIO(&Throttle, CSD, 	ufcrocker_up,																	// I - UFC STEER UP Rocker switch
-								HOME );																			// O - DMS up
+	MapKeyIO(&Throttle, CSD, 		ufcrocker_up,																	// I - UFC STEER UP Rocker switch
+									coolie_up );																	// O - DMS up
 	// CSR
-	MapKeyIO(&Throttle, CSR, 	0, 																				// I - 
-								PGDN );																			// O - DMS right
+	MapKeyIO(&Throttle, CSR, 		0, 																				// I - 
+									coolie_right );																	// O - DMS right
 	// CSL
-	MapKeyIO(&Throttle, CSL, 	0,							 													// I - 
-								DEL );																			// O - DMS left
+	MapKeyIO(&Throttle, CSL, 		0,							 													// I - 
+									coolie_left );																	// O - DMS left
 
 /* TO COMMON -- TEST						
 	// China Hat			// TODO to common, use DX13 and DX14
@@ -245,54 +287,48 @@ int main()
 */
 
 	// Left Throttle Button (overwrite of common)
-	MapKeyIO(&Throttle, LTB, 	eject, 																			// I - EJECT
-								'q' );																			// O - Left Throttle Button
+	MapKeyIO(&Throttle, LTB, 		eject, 																			// I - EJECT
+									ltb_short );																	// O - Left Throttle Button
 								
 
 	// Flaps Switch 
 	// FLAPU
-	MapKey(&Throttle, FLAPU,  		CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ));					// Flaps Up
-	MapKeyR(&Throttle, FLAPU,  		CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));						// Flaps Down (to middle)	
+	MapKey(&Throttle, FLAPU,  		flaps_up );																		// Flaps Up (to fully up - 0 deg)
+	MapKeyR(&Throttle, FLAPU,  		flaps_down );																	// Flaps Down (to manoeuvre/takeoff - 7 deg)	
 	// FLAPM
-	MapKey(&Throttle, FLAPM, 		0 );																		// 
+	MapKey(&Throttle, FLAPM, 		0 );																			// 
 	// FLAPD
-	MapKey(&Throttle, FLAPD,  		CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));						// Flaps Down (to full)
-	MapKeyR(&Throttle, FLAPD,  		CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ));					// Flaps Up (to middle)
+	MapKey(&Throttle, FLAPD,  		flaps_down );																	// Flaps Down (to fully down - 20 deg)
+	MapKeyR(&Throttle, FLAPD,  		flaps_up );																		// Flaps Up (to manoeuvre/takeoff - 7 deg)
 
 
 	// Engine Override Left
 	// EFLNORM
-	MapKeyIO(&Throttle, EFLNORM, 	0,																			// I - 
-									CHAIN( PULSE+DX22, D(), 													// O - Flight control - NORMAL  ********* FIX DX in DCS
-										   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED5) ));						// 	   LED5 OFF for NORMAL
+	MapKeyIO(&Throttle, EFLNORM, 	0,																				// I - 
+									CHAIN( PULSE+attcontrol_override, D(), throttle_led5_off ));					// O - Flight control - NORMAL  ********* FIX DX in DCS; LED5 OFF for NORMAL
 	// EFLOVER
-	MapKeyIO(&Throttle, EFLOVER, 	0,																			// I - 
-									CHAIN( PULSE+DX22, D(),														// O - Flight control - MANUAL REVERSION    ********* FIX DX in DCS
-										   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED5) ));						// 	   LED5 ON for MANUAL
+	MapKeyIO(&Throttle, EFLOVER, 	0,																				// I - 
+									CHAIN( PULSE+attcontrol_override, D(), throttle_led5_on ));						// O - Flight control - MANUAL REVERSION    ********* FIX DX in DCS; LED5 ON for MANUAL
 
 
 	// U LAYER - Air-to-Air Mode
 	// BSF - LED1 ON/OFF
-	MapKeyIO(&Throttle, BSF, 	0,																				// I - 
-								CHAIN( mastermode_aa, D(100),													// O - A-A mode on
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED1) )); 							// 	   LED1 ON for U layer
-	MapKeyRIO(&Throttle, BSF, 	0,																				// I - 
-								CHAIN( PULSE+'m', D(100),														// O - A-A mode off
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED1) )); 							//     LED1 OFF for U layer
+	MapKeyIO(&Throttle, BSF, 		0,																				// I - 
+									CHAIN( mastermode_aa, D(100), throttle_led1_on ));								// O - A-A mode on; LED1 ON for U layer
+	MapKeyRIO(&Throttle, BSF, 		0,																				// I - 
+									CHAIN( PULSE+'m', D(100), throttle_led1_off ));									// O - A-A mode off; LED1 OFF for U layer
 	
 	// M LAYER - Navigation Mode
 	// BSM - LED2 ON/OFF
-	MapKey(&Throttle, BSM, 		CHAIN( D(200), LED(&Throttle, LED_ONOFF, LED_CURRENT+LED2) ));					// LED2 ON for M layer
-	MapKeyR(&Throttle, BSM, 	LED(&Throttle, LED_ONOFF, LED_CURRENT-LED2) ); 									// LED2 OFF for M layer
+	MapKey(&Throttle, BSM, 			CHAIN( D(200), throttle_led2_on ));												// LED2 ON for M layer
+	MapKeyR(&Throttle, BSM, 		throttle_led2_off ); 															// LED2 OFF for M layer
 
 	// D LAYER - Air-to-Ground Mode
 	// BSB - LED3 ON/OFF
-	MapKeyIO(&Throttle, BSB, 	0,																				// I -
-								CHAIN( mastermodecontrolbutton, D(100),											// O - A-G mode on
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED3) )); 							//     LED3 ON for D layer
-	MapKeyRIO(&Throttle, BSB, 	0,																				// I -
-								CHAIN( mastermode_nav, D(100),													// O - A-G mode off
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED3) )); 							//     LED3 OFF for D layer
+	MapKeyIO(&Throttle, BSB, 		0,																				// I -
+									CHAIN( mastermodecontrolbutton, D(100),	throttle_led3_on ));					// O - A-G mode on; LED3 ON for D layer
+	MapKeyRIO(&Throttle, BSB,	 	0,																				// I -
+									CHAIN( mastermode_nav, D(100), throttle_led3_off ));							// O - A-G mode off; LED3 OFF for D layer
 
 
 }	// =====  end main()  =========================================================================

@@ -28,6 +28,8 @@ int displaymode_land;
 int displaymode_next;
 int displaymode_prev;
 int displaymode_whdn;
+int hudtrim_incr;
+int hudtrim_decr;
 int	wingsweep_fwd;
 int	wingsweep_aft;
 int	wingsweep_bomb;
@@ -165,6 +167,8 @@ int main()
 
 	// ------------------------- FUNCTIONS --------------------------
 
+
+	// Keybindings
 	displaymode_takeoff	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'1', D(), UP+L_SHIFT );
 	displaymode_cruise	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'2', D(), UP+L_SHIFT );
 	displaymode_a2a		= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'3', D(), UP+L_SHIFT );
@@ -201,6 +205,9 @@ int main()
 	horns_left			= CHAIN( DOWN+L_SHIFT+L_ALT, D(10), PULSE+'o', D(), UP+L_SHIFT+L_ALT );
 	horns_right			= CHAIN( DOWN+R_SHIFT+L_ALT, D(10), PULSE+'o', D(), UP+R_SHIFT+L_ALT );
 
+	// DX bindings
+	hudtrim_incr		= DX13;																							// In Common this is bound to radar elevation
+	hudtrim_decr		= DX14;																							// In Common this is bound to radar elevation
 
 	// Autopilot
 	autopilot 	= SEQ( CHAIN( EXEC( "autopilot_mode();" ), D(200),														// Set autopilot mode
@@ -209,12 +216,12 @@ int main()
 	
 
 	// Ground Crew Start-up
-	groundcrew	= SEQ( CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F4, D(200), PULSE+F1, D(10000), 	// Radio menu (\), Prev menu, Ground crew, Wheel Chocks, Place 
-							  PULSE+USB[0x31], D(200), PULSE+F8, D(200), PULSE+F2, D(200), PULSE+F1, D(13000), 						// Radio menu (\), Ground crew, Ground Electric Power, On
-							  PULSE+USB[0x31], D(200), PULSE+F8, D(200), PULSE+F5, D(200), PULSE+F1, D(13000) ),					// Radio menu (\), Ground crew, Ground Air Supply, Connect
-					   CHAIN( PULSE+USB[0x31], D(200), PULSE+F11, D(200), PULSE+F8, D(200), PULSE+F5, D(200), PULSE+F2, D(13000),	// Radio menu (\), Prev menu, Ground crew, Ground Air Supply, Disconnect
-							  PULSE+USB[0x31], D(200), PULSE+F8, D(200), PULSE+F2, D(200), PULSE+F2, D(13000), 						// Radio menu (\), Ground crew, Ground Electric Power, Off
-							  PULSE+USB[0x31], D(200), PULSE+F8, D(200), PULSE+F4, D(200), PULSE+F2 ));								// Radio menu (\), Ground crew, Wheel Chocks, Remove
+	groundcrew	= SEQ( CHAIN( ground_wheelchocks_place, D(10000), 																	// Radio menu (\), Prev menu, Ground crew, Wheel Chocks, Place 
+							  ground_elecpower_on, D(13000), 																		// Radio menu (\), Ground crew, Ground Electric Power, On
+							  ground_airsupply_connect, D(13000) ),																	// Radio menu (\), Ground crew, Ground Air Supply, Connect
+					   CHAIN( ground_airsupply_disconnect, D(13000),																// Radio menu (\), Prev menu, Ground crew, Ground Air Supply, Disconnect
+							  ground_elecpower_off, D(13000), 																		// Radio menu (\), Ground crew, Ground Electric Power, Off
+							  ground_wheelchocks_remove ));																			// Radio menu (\), Ground crew, Wheel Chocks, Remove
 
 							  
 	// DTC editor

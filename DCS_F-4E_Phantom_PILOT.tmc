@@ -250,24 +250,24 @@ int dcs_f4e_pilot_controls_switch()
 
 	// Coolie Switch
 	// CSU
-	MapKeyIOUMD(&Throttle, CSU, CHAIN( L_SHIFT, D(10), '-'),										 					// IU - Aural Tone Volume - [Dec]
+	MapKeyIOUMD(&Throttle, CSU, sidewinder_volume_down,												 					// IU - Aural Tone Volume - [Dec]
 								0,																						// OU - 
 								seat_up,																  				// IM - Seat Position - Up
 								reticle_depr_decr,																		// OM - Reticle Depression - [Dec]
-								CHAIN( L_SHIFT, D(10), '-'),										 					// ID - Aural Tone Volume - [Dec]
+								sidewinder_volume_down,												 					// ID - Aural Tone Volume - [Dec]
 								reticle_depr_decr ); 																	// OD - Reticle Depression - [Dec]
 	// CSD
-	MapKeyIOUMD(&Throttle, CSD, CHAIN( L_SHIFT, D(10), '='),										 					// IU - Aural Tone Volume - [Inc]
+	MapKeyIOUMD(&Throttle, CSD, sidewinder_volume_up,												 					// IU - Aural Tone Volume - [Inc]
 								0,																						// OU -
 								seat_down,																  				// IM - Seat Position - Down
 								reticle_depr_incr,													 					// OM - Reticle Depression - [Inc]
-								CHAIN( L_SHIFT, D(10), '='),										 					// ID - Aural Tone Volume - [Inc]
+								sidewinder_volume_up,												 					// ID - Aural Tone Volume - [Inc]
 								reticle_depr_incr );												 					// OD - Reticle Depression - [Inc]
 	// CSR
 	MapKeyIOUMD(&Throttle, CSR, 0,																						// IU - 
-								uncage,			// TODO check refuel													// OU - Air Refuel Release Button (ARR) - missile uncage
+								sidewinder_uncage,			// TODO check refuel										// OU - Air Refuel Release Button (ARR) - missile uncage
 								bombing_table,																			// IM - Bombing Table - [Toggle]
-								uncage, 																				// OM - Air Refuel Release Button (ARR)
+								sidewinder_uncage, 																		// OM - Air Refuel Release Button (ARR)
 								bombing_table,																			// ID - Bombing Table - [Toggle]
 								0 );																					// OD - 
 	// CSL

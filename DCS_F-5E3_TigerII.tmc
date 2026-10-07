@@ -1,6 +1,6 @@
 // DCS F-5E3 Tiger II Thrustmaster Warthog/AVA/MFD Script by Astro
 // TARGET version 3.0.25.127
-// version 2.2, Jan 2026
+// version 3.0, Oct 2026
 
 
 include "target.tmh"
@@ -8,6 +8,27 @@ include "DCS_Fighter_Common.tmc"
 
 
 // -------------------------- INITIALISE ----------------------------
+
+int masterarm_arm;
+int masterarm_off;
+int masterarmcover_open;
+int masterarmcover_close;
+int extstoresselect_rkt;
+int extstoresselect_bomb;
+int extstoresselect_safe;
+int flaps_auto;
+int flaps_fixed;
+int flaps_up;
+int station1_arm_toggle;
+int station7_arm_toggle;
+int sightmode_off;
+int sightmode_gun;
+int sightmode_msl;
+int sightmode_man;
+int radarmode_oper;
+int radarmode_stby;
+int radarrange_incr;
+int radarrange_decr;
 
 int extlight_fulltoform;		
 int extlight_covtoform;			
@@ -43,7 +64,30 @@ int main()
 	DMS_right	= CHAIN( R_ALT, D(10), '7' );																	// RWR Indicator Control SEARCH Button
 	DMS_left 	= TEMPO( CHAIN( DOWN+R_ALT, D(10), DOWN+'6', D(200), UP+'6', D(), UP+R_ALT ),					// RWR Indicator Control MODE Button - PRIO/NORM toggle
 						 CHAIN( R_ALT, D(10), 'y' ), 500 );														// RWR Indicator Control T Button - TGT SEPARATE
+						 
+	// Keybindings
+	masterarm_arm			= CHAIN( DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT );								// Guns, Missile and Camera Switch - GUNS MSL & CAMR
+	masterarm_off			= CHAIN( DOWN+R_CTL, D(10), PULSE+'a', D(), UP+R_CTL );									// Guns, Missile and Camera Switch - OFF
+	masterarmcover_open		= CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'a', D(), UP+L_SHIFT+R_SHIFT );				// Guns, Missile and Camera Switch Cover - OPEN
+	masterarmcover_close	= CHAIN( DOWN+L_SHIFT+R_CTL, D(10), PULSE+'a', D(), UP+L_SHIFT+R_CTL );					// Guns, Missile and Camera Switch Cover - CLOSE
+	extstoresselect_rkt		= CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'r', D(), UP+L_SHIFT+R_SHIFT );				// External Stores Selector - RKT/DISP
+	extstoresselect_bomb	= CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'b', D(), UP+L_SHIFT+R_SHIFT );				// External Stores Selector - BOMB
+	extstoresselect_safe	= CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT+R_SHIFT );				// External Stores Selector - SAFE
+	flaps_auto				= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT );								// Flap Switch - UP
+	flaps_fixed				= CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL );									// Flap Switch - FIXED
+	flaps_up				= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT );								// Flap Switch - UP
+	station1_arm_toggle		= CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'0', D(), UP+R_WIN+L_CTL );						// Armament Position Selector Switch (LEFT WINGTIP) - ON/OFF
+	station7_arm_toggle		= CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'6', D(), UP+R_WIN+L_SHIFT );			 		// Armament Position Selector Switch (RIGHT WINGTIP) - ON/OFF
+	sightmode_off			= PULSE+'`';																			// AN/ASG-31 Sight Mode Selector - OFF
+	sightmode_gun			= PULSE+'2'; 																			// AN/ASG-31 Sight Mode Selector - A/A1 GUNS
+	sightmode_msl			= PULSE+'1';																			// AN/ASG-31 Sight Mode Selector - MSL
+	sightmode_man			= PULSE+'4';																			// AN/ASG-31 Sight Mode Selector - MAN
+	radarmode_oper			= CHAIN( DOWN+R_CTL, D(10), PULSE+'0', D(), UP+R_CTL );									// AN/APQ-159 Radar Mode Selector - OPER
+	radarmode_stby			= CHAIN( DOWN+R_CTL, D(10), PULSE+'9', D(), UP+R_CTL );									// AN/APQ-159 Radar Mode Selector - STBY
+	radarrange_incr			= PULSE+'=';																			// AN/APQ-159 Radar Range Selector - CW/Increase
+	radarrange_decr			= PULSE+'-'; 																			// AN/APQ-159 Radar Range Selector - CCW/Decrease
 	
+
 	// Start-up Sequence (overwrites common)
 	startup = SEQ( CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'b', D(), UP+R_CTL+R_SHIFT ),						// Battery Switch - BATT/OFF
 				   CHAIN( DOWN+R_CTL+R_SHIFT, D(10), PULSE+'h', D(), UP+R_CTL+R_SHIFT, D(),						// Left Generator Switch - Up
@@ -74,17 +118,17 @@ int main()
 
 
 	// Ground Crew Start-up
-	groundcrew = SEQ( CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F1, D(8000), 	// Radio menu (\), Ground crew, Wheel Chocks, Place 
-			 		   		 PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F1, D(10000),	// Radio menu (\), Ground crew, Ground Air Supply, Connect
-							 PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F3 ), 			// Radio menu (\), Ground crew, Ground Air Supply, Apply
-					  CHAIN( PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F3, D(25000),	// Radio menu (\), Ground crew, Ground Air Supply, Apply
-							 PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F5, D(100), PULSE+F2, D(15000),	// Radio menu (\), Ground crew, Ground Air Supply, Disconnect
-							 PULSE+USB[0x31], D(100), PULSE+F8, D(100), PULSE+F4, D(100), PULSE+F2 ));			// Radio menu (\), Ground crew, Wheel Chocks, Remove
+	groundcrew = SEQ( CHAIN( ground_wheelchocks_place, D(8000), 												// Radio menu (\), Ground crew, Wheel Chocks, Place 
+			 		   		 ground_airsupply_connect, D(10000),												// Radio menu (\), Ground crew, Ground Air Supply, Connect
+							 ground_airsupply_apply ), 															// Radio menu (\), Ground crew, Ground Air Supply, Apply
+					  CHAIN( ground_airsupply_apply, D(25000),													// Radio menu (\), Ground crew, Ground Air Supply, Apply
+							 ground_airsupply_disconnect, D(15000),												// Radio menu (\), Ground crew, Ground Air Supply, Disconnect
+							 ground_wheelchocks_remove ));														// Radio menu (\), Ground crew, Wheel Chocks, Remove
 
 
 	// Speedbrake functions
-	speedbrakes_open  	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'b', D(), UP+L_SHIFT ); 							// speedbrake extend
-	speedbrakes_close 	= CHAIN( D(100), DOWN+L_CTL, D(10), PULSE+'b', D(), UP+L_CTL );							// speedbrake fully retract
+//	speedbrakes_open  	= CHAIN( DOWN+L_SHIFT, D(10), PULSE+'b', D(), UP+L_SHIFT ); 							// speedbrake extend
+//	speedbrakes_close 	= CHAIN( D(100), DOWN+L_CTL, D(10), PULSE+'b', D(), UP+L_CTL );							// speedbrake fully retract
 
 
 	// Drag Chute function (defined in Common)
@@ -137,7 +181,7 @@ int main()
 							 	0 ); 																			// O - 
 	// H4P
 	MapKeyIO(&AVA_F16, H4P, 	0, 																				// I - 
-							 	'q' ); 																			// O - CHAFF/FLARE Dispense Button
+							 	cm_dispense ); 																	// O - CHAFF/FLARE Dispense Button
 
 	
 	
@@ -170,44 +214,42 @@ int main()
 
 	// Autopilot
 	// APENG	
-	MapKeyIO(&Throttle, APENG, 	SEQ( PULSE+'1',																	// I - AN/ASG-31 Sight Mode Selector - MSL
-									 PULSE+'`' ),																// 	   AN/ASG-31 Sight Mode Selector - OFF
-								SEQ( CHAIN( DOWN+R_CTL, D(10), PULSE+'9', D(), UP+R_CTL ),						// O - AN/APQ-159 Radar Mode Selector - STBY
-									 CHAIN( DOWN+R_CTL, D(10), PULSE+'0', D(), UP+R_CTL )));					// 	   AN/APQ-159 Radar Mode Selector - OPER
+	MapKeyIO(&Throttle, APENG, 	SEQ( sightmode_msl, sightmode_off ),											// I - AN/ASG-31 Sight Mode Selector - MSL / OFF
+								SEQ( radarmode_stby, radarmode_oper ));											// O - AN/APQ-159 Radar Mode Selector - STBY / OPER
 	// APDIS
 	MapKey(&Throttle, APDIS, 	0 ); 																			// 
 	// APPAT
-	MapKey(&Throttle, APPAT, 	PULSE+'2' ); 																	// AN/ASG-31 Sight Mode Selector - A/A1 GUNS
+	MapKey(&Throttle, APPAT, 	sightmode_gun ); 																// AN/ASG-31 Sight Mode Selector - A/A1 GUNS
 	// APAH
-	MapKey(&Throttle, APAH, 	PULSE+'1' );																	// AN/ASG-31 Sight Mode Selector - MSL
+	MapKey(&Throttle, APAH, 	sightmode_msl );																// AN/ASG-31 Sight Mode Selector - MSL
 	// APALT
-	MapKey(&Throttle, APALT, 	PULSE+'4' );																	// AN/ASG-31 Sight Mode Selector - MAN
+	MapKey(&Throttle, APALT, 	sightmode_man );																// AN/ASG-31 Sight Mode Selector - MAN
 
 
 	// Coolie Switch
 	// CSU
-	MapKeyIOUMD(&Throttle, CSU, CHAIN( L_CTL+L_SHIFT, D(10), '-' ), 											// IU - Missile Volume Knob - CCW/Decrease
-								PULSE+'-', 																		// OU - AN/APQ-159 Radar Range Selector - CCW/Decrease
+	MapKeyIOUMD(&Throttle, CSU, sidewinder_volume_down, 														// IU - Missile Volume Knob - CCW/Decrease
+								radarrange_decr, 																// OU - AN/APQ-159 Radar Range Selector - CCW/Decrease
 								seat_up,															  			// IM - Seat Position - Up
-								EXEC( "if (WHDN_mode) ActKey ( PULSE+KEYON+DX44 );"	),							// OM - [WHDN] Nose Strut Switch - RETRACT
+								EXEC( "if (WHDN_mode) ActKey ( PULSE+KEYON+nw_strut_retract );"	),				// OM - [WHDN] Nose Strut Switch - RETRACT
 								0, 																				// ID - 
 								reticle_depr_decr );															// OD - AN/ASG-31 Sight Reticle Depression Knob - CCW/Decrease
 	// CSD
-	MapKeyIOUMD(&Throttle, CSD, CHAIN( L_CTL+L_SHIFT, D(10), '=' ), 											// IU - Missile Volume Knob - CW/Increase
-								PULSE+'=',																		// OU - AN/APQ-159 Radar Range Selector - CW/Increase
+	MapKeyIOUMD(&Throttle, CSD, sidewinder_volume_up, 															// IU - Missile Volume Knob - CW/Increase
+								radarrange_incr,																// OU - AN/APQ-159 Radar Range Selector - CW/Increase
 								seat_down,															  			// IM - Seat Position - Down
-								EXEC( "if (WHDN_mode) ActKey ( PULSE+KEYON+DX43 );"	),							// OM - [WHDN] Nose Strut Switch - EXTEND
+								EXEC( "if (WHDN_mode) ActKey ( PULSE+KEYON+nw_strut_extend );"	),				// OM - [WHDN] Nose Strut Switch - EXTEND
 								0, 																				// ID - 
 								reticle_depr_incr );															// OD - AN/ASG-31 Sight Reticle Depression Knob - CW/Increase
 	// CSR
-	MapKeyIOUMD(&Throttle, CSR, CHAIN( DOWN+R_WIN+L_SHIFT, D(10), PULSE+'6', D(), UP+R_WIN+L_SHIFT ),		 	// IU - Armament Position Selector Switch (RIGHT WINGTIP) - ON/OFF
-							 	uncage,																			// OU - Missile Uncage Switch
+	MapKeyIOUMD(&Throttle, CSR, station7_arm_toggle,														 	// IU - Armament Position Selector Switch (RIGHT WINGTIP) - ON/OFF
+							 	sidewinder_uncage,																// OU - Missile Uncage Switch
 								0, 																				// IM - 
 								0,																				// OM - 
 								0, 																				// ID - 
 								0 );																			// OD - 
 	// CSL
-	MapKeyIOUMD(&Throttle, CSL, CHAIN( DOWN+R_WIN+L_CTL, D(10), PULSE+'0', D(), UP+R_WIN+L_CTL ),				// IU - Armament Position Selector Switch (LEFT WINGTIP) - ON/OFF
+	MapKeyIOUMD(&Throttle, CSL, station1_arm_toggle,															// IU - Armament Position Selector Switch (LEFT WINGTIP) - ON/OFF
 								CHAIN( L_SHIFT, D(10), 'c' ),													// OU - AN/ASG-31 Sight Cage Switch
 								0, 																				// IM - 
 								CHAIN( L_SHIFT, D(10), 'c' ),													// OM - AN/ASG-31 Sight Cage Switch
@@ -217,43 +259,35 @@ int main()
 
 	// Pinky Switch (exterior lighting)
 	// PSF
-	MapKeyIO(&Throttle, PSF, 	CHAIN( 0, D(), 																	// I - 
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED4) ), 							//     LED4 ON
-							 	CHAIN( extlight_full, D(), 														// O - extlight_full
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED4) )); 							//     LED4 ON
-	MapKeyRIO(&Throttle, PSF, 	CHAIN( 0, D(), 																	// I - 
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED4) ),							//     LED4 OFF
-							  	CHAIN( extlight_fulltoform, D(), 												// O - extlight_fulltoform
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED4) )); 							//     LED4 OFF
+	MapKeyIO(&Throttle, PSF, 	CHAIN( 0, D(), throttle_led4_on ),												// I - LED4 ON
+							 	CHAIN( extlight_full, D(), throttle_led4_on ));									// O - extlight_full; LED4 ON
+	MapKeyRIO(&Throttle, PSF, 	CHAIN( 0, D(), throttle_led4_off ),												// I - LED4 OFF
+							  	CHAIN( extlight_fulltoform, D(), throttle_led4_off ));							// O - extlight_fulltoform; LED4 OFF
 	// PSB		
-	MapKeyIO(&Throttle, PSB, 	CHAIN( 0, D(), 																	// I - 
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED4) ), 							//     LED4 ON
-							 	CHAIN( extlight_covert, D(), 													// O - extlight_covert
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED4) )); 							//     LED4 ON
-	MapKeyRIO(&Throttle, PSB, 	CHAIN( 0, D(), 																	// I - 
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED4) ),							//     LED4 OFF
-							  	CHAIN( extlight_covtoform, D(), 												// O - extlight_covtoform
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED4) )); 							//     LED4 OFF
+	MapKeyIO(&Throttle, PSB, 	CHAIN( 0, D(), throttle_led4_on ),												// I - LED4 ON
+							 	CHAIN( extlight_covert, D(), throttle_led4_on ));								// O - extlight_covert; LED4 ON
+	MapKeyRIO(&Throttle, PSB, 	CHAIN( 0, D(), throttle_led4_off ),												// I - LED4 OFF
+							  	CHAIN( extlight_covtoform, D(), throttle_led4_off ));							// O - extlight_covtoform; LED4 OFF
 
 
 	// Flaps Switch
 	// FLAPU
-	MapKey(&Throttle, FLAPU,  	CHAIN( DOWN+L_SHIFT, D(10), PULSE+'f', D(), UP+L_SHIFT ));						// Flap Switch - UP
+	MapKey(&Throttle, FLAPU,  	flaps_up );																		// Flap Switch - UP
 	// FLAPM
-	MapKey(&Throttle, FLAPM, 	CHAIN( DOWN+L_CTL, D(10), PULSE+'f', D(), UP+L_CTL ));							// Flap Switch - FIXED
+	MapKey(&Throttle, FLAPM, 	flaps_fixed );																	// Flap Switch - FIXED
 	// FLAPD	
-	MapKey(&Throttle, FLAPD,  	PULSE+'f' );																	// Flap Switch - AUTO
+	MapKey(&Throttle, FLAPD,  	flaps_auto );																	// Flap Switch - AUTO
 
 
 	// Engine Operation
 	// EOLIGN
 	MapKeyIO(&Throttle, EOLIGN,	startup,																		// I - Startup sequence
-								SEQ( CHAIN( L_CTL+L_SHIFT, D(10), 'c' ),										// O - Left Engine Start Button
+								SEQ( engine_ignition_left,														// O - Left Engine Start Button
 									 throttle_left_idle ));														//	   Throttle Left - IDLE
 
 	// EORIGN
 	MapKeyIO(&Throttle, EORIGN, 0,																				// I - 
-								SEQ( CHAIN( L_CTL+L_SHIFT, D(10), 'v' ),										// O - Right Engine Start Button
+								SEQ( engine_ignition_right,														// O - Right Engine Start Button
 									 throttle_right_idle ));													//     Throttle Right - IDLE
 
 
@@ -264,26 +298,19 @@ int main()
 
 	// U LAYER - Air-to-Air Mode
 	// BSF - LED1 ON/OFF
-	MapKey(&Throttle, BSF, 		CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'a', D(), UP+L_SHIFT+R_SHIFT, D(100),	// Guns, Missile and Camera Switch Cover - OPEN
-									   DOWN+R_SHIFT, D(10), PULSE+'a', D(), UP+R_SHIFT,	D(),					// Guns, Missile and Camera Switch - GUNS MSL & CAMR
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED1) )); 							// LED1 ON for U layer
-	MapKeyR(&Throttle, BSF, 	CHAIN( DOWN+R_CTL, D(10), PULSE+'a', D(), UP+R_CTL,	D(100),						// Guns, Missile and Camera Switch - OFF
-									   DOWN+L_SHIFT+R_CTL, D(10), PULSE+'a', D(), UP+L_SHIFT+R_CTL, D(),		// Guns, Missile and Camera Switch Cover - CLOSE
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED1) )); 							// LED1 OFF for U layer
+	MapKey(&Throttle, BSF, 		CHAIN( masterarmcover_open, D(100),	masterarm_arm, D(),	throttle_led1_on ));	// Guns, Missile and Camera Switch Cover - OPEN; Guns, Missile and Camera Switch - GUNS MSL & CAMR
+	MapKeyR(&Throttle, BSF, 	CHAIN( masterarm_off, D(100), masterarmcover_close, D(), throttle_led1_off ));	// Guns, Missile and Camera Switch - OFF; Guns, Missile and Camera Switch Cover - CLOSE
 
 	// M LAYER - Navigation Mode
 	// BSM - LED2 ON/OFF
-	MapKey(&Throttle, BSM, 		CHAIN( D(200), LED(&Throttle, LED_ONOFF, LED_CURRENT+LED2) )); 					// LED2 ON for M layer
-	MapKeyR(&Throttle, BSM, 	LED(&Throttle, LED_ONOFF, LED_CURRENT-LED2)); 									// LED2 OFF for M layer
+	MapKey(&Throttle, BSM, 		CHAIN( D(200), throttle_led2_on )); 											// LED2 ON for M layer
+	MapKeyR(&Throttle, BSM, 	throttle_led2_off ); 															// LED2 OFF for M layer
 
 	// D LAYER - Air-to-Ground Mode
 	// BSB - LED3 ON/OFF
-	MapKeyIO(&Throttle, BSB, 	CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'r', D(), UP+L_SHIFT+R_SHIFT, D(),	// A-G mode on, External Stores Selector - RKT/DISP
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED3) ), 							// LED3 ON for D layer
-								CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'b', D(), UP+L_SHIFT+R_SHIFT, D(),	// A-G mode on, External Stores Selector - BOMB
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT+LED3) )); 							// LED3 ON for D layer
-	MapKeyR(&Throttle, BSB, 	CHAIN( DOWN+L_SHIFT+R_SHIFT, D(10), PULSE+'s', D(), UP+L_SHIFT+R_SHIFT, D(),	// A-G mode off, External Stores Selector - SAFE
-									   LED(&Throttle, LED_ONOFF, LED_CURRENT-LED3) )); 							// LED3 OFF for D layer
+	MapKeyIO(&Throttle, BSB, 	CHAIN( extstoresselect_rkt, D(), throttle_led3_on ),							// A-G mode on, External Stores Selector - RKT/DISP; LED3 ON for D layer
+								CHAIN( extstoresselect_bomb, D(), throttle_led3_on ));							// A-G mode on, External Stores Selector - BOMB; LED3 ON for D layer
+	MapKeyR(&Throttle, BSB, 	CHAIN( extstoresselect_safe, D(), throttle_led3_off ));							// A-G mode off, External Stores Selector - SAFE; LED3 OFF for D layer
 
 
 
@@ -291,10 +318,10 @@ int main()
 
 	// Left MFD GAIN
 	MapKeyIO(&LMFD, GAINU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'y' ), 											// I - Right MFD GAIN Up
-								CHAIN( L_CTL+L_SHIFT, D(10), '=' ));											// O - Missile Volume Knob - CW/Increase
+								sidewinder_volume_up );															// O - Missile Volume Knob - CW/Increase
 
 	MapKeyIO(&LMFD, GAIND, 		CHAIN( R_WIN+R_SHIFT, D(10), 'g' ), 											// I - Right MFD GAIN Down
-								CHAIN( L_CTL+L_SHIFT, D(10), '-' ));											// O - Missile Volume Knob - CCW/Decrease
+								sidewinder_volume_down );														// O - Missile Volume Knob - CCW/Decrease
 	// Left MFD SYM
 	MapKeyIO(&LMFD, SYMU, 		CHAIN( R_WIN+R_SHIFT, D(10), 'o' ), 											// I - Right MFD SYM Up
 								CHAIN( L_CTL+L_SHIFT, D(10), 's' ));											// O - Select Jettison Switch - Up
